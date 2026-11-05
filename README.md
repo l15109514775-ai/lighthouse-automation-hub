@@ -1,97 +1,116 @@
-# Lighthouse Automation Hub
+# 咕噜咕噜灯塔字幕组 · 开源工具箱
 
-多源内容自动化中枢：采集 X（Twitter）推文并翻译成中文、合成译图，发布到 B 站；抓取 YouTube 直播回放（最高画质、完整性校验、按需分段），并在确认后投稿；每天把业务库与素材归档到 CloudBase COS；任务队列带崩溃自愈、来源修订对账和保留策略。
+这是字幕组日常在用的两套工具，放在同一个仓库里：
 
-本项目来自一套真实长期运行的部署，公开版做了脱敏：所有账号、频道、服务器地址、桶名、路径都换成示例值，真实录播、译图、封面和投稿证据不在仓库内。**默认 DRY_RUN，不会调用真实平台、不会产生费用。**
+- **自动化中枢**（Python / Docker Compose）：把一条 **YouTube 长直播回放** 或一条 **X 推文**，自动变成 B 站上的稿件或动态。
+- **字幕协作平台**（静态网站 + CloudBase PostgreSQL + QQ 机器人 + 云端字幕 worker）：把 **人** 组织起来——谁申请入组、谁认领任务、谁交付、谁审核、积分怎么记。
 
-## 能力与边界
+两套工具数据独立、可以分别部署；同一个仓库只是为了让第一次来的人一次看全。默认全部离线或 `DRY_RUN`，不调用真实平台、不产生费用，也不含任何真实账号、Cookie、生产库和投稿素材。
 
-| 能力 | 状态 |
-| --- | --- |
-| SQLite 任务队列（租约、attempts、幂等、审计） | 已验证，`tests/` 覆盖 |
-| YouTube 回放登记 → 计划 → 下载绑定 → 完整性校验 → 分段 | 已验证（含时长修订、崩溃续传、失败下载重排） |
-| 回放分段上传 / 投稿 / 结果核对 | 已验证为“人工确认后发布”；自动发布默认关闭 |
-| X 官方 API 采集 → 翻译 → 译图合成 → B 站发布 | 代码与测试完整；需要你自己的 X API、模型与 B 站授权 |
-| 浏览器适配器（登录态、投稿页面、草稿、私有视频） | 可选；需要本机浏览器 profile，默认不启用 |
-| CloudBase（腾讯云 COS）异地备份、校验、保留清理 | 已验证；需要你自己的桶与密钥 |
-| 崩溃自愈 / 来源修订对账 / 保留证书（fail-closed） | 已验证；按定时器运行 |
+## 四个模块
 
-## 快速开始（Docker Compose）
+| 模块 | 它解决什么问题 | 源码 | 详细指南 |
+| --- | --- | --- | --- |
+| ① 字幕组网站与 OA 协作平台 | 让"一项字幕任务"从申请、建项目、发布任务、认领、交付到审核、积分都有记录，不再靠群聊口头同步 | `subtitle-platform/site/`（前端）、`subtitle-platform/database/`（PostgreSQL 迁移与函数）、`subtitle-platform/tools/`（部署配置） | [docs/website-oa.md](docs/website-oa.md) |
+| ② QQ 群聊机器人 | 组员在 QQ 里查自己的任务、待领任务、项目列表；组长在群里收到新申请与执行结果通知 | `subtitle-platform/bot/plugins/`（AstrBot 插件：`subtitle_bridge`、`subtitle_notify`） | [docs/qq-bot.md](docs/qq-bot.md) |
+| ③ YouTube 直播回放自动投稿 | 长回放被发现、排队、按最高画质下载、校验完整性、做封面、按需分段、投稿 B 站，并把 BV 号写回、清理素材 | `services/hub/youtube_*.py`、`services/hub/replay_*.py`、`services/hub/replay_fifo_v4.py`、`adapters/ytdlp_*.py` | [docs/youtube-replay.md](docs/youtube-replay.md) |
+| ④ X 推文自动翻译与 B 站动态 | 官方 API 发现新帖、去重、翻译、独立质检、排版成 PNG、发布 B 站动态并回写链接 | `services/hub/x_api_discovery.py`、`services/hub/machine_tweets*.py`、`adapters/compositor.py`、`compositor/`（submodule） | [docs/tweet-translation.md](docs/tweet-translation.md) |
+
+## 架构：真实连接关系
+
+```mermaid
+flowchart LR
+  subgraph HUB["自动化中枢（Python，Docker Compose）"]
+    SCH["scheduler<br/>定时发现"] --> Q[("SQLite 队列<br/>data/hub.sqlite3")]
+    WK["worker<br/>tweet / video / system"] --> Q
+    WK --> ADP["adapters/"]
+  end
+
+  ADP --> XAPI["X API v2（官方）"]
+  ADP --> YTAPI["YouTube Data API v3"]
+  ADP --> YTDLP["yt-dlp<br/>最高画质下载"]
+  ADP --> BILI["B 站<br/>稿件 / 动态"]
+  ADP --> COS["腾讯云 COS<br/>异地备份"]
+  ADP --> COMP["compositor（Node 子进程）<br/>推文 → 译图 PNG"]
+
+  subgraph PLAT["字幕协作平台（腾讯云 CloudBase）"]
+    SITE["静态网站 site/<br/>成员 / 项目 / 任务 / 审核"] --> GW["RPC gateway"]
+    GW --> PG[("PostgreSQL RDB<br/>st_* 函数")]
+    BOT["QQ 机器人<br/>AstrBot 插件"] --> GW
+    CW["云端字幕 worker<br/>Codex Cloud"] --> GW
+  end
+
+  style HUB fill:#eef5ff,stroke:#4a7bd0
+  style PLAT fill:#f7f0ff,stroke:#8a5cd0
+```
+
+要点（都有代码依据）：
+
+- **中枢与平台不共享数据库**：中枢用 SQLite（`services/hub/db.py` 建 `jobs` / `heartbeats` / `audit`），平台用 CloudBase PostgreSQL（`subtitle-platform/database/migrations/`）。两边唯一的关联是同一条内容在各自系统里都有记录，靠来源链接人工对齐。
+- **QQ 机器人不直连数据库**：它只调用 gateway 的 `st_qq_dispatch` / `st_qq_notification_feed`（`subtitle-platform/bot/plugins/astrbot_plugin_subtitle_bridge/bridge.py`、`.../subtitle_notify/main.py`），权限与数据边界都在 SQL 函数里。
+- **云端字幕 worker 也只走 RPC**：`st_cloud_worker_call` / `st_cloud_prepare` 等函数（`database/migrations/021_cloud_jobs.sql`，后续迁移补权限），worker 在 Codex Cloud 里跑，回传结果由函数校验。
+- **译图是中枢的子进程**：`adapters/compositor.py` 调 `node adapters/render_bridge.mjs`（即 `compositor/` 子模块），只负责"文本 → PNG"，B 站发布由 `services/hub/publishing.py` 与 `adapters/bilibili.py` 负责。
+- **生产与公开版的区别**：公开版默认 `DRY_RUN=true`、所有采集/下载/发布开关为 `false`；生产环境验证过的流程在 `docs/` 各指南里单独标注。
+
+## 四个快速入口
 
 ```bash
-git clone --recursive https://github.com/<your-account>/lighthouse-automation-hub.git
-cd lighthouse-automation-hub
+# ① 网站与 OA：离线跑数据库/前端测试（不需要任何云账号）
+cd subtitle-platform
+npm ci
+npm test
+python tools/check_release.py
+
+# ② QQ 机器人：生成绑定配置（只写本地文件，不连网）
+python subtitle-platform/tools/configure_bot.py --deployment <你的部署目录>
+
+# ③ YouTube 回放：启动中枢并初始化队列（DRY_RUN，不下载）
 cp config/hub.example.toml config/hub.toml
 cp .env.example .env
-
 docker compose build
 docker compose run --rm api python -m services.hub.cli init
 docker compose run --rm api python -m services.hub.cli status
-docker compose up -d api scheduler
+
+# ④ X 推文：离线跑翻译/排版相关测试
+docker compose run --rm api python -m pytest tests/test_tweet.py tests/test_manual_openai.py -q
 ```
 
-- 首次启动不需要任何真实账号：`DRY_RUN=true`、所有采集/下载/发布开关都是 `false`。
-- `config/hub.toml` 里两个 `[[sources]]` 是示例频道；改成你自己的频道 ID / handle。
-- 数据库、媒体、日志、备份分别落在 `./data`、`./media`、`./logs`、`./backups`。
-- 只读根文件系统 + `cap_drop: ALL` + `no-new-privileges` + 浏览器 seccomp；`heavy_concurrency` 固定为 1。
+## 仓库结构
 
-## 离线样例（不联网、不产生费用）
-
-```bash
-# 初始化数据库并查看流水线
-docker compose run --rm api python -m services.hub.cli init
-docker compose run --rm api python -m services.hub.cli status
-
-# 用合成数据跑通“登记 → 计划 → 下载绑定 → 来源修订 → 重排”的完整链路
-docker compose run --rm api python -m pytest \
-  tests/test_replay_fifo_v4.py \
-  tests/test_replay_fifo_duration_revision_v1.py \
-  tests/ops/test_reconcile_replay_source_revision_v1.py -q
+```
+README.md                 本页：四模块导航、架构、快速入口
+docs/                     四份模块指南 + 架构依据 + 运维手册
+services/ adapters/      自动化中枢：队列、采集、回放、投稿、备份
+scheduler/               持久化调度器与 SQL 迁移
+config/                  中枢示例配置（hub.example.toml、策略示例）
+tests/                   中枢离线测试（合成数据）
+subtitle-platform/       字幕协作平台
+  site/ database/ worker/ bot/ ops/ tools/ tests/ docs/
+compositor/              tweet-zh-compositor（git submodule）
+vendor/subtitle-cloud-worker/  云端字幕 worker（git submodule）
 ```
 
-这些测试使用内置的合成元数据与 SQLite，不访问 YouTube、B 站或任何外部服务。
+## 哪些在仓库里、哪些是外部依赖、哪些只是历史原型
 
-## 接入真实服务需要什么
-
-| 用途 | 需要你自己取得 |
+| 内容 | 状态 |
 | --- | --- |
-| X 采集 | X API v2 凭据（付费档位）+ `X_BEARER_TOKEN` |
-| 翻译 / QA | 兼容 OpenAI 风格的模型端点与 Key（`MODEL_*`），或替换为本地模型 |
-| YouTube 元数据 | Google Cloud 项目 + YouTube Data API v3 Key（`YOUTUBE_API_KEY`） |
-| B 站发布 | 你自己的账号登录态（浏览器 profile 或 Cookie 导入）；`target_bilibili_site_uid` 改成你的公开 UID |
-| 异地备份 | 腾讯云 COS 桶 + 子账号密钥（`CLOUDBASE_*`） |
+| 自动化中枢（Python） | 在本仓库，可独立运行 |
+| 协作平台（网站 + 数据库 + 云端 worker 接口） | 在本仓库 `subtitle-platform/`，需要自己的 CloudBase 环境 |
+| QQ 机器人插件 | 在本仓库 `subtitle-platform/bot/`，需要 AstrBot 与 QQ 官方机器人 |
+| `tweet-zh-compositor` | **外部 submodule**（`compositor/`），`git clone --recursive` 获取 |
+| `subtitle-cloud-worker` | **外部 submodule**（`vendor/subtitle-cloud-worker/`），运行在 Codex Cloud |
+| 平台历史实验（初版工作器、未启用调度器） | `subtitle-platform/experiments/`，仅作研究保留，不参与默认流程 |
+| 真实账号、Cookie、生产库、备份、媒体 | **不在仓库**；样例均为合成数据 |
 
-授权与启用顺序：先把 `DRY_RUN` 保持 `true` 跑通流程 → 单独开启 `youtube_feed_enabled` / `youtube_download_enabled` → 需要发布时再显式打开 `machine_tweet_enabled` / 自动发布开关。**收费调用必须由使用者自己把对应 budget 的 `paid_authorized` 改成 `true`。**
+## 许可证与署名
 
-## 目录
+本仓库自有代码以 **GNU AGPL-3.0** 发布（根 `LICENSE`）；`subtitle-platform/` 原本即 AGPL-3.0，保留其 `LICENSE`、`THIRD_PARTY_NOTICES.md`、`SECURITY.md` 与 `SOURCE_MANIFEST.json`。
 
-```
-services/hub/      队列、FIFO、计划/下载/发布、保留与对账、CLI
-adapters/          平台适配器（HTTP、浏览器、COS、媒体处理）
-scheduler/         持久化调度器与 SQL 迁移
-tests/             单元/集成测试（合成数据）
-config/            示例配置（hub.example.toml、各类策略示例）
-scripts/           verify_upstream.py 等工具
-compositor/        译图合成（git submodule，见下）
-vendor/            字幕云 worker（git submodule，见下）
-```
+`compositor/` 与 `vendor/subtitle-cloud-worker/` 通过 git submodule 引用各自仓库的固定提交，许可证与使用条款见对应仓库；参考 `subtitle-platform/THIRD_PARTY_NOTICES.md`。
 
-## 上游依赖与许可证
+## 继续读
 
-本项目自有代码（`services/`、`adapters/`、`scheduler/`、`tests/`、`scripts/`）以 **GNU AGPL-3.0** 发布，完整文本见 `LICENSE`。
-
-`compositor/` 与 `vendor/subtitle-cloud-worker/` 通过 git submodule 引用各自仓库与固定提交，不在本仓库内复制代码；它们可能有各自的许可证，请分别查看对应仓库。
-
-## 测试
-
-```bash
-docker compose run --rm api python -m pytest -q
-```
-
-单元测试不需要网络；浏览器类测试需要 Playwright 与浏览器缓存（镜像内已安装）。
-
-## 安全与合规
-
-- 不提交任何真实凭据、Cookie、私钥、生产数据库或投稿证据；`.env` 与 `config/hub.toml` 已在 `.gitignore` 中。
-- 默认只读、单并发、磁盘下限、媒体大小上限，失败即停，不无限重试。
-- 仅处理你有权处理的内容；遵守 X、YouTube、B 站与腾讯云的服务条款。自动化发布由你自行承担合规责任。
+- 平台怎么从零搭：[`subtitle-platform/docs/从零搭建.md`](subtitle-platform/docs/从零搭建.md)
+- 平台使用手册：[`subtitle-platform/docs/使用手册.md`](subtitle-platform/docs/使用手册.md)
+- 平台架构与数据：[`subtitle-platform/docs/架构与数据.md`](subtitle-platform/docs/架构与数据.md)
+- 日常运维（状态、备份、日志、重启恢复）：[docs/operations.md](docs/operations.md)
