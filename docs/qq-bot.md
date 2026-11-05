@@ -89,3 +89,17 @@ python -m unittest discover -s tests/notifications -p 'test_*.py'  # 64 项
 | 绑定码提示无效/过期 | 超过 5 分钟或已被使用 | 重新发 `字幕绑定` |
 | 群里收不到通知 | 群未绑定，或机器人无主动消息权限 | 重新走群绑定；检查机器人权限 |
 | 通知重复/漏发 | 账本文件丢失 | 不要清零重发；按 `subtitle-platform/docs/维护与排错.md` 恢复账本 |
+
+## v0.3：执行器开始/完成通知
+
+全自动流程不再需要「审批后私聊执行指令」。机器人新增消费 `st_qq_job_feed`：
+
+- 参数与 `st_qq_approval_feed` 类似：`p_key`、`p_sender`、`p_after`、`p_after_id`、`p_ids`；
+- 返回 `started` / `completed` / `failed` 事件，字段包括：
+  `id`、`request_id`、`event`、`created_at`、`member_id`、`member_name`、
+  `owner_id`、`owner_name`、`stream_title`、`timestamp_label`、`job_id`、`job_state`；
+- 建议：开始与完成各私聊一条给 `member_id` 和 `owner_id`（同一事件只发一次，用 `id` 去重）；
+- 旧的 `st_qq_approval_feed` 仍保留，但不再有新的审批指令事件。
+
+迁移见 `database/migrations/050_trial_automation.sql`（事件与 feed 函数）。
+
