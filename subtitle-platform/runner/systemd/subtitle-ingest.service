@@ -1,0 +1,19 @@
+[Unit]
+Description=Subtitle audio ingest (Silicon Valley)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+RestartSec=10
+ExecStartPre=-/usr/bin/docker rm -f subtitle-ingest
+ExecStart=/usr/bin/docker run --rm --name subtitle-ingest \
+  -p 0.0.0.0:18081:18081 \
+  -v /opt/lighthouse-hub/backups/subtitle-runner/app:/app \
+  -v /opt/lighthouse-hub/backups/subtitle-runner/work:/work \
+  --env-file /opt/lighthouse-hub/backups/subtitle-runner/env \
+  -w /app lighthouse-hub:tweet-publish-hotfix2 python /app/ingest.py
+ExecStop=/usr/bin/docker stop subtitle-ingest
+
+[Install]
+WantedBy=multi-user.target
