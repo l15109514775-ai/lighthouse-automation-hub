@@ -2,12 +2,13 @@
 from contextlib import contextmanager
 from contextvars import ContextVar
 import fcntl
+import os
 from pathlib import Path
 from uuid import UUID
 
-TRIAL_STATE_ROOT = Path('/workspace/subtitle-trial-state')
+TRIAL_STATE_ROOT = Path(os.environ.get('SUBTITLE_TRIAL_STATE_ROOT', '/workspace/subtitle-trial-state'))
 TRIAL_SCOPE = 'trial-20min-20261021'
-JOB_STATE_ROOT = Path('/workspace/subtitle-job-state')
+JOB_STATE_ROOT = Path(os.environ.get('SUBTITLE_JOB_STATE_ROOT', '/workspace/subtitle-job-state'))
 _request_guard = ContextVar('platform_before_reserve', default=None)
 
 

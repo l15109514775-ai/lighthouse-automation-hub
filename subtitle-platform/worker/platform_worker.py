@@ -21,7 +21,7 @@ import worker
 from operational_report import snapshot as operation_snapshot
 from delivery_contract import REQUIRED_FILES, MAX_FILE_BYTES, MAX_DELIVERY_BYTES
 
-HOST = 'example-env.api.tcloudbasegateway.com'
+HOST = os.environ.get('SUBTITLE_GATEWAY_HOST', 'example-env.api.tcloudbasegateway.com')
 API = 'https://' + HOST + '/v1/rdb/rest/rpc/st_cloud_worker_call'
 RESERVE_BYTES = 1024**3
 SOURCE_TTL = 23 * 3600
@@ -238,35 +238,50 @@ def download(claim, destination, claimed_at, check_active):
                 check_active()
                 if time.time() >= expires_at:
                     raise InputExpired('source_urls_expired_no_local_refresh')
-                request = urllib.request.Request(safe_source_url(source['url']),
-                    headers={'Accept-Encoding': 'identity'}, method='GET')
-                try:
-                    response = http.open(request, timeout=30)
-                except urllib.error.HTTPError as error:
-                    status = error.code
-                    error.close()
-                    if status in (401, 403, 410):
-                        raise InputExpired('source_url_expired_or_access_revoked') from None
-                    raise InvalidInput('source_http_rejected_no_redirect') from None
-                except (OSError, TimeoutError, urllib.error.URLError):
-                    raise PlatformUnavailable('source_download_unavailable') from None
-                count = 0
-                with response:
-                    if response.status != 200:
-                        raise InvalidInput('source_http_non_success')
-                    declared = response.headers.get('Content-Length')
-                    if declared is not None and declared != str(source['byte_size']):
-                        raise InvalidInput('source_content_length_mismatch')
-                    while block := response.read(1024**2):
-                        check_active()
-                        count += len(block); total += len(block)
-                        if count > source['byte_size'] or total > claim['byte_size']:
-                            raise InvalidInput('source_stream_size_exceeded')
-                        if shutil.disk_usage(destination.parent).free < RESERVE_BYTES + len(block):
-                            raise ConfigurationMissing('private_disk_reserve_reached')
-                        output.write(block); digest.update(block)
-                if count != source['byte_size']:
+                expected = source['byte_size']
+                buffered = None
+                for attempt in range(3):
+                    if time.time() >= expires_at:
+                        raise InputExpired('source_urls_expired_no_local_refresh')
+                    try:
+                        request = urllib.request.Request(safe_source_url(source['url']),
+                            headers={'Accept-Encoding': 'identity'}, method='GET')
+                        try:
+                            response = http.open(request, timeout=120)
+                        except urllib.error.HTTPError as error:
+                            status = error.code
+                            error.close()
+                            if status in (401, 403, 410):
+                                raise InputExpired('source_url_expired_or_access_revoked') from None
+                            if status in (429, 500, 502, 503, 504) and attempt < 2:
+                                time.sleep(2 * (attempt + 1))
+                                continue
+                            raise InvalidInput('source_http_rejected_no_redirect') from None
+                        data = bytearray()
+                        with response:
+                            if response.status != 200:
+                                raise InvalidInput('source_http_non_success')
+                            declared = response.headers.get('Content-Length')
+                            if declared is not None and declared != str(expected):
+                                raise InvalidInput('source_content_length_mismatch')
+                            while block := response.read(1024**2):
+                                check_active()
+                                data.extend(block)
+                                if len(data) > expected:
+                                    raise InvalidInput('source_stream_size_exceeded')
+                                if shutil.disk_usage(destination.parent).free < RESERVE_BYTES + len(block):
+                                    raise ConfigurationMissing('private_disk_reserve_reached')
+                        if len(data) == expected:
+                            buffered = bytes(data)
+                            break
+                    except (TimeoutError, OSError, urllib.error.URLError):
+                        pass
+                    time.sleep(2 * (attempt + 1))
+                if buffered is None:
                     raise InvalidInput('source_chunk_truncated')
+                output.write(buffered)
+                digest.update(buffered)
+                total += len(buffered)
             if total != claim['byte_size'] or digest.hexdigest() != claim['sha256']:
                 raise InvalidInput('source_complete_size_or_sha256_mismatch')
             output.flush(); os.fsync(output.fileno())
@@ -401,14 +416,18 @@ def limited_config(claim):
 
 
 def config_ready():
-    from qwen_asr import readiness
-    from runtime import model_ready
     cfg=worker.read(Path(__file__).with_name('config.example.json'))
     try:
         worker.text_readiness(cfg)
-        readiness(cfg)
-        if not model_ready(load=True)['ready']:
-            raise ConfigurationMissing('pinned_whisper_model_not_ready')
+        if cfg.get('asr_mode') == 'api':
+            from asr_api import preflight
+            preflight(cfg)
+        else:
+            from qwen_asr import readiness
+            from runtime import model_ready
+            readiness(cfg)
+            if not model_ready(load=True)['ready']:
+                raise ConfigurationMissing('pinned_whisper_model_not_ready')
     except Exception:
         raise ConfigurationMissing('recognition_configuration_not_ready') from None
 

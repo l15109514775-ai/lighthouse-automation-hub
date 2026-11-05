@@ -13,6 +13,7 @@ nothing is written to disk. Logs are single-line JSON on stdout.
 import json
 import os
 import signal
+import shutil
 import ssl
 import subprocess
 import sys
@@ -50,8 +51,11 @@ def rpc(name, payload):
 
 
 def run_job(job_id):
+    control = WORK_ROOT / 'control' / job_id
+    if control.exists():
+        shutil.rmtree(control, ignore_errors=True)
     command = [PYTHON, str(HERE / 'platform_worker.py'), '--job-id', job_id,
-               '--work-root', str(WORK_ROOT), '--config', CONFIG, '--execute']
+               '--work-root', str(WORK_ROOT), '--execute']
     started = time.time()
     try:
         result = subprocess.run(command, cwd=str(HERE), timeout=JOB_TIMEOUT,
