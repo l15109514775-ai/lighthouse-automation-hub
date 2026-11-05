@@ -244,7 +244,7 @@ def relay(rows, folder, cfg, phase, secondary, *, reservation=None):
     if marker.exists() and not response_file.exists() and read(marker).get('state') != 'not_sent':
         raise RuntimeError('Previous model request has no saved response; manual reconciliation required')
     base = urlsplit(cfg['gpt_base_url'])
-    if base.scheme != 'https' or base.hostname != 'text-provider.example.invalid' or base.path.rstrip('/') != '/v1' or base.query or base.fragment or base.username or base.password or base.port not in (None,443):
+    if base.scheme != 'https' or base.hostname not in ('text-provider.example.invalid','api.chr1.com','api.chr6.com') or base.path.rstrip('/') != '/v1' or base.query or base.fragment or base.username or base.password or base.port not in (None,443):
         raise ValueError('Only the existing GPT relay endpoints are permitted')
     if cfg['gpt_model'] != 'gpt-6-luna':
         raise ValueError('Only the existing GPT text model route is enabled')
@@ -303,7 +303,7 @@ def relay(rows, folder, cfg, phase, secondary, *, reservation=None):
 
 def text_readiness(cfg):
     base = urlsplit(cfg['gpt_base_url'])
-    if (base.scheme != 'https' or base.hostname != 'text-provider.example.invalid' or
+    if (base.scheme != 'https' or base.hostname not in ('text-provider.example.invalid','api.chr1.com','api.chr6.com') or
             base.path.rstrip('/') != '/v1' or base.query or base.fragment or
             base.username or base.password or base.port not in (None, 443) or
             cfg['gpt_model'] != 'gpt-6-luna'):
