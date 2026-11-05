@@ -2,9 +2,7 @@ name: Subtitle platform offline checks
 
 on:
   push:
-    paths: ['subtitle-platform/**']
   pull_request:
-    paths: ['subtitle-platform/**']
 
 permissions:
   contents: read
