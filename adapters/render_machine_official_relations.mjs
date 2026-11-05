@@ -1,5 +1,6 @@
 // Independent official-API rendering. No source screenshot is invented. No publisher, credential or policy enable.
 import fs from 'node:fs/promises';
+import {createRequire} from 'node:module';
 import path from 'node:path';
 import {Renderer} from '../compositor/src/renderer.mjs';
 import {loadTemplate,loadFonts,loadAssets,sha256,stable,walkPosts} from '../compositor/src/core.mjs';
@@ -267,14 +268,22 @@ try{
  let pngWidth=layout.width*template.scale,pngHeight=layout.height*template.scale,normalization=null;
  const MAX_BYTES=Number(process.env.HUB_RENDER_MAX_BYTES||3145728),MAX_HEIGHT=Number(process.env.HUB_RENDER_MAX_HEIGHT||4096);
  if(bytes.length>MAX_BYTES||pngHeight>MAX_HEIGHT){
-  const {default:sharp}=await import('/opt/lighthouse-hub/compositor/node_modules/sharp/lib/index.js');
+  const requireFromCompositor=createRequire('/opt/lighthouse-hub/compositor/package.json');
+  const sharp=requireFromCompositor('sharp');
   const meta=await sharp(bytes).metadata();
   let targetHeight=meta.height,targetWidth=meta.width;
   if(targetHeight>MAX_HEIGHT){targetWidth=Math.max(1,Math.round(meta.width*MAX_HEIGHT/targetHeight));targetHeight=MAX_HEIGHT;}
   if(targetWidth>1600){targetHeight=Math.max(1,Math.round(targetHeight*1600/targetWidth));targetWidth=1600;}
-  const scaled=await sharp(bytes).resize({width:targetWidth,height:targetHeight,fit:'inside'}).png({compressionLevel:9}).toBuffer();
-  normalization={from:{bytes:bytes.length,width:meta.width,height:meta.height},to:{bytes:scaled.length,width:targetWidth,height:targetHeight}};
-  bytes=scaled;pngWidth=targetWidth;pngHeight=targetHeight;
+  let scaled=await sharp(bytes).resize({width:targetWidth,height:targetHeight,fit:'inside'}).png({compressionLevel:9}).toBuffer();
+  // Height/width limits alone can still leave a complex tall image above the
+  // byte budget; shrink by width until it fits or the floor is reached.
+  for(let i=0;i<4&&scaled.length>MAX_BYTES&&targetWidth>900;i+=1){
+   targetWidth=Math.max(900,Math.round(targetWidth*Math.min(0.95,Math.sqrt(MAX_BYTES/scaled.length)*0.95)));
+   scaled=await sharp(bytes).resize({width:targetWidth}).png({compressionLevel:9}).toBuffer();
+  }
+  const finalMeta=await sharp(scaled).metadata();
+  normalization={from:{bytes:bytes.length,width:meta.width,height:meta.height},to:{bytes:scaled.length,width:finalMeta.width,height:finalMeta.height}};
+  bytes=scaled;pngWidth=finalMeta.width;pngHeight=finalMeta.height;
  }
  await fs.writeFile(png,bytes,{mode:0o600});
  const report={version:'machine-render-api-v2',policy:'machine-tweet-v4-api-relations',mode:'machine-render-only-api-relations-v2',
