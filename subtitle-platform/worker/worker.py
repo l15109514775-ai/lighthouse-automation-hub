@@ -378,8 +378,12 @@ def execute_job(args, cfg, video, duration, job):
             raise ValueError('Secondary reference file does not exist')
         secondary=read(secondary_path);validate_cues(secondary,duration)
     else:
-        from qwen_asr import readiness
-        readiness(cfg)  # Fail before local recognition when service setup is missing.
+        if cfg.get('asr_mode') == 'api':
+            from asr_api import preflight
+            preflight(cfg)
+        else:
+            from qwen_asr import readiness
+            readiness(cfg)  # Fail before local recognition when service setup is missing.
         if cfg.get('max_qwen_requests', 0) <= 0:
             raise ValueError('New secondary recognition requires an approved Qwen allowance')
     primary_path=Path(args.primary).resolve() if getattr(args,'primary',None) else None
@@ -390,24 +394,38 @@ def execute_job(args, cfg, video, duration, job):
         if getattr(args,'primary_source_sha256',None)!=input_sha256:
             raise ValueError('Reused primary transcript must be bound to the input video SHA256')
         validate_cues(read(primary_path),duration)
-    else:
+    elif cfg.get('asr_mode') != 'api':
         from runtime import model_ready
         if cfg['whisper_model_path'] != read(Path(__file__).with_name('model.lock.json'))['destination'] or not model_ready()['ready']:
             raise ValueError('Pinned local Whisper model is not ready; run runtime.py check')
+    api_mode = cfg.get('asr_mode') == 'api'
     identity={'input_sha256':input_sha256,'secondary_sha256':digest(secondary_path) if secondary_path else None,'config_sha256':hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),
-              'primary_mode':'reused' if primary_path else 'new_whisper',
-              'model_revision':read(Path(__file__).with_name('model.lock.json'))['revision'] if not primary_path else None}
+              'primary_mode':'reused' if primary_path else ('api_whisper' if api_mode else 'new_whisper'),
+              'model_revision':None if primary_path else (cfg.get('asr_primary_model') if api_mode else read(Path(__file__).with_name('model.lock.json'))['revision'])}
     if primary_path:
         identity['primary_reference_sha256']=digest(primary_path)
     if (job/'identity.json').exists() and read(job/'identity.json')!=identity:
         raise ValueError('Job inputs/config changed; do not reuse its checkpoints')
     save(job/'identity.json',identity)
     bind_source(cfg, input_sha256)
-    audio=job/'audio.wav'
-    prepare_audio(video,audio,duration,cfg['max_video_seconds'])
+    if api_mode:
+        from asr_api import prepare_primary_audio
+        audio=job/'asr'/'primary.mp3'
+        prepare_primary_audio(video,audio)
+    else:
+        audio=job/'audio.wav'
+        prepare_audio(video,audio,duration,cfg['max_video_seconds'])
     cues_path=job/'primary-cues.json'
     if not cues_path.exists():
-        save(cues_path,read(primary_path) if primary_path else transcribe(audio,job,cfg))
+        if primary_path:
+            save(cues_path,read(primary_path))
+        elif api_mode:
+            from asr_api import whisper_primary
+            save(cues_path,[{'id':index+1,'start':row['start'],'end':row['end'],'text':row['text'],
+                             'review':False,'timing_method':'whisper_api_segment_timestamps'}
+                            for index,row in enumerate(whisper_primary(audio,cfg,duration))])
+        else:
+            save(cues_path,transcribe(audio,job,cfg))
     rows=read(cues_path);validate_cues(rows,duration)
     # A lower bound, not a guarantee about future model output. Fail known
     # impossible deliveries before Qwen/text billing; keep original ASR intact.
@@ -417,26 +435,54 @@ def execute_job(args, cfg, video, duration, job):
     # Each batch needs translation and review; reject insufficient allowance up front.
     if 2 * math.ceil(len(rows)/20) > cfg['max_text_requests']:
         raise ValueError('Text request allowance cannot cover translation and review')
+    cross=None
     if not secondary_path:
-        from qwen_asr import recognize
-        secondary=recognize(audio,job,cfg)
-        save(job/'secondary-cues.json',secondary)
+        if api_mode:
+            from asr_api import qwen_window, arbiter_window, cross_check
+            workdir=job/'asr-api'
+            workdir.mkdir(parents=True,exist_ok=True)
+            secondary=[]
+            def qwen_call(start,end):
+                text=qwen_window(audio,start,end,cfg,workdir)
+                secondary.append({'id':len(secondary)+1,'start':start,'end':end,'text':text,'review':True,
+                                  'timing_method':'source_audio_window_interval_not_word_alignment'})
+                return text
+            def arbiter_call(start,end):
+                return arbiter_window(audio,start,end,cfg,workdir)
+            cross=cross_check(rows,duration,cfg,qwen_call,arbiter_call)
+            save(job/'secondary-cues.json',secondary)
+        else:
+            from qwen_asr import recognize
+            secondary=recognize(audio,job,cfg)
+            save(job/'secondary-cues.json',secondary)
     translated=[]
     for index in range(0,len(rows),20):
         first=relay(rows[index:index+20],job/'text'/f'{index:06}-translate',cfg,'translate',secondary)
         translated.extend(relay(first,job/'text'/f'{index:06}-review',cfg,'review',secondary))
     report=quality(translated,duration)
+    if cross is not None:
+        report['cross_check']={'version':cross['version'],'window_seconds':cross['window_seconds'],
+                               'summary':cross['summary'],
+                               'flagged_segments':cross['flagged_segments'][:200]}
     export(translated,job/'delivery')
     save(job/'delivery'/'cues.json',compact_cues(translated))
     save(job/'quality-full.json',report)
     save(job/'delivery'/'quality.json',compact_quality(report))
     save(job/'delivery'/'recognition-provenance.json',{
         'input_sha256':input_sha256,
-        'primary_mode':'reused_existing_result' if primary_path else 'whisper_executed_in_this_job',
+        'primary_mode':('reused_existing_result' if primary_path else
+                        ('openai_whisper_executed_in_this_job' if api_mode else 'whisper_executed_in_this_job')),
         'primary_reference_sha256':digest(primary_path) if primary_path else None,
-        'whisper_model':read(Path(cfg['whisper_model_path'])/'model-manifest.json') if not primary_path else None,
-        'whisper_runtime':{'device':'cpu','compute_type':'int8','cpu_threads':2,'num_workers':1} if not primary_path else None,
-        'secondary_mode':'provided_existing_result' if secondary_path else 'qwen3_asr_flash_executed_in_this_job',
+        'primary_provider':'openai' if api_mode and not primary_path else None,
+        'primary_model':cfg.get('asr_primary_model') if api_mode and not primary_path else None,
+        'whisper_model':read(Path(cfg['whisper_model_path'])/'model-manifest.json') if not primary_path and not api_mode else None,
+        'whisper_runtime':{'device':'cpu','compute_type':'int8','cpu_threads':2,'num_workers':1} if not primary_path and not api_mode else None,
+        'secondary_mode':('provided_existing_result' if secondary_path else
+                          ('qwen3_asr_flash_api_windows' if api_mode else 'qwen3_asr_flash_executed_in_this_job')),
+        'secondary_provider':'qwen' if api_mode and not secondary_path else None,
+        'arbiter_provider':'openai' if cross is not None and cross['summary'].get('arbiter_requests') else None,
+        'arbiter_model':cfg.get('asr_arbiter_model') if cross is not None and cross['summary'].get('arbiter_requests') else None,
+        'cross_check_summary':cross['summary'] if cross is not None else None,
         'secondary_sha256':digest(secondary_path or job/'secondary-cues.json'),
         'secondary_timing':'provided ASR cue intervals' if secondary_path else 'source audio chunk intervals, not word or forced alignment',
         'new_secondary_asr_requests':len(list((job/'qwen').glob('*/request-state.json'))),

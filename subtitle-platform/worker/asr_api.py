@@ -53,6 +53,18 @@ def resolve_key(cfg, env_name, provided=None):
     return key
 
 
+def preflight(cfg):
+    """Fail fast on missing endpoints or credentials without printing secrets."""
+    _require_https(cfg.get('asr_primary_base_url', 'https://api.openai.com/v1'))
+    _require_https(cfg.get('asr_qwen_base_url', 'https://dashscope.aliyuncs.com/compatible-mode/v1'))
+    _require_https(cfg.get('asr_arbiter_base_url', cfg.get('asr_primary_base_url', 'https://api.openai.com/v1')))
+    resolve_key(cfg, cfg.get('asr_primary_key_env', 'OPENAI_API_KEY'))
+    resolve_key(cfg, cfg.get('asr_qwen_key_env', 'DASHSCOPE_API_KEY'))
+    if int(cfg.get('asr_max_arbiter_requests', 10)) > 0:
+        resolve_key(cfg, cfg.get('asr_arbiter_key_env', 'OPENAI_API_KEY'))
+    return True
+
+
 def fingerprint(key):
     return hashlib.sha256(key.encode('utf-8')).hexdigest()[:8]
 

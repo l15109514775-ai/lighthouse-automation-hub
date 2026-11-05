@@ -17,5 +17,20 @@
   "qwen_base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
   "qwen_model": "qwen3-asr-flash",
   "qwen_credential_env": "SUBTITLE_QWEN_TOKEN",
-  "qwen_chunk_seconds": 30
+  "qwen_chunk_seconds": 30,
+  "asr_mode": "local",
+  "asr_primary_base_url": "https://api.openai.com/v1",
+  "asr_primary_model": "whisper-1",
+  "asr_primary_key_env": "OPENAI_API_KEY",
+  "asr_qwen_base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "asr_qwen_model": "qwen3-asr-flash",
+  "asr_qwen_key_env": "DASHSCOPE_API_KEY",
+  "asr_arbiter_base_url": "https://api.openai.com/v1",
+  "asr_arbiter_model": "gpt-4o-transcribe",
+  "asr_arbiter_key_env": "OPENAI_API_KEY",
+  "asr_window_seconds": 60,
+  "asr_max_arbiter_requests": 10,
+  "asr_agree_cer": 0.2,
+  "asr_conflict_cer": 0.4,
+  "asr_language": "ja"
 }
