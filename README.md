@@ -3,7 +3,7 @@
 这是字幕组日常在用的两套工具，放在同一个仓库里：
 
 - **自动化中枢**（Python / Docker Compose）：把一条 **YouTube 长直播回放** 或一条 **X 推文**，自动变成 B 站上的稿件或动态。
-- **字幕协作平台**（静态网站 + CloudBase PostgreSQL + QQ 机器人 + 云端字幕 worker）：把 **人** 组织起来——谁申请入组、谁认领任务、谁交付、谁审核、积分怎么记。
+- **字幕协作平台**（静态网站 + CloudBase PostgreSQL + QQ 机器人 + 自托管字幕执行器）：把 **人** 组织起来——谁申请入组、谁认领任务、谁交付、谁审核、积分怎么记。
 
 两套工具数据独立、可以分别部署；同一个仓库只是为了让第一次来的人一次看全。默认全部离线或 `DRY_RUN`，不调用真实平台、不产生费用，也不含任何真实账号、Cookie、生产库和投稿素材。
 
@@ -37,7 +37,8 @@ flowchart LR
     SITE["静态网站 site/<br/>成员 / 项目 / 任务 / 审核"] --> GW["RPC gateway"]
     GW --> PG[("PostgreSQL RDB<br/>st_* 函数")]
     BOT["QQ 机器人<br/>AstrBot 插件"] --> GW
-    CW["云端字幕 worker<br/>Codex Cloud"] --> GW
+    SH["上海执行器<br/>下载 + 抽音频"] --> CW["硅谷执行器<br/>whisper / 千问 / gpt-4o"]
+    CW --> GW
   end
 
   style HUB fill:#eef5ff,stroke:#4a7bd0
@@ -48,7 +49,8 @@ flowchart LR
 
 - **中枢与平台不共享数据库**：中枢用 SQLite（`services/hub/db.py` 建 `jobs` / `heartbeats` / `audit`），平台用 CloudBase PostgreSQL（`subtitle-platform/database/migrations/`）。两边唯一的关联是同一条内容在各自系统里都有记录，靠来源链接人工对齐。
 - **QQ 机器人不直连数据库**：它只调用 gateway 的 `st_qq_dispatch` / `st_qq_notification_feed`（`subtitle-platform/bot/plugins/astrbot_plugin_subtitle_bridge/bridge.py`、`.../subtitle_notify/main.py`），权限与数据边界都在 SQL 函数里。
-- **云端字幕 worker 也只走 RPC**：`st_cloud_worker_call` / `st_cloud_prepare` 等函数（`database/migrations/021_cloud_jobs.sql`，后续迁移补权限），worker 在 Codex Cloud 里跑，回传结果由函数校验。
+- **字幕执行器拆成上海 + 硅谷**：上海从 CloudBase 同地域下载原视频并只抽音频，硅谷用 whisper-1 / 千问 / gpt-4o 做识别、翻译和发布；两端都只走 RPC（`st_cloud_worker_call`、`st_subtitle_auto_decide` 等，见 `subtitle-platform/docs/AUTOMATION.md`）。
+- **白名单自动审批**：组长网页配置成员与每日限额，执行器每 5 分钟自动批准并领取；不在白名单的申请仍由组长手动批准。
 - **译图是中枢的子进程**：`adapters/compositor.py` 调 `node adapters/render_bridge.mjs`（即 `compositor/` 子模块），只负责"文本 → PNG"，B 站发布由 `services/hub/publishing.py` 与 `adapters/bilibili.py` 负责。
 - **生产与公开版的区别**：公开版默认 `DRY_RUN=true`、所有采集/下载/发布开关为 `false`；生产环境验证过的流程在 `docs/` 各指南里单独标注。
 

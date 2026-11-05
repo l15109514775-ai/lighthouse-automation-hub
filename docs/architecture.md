@@ -9,7 +9,7 @@
 | 自动化中枢 | 一台 Linux 服务器（Docker Compose） | `api`、`scheduler`、`tweet-worker`、`video-worker`、`system-worker` | `./data/hub.sqlite3`（队列、审计、心跳）、`./media`、`./logs`、`./backups` |
 | 字幕协作平台 | 腾讯云 CloudBase | 静态站点 + PostgreSQL RDB + RPC gateway | 平台自己的 PostgreSQL 实例 |
 | QQ 机器人 | 一台常开的服务器（AstrBot） | AstrBot + 两个插件 | 本地 `subtitle_bridge.json`、`subtitle_notifications.json` |
-| 云端字幕 worker | Codex Cloud（按需手动启动） | `vendor/subtitle-cloud-worker/worker.py` 等 | 通过 RPC 读写平台数据 |
+| 字幕执行器 | 上海（下载/抽音频）+ 硅谷（识别/翻译/发布） | `subtitle-platform/runner/`、`worker/` | 通过 RPC 读写平台数据 |
 | 译图排版 | 中枢所在服务器 | `compositor/`（Node 子进程） | 输出 PNG 到中枢 `media/` |
 
 ## 完整连接图
@@ -45,7 +45,7 @@ flowchart TB
     SITE["site/ 静态前端"] --> GW["RPC gateway"]
     GW --> PG[("PostgreSQL<br/>st_* 函数")]
     BOT["AstrBot 插件"] --> GW
-    CLOUD["Codex Cloud worker"] --> GW
+    CLOUD["上海 / 硅谷执行器"] --> GW
   end
 
   SITE -. "同一内容的来源链接" .- BILI
@@ -70,4 +70,4 @@ flowchart TB
 
 - **中枢与平台不共享数据库**，也没有自动同步。两边各自记录同一条内容（例如同一场直播），通过来源链接对齐；这是有意的隔离，避免任一系统故障影响另一套。
 - **公开版不含生产配置**：中枢的 `config/hub.toml` 需要从 `hub.example.toml` 复制并改；平台的域名、环境 ID、key 由 `tools/configure.py` 生成到独立部署目录。
-- **收费与发布默认关闭**：中枢 `DRY_RUN=true`、所有开关 `false`；平台的云端任务需要组员自己申请、组长审核后在 Codex Cloud 手动启动。
+- **收费与发布默认关闭**：中枢 `DRY_RUN=true`、所有开关 `false`；平台的白名单成员由执行器自动批准并处理，非白名单仍由组长审核；执行器拆成上海拉取与硅谷识别两段。
