@@ -261,6 +261,7 @@ def probe_duration(path):
 
 
 def prepare_primary_audio(video, out):
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
     _run(['ffmpeg', '-v', 'error', '-y', '-i', str(video), '-vn', '-ac', '1', '-ar', '16000',
           '-b:a', '64k', str(out)])
     if out.stat().st_size > MAX_AUDIO_BYTES:

@@ -502,9 +502,22 @@ def execute(args):
             with lease:
                 lease.stage='checking_configuration'
                 config_ready()
-                lease.stage='downloading'
-                video=download(claim,root/'inputs'/claim['job_id']/'source.media',
-                               session['claimed_at'],lease.check_active)
+                if getattr(args, 'audio_file', None):
+                    video=Path(args.audio_file).resolve()
+                    if not video.is_file():
+                        raise InvalidInput('audio_ingest_missing')
+                    import hashlib as _hashlib
+                    with video.open('rb') as _fh:
+                        _digest=_hashlib.sha256()
+                        for _block in iter(lambda: _fh.read(1024**2), b''):
+                            _digest.update(_block)
+                    worker.save(control/'audio-ingest.json',
+                        {'bytes':video.stat().st_size,'sha256':_digest.hexdigest(),
+                         'source_sha256':claim['sha256']})
+                else:
+                    lease.stage='downloading'
+                    video=download(claim,root/'inputs'/claim['job_id']/'source.media',
+                                   session['claimed_at'],lease.check_active)
                 if getattr(args, 'qwen_recovery_plan', None):
                     from qwen_recovery import apply_plan
                     cfg = apply_plan(root, claim['job_id'], cfg, args.qwen_recovery_plan)
@@ -512,6 +525,8 @@ def execute(args):
                 worker.save(config,cfg)
                 worker_args=argparse.Namespace(video=video,config=config,execute=True,
                     primary=None,secondary=None,primary_source_sha256=None,
+                    source_sha256=claim['sha256'] if getattr(args,'audio_file',None) else None,
+                    audio_file=str(video) if getattr(args,'audio_file',None) else None,
                     work_root=root/'jobs',job_id=claim['job_id'])
                 lease.stage='recognition_and_text'
                 with billing.request_guard(lease.before_reserve):
@@ -551,6 +566,7 @@ def main(argv=None):
     parser.add_argument('--execute',action='store_true',help='Claim the exact authorized job, process and publish within server limits')
     parser.add_argument('--publish-only',action='store_true',help='Explicit same-workspace saved-payload publication only; never claim or invoke models')
     parser.add_argument('--qwen-recovery-plan', help='Explicitly reviewed same-job recovery plan; never selects a new job')
+    parser.add_argument('--audio-file', help='Process a pre-staged audio file instead of downloading sources')
     args=parser.parse_args(argv)
     try:
         if not args.execute:

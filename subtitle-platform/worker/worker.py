@@ -387,7 +387,8 @@ def execute_job(args, cfg, video, duration, job):
         if cfg.get('max_qwen_requests', 0) <= 0:
             raise ValueError('New secondary recognition requires an approved Qwen allowance')
     primary_path=Path(args.primary).resolve() if getattr(args,'primary',None) else None
-    input_sha256=digest(video)
+    input_sha256=getattr(args,'source_sha256',None) or digest(video)
+    audio_sha256=digest(video) if getattr(args,'audio_file',None) else None
     if primary_path:
         if not primary_path.is_file():
             raise ValueError('Primary reference file does not exist')
@@ -399,7 +400,7 @@ def execute_job(args, cfg, video, duration, job):
         if cfg['whisper_model_path'] != read(Path(__file__).with_name('model.lock.json'))['destination'] or not model_ready()['ready']:
             raise ValueError('Pinned local Whisper model is not ready; run runtime.py check')
     api_mode = cfg.get('asr_mode') == 'api'
-    identity={'input_sha256':input_sha256,'secondary_sha256':digest(secondary_path) if secondary_path else None,'config_sha256':hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),
+    identity={'input_sha256':input_sha256,'audio_sha256':audio_sha256,'secondary_sha256':digest(secondary_path) if secondary_path else None,'config_sha256':hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),
               'primary_mode':'reused' if primary_path else ('api_whisper' if api_mode else 'new_whisper'),
               'model_revision':None if primary_path else (cfg.get('asr_primary_model') if api_mode else read(Path(__file__).with_name('model.lock.json'))['revision'])}
     if primary_path:
@@ -470,6 +471,8 @@ def execute_job(args, cfg, video, duration, job):
     save(job/'delivery'/'quality.json',compact_quality(report))
     save(job/'delivery'/'recognition-provenance.json',{
         'input_sha256':input_sha256,
+        'audio_sha256':audio_sha256,
+        'source_mode':'audio_ingest' if audio_sha256 else 'video_download',
         'primary_mode':('reused_existing_result' if primary_path else
                         ('openai_whisper_executed_in_this_job' if api_mode else 'whisper_executed_in_this_job')),
         'primary_reference_sha256':digest(primary_path) if primary_path else None,
