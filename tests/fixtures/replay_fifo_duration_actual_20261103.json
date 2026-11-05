@@ -73,7 +73,7 @@
     }
    },
    "registered_identity_sha256": "b56a89a992af4766322afb06dd4bedc884aa3038a97145fcb59c93cdcc60d1b3",
-   "registered_metadata_sha256": "21e6fdf207b53d3f59ae1381b4f4713eec8cc534908fb883e62c5ca7cde5dc80",
+   "registered_metadata_sha256": "f3b59ac66594f441e0212e8790476b69ea5dfe800c2617b88a29145101337210",
    "registered_payload": {
     "channel_id": "UCbbbbbbbbbbbbbbbbbbbbbb",
     "duration": "PT8H31M4S",
