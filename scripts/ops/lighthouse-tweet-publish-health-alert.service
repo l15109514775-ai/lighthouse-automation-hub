@@ -1,0 +1,7 @@
+[Unit]
+Description=Alert when the tweet publish health check fails
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'mkdir -p /opt/lighthouse-hub/data/ops-maintenance && date -Is > /opt/lighthouse-hub/data/ops-maintenance/tweet-publish-health.alert'
+ExecStart=/usr/bin/logger -t lighthouse-tweet-publish-health -p user.err "tweet publish health check failed; inspect /opt/lighthouse-hub/data/ops-maintenance/tweet-publish-health.json"

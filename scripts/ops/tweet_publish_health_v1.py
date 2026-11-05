@@ -39,6 +39,9 @@ def caption_digest(parent):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--hours', type=float, default=24.0)
+    parser.add_argument('--report', type=Path, help='also write the JSON report to this path')
+    parser.add_argument('--include-resolved', action='store_true',
+                        help='include failures whose parent or publication already completed')
     args = parser.parse_args()
     settings = Settings.load()
     store = Store(settings.db_path)
@@ -53,6 +56,12 @@ def main():
                  'state': child['state'], 'attempts': child['attempts'],
                  'error_code': child['error_code'], 'stage': child['stage'],
                  'updated_at': time.strftime('%Y-%m-%dT%H:%M:%S%z', time.localtime(child['updated_at']))}
+        if parent and not args.include_resolved:
+            published = store.query("SELECT 1 FROM publications WHERE source_id=? AND state='completed'",
+                                    (parent['source_id'],))
+            cleared = parent['state'] == 'failed' and parent['error_code'] == 'OWNER_BACKLOG_CLEARED'
+            if parent['state'] == 'completed' or published or cleared:
+                continue
         if parent:
             entry['source_url'] = parent['payload'].get('url')
             entry['caption_sha256'] = caption_digest(parent)
@@ -67,7 +76,11 @@ def main():
     report = {'version': VERSION, 'window_hours': args.hours, 'failed': failures,
               'uncertain_publications': uncertain,
               'healthy': not failures and not uncertain}
-    print(json.dumps(report, ensure_ascii=False, indent=1))
+    text = json.dumps(report, ensure_ascii=False, indent=1)
+    if args.report:
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(text + '\n', 'utf-8')
+    print(text)
     return 0 if report['healthy'] else 1
 
 

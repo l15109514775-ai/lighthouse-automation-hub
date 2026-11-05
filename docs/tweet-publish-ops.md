@@ -43,3 +43,15 @@ node scripts/ops/clear_orphaned_bilibili_draft_v1.mjs \
 3. 需要补发时，先确认该帖子在授权文件内（或仍在 2 小时窗口内），再 `requeue ... --apply`；
 4. 观察下一次发布：`ready.json` 应在 60 秒内出现，结果为 `published_visible`；
 5. 若译图过大，先让新渲染的缩放生效，旧任务需要重新渲染后再发布。
+
+
+## 健康检查定时器
+
+- 单元：`scripts/ops/lighthouse-tweet-publish-health.{service,timer}` 与 `…-alert.service`；
+- 每 15 分钟运行一次只读检查，报告写入 `data/ops-maintenance/tweet-publish-health.json`；
+- 非 0 退出触发 alert 单元（写 alert 文件 + `logger -p user.err`）；
+- `OWNER_BACKLOG_CLEARED` 与已完成的父任务视为已解决，避免历史噪声。
+
+## 渲染缩放重建工具
+
+`scripts/ops/rescale_machine_tweet_render_v1.py` 用于"已渲染但超过 3 MB / 4096px"的旧任务：ffmpeg 缩放到字节预算内，新建 attempt 目录（原目录不动），重建 report 与 manifest，更新父任务与失败子任务的绑定，随后用 requeue 工具重排。默认 dry-run，`--apply` 需 `--reason`。

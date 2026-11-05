@@ -1,0 +1,17 @@
+[Unit]
+Description=Lighthouse tweet publish health check (read-only)
+After=docker.service
+Requires=docker.service
+OnFailure=lighthouse-tweet-publish-health-alert.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/docker exec -u 10001 \
+  -e HUB_ROOT=/opt/lighthouse-hub \
+  -e HUB_CONFIG=/opt/lighthouse-hub/config/tweet-runtime-v4.toml \
+  -e PYTHONPATH=/opt/lighthouse-hub \
+  -w /opt/lighthouse-hub \
+  lighthouse-hub-tweet-worker-1 \
+  python /opt/lighthouse-hub/data/ops-tools/tweet_publish_health_v1.py \
+  --hours 24 \
+  --report /opt/lighthouse-hub/data/ops-maintenance/tweet-publish-health.json
