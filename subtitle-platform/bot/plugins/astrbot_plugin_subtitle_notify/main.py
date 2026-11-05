@@ -23,6 +23,13 @@ COMMANDS={'字幕通知设置','字幕通知绑定','字幕通知状态','字幕
 def sender_hash(platform,sender):
     return hashlib.sha256(('qq-c2c\0'+platform+'\0'+sender).encode()).hexdigest()
 
+def job_text(event):
+    label={'started':'开始','completed':'完成','failed':'失败'}.get(event.get('event'),event.get('event'))
+    return ('【字幕'+str(label)+'】'+str(event.get('stream_title') or '')+'｜'+str(event.get('timestamp_label') or '')
+            +'\n申请人：'+str(event.get('member_name') or '')+'｜组长：'+str(event.get('owner_name') or '')
+            +'\n任务：'+str(event.get('job_state') or '')+'｜'+str(event.get('job_id') or ''))
+
+
 def read_state(path):
     return json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
 
@@ -63,8 +70,9 @@ class SubtitleNotify(Star):
         if state.get('ledger_initialized') and not path.is_file():
             raise ValueError('Receipt ledger missing; manual recovery required')
         box=Outbox(path);box.close();state['ledger_initialized']=True
-    async def feed(self,conf,sender,after=None,after_id=None,approval=False,ids=None,result=False):
+    async def feed(self,conf,sender,after=None,after_id=None,approval=False,ids=None,result=False,job=False):
         url=GATEWAY if not approval else GATEWAY.replace('st_qq_notification_feed','st_qq_approval_feed')
+        if job:url=GATEWAY.replace('st_qq_notification_feed','st_qq_job_feed')
         if result:
             if approval:raise ValueError('Conflicting feed')
             url=GATEWAY.replace('st_qq_notification_feed','st_qq_result_feed')
@@ -194,8 +202,34 @@ class SubtitleNotify(Star):
                 except BaseException:
                     box.uncertain(rows);raise
             finally:box.close()
+    async def job_tick(self):
+        state=read_state(self.state_path)
+        if not (state.get('enabled') and state.get('job_enabled',True)):return
+        target=state.get('private_target') or {}
+        if target.get('mode')!='private':return
+        conf=self.config()
+        if state.get('platform_id')!=conf['platform_id']:return
+        cursor=state.get('job_cursor') or {}
+        value=await self.feed(conf,state['owner_sender'],cursor.get('at'),cursor.get('id'),job=True)
+        links_path=Path('/AstrBot/data/subtitle_member_links.json')
+        links=json.loads(links_path.read_text(encoding='utf-8')) if links_path.exists() else {}
+        for event in value.get('events') or []:
+            await self.send(conf,target,job_text(event))
+            member=links.get(str(event.get('member_id')))
+            if member and member.get('openid') and member.get('openid')!=target.get('openid'):
+                try:
+                    await self.send(conf,{'mode':'private','openid':member['openid']},job_text(event))
+                except Exception:
+                    pass
+            state['job_cursor']={'at':event.get('created_at'),'id':event.get('id')}
+            save_state(self.state_path,state)
     async def run(self):
         while True:
+            try:
+                await self.job_tick()
+            except asyncio.CancelledError:raise
+            except Exception as exc:
+                save_state(self.base/'subtitle_job_last_error.json',{'error_type':type(exc).__name__})
             if not claim_slot(self.base/'subtitle_notification_schedule.sqlite3'):
                 await asyncio.sleep(15);continue
             deadline=asyncio.get_running_loop().time()+240

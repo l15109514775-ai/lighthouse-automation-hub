@@ -55,6 +55,21 @@ class SubtitleBridge(Star):
                             yield event.plain_result('网站连接暂不可用，请稍后重试或登录网站查看。')
                             return
                         value=await response.json()
+                try:
+                    async with client.post(GATEWAY+'/v1/rdb/rest/rpc/st_qq_member_lookup',
+                        headers={'Authorization':'Bearer '+conf['publishable_key']},
+                        json={'p_key':conf['gateway_key'],'p_sender':sender},
+                        allow_redirects=False) as lookup_response:
+                        if lookup_response.status==200:
+                            link=await lookup_response.json()
+                            member_id=link.get('member_id') if isinstance(link,dict) else None
+                            if member_id:
+                                links_path=Path('/AstrBot/data/subtitle_member_links.json')
+                                links=json.loads(links_path.read_text(encoding='utf-8')) if links_path.exists() else {}
+                                links[str(member_id)]={'openid':event.get_sender_id(),'platform_id':event.get_platform_id()}
+                                links_path.write_text(json.dumps(links),encoding='utf-8')
+                except Exception:
+                    pass
                 text=render(action,value)
                 if len(text)>1800:
                     text=text[:1650]+'\n其余任务请登录字幕组网站查看。'
