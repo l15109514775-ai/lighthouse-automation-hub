@@ -1,0 +1,21 @@
+[Unit]
+Description=Lighthouse replay post-processing source revision reconciliation
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+ExecStart=/usr/bin/docker exec -u 10001 -w /opt/lighthouse-hub -e PYTHONPATH=/opt/lighthouse-hub lighthouse-hub-video-worker-1 python3 /opt/lighthouse-hub/backups/ops-replay-reconcile/reconcile_replay_source_revision_v1.py --apply --maintenance-reference "Automatic post-processing source revision reconciliation (registered while uploaded, now processed, stable identity, bounded duration)"
+TimeoutStartSec=10min
+TimeoutStopSec=60s
+Restart=no
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/run/docker.sock
+StandardOutput=journal
+StandardError=journal

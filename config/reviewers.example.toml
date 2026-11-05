@@ -1,0 +1,12 @@
+# Copy to config/reviewers.toml only after a real operator creates their OWN review key.
+# Public keys only. Never place a private key or passphrase here or on the server.
+# No reviewer is authorized by default; dot's maintenance token cannot sign a review.
+reviewers = []
+
+# [[reviewers]]
+# id = "actual-operator-id"
+# public_key = "base64url encoded raw 32-byte Ed25519 PUBLIC key"
+# enabled = true
+# scopes = ["video"]
+# Grant "tweet" separately for signed tweet artifacts; video alone cannot sign tweets.
+# scopes = ["video", "tweet"]

@@ -1,0 +1,18 @@
+# A separate V5 publishing policy. Default off. Supply real existing owner
+# instruction references; this file is not an owner or technical acceptance.
+version = "replay-part-video-policy-v5"
+enabled = false
+target_site_uid = "1000000000000000"
+target_account_name = "REPLACE_WITH_VERIFIED_ACCOUNT_NAME"
+public_submission_mode = "workflow_authorization_and_part_machine_acceptance_v5"
+source_scope = "pilot_single"
+acceptance_video_ids = ["6wHqfDmNF0U"]
+allowed_channel_ids = ["UCbbbbbbbbbbbbbbbbbbbbbb", "UCaaaaaaaaaaaaaaaaaaaaaa"]
+source_not_before = "2026-10-31T16:00:00Z"
+activated_at = "2026-11-02T00:00:00Z"
+automation_enabled = false
+owner_authorization_reference = "REPLACE_WITH_EXISTING_REAL_OWNER_INSTRUCTION"
+owner_permission_reference = "REPLACE_WITH_EXISTING_REAL_PERMISSION_REFERENCE"
+workflow_authorization_reference = "REPLACE_WITH_EXISTING_WORKFLOW_INSTRUCTION"
+actual_owner_workflow_response = "REPLACE_WITH_ACTUAL_OWNER_WORDS"
+owner_response_reference = "REPLACE_WITH_REAL_CONVERSATION_REFERENCE"

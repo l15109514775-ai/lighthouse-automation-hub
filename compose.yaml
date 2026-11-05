@@ -1,0 +1,76 @@
+name: lighthouse-hub
+x-runtime: &runtime
+  image: lighthouse-hub:0.1.0
+  build: .
+  restart: unless-stopped
+  init: true
+  user: "10001:10001"
+  env_file:
+    - ./.env
+  environment:
+    HUB_ROOT: /opt/lighthouse-hub
+    HUB_CONFIG: /opt/lighthouse-hub/config/hub.toml
+    DRY_RUN: "true"
+  volumes:
+    - ./data:/opt/lighthouse-hub/data
+    - ./media:/opt/lighthouse-hub/media
+    - ./logs:/opt/lighthouse-hub/logs
+    - ./backups:/opt/lighthouse-hub/backups
+    - ./config:/opt/lighthouse-hub/config:ro
+  read_only: true
+  tmpfs:
+    - /tmp:size=192m,mode=1777
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 160
+  logging:
+    driver: local
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  api:
+    <<: *runtime
+    ports: ["127.0.0.1:8080:8080"]
+    mem_limit: 256m
+    cpus: 0.5
+    command: ["python","-m","services.hub.cli","api"]
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  scheduler:
+    <<: *runtime
+    mem_limit: 192m
+    cpus: 0.25
+    command: ["python","-m","services.hub.cli","scheduler"]
+  tweet-worker:
+    <<: *runtime
+    hostname: lighthouse-tweet-worker
+    pids_limit: 256
+    security_opt:
+      - no-new-privileges:true
+      - seccomp=/opt/lighthouse-hub/config/browser-seccomp.json
+    mem_limit: 1400m
+    shm_size: 256m
+    cpus: 1.5
+    command: ["python","-m","services.hub.cli","worker","--queue","tweet"]
+  video-worker:
+    <<: *runtime
+    volumes:
+      - ./data:/opt/lighthouse-hub/data
+      - ./media:/opt/lighthouse-hub/media
+      - ./logs:/opt/lighthouse-hub/logs
+      - ./backups:/opt/lighthouse-hub/backups
+      - ./config:/opt/lighthouse-hub/config:ro
+      - ./data/browser-profiles/youtube:/opt/lighthouse-hub/data/browser-profiles/youtube:ro
+    mem_limit: 1400m
+    cpus: 1.5
+    command: ["python","-m","services.hub.cli","worker","--queue","video"]
+  system-worker:
+    <<: *runtime
+    mem_limit: 192m
+    cpus: 0.25
+    command: ["python","-m","services.hub.cli","worker","--queue","system"]

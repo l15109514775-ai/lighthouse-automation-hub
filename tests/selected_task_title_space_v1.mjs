@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {selectedTaskTitleMatches as matches} from '../adapters/replay_native_driver.mjs';
+const expected='【龍巻示例主播B】2026-11-04「◤#ちーサイがビッグになるまで ◢  先輩のお願いを叶えたい！」直播回放 P1/1';
+assert(matches(expected.replace('  ',' '),[expected]));
+assert(matches(expected,[expected]));
+assert(matches('original',['original.mp4','original',expected]));
+assert(!matches(expected.replace('  ',' ').replace('P1/1','P2/2'),[expected]));
+assert(!matches(expected.replace('  ',' ').replace('龍巻示例主播B','示例主播A'),[expected]));
+assert(!matches(expected.replaceAll(' ',''),[expected]));
+assert(!matches(expected.replace('  ','\u3000'),[expected]));
+console.log('7 sidebar title checks passed');

@@ -1,0 +1,17 @@
+[Unit]
+Description=Lighthouse Automation Hub Compose services
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/lighthouse-hub
+ExecStart=/usr/bin/docker compose up -d
+ExecStop=/usr/bin/docker compose stop
+TimeoutStartSec=180
+TimeoutStopSec=120
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=Record independent Lighthouse backup failure status (no MCP notification)
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+ExecStart=/usr/bin/python3 /usr/local/lib/lighthouse-backup-ops/run_cloudbase_backup_sidecar_v1e.py --record-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/lighthouse-hub/data/cloudbase-backup-state
+StandardOutput=journal
+StandardError=journal

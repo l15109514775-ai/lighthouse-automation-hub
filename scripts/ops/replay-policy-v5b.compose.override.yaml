@@ -1,0 +1,15 @@
+services:
+  video-worker:
+    volumes:
+      - /usr/local/lib/lighthouse-replay-policy-v5b/config.py:/opt/lighthouse-hub/services/hub/config.py:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/media_processing.py:/opt/lighthouse-hub/services/hub/media_processing.py:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/replay_multipart_v4.py:/opt/lighthouse-hub/services/hub/replay_multipart_v4.py:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/replay_multipart_video_v4.py:/opt/lighthouse-hub/services/hub/replay_multipart_video_v4.py:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/youtube_download.py:/opt/lighthouse-hub/services/hub/youtube_download.py:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/youtube_natural_plan_v3.py:/opt/lighthouse-hub/services/hub/youtube_natural_plan_v3.py:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/ytdlp_highest_v2.py:/opt/lighthouse-hub/adapters/ytdlp_highest_v2.py:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/replay_part_contract_v5.mjs:/opt/lighthouse-hub/adapters/replay_part_contract_v5.mjs:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/replay_native_driver.mjs:/opt/lighthouse-hub/adapters/replay_native_driver.mjs:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/replay_later_result_lookup_v2.mjs:/opt/lighthouse-hub/adapters/replay_later_result_lookup_v2.mjs:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/replay_part_public_evidence_v5.py:/opt/lighthouse-hub/services/hub/replay_part_public_evidence_v5.py:ro
+      - /usr/local/lib/lighthouse-replay-policy-v5b/short-video-native-metadata-v5.mjs:/opt/lighthouse-hub/scripts/ops/native_control_sources/short-video-native-metadata-v5.mjs:ro

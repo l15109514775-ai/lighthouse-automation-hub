@@ -1,0 +1,22 @@
+# Inactive. Root installs the tested policy and a real accepted-pilot grant.
+version = "replay-highest-natural-website-policy-v3"
+enabled = false
+automation_enabled = false
+public_submission_mode = "workflow_authorization_and_natural_highest_machine_acceptance_v3"
+source_scope = "automatic_new_only"
+acceptance_video_ids = []
+allowed_channel_ids = ["UCaaaaaaaaaaaaaaaaaaaaaa", "UCbbbbbbbbbbbbbbbbbbbbbb"]
+target_site_uid = "1000000000000000"
+target_account_name = "咕噜咕噜灯塔字幕组"
+operating_not_before = "2026-10-31T16:00:00Z"
+activated_at = "REPLACE_WITH_ACTUAL_ACTIVATION_SAME_AS_DOWNLOAD_V3"
+metadata_template = "source-title-and-link-v1"
+native_upload_limits_sha256 = "REPLACE_WITH_ACTUAL_INSTALLED_LIMIT_BINDING_SHA256"
+owner_authorization_reference = "REPLACE_WITH_ACTUAL_UNATTENDED_WORKFLOW_AUTHORIZATION"
+owner_permission_reference = "REPLACE_WITH_EXISTING_INTERNAL_RIGHTS_REFERENCE"
+workflow_authorization_reference = "REPLACE_WITH_ACTUAL_UNATTENDED_WORKFLOW_AUTHORIZATION"
+moderation_fast_seconds = 300
+moderation_slow_seconds = 1800
+moderation_max_hours = 48
+moderation_daily_polls = 96
+moderation_daily_attempts = 384

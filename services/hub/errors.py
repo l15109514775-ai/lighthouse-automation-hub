@@ -1,0 +1,38 @@
+class HubError(Exception):
+    def __init__(self, code, *, retryable=False, review=False, retry_after=0):
+        super().__init__(code)
+        self.code = code
+        self.retryable = retryable
+        self.review = review
+        self.retry_after = retry_after
+
+
+class ResourceDeferred(HubError):
+    """A typed, local resource wait; only explicitly registered handlers use it."""
+    def __init__(self,*,resource,required_bytes,binding_sha256):
+        import re
+        if (resource!='disk' or type(required_bytes) is not int or not 0<=required_bytes<=64_000_000_000 or
+                not isinstance(binding_sha256,str) or not re.fullmatch('[a-f0-9]{64}',binding_sha256)):
+            raise ValueError('INVALID_RESOURCE_DEFERRAL')
+        super().__init__('WAITING_RESOURCE')
+        self.resource=resource
+        self.required_bytes=required_bytes
+        self.binding_sha256=binding_sha256
+
+
+class YouTubeReadinessDeferred(HubError):
+    def __init__(self,reason,observation):
+        if reason not in ('YOUTUBE_NATURAL_POST_LIVE_NOT_READY','YOUTUBE_NATURAL_EXACT_SIZE_NOT_READY') or not isinstance(observation,dict):
+            raise ValueError('INVALID_YOUTUBE_READINESS_DEFERRAL')
+        super().__init__('WAITING_YOUTUBE_READINESS')
+        self.reason,self.observation=reason,observation
+
+
+class PublishUnknown(HubError):
+    def __init__(self):
+        super().__init__('PUBLISH_UNKNOWN')
+
+
+class PublishRejected(HubError):
+    """A documented explicit rejection, distinct from a lost submission result."""
+    pass

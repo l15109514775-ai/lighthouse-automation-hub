@@ -1,0 +1,12 @@
+# Copy reviewed grants to config/tweet-rights.toml; no grant is enabled here.
+# Evidence is a stable permission reference, not a password, secret URL or API token.
+grants = []
+
+# [[grants]]
+# post_id = "actual numeric X post ID"
+# x_handle = "actual_author"
+# source_sha256 = "SHA256 of the job's exact source.json"
+# actions = ["publish_translation", "publish_image"]
+# evidence = "actual written permission reference"
+# authorized_by = "actual human operator"
+# target_site_uid = "1000000000000000"

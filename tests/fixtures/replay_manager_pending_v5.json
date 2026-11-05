@@ -1,0 +1,72 @@
+{
+  "version": "owned-manager-fixture-derived-from-real-captures-v5",
+  "candidate_bv": "BV1gv4A6cEdK",
+  "provenance": [
+    {
+      "file": "outputs\\current-manager-rawhref-v5\\manager-native-rawhref.json",
+      "sha256": "589a33451987d64551968849a3cd0252b0fc2c067bd66088d4077455790cda1e",
+      "observed_at": "2026-11-02T17:06:37.674Z"
+    },
+    {
+      "file": "outputs\\replay-part-postsubmit-existing-evidence-v5\\1793638576\\error-lookup-inventory.json",
+      "sha256": "0b1d7c27a51b4f705e60ff243c14e3afd9790b5915ed8ce35c5e9796c9aa8ef9",
+      "observed_at": "2026-11-02T16:45:53.253Z"
+    }
+  ],
+  "published_row": {
+    "classes": "article-card clearfix v2",
+    "text": "06:50:28\n【示例主播A】2026-11-01「【#LTK】本番前日！！無限練習！！！！！！【 ぶいすぽっ！ / 示例主播A 】」直播回放 P1/1\n2026年11月03日 00:58:02\n编辑\n数据\n2\n0\n0\n0\n0\n0\n0",
+    "title_links": [
+      {
+        "tag": "A",
+        "classes": "name ellipsis",
+        "text": "【示例主播A】2026-11-01「【#LTK】本番前日！！無限練習！！！！！！【 ぶいすぽっ！ / 示例主播A 】」直播回放 P1/1",
+        "raw_href": "//www.bilibili.com/video/BV1gv4A6cEdK/",
+        "resolved_href": "https://www.bilibili.com/video/BV1gv4A6cEdK/",
+        "base_uri": "https://member.bilibili.com/platform/upload-manager/article",
+        "visible": true
+      }
+    ],
+    "covers": [
+      {
+        "tag": "A",
+        "classes": "cover-wrp",
+        "text": "06:50:28",
+        "raw_href": "//www.bilibili.com/video/BV1gv4A6cEdK/",
+        "resolved_href": "https://www.bilibili.com/video/BV1gv4A6cEdK/",
+        "base_uri": "https://member.bilibili.com/platform/upload-manager/article",
+        "visible": true
+      }
+    ],
+    "dates": [
+      {
+        "text": "2026年11月03日 00:58:02",
+        "classes": "date",
+        "parent_classes": "pubdate is-success"
+      }
+    ],
+    "durations": [
+      "06:50:28"
+    ],
+    "status": [
+      {
+        "tag": "DIV",
+        "classes": "meta-status",
+        "text": "2026年11月03日 00:58:02"
+      },
+      {
+        "tag": "DIV",
+        "classes": "pubdate is-success",
+        "text": "2026年11月03日 00:58:02"
+      }
+    ]
+  },
+  "pending_visible_text": "00:00:00\n【示例主播A】2026-11-01「【#LTK】本番前日！！無限練習！！！！！！【 ぶいすぽっ！ / 示例主播A 】」直播回放 P1/1\n2026年11月03日 00:44:57\n转码中\n审核中\n查询进度\n编辑\n0\n0\n0\n0\n0\n0\n0\n",
+  "pending_date": "2026年11月03日 00:44:57",
+  "native_pending_labels": [
+    "转码中",
+    "审核中"
+  ],
+  "pending_duration": "00:00:00",
+  "fixture_scope": "owned DOM combines the real href shape and earlier real pending text; a one-second local movie replaces long playback; identity and attempts are owned; no claim these were one capture"
+}

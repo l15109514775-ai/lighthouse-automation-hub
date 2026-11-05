@@ -1,0 +1,344 @@
+{
+ "captured_at": 1793664648.912625,
+ "records": [
+  {
+   "observed_at": 1793664623.117248,
+   "official_raw": {
+    "contentDetails": {
+     "caption": "false",
+     "contentRating": {},
+     "definition": "hd",
+     "dimension": "2d",
+     "duration": "PT8H31M6S",
+     "licensedContent": true,
+     "projection": "rectangular"
+    },
+    "etag": "Vpin_uMsW1iAI5zo6Uv1X61oOPE",
+    "id": "synthA00001",
+    "kind": "youtube#video",
+    "liveStreamingDetails": {
+     "actualEndTime": "2026-11-02T15:36:30Z",
+     "actualStartTime": "2026-11-02T07:05:25Z",
+     "scheduledStartTime": "2026-11-02T07:00:00Z"
+    },
+    "snippet": {
+     "categoryId": "20",
+     "channelId": "UCbbbbbbbbbbbbbbbbbbbbbb",
+     "channelTitle": "Example Channel B",
+     "defaultAudioLanguage": "ja",
+     "defaultLanguage": "ja",
+     "description": "Synthetic public metadata used only by the duration revision test.",
+     "liveBroadcastContent": "none",
+     "localized": {
+      "description": "Synthetic public metadata used only by the duration revision test.",
+      "title": "Synthetic replay A (duration revision fixture)"
+     },
+     "publishedAt": "2026-11-02T17:57:38Z",
+     "thumbnails": {
+      "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/synthC00003/default.jpg",
+       "width": 120
+      },
+      "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/synthC00003/hqdefault.jpg",
+       "width": 480
+      },
+      "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/synthC00003/maxresdefault.jpg",
+       "width": 1280
+      },
+      "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/synthC00003/mqdefault.jpg",
+       "width": 320
+      },
+      "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/synthC00003/sddefault.jpg",
+       "width": 640
+      }
+     },
+     "title": "Synthetic replay A (duration revision fixture)"
+    },
+    "status": {
+     "embeddable": true,
+     "license": "youtube",
+     "madeForKids": false,
+     "privacyStatus": "public",
+     "publicStatsViewable": true,
+     "uploadStatus": "processed"
+    }
+   },
+   "registered_identity_sha256": "b56a89a992af4766322afb06dd4bedc884aa3038a97145fcb59c93cdcc60d1b3",
+   "registered_metadata_sha256": "21e6fdf207b53d3f59ae1381b4f4713eec8cc534908fb883e62c5ca7cde5dc80",
+   "registered_payload": {
+    "channel_id": "UCbbbbbbbbbbbbbbbbbbbbbb",
+    "duration": "PT8H31M4S",
+    "published_at": "2026-11-02T06:57:04Z",
+    "raw": {
+     "contentDetails": {
+      "caption": "false",
+      "contentRating": {},
+      "definition": "sd",
+      "dimension": "2d",
+      "duration": "PT8H31M4S",
+      "licensedContent": true,
+      "projection": "rectangular"
+     },
+     "etag": "auUtqBzfjvwHjOtqqLtEsFJgANU",
+     "id": "synthA00001",
+     "kind": "youtube#video",
+     "liveStreamingDetails": {
+      "activeLiveChatId": "Cg0KCzA0LUVaZTdvR1dZKicKGFVDb1c4cVF5ODBtS0gwUkpUS0FLLW5OQRILMDQtRVplN29HV1k",
+      "actualEndTime": "2026-11-02T15:36:30Z",
+      "actualStartTime": "2026-11-02T07:05:25Z",
+      "scheduledStartTime": "2026-11-02T07:00:00Z"
+     },
+     "snippet": {
+      "categoryId": "20",
+      "channelId": "UCbbbbbbbbbbbbbbbbbbbbbb",
+      "channelTitle": "Example Channel B",
+      "defaultAudioLanguage": "ja",
+      "defaultLanguage": "ja",
+      "description": "Synthetic public metadata used only by the duration revision test.",
+      "liveBroadcastContent": "none",
+      "localized": {
+       "description": "Synthetic public metadata used only by the duration revision test.",
+       "title": "Synthetic replay A (duration revision fixture)"
+      },
+      "publishedAt": "2026-11-02T06:57:04Z",
+      "thumbnails": {
+       "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/synthC00003/default.jpg?v=6ae83443",
+        "width": 120
+       },
+       "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/synthC00003/hqdefault.jpg?v=6ae83443",
+        "width": 480
+       },
+       "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/synthC00003/maxresdefault.jpg?v=6ae83443",
+        "width": 1280
+       },
+       "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/synthC00003/mqdefault.jpg?v=6ae83443",
+        "width": 320
+       },
+       "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/synthC00003/sddefault.jpg?v=6ae83443",
+        "width": 640
+       }
+      },
+      "title": "Synthetic replay A (duration revision fixture)"
+     },
+     "status": {
+      "embeddable": true,
+      "license": "youtube",
+      "madeForKids": false,
+      "privacyStatus": "public",
+      "publicStatsViewable": true,
+      "uploadStatus": "uploaded"
+     }
+    },
+    "source_api": "youtube-data-v3-official",
+    "title": "Synthetic replay A (duration revision fixture)",
+    "url": "https://www.youtube.com/watch?v=synthA00001",
+    "video_id": "synthA00001"
+   },
+   "source_id": "synthA00001"
+  },
+  {
+   "observed_at": 1793664621.122301,
+   "official_raw": {
+    "contentDetails": {
+     "caption": "false",
+     "contentRating": {},
+     "definition": "hd",
+     "dimension": "2d",
+     "duration": "PT10H48M39S",
+     "licensedContent": true,
+     "projection": "rectangular"
+    },
+    "etag": "wJF_DRpXfm2hxg_1BouFS82_b4w",
+    "id": "synthB00002",
+    "kind": "youtube#video",
+    "liveStreamingDetails": {
+     "actualEndTime": "2026-11-02T17:03:34Z",
+     "actualStartTime": "2026-11-02T06:14:50Z",
+     "scheduledStartTime": "2026-11-02T06:00:00Z"
+    },
+    "snippet": {
+     "categoryId": "20",
+     "channelId": "UCaaaaaaaaaaaaaaaaaaaaaa",
+     "channelTitle": "Example Channel A",
+     "defaultAudioLanguage": "ja",
+     "defaultLanguage": "ja",
+     "description": "Synthetic public metadata used only by the duration revision test.",
+     "liveBroadcastContent": "none",
+     "localized": {
+      "description": "Synthetic public metadata used only by the duration revision test.",
+      "title": "Synthetic replay B (duration revision fixture)"
+     },
+     "publishedAt": "2026-11-02T05:56:48Z",
+     "tags": [
+      "ぶいすぽ新メンバー",
+      "ぶいすぽ",
+      "示例主播A",
+      "ぶいすぽ新人",
+      "Vtuber",
+      "ブイチューバー",
+      "バーチャルユーチューバー",
+      "白沢飾音",
+      "ぶいすぽっ！",
+      "しぐれうい",
+      "ゲーム",
+      "LoL",
+      "LTK"
+     ],
+     "thumbnails": {
+      "default": {
+       "height": 90,
+       "url": "https://i.ytimg.com/vi/EoZFofw4OSU/default.jpg?v=6ae82622",
+       "width": 120
+      },
+      "high": {
+       "height": 360,
+       "url": "https://i.ytimg.com/vi/EoZFofw4OSU/hqdefault.jpg?v=6ae82622",
+       "width": 480
+      },
+      "maxres": {
+       "height": 720,
+       "url": "https://i.ytimg.com/vi/EoZFofw4OSU/maxresdefault.jpg?v=6ae82622",
+       "width": 1280
+      },
+      "medium": {
+       "height": 180,
+       "url": "https://i.ytimg.com/vi/EoZFofw4OSU/mqdefault.jpg?v=6ae82622",
+       "width": 320
+      },
+      "standard": {
+       "height": 480,
+       "url": "https://i.ytimg.com/vi/EoZFofw4OSU/sddefault.jpg?v=6ae82622",
+       "width": 640
+      }
+     },
+     "title": "Synthetic replay B (duration revision fixture)"
+    },
+    "status": {
+     "embeddable": true,
+     "license": "youtube",
+     "madeForKids": false,
+     "privacyStatus": "public",
+     "publicStatsViewable": true,
+     "uploadStatus": "uploaded"
+    }
+   },
+   "registered_identity_sha256": "b3153fc42b6f2be90d96f82db056313791c55b49f41cb5dbc4ba2d4baff9220b",
+   "registered_metadata_sha256": "03e466a819519222b04bc53bb1a8b231ae0b265f2e18bdb80d858d6951e6315c",
+   "registered_payload": {
+    "channel_id": "UCaaaaaaaaaaaaaaaaaaaaaa",
+    "duration": "PT10H48M43S",
+    "published_at": "2026-11-02T05:56:48Z",
+    "raw": {
+     "contentDetails": {
+      "caption": "false",
+      "contentRating": {},
+      "definition": "sd",
+      "dimension": "2d",
+      "duration": "PT10H48M43S",
+      "licensedContent": true,
+      "projection": "rectangular"
+     },
+     "etag": "P4wxFeWxOIWXjTNyRpdfLBYjhXw",
+     "id": "synthB00002",
+     "kind": "youtube#video",
+     "liveStreamingDetails": {
+      "activeLiveChatId": "Cg0KC0VvWkZvZnc0T1NVKicKGFVDdURZM2liU1AyTUZSZ2Y3ZW8zY29qZxILRW9aRm9mdzRPU1U",
+      "actualEndTime": "2026-11-02T17:03:34Z",
+      "actualStartTime": "2026-11-02T06:14:50Z",
+      "scheduledStartTime": "2026-11-02T06:00:00Z"
+     },
+     "snippet": {
+      "categoryId": "20",
+      "channelId": "UCaaaaaaaaaaaaaaaaaaaaaa",
+      "channelTitle": "Example Channel A",
+      "defaultAudioLanguage": "ja",
+      "defaultLanguage": "ja",
+      "description": "Synthetic public metadata used only by the duration revision test.",
+      "liveBroadcastContent": "none",
+      "localized": {
+       "description": "Synthetic public metadata used only by the duration revision test.",
+       "title": "Synthetic replay B (duration revision fixture)"
+      },
+      "publishedAt": "2026-11-02T05:56:48Z",
+      "tags": [
+       "ぶいすぽ新メンバー",
+       "ぶいすぽ",
+       "示例主播A",
+       "ぶいすぽ新人",
+       "Vtuber",
+       "ブイチューバー",
+       "バーチャルユーチューバー",
+       "白沢飾音",
+       "ぶいすぽっ！",
+       "しぐれうい",
+       "ゲーム",
+       "LoL",
+       "LTK"
+      ],
+      "thumbnails": {
+       "default": {
+        "height": 90,
+        "url": "https://i.ytimg.com/vi/EoZFofw4OSU/default.jpg?v=6ae82622",
+        "width": 120
+       },
+       "high": {
+        "height": 360,
+        "url": "https://i.ytimg.com/vi/EoZFofw4OSU/hqdefault.jpg?v=6ae82622",
+        "width": 480
+       },
+       "maxres": {
+        "height": 720,
+        "url": "https://i.ytimg.com/vi/EoZFofw4OSU/maxresdefault.jpg?v=6ae82622",
+        "width": 1280
+       },
+       "medium": {
+        "height": 180,
+        "url": "https://i.ytimg.com/vi/EoZFofw4OSU/mqdefault.jpg?v=6ae82622",
+        "width": 320
+       },
+       "standard": {
+        "height": 480,
+        "url": "https://i.ytimg.com/vi/EoZFofw4OSU/sddefault.jpg?v=6ae82622",
+        "width": 640
+       }
+      },
+      "title": "Synthetic replay B (duration revision fixture)"
+     },
+     "status": {
+      "embeddable": true,
+      "license": "youtube",
+      "madeForKids": false,
+      "privacyStatus": "public",
+      "publicStatsViewable": true,
+      "uploadStatus": "uploaded"
+     }
+    },
+    "source_api": "youtube-data-v3-official",
+    "title": "Synthetic replay B (duration revision fixture)",
+    "url": "https://www.youtube.com/watch?v=synthB00002",
+    "video_id": "synthB00002"
+   },
+   "source_id": "synthB00002"
+  }
+ ],
+ "version": "actual-public-official-duration-drift-fixture-v1"
+}

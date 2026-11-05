@@ -1,0 +1,18 @@
+{
+  "version": "replay-fifo-policy-v4",
+  "enabled": false,
+  "source_scope": "all_eligible_ended_since_operating_cutoff",
+  "source_not_before": "2026-10-31T16:00:00Z",
+  "allowed_channel_ids": [
+    "UCbbbbbbbbbbbbbbbbbbbbbb",
+    "UCaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "target_site_uid": "1000000000000000",
+  "activated_at": "REPLACE_WITH_REAL_AUTHORIZATION_TIME",
+  "owner_queue_reference": "REPLACE_WITH_REAL_USER_REFERENCE",
+  "max_download_dispatches_per_day": 4,
+  "dispatch_timezone": "Asia/Shanghai",
+  "source_max_age_seconds": 300,
+  "resource_wait_max_seconds": 259200,
+  "planning_policy_sha256": "REPLACE_WITH_REAL_POLICY_SHA256"
+}

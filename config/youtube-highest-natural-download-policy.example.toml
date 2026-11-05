@@ -1,0 +1,26 @@
+# Default off. No credentials belong here. Use real activation/rights records.
+version = "youtube-highest-natural-download-policy-v3"
+policy_id = "youtube-highest-natural-download-v3"
+enabled = false
+source_scope = "natural_ended_after_activation"
+quality_profile = "highest-height-fps-h264-aac-stream-copy-v1"
+allowed_channel_ids = ["UCbbbbbbbbbbbbbbbbbbbbbb", "UCaaaaaaaaaaaaaaaaaaaaaa"]
+operating_not_before = "2026-10-31T16:00:00Z"
+max_source_bytes = 0 # Accepted explicit operational ceiling:14000000000.
+max_output_bytes = 0 # Source total +64000000 must fit within14000000000.
+max_http_requests = 0 # Accepted maximum2048; source plan derives actual bound.
+daily_http_requests = 0 # Configurable1..6000, same persisted youtube_download_http.
+monthly_http_requests = 0 # Configurable1..150000; no reservations are refunded.
+max_new_replays_per_day = 0 # Accepted1..4, persisted Beijing-day count.
+timeout_seconds = 0 # Accepted30..21600.
+activated_at = "REPLACE_WITH_ACTUAL_FORMAL_ACTIVATION_TIME"
+activation_reference = "REPLACE_WITH_ACTUAL_ACTIVATION_AUDIT"
+owner_permission_reference = "REPLACE_WITH_EXISTING_OWNER_RIGHTS_SCOPE"
+acquisition_authorization_reference = "REPLACE_WITH_REAL_ACQUISITION_AUTHORIZATION"
+quality_authorization_reference = "REPLACE_WITH_REAL_HIGHEST_QUALITY_REQUEST"
+acquisition_mode = "owner_accepted_platform_terms_risk"
+owner_risk_acceptance_reference = "REPLACE_WITH_EXISTING_TERMS_RISK_ACCEPTANCE"
+owner_risk_accepted_at = "REPLACE_WITH_ACTUAL_ACCEPTANCE_TIME"
+session_profile = "youtube"
+session_authorization_reference = "REPLACE_WITH_REAL_SERVER_SESSION_AUTHORIZATION"
+session_authorized_at = "REPLACE_WITH_ACTUAL_AUTHORIZATION_TIME"

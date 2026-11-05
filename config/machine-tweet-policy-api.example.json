@@ -1,0 +1,15 @@
+{
+  "version": "machine-tweet-v3-api",
+  "source_authority": "x-v2-official",
+  "owner_confirmed_machine_mode": false,
+  "human_review_required": false,
+  "target_site_uid": "1000000000000000",
+  "x_handles": ["example_handle_a", "example-channel-b"],
+  "rights": {"owner_confirmed": false, "actions": ["publish_translation", "publish_image"], "reference": ""},
+  "owner_response": "",
+  "authorization_basis": "existing_owner_automation_and_content_grant",
+  "max_post_age_seconds": 7200,
+  "activation_at": 0,
+  "dispatch_not_before": 0,
+  "supported_content": ["official_full_text", "official_static_photos", "official_reply_parent"]
+}

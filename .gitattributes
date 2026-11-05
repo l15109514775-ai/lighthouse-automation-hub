@@ -1,0 +1,11 @@
+* text=auto eol=lf
+*.png binary
+*.ttf binary
+*.otf binary
+# Preserve exact installed operator artifact bytes referenced by release pins.
+scripts/ops/install_archive_retention_v2b.py -text whitespace=cr-at-eol
+scripts/ops/cloudbase_backup_daily_retention_v2b.py -text whitespace=cr-at-eol
+# Keep the exact executed read-only observer bytes (one final CRLF).
+scripts/ops/observe_reboot_known_bv_v5.py -text whitespace=cr-at-eol
+# Preserve the exact once-only announcement artifacts executed on Nov 3.
+scripts/ops/codex-progress-request-20261103.json -text whitespace=cr-at-eol

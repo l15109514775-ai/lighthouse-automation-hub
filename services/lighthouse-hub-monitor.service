@@ -1,0 +1,10 @@
+[Unit]
+Description=Read-only Lighthouse container status snapshot
+After=docker.service lighthouse-hub.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/lighthouse-hub/scripts/host-monitor.py
+NoNewPrivileges=yes
+PrivateTmp=yes

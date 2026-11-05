@@ -1,0 +1,15 @@
+# Inactive example. Install a real, source-bound policy only after Ubuntu tests.
+version = "replay-highest-video-website-policy-v2"
+enabled = false
+automation_enabled = false
+public_submission_mode = "workflow_authorization_and_highest_machine_acceptance_v2"
+source_scope = "pilot_single"
+acceptance_video_ids = ["9T5tn1WGlJg"]
+allowed_channel_ids = ["UCaaaaaaaaaaaaaaaaaaaaaa", "UCbbbbbbbbbbbbbbbbbbbbbb"]
+target_site_uid = "1000000000000000"
+target_account_name = "咕噜咕噜灯塔字幕组"
+activated_at = "2026-10-31T16:00:00Z"
+owner_authorization_reference = "REPLACE_WITH_ACTUAL_HIGHEST_WORKFLOW_REQUEST_REFERENCE"
+owner_permission_reference = "REPLACE_WITH_INTERNAL_RIGHTS_REFERENCE"
+workflow_authorization_reference = "REPLACE_WITH_ACTUAL_HIGHEST_WORKFLOW_REQUEST_REFERENCE"
+native_upload_limits_sha256 = "REPLACE_WITH_INSTALLED_NATIVE_LIMIT_BINDING_SHA256"

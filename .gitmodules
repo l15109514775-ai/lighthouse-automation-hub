@@ -1,0 +1,7 @@
+[submodule "compositor"]
+	path = compositor
+	url = https://github.com/l15109514775-ai/tweet-zh-compositor.git
+[submodule "vendor/subtitle-cloud-worker"]
+	path = vendor/subtitle-cloud-worker
+	url = https://github.com/l15109514775-ai/subtitle-cloud-worker.git
+	branch = feature/stream-observer-mvp

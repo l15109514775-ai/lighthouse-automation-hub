@@ -1,0 +1,15 @@
+{
+  "capture_dom_sha256": "b4842a370fa221ccb81103a14eff4cf7ff37bbb7a11e654eef3569a870bc709a",
+  "capture_metadata_sha256": "9fa3f3b498b6216d2496558e852b1bb682c06076e109de341ee111f5b6e659e2",
+  "expectation": {
+    "expected_caption": "【补发】龍巻示例主播B🐉🌪️｜原帖中文翻译（非原图） 原帖：https://x.com/example-channel-b/status/2117189314744590552\n推文正文译图；YouTube链接预览缩略图未包含",
+    "external_id": "1266077623570661433",
+    "site_uid": "1000000000000000",
+    "source_id": "2117189314744590552",
+    "source_url": "https://x.com/example-channel-b/status/2117189314744590552",
+    "target_name": "咕噜咕噜灯塔字幕组"
+  },
+  "outerHTML": "<div class=\"bili-dyn-share-publishing bili-dyn-share-transition-enter-active bili-dyn-share-transition-enter-to\"><div class=\"bili-dyn-share-publishing__close\"><svg><path></path></svg></div> <div class=\"bili-dyn-share-publishing__title\"><span>分享到动态</span></div> <div class=\"bili-dyn-share-publishing__topic\"><div class=\"bili-topic-selector\"><div class=\"bili-topic-selector__desk\"><div class=\"bili-topic-selector__search\"><div class=\"bili-topic-search\"><div class=\"bili-topic-search__popover\"><div class=\"bili-topic-search__input\"><svg class=\"bili-topic-search__input__prefix\"><path></path></svg> <span class=\"bili-topic-search__input__text\">\n        选择话题\n      </span> </div> </div> <!----></div></div> </div> <!----></div></div> <div class=\"bili-dyn-share-publishing__input\"><div class=\"bili-rich-textarea\"><div placeholder=\"来说说分享的理由？|´・ω・)ノ\" contenteditable=\"true\" class=\"bili-rich-textarea__inner empty\">​\n</div></div></div> <div class=\"bili-dyn-share-publishing__reference\"><div class=\"bili-dyn-share-publishing__reference__author\"><div class=\"bili-dyn-share-publishing__reference__author__name bili-ellipsis\">\n        @咕噜咕噜灯塔字幕组\n      </div></div> <div class=\"bili-dyn-share-publishing__reference__preview\"><div class=\"dyn-share-common-pic-card\"><div class=\"dyn-share-common-pic-card__cover\"><div class=\"b-img\"><picture class=\"b-img__inner\"></picture></div></div> <div class=\"dyn-share-common-pic-card__content\"><div class=\"bili-rich-text\"><div class=\"bili-rich-text__content\"><span>【补发】龍巻示例主播B🐉🌪️｜原帖中文翻译（非原图） 原帖：</span><span>https://x.com/example-channel-b/status/2117189314744590552</span><span>\n推文正文译图；YouTube链接预览缩略图未包含</span></div></div></div></div></div></div> <!----> <div class=\"bili-dyn-share-publishing__control\"><div class=\"bili-dyn-share-publishing__tools\"><div class=\"bili-dyn-share-publishing__tools__item emoji\"><svg><path></path><path></path><path></path><path></path></svg></div> <!----></div> <div class=\"bili-dyn-share-publishing__headquarters\"><div title=\"全角字符计数为1半角字符计数为0.5，不足1时记为1\" class=\"bili-dyn-share-publishing__hint\">\n        1000\n      </div> <div class=\"bili-dyn-share-publishing__action launcher\">\n        发布\n      </div></div></div> </div>",
+  "public_visible_preview_only": true,
+  "version": "sanitized-native-tweet-share-modal-fixture-v1"
+}

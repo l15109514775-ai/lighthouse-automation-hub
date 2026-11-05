@@ -1,0 +1,23 @@
+[Unit]
+Description=Lighthouse verified CloudBase backup, actual restore and exact clone cleanup
+After=docker.service network-online.target
+Requires=docker.service
+Wants=network-online.target
+OnFailure=lighthouse-cloudbase-backup-failure.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+ExecStart=/usr/bin/python3 /usr/local/lib/lighthouse-backup-ops/cloudbase_backup_daily_v1.py --run-once
+TimeoutStartSec=30min
+TimeoutStopSec=45s
+Restart=no
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/run/docker.sock /opt/lighthouse-hub/data/cloudbase-backup-state /opt/lighthouse-hub/data/cloudbase-backup-canary-checks /opt/lighthouse-hub/backups /opt/lighthouse-hub/data /var/lib/lighthouse-backup-ops
+StandardOutput=journal
+StandardError=journal

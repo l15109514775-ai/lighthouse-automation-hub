@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh Lighthouse container status once per minute
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=60s
+AccuracySec=5s
+Unit=lighthouse-hub-monitor.service
+
+[Install]
+WantedBy=timers.target

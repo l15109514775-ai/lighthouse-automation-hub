@@ -1,0 +1,12 @@
+# Copy reviewed grants to config/rights.toml on the server; no grants are enabled here.
+# A public source link alone is not a rights grant.
+grants = []
+
+# [[grants]]
+# video_id = "actual11char"
+# actions = ["download", "process"]
+# evidence = "written permission reference"
+# authorized_by = "human operator identity"
+# source_url = "https://explicitly-authorized-download-host/video.mp4"
+# source_sha256 = "64 lowercase hex digits verified from the authorized source"
+# max_bytes = 4000000000

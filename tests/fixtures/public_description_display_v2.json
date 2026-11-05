@@ -1,0 +1,27 @@
+{
+  "version": "recorded-public-description-fixture-v2",
+  "evidence_sha256": "7bb5cb19c47583b066c152fcc893ea54d842a6f3761ec54cc8d781e3016b34a6",
+  "evidence_file": "report.json",
+  "stable_snapshots": 3,
+  "expected_metadata": {
+    "category_label": "娱乐",
+    "copyright": 2,
+    "description": "龍巻示例主播B 2026年11月1日直播回放，日语原声。\n原题：◤ League of Legends ◢　#LTK Season: Finale CC CORE 3戦スクリム練習！ ◤ぶいすぽっ！ #龍巻示例主播B ⁠◢\n原视频：https://www.youtube.com/watch?v=YsSXSIYtCoE\n原频道：https://www.youtube.com/@example-channel-b",
+    "source": "https://www.youtube.com/watch?v=YsSXSIYtCoE",
+    "tags": [
+      "龍巻示例主播B",
+      "ぶいすぽっ",
+      "虚拟UP主",
+      "直播回放"
+    ],
+    "title": "【龍巻示例主播B】2026-11-01「◤ League of Legends ◢　#LTK Season: Finale CC CORE 3戦…」直播回放 P1/1"
+  },
+  "metadata_sha256": "c488c373df31c72399b2c4cfd217d2c3d513be877bb5b7ade16e363bc374c238",
+  "source_url": "https://www.youtube.com/watch?v=YsSXSIYtCoE",
+  "observed_description": "https://www.youtube.com/watch?v=YsSXSIYtCoE\n龍巻示例主播B 2026年11月1日直播回放，日语原声。\n原题：◤ League of Legends ◢　#LTK Season: Finale CC CORE 3戦スクリム練習！ ◤ぶいすぽっ！ #龍巻示例主播B ◢\n原视频：https://www.youtube.com/watch?v=YsSXSIYtCoE\n原频道：https://www.youtube.com/@example-channel-b",
+  "expected_description": "龍巻示例主播B 2026年11月1日直播回放，日语原声。\n原题：◤ League of Legends ◢　#LTK Season: Finale CC CORE 3戦スクリム練習！ ◤ぶいすぽっ！ #龍巻示例主播B ⁠◢\n原视频：https://www.youtube.com/watch?v=YsSXSIYtCoE\n原频道：https://www.youtube.com/@example-channel-b",
+  "word_joiner_positions": [
+    103
+  ],
+  "note": "Public visible text only; fixture reuse is offline and never posts to a real account."
+}

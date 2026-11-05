@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Lighthouse replay source revision reconciliation every 10 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=10min
+AccuracySec=1min
+RandomizedDelaySec=0
+Persistent=true
+Unit=lighthouse-replay-source-reconcile.service
+
+[Install]
+WantedBy=timers.target

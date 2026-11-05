@@ -1,0 +1,201 @@
+"""Default plan; install an isolated, completed-only local video cleanup timer.
+
+No upload, public submission, network client, recursive deletion or core restart.
+An actual 38-case isolated Ubuntu attestation is required before install.
+"""
+from datetime import datetime,timezone
+from pathlib import Path
+import argparse,hashlib,json,os,subprocess,uuid
+import xml.etree.ElementTree as ET
+
+ROOT=Path('/opt/lighthouse-hub');BASE=Path('/usr/local/lib/lighthouse-backup-ops/video-tracks-v2')
+STATE=Path('/var/lib/lighthouse-backup-ops/video-tracks-v2')
+IMAGE='sha256:9f19b756ca081bfe033ffa01b0face5c9cb70b3d45de08394567150ac747de6e'
+ARCHIVE='51b6f980f25bfe18da248625939873dc33078125ecbe9c2cd49b7624aa9f15ff'
+GROUPS={'tests.test_video_source_retention_v2':19,'tests.test_video_source_retention_tracks_v2':13,'tests.test_video_retention_scheduler_v2':6}
+CORE=('services/hub/video_source_retention_v2.py','services/hub/archive_source_retention_v2.py',
+ 'services/hub/video_retention_scheduler_v2.py','services/hub/replay_highest_video_v2.py',
+ 'services/hub/replay_highest_coverage_v2.py','services/hub/replay_natural_video_v3.py')
+RELEASE=ROOT/'config/video-source-retention-tracks-v2-release.json'
+OWNER=ROOT/'config/video-source-retention-tracks-owner-v2.json'
+SERVICE=Path('/etc/systemd/system/lighthouse-video-source-retention-v2.service')
+TIMER=Path('/etc/systemd/system/lighthouse-video-source-retention-v2.timer')
+
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def safe(path):
+ path=Path(path);assert path.is_absolute() and path.resolve()==path and not any(p.is_symlink() for p in (path,*path.parents));return path
+def protected(path):
+ path=safe(path)
+ for p in (path,*path.parents):assert p.stat().st_uid==0 and p.stat().st_mode&0o022==0
+ return path
+def mkdir(path,mode=0o755,gid=0):
+ safe(path)
+ if not path.exists():protected(path.parent);path.mkdir(mode=mode);os.chown(path,0,gid);path.chmod(mode)
+ protected(path);assert path.is_dir()
+def write(path,raw,mode=0o644,gid=0):
+ safe(path);protected(path.parent)
+ if path.exists():protected(path);assert path.is_file()
+ temp=path.with_name(path.name+'.'+uuid.uuid4().hex+'.partial')
+ fd=os.open(temp,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,mode)
+ with os.fdopen(fd,'wb') as f:f.write(raw);f.flush();os.fchmod(f.fileno(),mode);os.fchown(f.fileno(),0,gid);os.fsync(f.fileno())
+ os.replace(temp,path);fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY)
+ try:os.fsync(fd)
+ finally:os.close(fd)
+def uid(value):return isinstance(value,str) and str(uuid.UUID(value))==value
+def command(*args,timeout=90):return subprocess.check_output(args,text=True,timeout=timeout)
+def dump(value):return (json.dumps(value,ensure_ascii=False,indent=2)+'\n').encode()
+
+def verify_proof(proof,expected_sha):
+ protected(proof);raw=(proof/'test-attestation.json').read_bytes();assert sha(raw)==expected_sha
+ value=json.loads(raw);assert value['version']=='video-source-retention-tracks-v2-ubuntu-tests-v1'
+ assert value['image']==IMAGE and value['archive_sha256']==ARCHIVE and value['tests']==38
+ assert value['exit_code']==value['failures']==value['errors']==value['skipped']==0 and value['oom_killed'] is False
+ assert value['network']=='none' and value['application_data_mounted'] is value['production_profile_mounted'] is value['secrets_environment_injected'] is False
+ for key in ('full_suite_passed','no_pid_or_oom_denial','runtime_matches_declared_candidate','mounts_match_isolated_allowlist'):assert value[key] is True
+ junit=proof/'accepted-results.xml';protected(junit);jraw=junit.read_bytes()
+ assert value['junit_file']==str(junit) and sha(jraw)==value['junit_sha256']
+ cases=ET.fromstring(jraw).findall('.//testcase');groups={}
+ for case in cases:
+  groups[case.get('classname')]=groups.get(case.get('classname'),0)+1
+  assert all(case.find(tag) is None for tag in ('failure','error','skipped'))
+ assert len(cases)==38 and groups==GROUPS
+ manifest=value['manifest'];assert manifest['version']=='video-source-tracks-ro-overlay-v2' and len(manifest['files'])==93
+ assert set(value['source_files'])==set(CORE) and all(value['source_files'][n]==manifest['files'][n]['sha256'] for n in CORE)
+ bodies={}
+ for name,item in manifest['files'].items():
+  path=Path(name);assert not path.is_absolute() and '..' not in path.parts and str(path.as_posix())==name
+  file=proof/'overlay'/name;protected(file);body=file.read_bytes()
+  assert len(body)==item['bytes'] and 0<len(body)<500000 and sha(body)==item['sha256'];bodies[name]=body
+ return raw,jraw,value,bodies
+
+def owner_request(raw):
+ assert 0<len(raw)<=16384;value=json.loads(raw)
+ assert set(value)=={'actual_owner_response','owner_response_reference'}
+ assert all(isinstance(v,str) and v.strip() and len(v)<=2048 for v in value.values())
+ return value
+
+def app_run(config,arguments,*,media_write=False,timeout=7200):
+ manifest=config['manifest'];runtime=BASE/'runtime'
+ assert command('/usr/bin/docker','image','inspect','-f','{{.Id}}',IMAGE).strip()==IMAGE
+ for name,item in manifest['files'].items():
+  file=runtime/name;protected(file);assert sha(file.read_bytes())==item['sha256']
+ container_name='lighthouse-video-retention-'+uuid.uuid4().hex[:10]
+ cmd=['/usr/bin/docker','run','--pull=never','--rm','--init','--name',container_name,
+  '--network','none','--read-only','--user','10001:10001','--cap-drop','ALL','--security-opt','no-new-privileges:true',
+  '--memory','512m','--cpus','1','--pids-limit','96','--tmpfs','/tmp:rw,size=96m,mode=1777',
+  '--tmpfs',str(ROOT/'data/browser-profiles')+':rw,size=1024,mode=0700,uid=10001,gid=10001',
+  '-e','HUB_ROOT='+str(ROOT),'-e','PYTHONDONTWRITEBYTECODE=1','-e','PYTHONNOUSERSITE=1']
+ for name,writable in (('data',True),('media',media_write)):
+  cmd+=['--mount','type=bind,src='+str(ROOT/name)+',dst='+str(ROOT/name)+('' if writable else ',readonly')]
+ # Only these harmless individual configuration files are mounted. No env-file,
+ # account secret, browser profile, backup archive or API credential is mounted.
+ for file in (ROOT/'config/hub.toml',OWNER,RELEASE):
+  if file.exists():protected(file);cmd+=['--mount','type=bind,src='+str(file)+',dst='+str(file)+',readonly']
+ cmd+=['--mount','type=bind,src='+str(STATE/'readiness')+',dst='+config['proof_directory']+',readonly']
+ for name in manifest['files']:cmd+=['--mount','type=bind,src='+str(runtime/name)+',dst='+str(ROOT/name)+',readonly']
+ try:r=subprocess.run(cmd+[IMAGE,*arguments],capture_output=True,text=True,timeout=timeout,stdin=subprocess.DEVNULL)
+ except subprocess.TimeoutExpired:
+  stopped=subprocess.run(['/usr/bin/docker','stop','--time','30',container_name],capture_output=True,text=True,timeout=90)
+  return {'version':'video-source-tracks-host-result-v2','at':datetime.now(timezone.utc).isoformat(),'exit_code':124,
+   'image':IMAGE,'network':'none','credentials_mounted':False,'profile_mounted':False,'metadata_config_only':True,
+   'media_writable':media_write,'container_name':container_name,'graceful_stop_returncode':stopped.returncode,
+   'result':{'state':'operation_timeout_reconciliation_required','files_deleted_unknown':True},'stderr_bytes':0}
+ assert len(r.stdout)<2_000_000 and len(r.stderr)<200_000
+ try:value=json.loads(r.stdout)
+ except ValueError:value={'state':'app_result_not_json','stderr_bytes':len(r.stderr)}
+ return {'version':'video-source-tracks-host-result-v2','at':datetime.now(timezone.utc).isoformat(),
+  'exit_code':r.returncode,'image':IMAGE,'network':'none','credentials_mounted':False,'profile_mounted':False,
+  'metadata_config_only':True,'media_writable':media_write,'result':value,'stderr_bytes':len(r.stderr)}
+
+def cli(*args):return ['python',str(ROOT/'scripts/video-source-retention-v2.py'),'--include-source-tracks',*args]
+def verify_release(config):
+ code="from services.hub.config import Settings;from services.hub.db import Store;from services.hub.video_source_retention_v2 import VideoSourceTracksRetentionV2,PUBLISHED;import sys,json;s=Settings.load();r=VideoSourceTracksRetentionV2(s,Store(s.db_path));a=r._authorization(sys.argv[1]);assert a['scope']==PUBLISHED;print(json.dumps({'state':'verified_not_run','release_sha256':r._release({'scope':PUBLISHED,'authorization_id':sys.argv[1],'proof':{'pipeline_state':'replay_highest_video_web_v2'}}),'external_requests':0,'files_deleted':0}))"
+ return app_run(config,['python','-c',code,config['authorization_id']],timeout=90)
+
+def main():
+ assert os.name=='posix' and os.geteuid()==0 and __debug__;os.umask(0o077)
+ p=argparse.ArgumentParser(description=__doc__);m=p.add_mutually_exclusive_group()
+ m.add_argument('--plan',action='store_true');m.add_argument('--install',action='store_true');m.add_argument('--runtime',action='store_true')
+ p.add_argument('--proof');p.add_argument('--proof-sha256');p.add_argument('--owner-request');p.add_argument('--enable-timer',action='store_true')
+ r=p.add_mutually_exclusive_group();r.add_argument('--verify-only',action='store_true');r.add_argument('--plan-job');r.add_argument('--apply-plan');r.add_argument('--run-completed',action='store_true')
+ p.add_argument('--apply',action='store_true');p.add_argument('--max-jobs',type=int,default=1);a=p.parse_args()
+ if a.runtime:
+  protected(BASE/'runtime.json');config=json.loads((BASE/'runtime.json').read_bytes())
+  assert uid(config['authorization_id']) and config['archive_sha256']==ARCHIVE
+  protected(RELEASE);assert sha(RELEASE.read_bytes())==config['release_sha256']
+  protected(STATE/'readiness');assert sha((STATE/'readiness/test-attestation.json').read_bytes())==config['proof_sha256']
+  assert 1<=a.max_jobs<=3 and (not a.apply or a.run_completed)
+  if a.plan_job:assert uid(a.plan_job);arguments=cli('--plan-job',a.plan_job,'--authorization-id',config['authorization_id'])
+  elif a.apply_plan:
+   file=safe(Path(a.apply_plan));assert file.parent==ROOT/'data/video-source-retention-v2/plans' and file.suffix=='.json' and uid(file.stem)
+   arguments=cli('--apply-plan',str(file))
+  elif a.run_completed:arguments=cli('--run-completed','--authorization-id',config['authorization_id'],'--max-jobs',str(a.max_jobs),*(['--apply'] if a.apply else []))
+  else:arguments=None
+  result=verify_release(config) if arguments is None else app_run(config,arguments,media_write=bool(a.apply_plan or a.apply))
+  directory=STATE/'runtime-history';mkdir(directory,0o700);file=directory/(str(uuid.uuid4())+'.json');write(file,dump(result),0o600)
+  print(json.dumps({**result,'receipt_file':str(file)},ensure_ascii=False));return result['exit_code']
+ assert not any((a.plan_job,a.apply_plan,a.run_completed,a.apply,a.verify_only))
+ assert not a.enable_timer or a.install
+ assert a.proof and a.proof_sha256 and a.owner_request
+ proof=safe(Path(a.proof));raw,jraw,value,bodies=verify_proof(proof,a.proof_sha256)
+ request_file=safe(Path(a.owner_request));protected(request_file);request_raw=request_file.read_bytes();owner_request(request_raw)
+ protected(ROOT/'config/hub.toml');assert command('/usr/bin/docker','image','inspect','-f','{{.Id}}',IMAGE).strip()==IMAGE
+ plan={'version':'video-source-tracks-install-v2','state':'planned_not_installed','image':IMAGE,'proof_sha256':a.proof_sha256,
+  'tests':38,'source_files':value['source_files'],'exact_overlay_files':len(bodies),'network_requests':0,
+  'core_restarts':0,'files_deleted':0,'timer_enable_requested':a.enable_timer,'completed_only':True,'unknown_and_active_retained':True}
+ if not a.install:print(json.dumps(plan));return 0
+ protected(BASE.parent);mkdir(BASE);mkdir(BASE/'runtime');mkdir(STATE,0o700);mkdir(STATE/'install-history',0o700)
+ import fcntl
+ lock=os.open(STATE/'install.lock',os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
+ try:
+  fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  assert subprocess.run(['/usr/bin/systemctl','is-active','--quiet',SERVICE.name]).returncode!=0
+  history=STATE/'install-history'/str(uuid.uuid4());mkdir(history,0o700)
+  for name,body in bodies.items():
+   file=BASE/'runtime'/name;chain=[];parent=file.parent
+   while not parent.exists():chain.append(parent);parent=parent.parent
+   for path in reversed(chain):mkdir(path)
+   write(file,body)
+  mkdir(STATE/'readiness',0o750,10001);write(STATE/'readiness/test-attestation.json',raw,0o640,10001)
+  write(STATE/'readiness/accepted-results.xml',jraw,0o640,10001)
+  selfraw=Path(__file__).read_bytes();write(BASE/'run.py',selfraw)
+  config={'version':'video-source-tracks-runtime-v2','manifest':value['manifest'],'proof_directory':str(proof),
+   'proof_sha256':a.proof_sha256,'archive_sha256':ARCHIVE,'owner_request_sha256':sha(request_raw)}
+  prior=BASE/'runtime.json'
+  if prior.exists():
+   protected(prior);old=json.loads(prior.read_bytes());assert old['owner_request_sha256']==sha(request_raw)
+   assert old['proof_sha256']==a.proof_sha256 and old['archive_sha256']==ARCHIVE
+   config['authorization_id']=old['authorization_id']
+  else:
+   request={**owner_request(request_raw),'scope':'confirmed_full_duration_public_video'};write(OWNER,dump(request),0o640,10001)
+   auth=app_run(config,cli('--authorize-file',str(OWNER)),timeout=90);write(history/'authorization-result.json',dump(auth),0o600)
+   assert auth['exit_code']==0 and uid(auth['result']['authorization_id']);config['authorization_id']=auth['result']['authorization_id']
+  release={'version':'video-source-retention-release-v2','authorization_id':config['authorization_id'],
+   'scope':'confirmed_full_duration_public_video','source_files':value['source_files'],
+   'test_attestation':{'file':str(proof/'test-attestation.json'),'sha256':a.proof_sha256}}
+  if RELEASE.exists():write(history/'previous-release.json',RELEASE.read_bytes(),0o600)
+  write(RELEASE,dump(release),0o640,10001);config['release_sha256']=sha(RELEASE.read_bytes());write(BASE/'runtime.json',dump(config))
+  checked=verify_release(config);write(history/'release-verification.json',dump(checked),0o600)
+  assert checked['exit_code']==0 and checked['result']['state']=='verified_not_run'
+  service='''[Unit]\nDescription=Bounded completed-video local source retention\nAfter=docker.service\nRequires=docker.service\n[Service]\nType=oneshot\nExecStart=/usr/bin/python3 /usr/local/lib/lighthouse-backup-ops/video-tracks-v2/run.py --runtime --run-completed --apply\nTimeoutStartSec=7200\nNice=15\nIOSchedulingClass=idle\nProtectSystem=strict\nReadWritePaths=/var/lib/lighthouse-backup-ops/video-tracks-v2 /opt/lighthouse-hub/data /opt/lighthouse-hub/media /run\nPrivateTmp=true\nNoNewPrivileges=yes\nRestrictAddressFamilies=AF_UNIX\nRestart=no\n'''.encode()
+  timer='''[Unit]\nDescription=Check completed-video local source retention every two minutes\n[Timer]\nOnBootSec=3min\nOnUnitInactiveSec=2min\nRandomizedDelaySec=10s\nUnit=lighthouse-video-source-retention-v2.service\n[Install]\nWantedBy=timers.target\n'''.encode()
+  previous={}
+  for file in (SERVICE,TIMER):
+   if file.exists():protected(file);previous[file]=file.read_bytes();write(history/(file.name+'.previous'),previous[file],0o600)
+   else:previous[file]=None
+  try:
+   for file,body in ((SERVICE,service),(TIMER,timer)):write(file,body)
+   command('/usr/bin/systemd-analyze','verify',str(SERVICE),str(TIMER));command('/usr/bin/systemctl','daemon-reload')
+  except BaseException:
+   # Exact unit files only. Never touch the previous video worker, data or media.
+   for file,body in previous.items():
+    if body is not None:write(file,body)
+    elif file.exists():protected(file);file.unlink()
+   command('/usr/bin/systemctl','daemon-reload');raise
+  if a.enable_timer:command('/usr/bin/systemctl','enable','--now',TIMER.name)
+  result={**plan,'state':'installed_not_run','authorization_id':config['authorization_id'],'release_sha256':config['release_sha256'],
+   'host_runner_sha256':sha(selfraw),'timer_enabled_by_this_run':a.enable_timer,'timer_service_started_by_installer':False,
+   'service_sha256':sha(service),'timer_sha256':sha(timer),'proof_mirror_bytes_unchanged':True}
+  write(history/'result.json',dump(result),0o600);print(json.dumps({**result,'receipt_file':str(history/'result.json')}));return 0
+ finally:os.close(lock)
+if __name__=='__main__':raise SystemExit(main())

@@ -1,0 +1,97 @@
+youtube_download_enabled = false
+x_source_transport = "official_api"
+machine_source_generation = 1
+machine_tweet_enabled = false
+web_reviewed_queue_enabled = false
+x_web_enabled = false
+source_receipt_max_age_seconds = 86400
+policy_version = "human-review-v1"
+x_api_enabled = false
+x_ingestion_mode = "official_api"
+bilibili_publish_mode = "manual"
+bilibili_reconcile_minutes = 5
+bilibili_token_refresh_enabled = false
+bilibili_token_refresh_lead_seconds = 900
+target_bilibili_account_name = "example-bilibili-account"
+target_bilibili_site_uid = "1000000000000000"  # replace with your own public website identity
+bilibili_developer_onboarding = "deferred_by_owner"
+owner_content_permission_statement = "owner_confirmed_scope"
+model_provider = "configured_gpt_relay"
+tweet_poll_minutes = 30
+youtube_check_time = "09:00"
+youtube_feed_enabled = false
+youtube_feed_poll_minutes = 10
+youtube_live_monitor_enabled = false
+youtube_live_poll_minutes = 5
+timezone = "Asia/Shanghai"
+max_attempts = 4
+lease_seconds = 180
+disk_floor_gb = 15
+max_media_bytes = 8000000000
+video_part_max_seconds = 36000
+video_part_max_bytes = 14000000000
+video_max_parts = 32
+video_processing_timeout_seconds = 7200
+temporary_retention_days = 7
+backup_retention_days = 14
+heavy_concurrency = 1
+auto_publish = false
+first_publish_accepted = false
+authorized_bilibili_accounts = []
+allowed_media_hosts = ["pbs.twimg.com"]
+authorized_download_hosts = []
+event_callback_hosts = []
+
+youtube_download_acceptance_only = true
+youtube_highest_download_enabled = true
+youtube_whole_replay_download_enabled = true
+youtube_natural_download_enabled = false
+[[sources]]
+name = "Example Streamer A"
+x_handle = "example_handle_a"
+profile_image_url = "https://example.com/avatar-a.png"
+youtube_handle = "@example-channel-a"
+youtube_channel_id = "UCaaaaaaaaaaaaaaaaaaaaaa"
+identity_evidence = "https://example.com/identity-a"
+
+[[sources]]
+name = "Example Streamer B"
+x_handle = "example_handle_b"
+profile_image_url = "https://example.com/avatar-b.png"
+youtube_handle = "@example-channel-b"
+youtube_channel_id = "UCbbbbbbbbbbbbbbbbbbbbbb"
+identity_evidence = "https://example.com/identity-b"
+
+[budgets.x]
+daily_usd = 0
+monthly_usd = 0
+daily_calls = 0
+monthly_calls = 0
+max_call_usd = 0
+paid_authorized = false
+
+[budgets.youtube]
+daily_usd = 0
+monthly_usd = 0
+daily_calls = 2500
+monthly_calls = 75000
+max_call_usd = 0
+paid_authorized = false
+
+[budgets.model]
+unlimited = false
+daily_usd = 0
+monthly_usd = 0
+daily_calls = 0
+monthly_calls = 0
+max_call_usd = 0
+paid_authorized = false
+
+[budgets.bilibili]
+daily_usd = 0
+monthly_usd = 0
+daily_calls = 0
+monthly_calls = 0
+max_call_usd = 0
+paid_authorized = false
+

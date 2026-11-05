@@ -1,0 +1,16 @@
+{
+  "version": "machine-tweet-v1",
+  "owner_confirmed_machine_mode": false,
+  "human_review_required": false,
+  "owner_response": "REPLACE_WITH_THE_EXISTING_OWNER_AUTHORIZATION_RECORD",
+  "target_site_uid": "1000000000000000",
+  "x_handles": ["example_handle_a", "example-channel-b"],
+  "rights": {
+    "owner_confirmed": false,
+    "reference": "REPLACE_WITH_EXISTING_APPLICABLE_OWNER_RIGHTS_REFERENCE",
+    "actions": ["publish_translation", "publish_image"]
+  },
+  "max_post_age_seconds": 7200,
+  "activation_at": 0,
+  "supported_content": ["visible_plain_text_without_media_or_context"]
+}

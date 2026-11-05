@@ -1,0 +1,12 @@
+{
+  "version": "short-native-control-entry-manifest-v1",
+  "core_file": "adapters/short_video_native_controls_core.mjs",
+  "core_sha256": "b13d5a30188437e4fb6d739a455b1ecca4924e3d8c619f76de971ccd8d91a894",
+  "installed_core_filename": "short_video_native_controls_core.b13d5a30188437e4fb6d739a455b1ecca4924e3d8c619f76de971ccd8d91a894.mjs",
+  "entries_sha256": {
+    "short_video_cover_complete_control.mjs": "e73941933ba4a0e9e75ac362b9bdb03656f64bef2f08c46d4d85617abfefe7c7",
+    "short_video_private_draft_control.mjs": "2e41d8e88054eb9128c95c7085b916796ac238e02c194bd29e75fdae45fb16fa",
+    "short-native-pre-submit-screenshot-v1.mjs": "a4c3d9596123409de1d245fef229c77dc33b8c91c05bb33dba8b6f62519a6ca2"
+  },
+  "source_bytes_preserved": true
+}

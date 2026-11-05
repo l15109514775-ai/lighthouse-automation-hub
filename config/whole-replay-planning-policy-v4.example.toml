@@ -1,0 +1,20 @@
+version = "whole-replay-planning-policy-v4"
+enabled = false
+source_not_before = "2026-10-31T16:00:00Z"
+target_site_uid = "1000000000000000"
+max_parts = 32
+max_part_bytes = 14000000000
+max_part_seconds = 36000
+disk_floor_bytes = 16106127360
+workspace_overhead_bytes = 32000000
+# Optional, defaults false. Enable only with the qualified V4 custody lifecycle.
+# raw_track_release_after_verified_merge = true
+# Optional, defaults false. V5 delivery references a verified <=14GB/10h master
+# in place; only actual oversized masters use the existing lossless splitter.
+# prefer_single_whole_passthrough_v5 = true
+max_http_requests = 20000
+max_processing_seconds = 28800
+max_total_packets = 64000000
+# These are the actual observed single-video limits, not a verified total-P cap.
+native_single_part_max_bytes = 16000000000
+native_single_part_max_seconds = 36000

@@ -1,0 +1,32 @@
+# Independent v2 pilot. Do not edit the legacy v1 policy/job to enable this.
+# Also set hub.toml youtube_highest_download_enabled=true only after acceptance.
+version = "youtube-highest-download-policy-v2"
+policy_id = "youtube-highest-download-v2"
+enabled = false
+video_id = "9T5tn1WGlJg"
+channel_id = "REPLACE_WITH_FRESH_OFFICIAL_CHANNEL_ID"
+quality_profile = "h264-1080p60-itag299-aac140-v1"
+video_format_id = "299"
+audio_format_id = "140"
+# Fill exact fresh observed filesize values, never approximate/unknown sizes.
+video_bytes = 0
+audio_bytes = 0
+max_source_bytes = 0 # Operator ceiling <=14000000000, distinct v2 policy.
+max_output_bytes = 0 # Must contain exact source total +64000000, <=14000000000.
+max_http_requests = 0 # Finite ceiling <=2048; actual plan derives a smaller cap.
+daily_http_requests = 0 # Accepted pilot:2500; shares existing provider ledger.
+monthly_http_requests = 0 # Accepted pilot:30000; never reset existing rows.
+timeout_seconds = 0 # <=21600, bounded download runtime.
+activated_at = "REPLACE_WITH_ACTUAL_ACTIVATION_TIMESTAMP"
+owner_permission_reference = "REPLACE_WITH_ACTUAL_EXISTING_RIGHTS_SCOPE"
+acquisition_authorization_reference = "REPLACE_WITH_ACTUAL_DOWNLOAD_AUTHORIZATION"
+quality_authorization_reference = "REPLACE_WITH_ACTUAL_HIGHEST_QUALITY_REQUEST"
+acquisition_mode = "owner_accepted_platform_terms_risk"
+owner_risk_acceptance_reference = "REPLACE_WITH_ACTUAL_EXISTING_TERMS_RISK_ACCEPTANCE"
+owner_risk_accepted_at = "REPLACE_WITH_ACTUAL_ACCEPTANCE_TIMESTAMP"
+session_profile = "youtube"
+session_authorization_reference = "REPLACE_WITH_ACTUAL_SERVER_SESSION_AUTHORIZATION"
+session_authorized_at = "REPLACE_WITH_ACTUAL_AUTHORIZATION_TIMESTAMP"
+# The Nov1 Beijing operating cutoff is fixed in v2 code. It cannot be backdated
+# here; only official actualStartTime determines the source's operating date.
+# No API keys, passwords or Cookie values belong in this file.

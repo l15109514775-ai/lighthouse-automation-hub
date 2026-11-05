@@ -1,0 +1,6 @@
+{
+  "author": {"name": "示例主播A", "username": "example_handle_a"},
+  "post": {"id": "", "text": "", "created_at": "", "referenced_tweets": []},
+  "source_media_count": null,
+  "references_observed": false
+}

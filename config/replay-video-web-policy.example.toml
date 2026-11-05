@@ -1,0 +1,14 @@
+# Inactive example; not read until explicitly installed as replay-video-web-policy.toml.
+version = "replay-video-website-policy-v1"
+enabled = false
+automation_enabled = false
+public_submission_mode = "workflow_authorization_and_machine_acceptance_v1"
+source_scope = "pilot_single"
+acceptance_video_ids = ["9T5tn1WGlJg"]
+allowed_channel_ids = ["UCaaaaaaaaaaaaaaaaaaaaaa", "UCbbbbbbbbbbbbbbbbbbbbbb"]
+target_site_uid = "REPLACE_WITH_AUTHORIZED_GROUP_UID"
+target_account_name = "REPLACE_WITH_AUTHORIZED_GROUP_NAME"
+activated_at = "2026-11-01T00:00:00Z"
+owner_authorization_reference = "REPLACE_WITH_ACTUAL_WORKFLOW_REQUEST_REFERENCE"
+owner_permission_reference = "REPLACE_WITH_INTERNAL_RIGHTS_REFERENCE"
+workflow_authorization_reference = "REPLACE_WITH_ACTUAL_WORKFLOW_REQUEST_REFERENCE"

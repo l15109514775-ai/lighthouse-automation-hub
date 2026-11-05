@@ -1,0 +1,25 @@
+# Copy to youtube-download-policy.toml only after real authorization is recorded.
+# hub.toml youtube_download_enabled remains false in the public configuration.
+version = "youtube-download-policy-v1"
+# Anonymous mode; does not read a signed-in browser profile.
+policy_id = "youtube-download-v1"
+# Authenticated mode requires this separate policy plus all three fields below.
+# policy_id = "youtube-download-auth-v1"
+# session_profile = "youtube" # Fixed profile only; read-only video-worker mount.
+# session_authorization_reference = "Actual owner authorization for server YouTube login"
+# session_authorized_at = "Actual authorization timestamp"
+# Never place Cookie values, passwords, or API keys in this file.
+activation_at = "REPLACE_WITH_ACTUAL_ACTIVATION_TIMESTAMP"
+allowed_channel_ids = ["UCaaaaaaaaaaaaaaaaaaaaaa", "UCbbbbbbbbbbbbbbbbbbbbbb"]
+owner_permission_reference = "REPLACE_WITH_ACTUAL_OWNER_SCOPE_REFERENCE"
+acquisition_authorization_reference = "REPLACE_WITH_ACTUAL_OPERATOR_AUTHORIZATION"
+# Allowed: platform_authorized or owner_accepted_platform_terms_risk.
+acquisition_mode = "UNCONFIGURED"
+# platform_download_permission_reference = "Actual applicable platform authorization"
+# owner_risk_acceptance_reference = "Actual owner response accepting ordinary yt-dlp terms risk"
+# owner_risk_accepted_at = "Actual response timestamp"
+max_bytes = 3800000000
+max_height = 720
+timeout_seconds = 21600
+max_new_replays_per_day = 4
+acceptance_video_ids = [] # At most one; explicit acceptance enqueue only, never monitor catch-up.
