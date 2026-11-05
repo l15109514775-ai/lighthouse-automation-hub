@@ -40,6 +40,35 @@ def source_policy_generation(value):
     return int(match[1])
 
 
+def owner_backfill_authorization(settings, source_id):
+    """Owner-authorized exception for re-publishing one specific source.
+
+    The file is deployment configuration, not code: it grants no blanket
+    bypass. Entries must carry an explicit reference, an authorisation time
+    and a hard not-after bound; anything malformed is ignored.
+    """
+    if not isinstance(source_id, str) or not source_id:
+        return None
+    try:
+        path = settings.root / 'config/owner-backfill-authorizations.json'
+        if path.is_symlink():
+            return None
+        data = json.loads(path.read_text('utf-8'))
+        if data.get('version') != 'owner-backfill-authorizations-v1':
+            return None
+        for item in data.get('authorizations', []):
+            if item.get('source_id') != source_id:
+                continue
+            if (type(item.get('authorized_at')) not in (int, float) or
+                    type(item.get('not_after')) not in (int, float) or
+                    not item.get('reference')):
+                return None
+            return item
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
+    return None
+
+
 class MachineTweets:
     version=VERSION
     kind=KIND
@@ -64,7 +93,12 @@ class MachineTweets:
 
         Lookup and recording deliberately do not call this guard: clearing a
         backlog must never erase or strand an already uncertain publication.
+        An explicit, time-bounded owner backfill authorization is the only
+        exception; it never applies to a different source.
         """
+        auth=owner_backfill_authorization(self.settings,job['source_id'])
+        if auth and time.time()<=auth['not_after']:
+            return
         args=('x',job['source_id'])
         sql='SELECT 1 FROM source_tombstones WHERE source_platform=? AND source_id=?'
         blocked=db.execute(sql,args).fetchone() if db is not None else self.store.query(sql,args)
@@ -88,7 +122,7 @@ class MachineTweets:
             hold=p.get('dispatch_not_before',0)
             if (file.is_symlink() or p['version']!=self.version or p['owner_confirmed_machine_mode'] is not True or
                 p['human_review_required'] is not False or p['target_site_uid']!=self.settings.config['target_bilibili_site_uid'] or
-                set(p['x_handles'])!={'example_handle_a','example-channel-b'} or p['rights']['owner_confirmed'] is not True or
+                set(p['x_handles'])!={'example_handle_a','example_handle_b'} or p['rights']['owner_confirmed'] is not True or
                 not {'publish_translation','publish_image'}<=set(p['rights']['actions']) or
                 not p['rights']['reference'] or not p['owner_response'] or
                 type(p['max_post_age_seconds']) is not int or not 60<=p['max_post_age_seconds']<=7200 or
@@ -108,6 +142,9 @@ class MachineTweets:
             if moment.tzinfo is None:raise ValueError()
             posted=moment.timestamp()
         except (ValueError,KeyError,TypeError):raise HubError('MACHINE_SOURCE_TIMESTAMP_INVALID') from None
+        auth=owner_backfill_authorization(self.settings,job['source_id'])
+        if auth and auth['authorized_at']<=now<=auth['not_after']:
+            return p
         if not 0<=now-posted<=p['max_post_age_seconds'] or posted<p['activation_at']-p['max_post_age_seconds']:
             raise HubError('OWNER_TWO_HOUR_WINDOW_EXPIRED')
         return p

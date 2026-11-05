@@ -78,3 +78,8 @@ docker compose run --rm api python -m pytest \
 | `PUBLISH_REVIEW_EVIDENCE_REQUIRED` | 没有人工审核或证据不匹配 | 重新走审核，不要改库跳过 |
 | 发布停在 `unknown` | B 站结果未知 | 只查询核对；确认未发出才允许重新提交 |
 | 中文显示成方块 | 容器缺中文字体 | 安装 `fonts-noto-cjk` 后重建镜像 |
+
+
+## 发布失败、孤儿草稿与补发
+
+见 [推文发布运维](tweet-publish-ops.md)：上传失败如何快速失败、如何识别与清理孤儿草稿、如何在 owner 授权下安全补发。

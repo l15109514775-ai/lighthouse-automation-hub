@@ -52,12 +52,25 @@ try{
   fontsLoaded:layout.fonts,canvas:layout.width===template.width&&layout.height*template.scale<=30000&&
    layout.width*layout.height*template.scale**2<=100000000,overflow:layout.overflow.length===0};
  if(!Object.values(checks).every(x=>x===true))throw new Error('MACHINE_RENDER_FINAL_LAYOUT_FAILED');
- const png=path.join(outputDir,`${post.id}.machine-v1.png`),bytes=await page.screenshot({fullPage:true,type:'png',animations:'disabled',caret:'hide',scale:'device',timeout:60000});
+ const png=path.join(outputDir,`${post.id}.machine-v1.png`);
+ let bytes=await page.screenshot({fullPage:true,type:'png',animations:'disabled',caret:'hide',scale:'device',timeout:60000});
+ let pngWidth=template.width*template.scale,pngHeight=layout.height*template.scale,normalization=null;
+ const MAX_BYTES=Number(process.env.HUB_RENDER_MAX_BYTES||3145728),MAX_HEIGHT=Number(process.env.HUB_RENDER_MAX_HEIGHT||4096);
+ if(bytes.length>MAX_BYTES||pngHeight>MAX_HEIGHT){
+  const {default:sharp}=await import('/opt/lighthouse-hub/compositor/node_modules/sharp/lib/index.js');
+  const meta=await sharp(bytes).metadata();
+  let targetHeight=meta.height,targetWidth=meta.width;
+  if(targetHeight>MAX_HEIGHT){targetWidth=Math.max(1,Math.round(meta.width*MAX_HEIGHT/targetHeight));targetHeight=MAX_HEIGHT;}
+  if(targetWidth>1600){targetHeight=Math.max(1,Math.round(targetHeight*1600/targetWidth));targetWidth=1600;}
+  const scaled=await sharp(bytes).resize({width:targetWidth,height:targetHeight,fit:'inside'}).png({compressionLevel:9}).toBuffer();
+  normalization={from:{bytes:bytes.length,width:meta.width,height:meta.height},to:{bytes:scaled.length,width:targetWidth,height:targetHeight}};
+  bytes=scaled;pngWidth=targetWidth;pngHeight=targetHeight;
+ }
  await fs.writeFile(png,bytes,{mode:0o600});
  const report={version:'machine-render-v1',mode:'machine-publish-v1',policy:'machine-tweet-v1',machine_publishable:true,
   human_review:false,upstream_human_publishable:original.report.publishable,input_sha256:sha256(await fs.readFile(inputFile)),
   upstream_report:original.report,checks,fonts:original.report.fonts,template:original.report.template,
-  source_url:post.url,png:{file:png,sha256:sha256(bytes),bytes:bytes.length,width:template.width*template.scale,height:layout.height*template.scale},
+  source_url:post.url,png:{file:png,sha256:sha256(bytes),bytes:bytes.length,width:pngWidth,height:pngHeight},normalization,
   limitations:['Machine approval of rendered visible plain text, not human review or official API evidence.','Independent model QA can still miss semantic errors.']};
  await fs.writeFile(path.join(outputDir,'machine-render-result.json'),JSON.stringify(report,null,2),{mode:0o600});
 }finally{await page?.close();await renderer.close();}

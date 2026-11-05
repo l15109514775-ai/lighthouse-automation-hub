@@ -16,6 +16,7 @@ from .errors import HubError, PublishUnknown
 from .evidence import sha256_file
 from .locks import resource_guard
 from .supervised_web import SupervisedWeb, KIND
+from .machine_tweets import owner_backfill_authorization
 
 
 def run_reviewed_tweet(settings, store, job_id):
@@ -46,9 +47,19 @@ def _run_website(settings,store,job_id,service,kind,principal):
                 'target_site_uid': manifest['target_site_uid'], 'target_name': manifest['target_name'],
                 'file': manifest['render']['png'], 'artifact_sha256': manifest['render']['sha256'], 'caption': manifest['caption']}
         if principal=='machine-policy':
-            spec.update(machine_policy=service.version,dispatch_expires_at=
-                datetime.fromisoformat(job['payload']['post']['created_at'].replace('Z','+00:00')).timestamp()+
-                service.policy()['max_post_age_seconds'])
+            posted=datetime.fromisoformat(job['payload']['post']['created_at'].replace('Z','+00:00')).timestamp()
+            expires=posted+service.policy()['max_post_age_seconds']
+            # run_machine_tweet() is called with the parent tweet_process id, so
+            # the authorization is looked up on the job's own source id.
+            auth=owner_backfill_authorization(settings,job['source_id'])
+            if auth and time.time()<=auth['not_after']:
+                expires=max(expires,auth['not_after'])
+                spec['owner_backfill']={'source_id':job['source_id'],'authorized_at':auth['authorized_at'],
+                    'not_after':auth['not_after'],'reference':auth['reference']}
+                store.audit('owner','owner_backfill_authorized',job_id,json.dumps(
+                    {'source_id':job['source_id'],'not_after':auth['not_after'],'reference':auth['reference']},
+                    ensure_ascii=False))
+            spec.update(machine_policy=service.version,dispatch_expires_at=expires)
         # The browser does not inherit relay/API or maintenance credentials.
         env = {k: os.environ[k] for k in ('PATH', 'PLAYWRIGHT_BROWSERS_PATH', 'TEMP', 'TMP', 'TMPDIR') if k in os.environ}
         env.update(HUB_ROOT=str(settings.root), BILIBILI_EXPECTED_SITE_UID=manifest['target_site_uid'],
@@ -60,7 +71,7 @@ def _run_website(settings,store,job_id,service,kind,principal):
         reserved = unresolved
         try:
             deadline = time.monotonic()+18*60
-            preparation_deadline = time.monotonic()+120
+            preparation_deadline = time.monotonic()+300
             while time.monotonic()<deadline:
                 result_file = folder/'result.json'
                 if result_file.exists():

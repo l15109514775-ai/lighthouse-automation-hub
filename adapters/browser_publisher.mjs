@@ -15,13 +15,20 @@ const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 if(spec.version!=='bilibili-ui-transport-v1'||!/^[-a-f0-9]{36}$/.test(spec.job_id)||
  !/^[-a-f0-9]{36}$/.test(spec.attempt_id)||!/^\d{1,30}$/.test(spec.target_site_uid)||
  spec.target_site_uid!==process.env.BILIBILI_EXPECTED_SITE_UID||typeof spec.caption!=='string'||spec.caption.length>10000||
- !/^https:\/\/x\.com\/(?:example_handle_a|example-channel-b)\/status\/\d+$/.test(spec.source_url)||
+ !/^https:\/\/x\.com\/(?:example_handle_a|example_handle_b)\/status\/\d+$/.test(spec.source_url)||
  !spec.caption.includes(spec.source_url)||!['publish','lookup','upload_probe'].includes(spec.mode))throw new Error('SPEC_INVALID');
 const jobRoot=await fs.realpath(path.join(root,'media',spec.job_id));
 const attempt=path.join(jobRoot,'website-attempts',spec.attempt_id);
 await fs.mkdir(attempt,{recursive:true,mode:0o700});
 const file=await fs.realpath(spec.file);
 if(!file.startsWith(jobRoot+path.sep)||hash(await fs.readFile(file))!==spec.artifact_sha256)throw new Error('ARTIFACT_INVALID');
+const artifactStat=await fs.stat(file);
+let artifactHeight=null;
+try{const fd=await fs.open(file,'r');const head=Buffer.alloc(24);await fd.read(head,0,24,0);await fd.close();
+ if(head.slice(1,4).toString()==='PNG')artifactHeight=head.readUInt32BE(20);}catch{}
+const MAX_IMAGE_BYTES=Number(process.env.HUB_MAX_DYNAMIC_IMAGE_BYTES||3145728);
+const MAX_IMAGE_HEIGHT=Number(process.env.HUB_MAX_DYNAMIC_IMAGE_HEIGHT||4096);
+if(artifactStat.size>MAX_IMAGE_BYTES||(artifactHeight&&artifactHeight>MAX_IMAGE_HEIGHT))throw new Error('IMAGE_TOO_LARGE_FOR_UPLOAD');
 async function write(name,value){const f=path.join(attempt,name);await fs.writeFile(f+'.partial',JSON.stringify(value,null,2),{mode:0o600});await fs.rename(f+'.partial',f);}
 const clean=s=>s.replace(/^\u200B/,'').trimEnd();
  let context,clicked=false,stage='launch';
@@ -130,15 +137,33 @@ try{
   // A thumbnail is shown before the remote upload finishes. Wait for the real
   // loading state to end; never accept the site's "publish without image" prompt.
   stage='wait_upload_completion';
-  try{
-   await page.waitForFunction(()=>{
-    const items=[...document.querySelectorAll('.bili-pics-uploader__item')];
-    return items.length===1&&!items[0].classList.contains('loading')&&!items[0].classList.contains('error');
-   },null,{timeout:120000});
-  }catch{
-   await write('upload-network-failures.json',{failures:failedRequests});
-   await fs.writeFile(path.join(attempt,'uploader-final-dom.html'),await page.locator('.bili-dyn-publishing__image-upload').evaluate(e=>e.outerHTML),{mode:0o600});
-   throw new Error('IMAGE_UPLOAD_NOT_COMPLETED');
+  {
+   const deadline=Date.now()+120000;let uploadState='loading';
+   while(Date.now()<deadline){
+    uploadState=await page.evaluate(()=>{
+     const box=document.querySelector('.bili-dyn-publishing__image-upload');
+     if(!box||getComputedStyle(box).display==='none')return 'hidden';
+     const items=[...document.querySelectorAll('.bili-pics-uploader__item')];
+     if(items.some(e=>e.classList.contains('error')))return 'error';
+     if(items.length===1&&!items[0].classList.contains('loading'))return 'ready';
+     return 'loading';
+    });
+    if(uploadState==='ready'||uploadState==='error')break;
+    await page.waitForTimeout(400);
+   }
+   if(uploadState==='error'){
+    await page.locator('.bili-pics-uploader-item-error__retry').click().catch(()=>{});
+    await page.waitForTimeout(20000);
+    uploadState=await page.evaluate(()=>{
+     const items=[...document.querySelectorAll('.bili-pics-uploader__item')];
+     return items.some(e=>e.classList.contains('error'))?'error':'ready';
+    });
+   }
+   if(uploadState!=='ready'){
+    await write('upload-network-failures.json',{failures:failedRequests});
+    await fs.writeFile(path.join(attempt,'uploader-final-dom.html'),await page.locator('.bili-dyn-publishing__image-upload').evaluate(e=>e.outerHTML),{mode:0o600});
+    throw new Error('IMAGE_UPLOAD_NOT_COMPLETED');
+   }
   }
   stage='verify_draft';
   if(clean(await body.innerText())!==spec.caption)throw new Error('DRAFT_CAPTION_CHANGED');
@@ -224,6 +249,19 @@ try{
    caption_input_stage:captionInputStage,
    observed_text:await body.innerText({timeout:3000}).catch(()=>null),
    observed_html:await body.evaluate(e=>e.innerHTML).catch(()=>null)});
+  if(code==='IMAGE_UPLOAD_NOT_COMPLETED'&&await body.count()===1){
+   const observed=clean(await body.innerText({timeout:3000}).catch(()=>null)||'');
+   if(observed===spec.caption){
+    await body.click().catch(()=>{});
+    await page.keyboard.press('Control+A').catch(()=>{});
+    await page.keyboard.press('Backspace').catch(()=>{});
+    await page.waitForTimeout(600);
+    const remaining=await page.locator('.bili-pics-uploader__item.error').count();
+    for(let i=0;i<remaining;i+=1)await page.locator('.bili-pics-uploader__item.error .bili-pics-uploader__item__remove').first().click().catch(()=>{});
+    const cleared=clean(await body.innerText({timeout:3000}).catch(()=>'')||'');
+    await write('own-draft-cleared.json',{cleared:cleared==='',text_sha256:hash(Buffer.from(observed)),remaining_error_images:remaining});
+   }
+  }
   await page.screenshot({path:path.join(attempt,'error.png'),timeout:5000}).catch(()=>{});
  }
  await write('result.json',{state:clicked?'publish_unknown':'blocked_before_send',error_code:code,

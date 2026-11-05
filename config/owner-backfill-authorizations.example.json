@@ -1,0 +1,11 @@
+{
+  "version": "owner-backfill-authorizations-v1",
+  "authorizations": [
+    {
+      "source_id": "REPLACE_WITH_X_POST_ID",
+      "authorized_at": 1762344000,
+      "not_after": 1762430400,
+      "reference": "owner chat YYYY-MM-DD HH:MM: explicit backfill approval (include the exact scope)"
+    }
+  ]
+}
