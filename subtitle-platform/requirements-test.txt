@@ -1,2 +1,0 @@
-# Small dependency set for offline tests; runtime uses worker/requirements.lock.
-numpy==2.5.4

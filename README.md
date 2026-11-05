@@ -4,26 +4,6 @@
 
 本项目来自一套真实长期运行的部署，公开版做了脱敏：所有账号、频道、服务器地址、桶名、路径都换成示例值，真实录播、译图、封面和投稿证据不在仓库内。**默认 DRY_RUN，不会调用真实平台、不会产生费用。**
 
-## 一个仓库，两个字幕组组件
-
-仓库把字幕组的两条工作流放在一起，共用 AGPL-3.0 许可：
-
-| 组件 | 目录 | 负责什么 |
-| --- | --- | --- |
-| 自动化中枢（本仓库主体） | `services/`、`adapters/`、`scheduler/`、`tests/` | 队列与调度、X 采集与翻译、YouTube 回放采集与分段投稿、B 站发布、CloudBase 备份、崩溃自愈与保留 |
-| 字幕协作平台 | `subtitle-platform/` | 网站前端、PostgreSQL 后端、成员/项目/任务/交付/审核、Codex Cloud 字幕程序、QQ 机器人、部署与测试 |
-
-两者互相独立：中枢负责"自动采集与发布"，平台负责人与人之间的协作流（登记、认领、交付、审核、积分）。平台有自己的详细文档和测试，见 [`subtitle-platform/README.md`](subtitle-platform/README.md) 与 [`subtitle-platform/docs/`](subtitle-platform/docs/)。
-
-平台快速体验（Node.js + Python，不需要真实云账号）：
-
-```bash
-cd subtitle-platform
-npm ci
-npm test                 # 数据库与前端离线测试
-python tools/check_release.py
-```
-
 ## 能力与边界
 
 | 能力 | 状态 |
@@ -92,7 +72,6 @@ scheduler/         持久化调度器与 SQL 迁移
 tests/             单元/集成测试（合成数据）
 config/            示例配置（hub.example.toml、各类策略示例）
 scripts/           verify_upstream.py 等工具
-subtitle-platform/ 字幕协作平台（网站/数据库/Cloud worker/QQ 机器人/测试/文档）
 compositor/        译图合成（git submodule，见下）
 vendor/            字幕云 worker（git submodule，见下）
 ```
