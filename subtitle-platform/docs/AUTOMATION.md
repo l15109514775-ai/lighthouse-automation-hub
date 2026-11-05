@@ -109,3 +109,17 @@ select st_subtitle_auto_policy_set('<member-uuid>', true, 2, 2400);
 | --- | --- |
 | 285MB / 170 秒 | 上海下载 69 片，音频 1,355,476 字节；45 条字幕；3 个千问窗口；1 次裁判；0 冲突；发布成功 |
 | 40 秒新申请（全自动） | 02:19:47 自动批准，54 秒拉取，37.6 秒识别发布；19 条字幕；1 次裁判；0 冲突 |
+
+## 已批准申请的自动归档
+
+- 迁移 055 新增 `st_subtitle_requests_archive(p_days default 30)`；
+- 只处理满足以下条件的已批准申请：创建超过 30 天、任务已结束（succeeded / failed / cancelled）、没有活动租约；
+- 只做软删除：写入 `deleted_at` / `deleted_by`，申请进入“已删除申请”，所有任务、交付、通知和积分记录都保留；
+- 组长可在“已删除申请”里点“恢复申请”；已结束任务（含 succeeded）也允许恢复（迁移 055 同时放宽了 `st_subtitle_request_set_deleted`）；
+- 定时任务：硅谷服务器 `/etc/cron.d/subtitle-archive`，每天 05:00 调用一次，日志在 `/var/log/subtitle-archive.log`。
+
+```sql
+-- 手动执行（默认 30 天）
+select st_subtitle_requests_archive(30);
+```
+
