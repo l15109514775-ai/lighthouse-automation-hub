@@ -41,7 +41,7 @@ def candidate(store, parent):
     return children[0] if children else None
 
 
-def assess(settings, store, parent):
+def assess(settings, store, parent, reset_attempts=False):
     now = time.time()
     result = {'parent_job_id': parent['job_id'], 'source_id': parent['source_id'],
               'parent_state': parent['state'], 'problems': [], 'actions': []}
@@ -59,7 +59,10 @@ def assess(settings, store, parent):
     if child['state'] not in CHILD_STATES:
         result['problems'].append('CHILD_NOT_IN_FAILED_STATE')
     if child['attempts'] >= settings.config['max_attempts']:
-        result['problems'].append('CHILD_ATTEMPTS_EXHAUSTED')
+        if reset_attempts:
+            result['actions'].append('reset_child_attempts')
+        else:
+            result['problems'].append('CHILD_ATTEMPTS_EXHAUSTED')
     pubs = store.query("SELECT state,external_id FROM publications WHERE source_id=? AND state<>'rejected'",
                        (parent['source_id'],))
     if pubs:
@@ -67,6 +70,8 @@ def assess(settings, store, parent):
         result['publication'] = [dict(row) for row in pubs]
     auth = owner_backfill_authorization(settings, parent['source_id'])
     result['owner_backfill'] = bool(auth)
+    if reset_attempts and not auth:
+        result['problems'].append('ATTEMPTS_RESET_REQUIRES_AUTHORIZATION')
     if auth:
         result['owner_backfill_reference'] = auth['reference']
         result['owner_backfill_not_after'] = auth['not_after']
@@ -97,7 +102,7 @@ def assess(settings, store, parent):
     return result
 
 
-def apply(settings, store, parent, child, reason, now):
+def apply(settings, store, parent, child, reason, now, reset_attempts=False):
     with store.transaction() as db:
         if parent['state'] == 'failed':
             changed = db.execute(
@@ -105,21 +110,33 @@ def apply(settings, store, parent, child, reason, now):
                 "WHERE job_id=? AND state='failed'", (now, parent['job_id'])).rowcount
             if changed != 1:
                 raise SystemExit('REQUEUE_PARENT_UPDATE_CONFLICT')
-        manifest_sha = parent['result']['machine_web']['manifest_sha256']
-        payload = dict(child['payload'])
+        result = parent['result']
+        if isinstance(result, str):
+            result = json.loads(result)
+        manifest_sha = result['machine_web']['manifest_sha256']
+        payload = child['payload']
+        if isinstance(payload, str):
+            payload = json.loads(payload)
+        else:
+            payload = dict(payload)
         payload['manifest_sha256'] = manifest_sha
+        new_attempts = 0 if reset_attempts else child['attempts']
         changed = db.execute(
             "UPDATE jobs SET payload=?,state='pending',error_code=NULL,stage='discovered',next_run=?,updated_at=?,"
-            "lease_owner=NULL,lease_until=NULL WHERE job_id=? AND state='failed' AND attempts=?",
-            (json.dumps(payload, ensure_ascii=False), now, now, child['job_id'], child['attempts'])).rowcount
+            "lease_owner=NULL,lease_until=NULL,attempts=? WHERE job_id=? AND state='failed' AND attempts=?",
+            (json.dumps(payload, ensure_ascii=False), now, now, new_attempts,
+             child['job_id'], child['attempts'])).rowcount
         if changed != 1:
             raise SystemExit('REQUEUE_CHILD_UPDATE_CONFLICT')
+        audit = {'reason': reason, 'parent': parent['job_id'], 'source_id': parent['source_id'],
+                 'manifest_sha256': manifest_sha}
+        if reset_attempts:
+            audit['attempts_reset_from'] = child['attempts']
+        else:
+            audit['attempts_preserved'] = child['attempts']
         db.execute("INSERT INTO audit(at,principal,action,target,outcome) VALUES(?,?,?,?,?)",
-                   (now, 'owner', VERSION, child['job_id'],
-                    json.dumps({'reason': reason, 'parent': parent['job_id'], 'source_id': parent['source_id'],
-                                'attempts_preserved': child['attempts'], 'manifest_sha256': manifest_sha},
-                               ensure_ascii=False)))
-    return {'requeued': child['job_id'], 'parent': parent['job_id'], 'attempts': child['attempts']}
+                   (now, 'owner', VERSION, child['job_id'], json.dumps(audit, ensure_ascii=False)))
+    return {'requeued': child['job_id'], 'parent': parent['job_id'], 'attempts': new_attempts}
 
 
 def main():
@@ -128,13 +145,15 @@ def main():
     parser.add_argument('--list', action='store_true', help='list requeueable parents and exit')
     parser.add_argument('--apply', action='store_true', help='perform the requeue (default is dry-run)')
     parser.add_argument('--reason', default='', help='required with --apply')
+    parser.add_argument('--reset-attempts', action='store_true',
+                        help='owner-authorized reset of exhausted child attempts (requires authorization)')
     args = parser.parse_args()
     settings = Settings.load()
     store = Store(settings.db_path)
     if args.list:
         rows = store.query("SELECT * FROM jobs WHERE job_type='tweet_process' "
                            "AND state IN ('upload_pending','failed') ORDER BY updated_at DESC")
-        plans = [assess(settings, store, row) for row in rows]
+        plans = [assess(settings, store, row, args.reset_attempts) for row in rows]
         print(json.dumps({'version': VERSION, 'plans': plans}, ensure_ascii=False, indent=1))
         return 0
     if args.apply and not args.reason.strip():
@@ -147,14 +166,14 @@ def main():
         parent = store.get(parent_id)
         if not parent or parent['job_type'] != 'tweet_process':
             raise SystemExit('PARENT_NOT_FOUND:' + parent_id)
-        plan = assess(settings, store, parent)
+        plan = assess(settings, store, parent, args.reset_attempts)
         if plan['problems']:
             raise SystemExit('REFUSED:' + parent_id + ':' + ','.join(plan['problems']))
         if not args.apply:
             results.append({'dry_run': True, **plan})
             continue
         child = candidate(store, parent)
-        results.append(apply(settings, store, parent, child, args.reason.strip(), now))
+        results.append(apply(settings, store, parent, child, args.reason.strip(), now, args.reset_attempts))
     print(json.dumps({'version': VERSION, 'applied': args.apply, 'results': results}, ensure_ascii=False, indent=1))
     return 0
 

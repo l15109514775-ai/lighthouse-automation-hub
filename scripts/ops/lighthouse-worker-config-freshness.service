@@ -1,0 +1,8 @@
+[Unit]
+Description=Read-only worker config freshness check
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/lighthouse-hub/data/ops-tools/worker_config_freshness_v1.py

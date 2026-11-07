@@ -181,7 +181,10 @@ def main():
     new_png, report, new_manifest, manifest_file, new_dir = build(
         manifest, old_dir, args.max_bytes, args.max_height, args.reason)
 
-    previous_result = json.dumps(parent['result'], ensure_ascii=False)
+    previous = parent['result']
+    if isinstance(previous, str):
+        previous = json.loads(previous)
+    previous_result = json.dumps(previous, ensure_ascii=False)
     new_result = json.loads(previous_result)
     new_result['machine_web'] = {**new_result['machine_web'],
                                  'manifest_file': str(manifest_file),
@@ -192,7 +195,11 @@ def main():
     with store.transaction() as db:
         db.execute('UPDATE jobs SET result=?,updated_at=? WHERE job_id=? AND state=?',
                    (json.dumps(new_result, ensure_ascii=False), now, parent['job_id'], parent['state']))
-        payload = dict(child['payload'])
+        payload = child['payload']
+        if isinstance(payload, str):
+            payload = json.loads(payload)
+        else:
+            payload = dict(payload)
         payload['manifest_sha256'] = new_result['machine_web']['manifest_sha256']
         db.execute("UPDATE jobs SET payload=?,updated_at=? WHERE job_id=? AND state='failed'",
                    (json.dumps(payload, ensure_ascii=False), now, child['job_id']))

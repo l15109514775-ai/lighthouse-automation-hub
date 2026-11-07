@@ -41,6 +41,11 @@ MAX_RESUMES_PER_DAY = 2
 AUTO_PROCESSING_MAX_SECONDS = 120
 AUTO_FINALIZED_MAX_SECONDS = 60
 APPROVAL_MAX_SECONDS = 600
+# The YouTube monitor polls this source about every 10 minutes. The timer runs
+# on a separate 10-minute phase, so a 240s freshness gate deterministically
+# skipped every pass. Keep one full monitor interval plus margin; the broader
+# source_max_age_seconds gate still rejects genuinely stale observations.
+OBSERVATION_MAX_AGE_SECONDS = 600
 STABLE_FINAL_HOURS = 6
 STABLE_OBSERVATIONS = 3
 MAX_REBASES_PER_DAY = 2
@@ -233,8 +238,12 @@ def inspect(settings, store, candidate_id, policy, now, state):
     video = rows[0]
     need((video['state'], video['source_api'], video['channel_id']) == ('ended', 'youtube-data-v3-official',
                                                                         candidate['channel_id']), 'OFFICIAL_SOURCE_CHANGED')
-    need(0 <= now - video['last_api_check'] <= policy['source_max_age_seconds'], 'OFFICIAL_SOURCE_NOT_FRESH')
-    need(now - video['last_api_check'] <= 240, 'OFFICIAL_SOURCE_TOO_CLOSE_TO_STALENESS')
+    # Reconcile consumes the monitor's cached observation and runs on a separate
+    # 10-minute phase. Allow one full monitor interval plus margin; FIFO's own
+    # source_max_age_seconds admission policy is unchanged. Identity and
+    # duration checks below still reject changed/stale sources.
+    need(0 <= now - video['last_api_check'] <= OBSERVATION_MAX_AGE_SECONDS,
+         'OFFICIAL_SOURCE_NOT_FRESH')
     identity, payload = ReplayFIFOV4(settings, store)._source(video, policy)
     old = json.loads(candidate['source_payload'])
     need('raw' in old, 'SNAPSHOT_UNREADABLE')
@@ -316,12 +325,23 @@ def inspect(settings, store, candidate_id, policy, now, state):
     if rebases_today(store, candidate_id, now) >= MAX_REBASES_PER_DAY:
         return hold('REBASE_LIMIT_REACHED')
     old_upload, new_upload = old_raw['status'].get('uploadStatus'), new_raw['status'].get('uploadStatus')
+    old_definition = old_raw['contentDetails'].get('definition')
+    new_definition = new_raw['contentDetails'].get('definition')
+    old_chat = old_raw.get('liveStreamingDetails', {}).get('activeLiveChatId')
+    new_chat = new_raw.get('liveStreamingDetails', {}).get('activeLiveChatId')
     finalised = observation['observations'] >= STABLE_OBSERVATIONS and \
         now - old_identity['actual_end'] >= STABLE_FINAL_HOURS * 3600
+    # Live archives keep status.uploadStatus='uploaded' even after YouTube
+    # finalises them; the visible signal is the SD->HD definition upgrade
+    # and/or the live chat id disappearing, with a negative duration trim.
+    live_processing = (finalised and old_upload == new_upload == 'uploaded' and delta < 0 and
+        ((old_definition != 'hd' and new_definition == 'hd') or (bool(old_chat) and not new_chat)))
     if old_upload == 'uploaded' and new_upload == 'processed':
         tier, auto_max = 'post_processing', AUTO_PROCESSING_MAX_SECONDS
     elif old_upload == 'processed' and new_upload == 'processed':
         tier, auto_max = 'finalized_revision', AUTO_FINALIZED_MAX_SECONDS
+    elif live_processing:
+        tier, auto_max = 'live_archive_processing', AUTO_PROCESSING_MAX_SECONDS
     elif old_upload == new_upload == 'uploaded' and finalised and delta < 0:
         tier, auto_max = 'stable_finalised', AUTO_FINALIZED_MAX_SECONDS
     else:
@@ -503,8 +523,9 @@ def binding_from_copy(settings, store, value, now):
         job = copied.get(value['job']['job_id'])
         bound = digest(YouTubeWholeReplayPrepare(settings, copied).resource_binding(job))
         WholeReadinessCoordinatorV4(settings, copied)._binding(job, bound)
-        with copied.transaction() as db:
-            _reopen_wait(db, value, now, bound)
+        if value.get('wait'):
+            with copied.transaction() as db:
+                _reopen_wait(db, value, now, bound)
         WholeReadinessCoordinatorV4(settings, copied)._binding(copied.get(value['job']['job_id']), bound)
         return bound
     finally:

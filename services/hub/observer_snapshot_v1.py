@@ -24,6 +24,16 @@ MAX_JOBS, MAX_REPLAYS, MAX_JSON = 250, 50, 2_097_152
 FIELDS = ('job_id,source_platform,source_id,job_type,queue,state,stage,attempts,'
           'error_code,created_at,updated_at,external_publish_id,policy_version')
 BAD_STATES = {'failed', 'awaiting_review', 'auth_expired', 'publish_unknown'}
+# Source identity reconciliation is a normal wait for a paused/late-finalized
+# replay: YouTube rewrites duration/definition after the plan snapshot. It must
+# not be projected as a failure; it is surfaced separately as waiting.
+NORMAL_WAIT_ERRORS = {'REPLAY_FIFO_SOURCE_IDENTITY_CHANGED'}
+
+
+def is_normal_wait(row):
+    return (row.get('state') == 'awaiting_review' and
+            row.get('error_code') in NORMAL_WAIT_ERRORS and
+            (row.get('queue') == 'video' or str(row.get('job_type', '')).startswith('youtube_replay_')))
 BEATS = ('scheduler', 'worker:tweet', 'worker:video', 'worker:system')
 PERIODIC = {'x_discovery', 'youtube_discovery', 'youtube_feed', 'youtube_live_monitor',
             'maintenance', 'backup', 'cleanup', 'bilibili_token_check', 'tweet_machine_reconcile',
@@ -316,7 +326,9 @@ def collect_snapshot(root, database, *, now=None, backup=None, active_tweet_poli
                               for k, v in resolution.items()}
             item.update(is_historical=historical or not current, is_current=current,
                         source_url=source_url(row['source_platform'],row['source_id']), published_url=links.get(row['job_id']),
-                        resolution=resolution)
+                        resolution=resolution, normal_wait=is_normal_wait(row),
+                        attention='waiting_source_reconciliation' if is_normal_wait(row) else
+                                  ('error' if row['state'] in BAD_STATES else None))
             item['progress'] = progress(root, db, item, now); jobs.append(item)
         replay_items = []
         for row in fifo:
@@ -341,7 +353,9 @@ def collect_snapshot(root, database, *, now=None, backup=None, active_tweet_poli
             'system': system_usage(root), 'containers': container_status(root/'data/host-status.json',now),
             'pipelines': pipelines, 'jobs':jobs,'replays':replay_items,
             'failures':[j for j in jobs if j['is_current'] and j['state'] in BAD_STATES
+                        and not j.get('normal_wait')
                         and not (j.get('resolution') or {}).get('supersession_complete')],
+            'waiting':[j for j in jobs if j['is_current'] and j.get('normal_wait')],
             'daily_report':{'date':local.date().isoformat(),'timezone':'Asia/Shanghai','job_counts':counts,
                 'job_counts_scope':'current_jobs_in_bounded_snapshot',
                 'api_usage':usage,'estimated':True,'charges_confirmed':False}, 'backup':backup_status(backup,now)}

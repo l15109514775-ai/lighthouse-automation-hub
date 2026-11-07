@@ -19,7 +19,7 @@ CONTAINER = 'lighthouse-hub-video-worker-1'
 NAME = 'reconcile_replay_source_revision_v1.py'
 SERVICE = 'lighthouse-replay-source-reconcile.service'
 TIMER = 'lighthouse-replay-source-reconcile.timer'
-PIN = '2499837eafd75ed861e4451fa7609b832f198f77c36f7f2f6a1e2090205eca3a'
+PIN = '7d6abeea140d070ebfb4157c8ff5047fd6d11beb3a535325cbc812de8f8c4222'
 PLACEHOLDER = 'REPLACE_WITH_REVIEWED_SHA256'
 HERE = Path(__file__).resolve().parent
 

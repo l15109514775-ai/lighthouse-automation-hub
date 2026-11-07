@@ -107,6 +107,15 @@ class ReplayBrowserSession:
             return value
 
     def operation(self, operation, **arguments):
+        # Upload is ordinary network I/O; a replay part can be many GB and its
+        # current budget is measured in hours. Holding the single global heavy
+        # lock for that whole stage starves short tweet media-ingest/render
+        # jobs, which retry with HEAVY_RESOURCE_BUSY and can pass the two-hour
+        # publication window. The caller's bilibili-video-profile lock already
+        # serializes native browser sessions; keep heavy for the local
+        # prepare/submit/lookup phases only.
+        if operation == 'upload':
+            return self._operation(operation, **arguments)
         with resource_guard(self.settings.root/'data/locks/heavy'):
             return self._operation(operation, **arguments)
 

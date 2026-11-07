@@ -19,16 +19,18 @@ from test_observer_snapshot_v1 import owned, collect, NOW
 
 JOB = '4ca65e35-8a45-4746-b6c4-13de860409a8'
 OLD_JOB = 'eefce1b8-228a-4ef6-a0a4-840d07a7b60d'
+WAITING_JOB = '5ba8a447-38a8-434b-95dc-7353a46d4018'
+FAIL_JOB = '7f6e3d8a-1111-4222-9333-444455556666'
 SECRET = 'owned-sensitive-sentinel-that-must-not-be-returned'
 
 
 def snapshot(now):
-    job = {'job_id': JOB, 'source_platform': 'youtube', 'source_id': 'synthC00003',
+    job = {'job_id': JOB, 'source_platform': 'youtube', 'source_id': 'exampleVid7',
            'job_type': 'youtube_replay_download_v4', 'queue': 'video', 'state': 'processing',
            'stage': 'youtube_whole_acquiring', 'attempts': 1, 'error_code': None,
            'created_at': now-30, 'updated_at': now-1, 'external_publish_id': None,
            'is_historical': False, 'is_current': True,
-           'source_url': 'https://www.youtube.com/watch?v=synthC00003', 'published_url': None,
+           'source_url': 'https://www.youtube.com/watch?v=exampleVid7', 'published_url': None,
            'progress': {'phase': 'download', 'format_id': '299', 'percent_scope': 'current_track',
                         'downloaded_bytes': 20, 'total_bytes': 100, 'percent': 20.0,
                         'observed_at': now-1, 'fresh': True, 'reason': None}}
@@ -44,7 +46,7 @@ def snapshot(now):
             'containers': {'available': True, 'checked_at': now, 'items': [
                 {'name': 'lighthouse-video-worker-1', 'state': 'running', 'health': 'healthy', 'exit_code': 0, 'restart_count': 0}], 'reason': None},
             'pipelines': [{'name': 'video', 'paused': False}], 'jobs': [job, old],
-            'replays': [{'candidate_id': '9064b1bf-74dd-4094-9460-e699ec6cd7cc', 'source_id': 'synthC00003',
+            'replays': [{'candidate_id': '9064b1bf-74dd-4094-9460-e699ec6cd7cc', 'source_id': 'exampleVid7',
                         'title': 'Owned replay', 'state': 'download_queued', 'reason': None,
                         'plan_job_id': '16cea2cb-2592-5225-9978-1b4e710ca1f5', 'download_job_id': JOB,
                         'publication_job_id': None, 'updated_at': now,
@@ -59,6 +61,41 @@ def snapshot(now):
             'backup': {'configured': True, 'status': 'last_run_failed', 'last_verified_at': now-1000,
                        'last_verified_age_seconds': 1000.0, 'last_error_at': now-100,
                        'error_code': 'OWNED_FAILURE', 'reason': None}}
+
+
+def waiting_and_failure_snapshot(now):
+    value = snapshot(now)
+    waiting = deepcopy(value['jobs'][0])
+    waiting.update(job_id=WAITING_JOB, source_id='exampleVid1',
+                   job_type='youtube_replay_plan_v4', state='awaiting_review',
+                   error_code='REPLAY_FIFO_SOURCE_IDENTITY_CHANGED',
+                   normal_wait=True, attention='waiting_source_reconciliation',
+                   is_current=True, is_historical=False,
+                   source_url='https://www.youtube.com/watch?v=exampleVid1')
+    failure = deepcopy(value['jobs'][0])
+    failure.update(job_id=FAIL_JOB, state='failed', error_code='OWNED_REAL_FAILURE',
+                   normal_wait=False, attention='error', is_current=True, is_historical=False)
+    value['jobs'] += [waiting, failure]
+    value['waiting'] = [waiting]
+    # Deliberately include the normal wait in failures too: list_failures must
+    # still exclude it, so a future collector regression cannot leak it.
+    value['failures'] = [failure, waiting]
+    value['replays'] = [{
+        'candidate_id': '765c14a8-b863-49e9-aebe-59acd6da3f24', 'source_id': 'exampleVid1',
+        'title': 'Owned waiting replay', 'state': 'hold',
+        'reason': 'REPLAY_FIFO_SOURCE_IDENTITY_CHANGED', 'plan_job_id': WAITING_JOB,
+        'download_job_id': None, 'publication_job_id': None, 'refresh_job_id': None,
+        'updated_at': now, 'source_url': 'https://www.youtube.com/watch?v=exampleVid1',
+        'published_urls': []},
+        # Same hold/reason shape, but the linked job is not a normal wait: the
+        # projection must not turn every hold into waiting.
+        {'candidate_id': '9064b1bf-74dd-4094-9460-e699ec6cd7cc', 'source_id': 'exampleVid7',
+         'title': 'Owned unrelated hold', 'state': 'hold',
+         'reason': 'REPLAY_FIFO_SOURCE_IDENTITY_CHANGED', 'plan_job_id': JOB,
+         'download_job_id': None, 'publication_job_id': None, 'refresh_job_id': None,
+         'updated_at': now, 'source_url': 'https://www.youtube.com/watch?v=exampleVid7',
+         'published_urls': []}]
+    return value
 
 
 def write_snapshot(path, value):
@@ -89,9 +126,12 @@ def test_real_sdk_stdio_has_exact_read_tools_no_maintenance_or_database_initiali
                            tool.annotations.openWorldHint is False for tool in listed.tools)
                 status = data(await session.call_tool('get_system_status', {}))
                 assert status['availability'] == 'current' and status['backup']['status'] == 'last_run_failed'
+                assert status['waiting'] == []
+                assert status['replays'][0]['normal_wait'] is False and status['replays'][0]['attention'] is None
                 jobs = data(await session.call_tool('list_jobs', {}))
                 assert [job['job_id'] for job in jobs['jobs']] == [JOB]
                 assert jobs['jobs'][0]['progress']['percent'] == 20.0
+                assert jobs['jobs'][0]['normal_wait'] is False and jobs['jobs'][0]['attention'] is None
                 history = data(await session.call_tool('get_job_details', {'job_id': OLD_JOB}))
                 assert history['job']['is_historical'] is True and history['job']['progress']['percent'] is None
                 assert len(data(await session.call_tool('list_jobs', {'current_only': False}))['jobs']) == 2
@@ -277,6 +317,54 @@ def test_invalid_resolution_shape_never_crosses_read_boundary(tmp_path):
     path = write_snapshot(tmp_path/'snapshot.json', value)
     meta, body = observer.SnapshotReader(path, clock=lambda: now).load()
     assert body is None and meta['availability'] == 'unavailable' and SECRET not in str(meta)
+
+
+def test_waiting_job_and_replay_attention_cross_real_mcp_and_failures_stay_separate(tmp_path):
+    now = time.time()
+    path = write_snapshot(tmp_path/'snapshot.json', waiting_and_failure_snapshot(now))
+    root = Path(__file__).resolve().parents[1]
+
+    async def exercise():
+        params = StdioServerParameters(command=sys.executable, args=['-m', 'services.hub.observer_mcp_v1'],
+            env={**os.environ, 'HUB_OBSERVER_SNAPSHOT': str(path), 'PYTHONPATH': str(root),
+                 'PYTHONDONTWRITEBYTECODE': '1'})
+        async with stdio_client(params) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                status = data(await session.call_tool('get_system_status', {}))
+                assert [job['job_id'] for job in status['waiting']] == [WAITING_JOB]
+                assert status['waiting'][0]['normal_wait'] is True
+                assert status['waiting'][0]['attention'] == 'waiting_source_reconciliation'
+                replay = status['replays'][0]
+                assert replay['plan_job_id'] == WAITING_JOB
+                assert replay['normal_wait'] is True
+                assert replay['attention'] == 'waiting_source_reconciliation'
+                unrelated = status['replays'][1]
+                assert unrelated['state'] == 'hold'
+                assert unrelated['reason'] == 'REPLAY_FIFO_SOURCE_IDENTITY_CHANGED'
+                assert unrelated['normal_wait'] is False and unrelated['attention'] is None
+                jobs = data(await session.call_tool('list_jobs', {}))
+                waiting = next(job for job in jobs['jobs'] if job['job_id'] == WAITING_JOB)
+                failure = next(job for job in jobs['jobs'] if job['job_id'] == FAIL_JOB)
+                assert waiting['normal_wait'] is True and waiting['attention'] == 'waiting_source_reconciliation'
+                assert failure['normal_wait'] is False and failure['attention'] == 'error'
+                details = data(await session.call_tool('get_job_details', {'job_id': WAITING_JOB}))
+                assert details['job']['normal_wait'] is True and details['job']['attention'] == 'waiting_source_reconciliation'
+                failures = data(await session.call_tool('list_failures', {}))
+                assert [job['job_id'] for job in failures['failures']] == [FAIL_JOB]
+                assert failures['matching_in_snapshot'] == 1
+
+    asyncio.run(exercise())
+
+
+def test_legacy_snapshot_without_waiting_fields_defaults_and_remains_usable(tmp_path):
+    now = time.time()
+    path = write_snapshot(tmp_path/'snapshot.json', snapshot(now))
+    meta, body = observer.SnapshotReader(path, clock=lambda: now).load()
+    assert meta['availability'] == 'current'
+    assert body['waiting'] == []
+    assert all(job['normal_wait'] is False and job['attention'] is None for job in body['jobs'])
+    assert all(replay['normal_wait'] is False and replay['attention'] is None for replay in body['replays'])
 
 
 def test_real_stdio_rejects_unknown_protocol_without_logging_inputs_and_still_serves_tools(tmp_path):

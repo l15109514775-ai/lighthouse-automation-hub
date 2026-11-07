@@ -218,6 +218,67 @@ def test_stable_unfinalised_observation_becomes_eligible_after_three_runs(readin
     assert f.db.query('SELECT state FROM replay_fifo_v4')[0]['state'] == 'registered'
 
 
+def test_live_archive_processing_shrink_67s_is_automatic_after_three_runs(readiness, monkeypatch, capsys):
+    f = readiness
+    prepare(f, monkeypatch)
+    register(f)
+    publish_revision(f, upload='uploaded', duration='PT3533S')
+    assert f.q.enqueue_plan_tick(f.handlers)['state'] == 'hold'
+    first, code = run(monkeypatch, capsys)
+    assert first['held'][0]['reason'] == 'UNSUPPORTED_TRANSITION'
+    second, code = run(monkeypatch, capsys)
+    assert second['held'][0]['reason'] == 'UNSUPPORTED_TRANSITION'
+    third, code = run(monkeypatch, capsys, '--apply')
+    assert code == 0 and third['rebased']
+    assert third['rebased'][0]['candidate_state'] == 'registered'
+    audit = f.db.query('SELECT outcome FROM audit WHERE action=? ORDER BY rowid DESC LIMIT 1', (op.VERSION,))
+    assert json.loads(audit[0]['outcome'])['tier'] == 'live_archive_processing'
+    assert f.db.query('SELECT state FROM replay_fifo_v4')[0]['state'] == 'registered'
+
+
+def test_plan_without_readiness_wait_is_rebased_without_reopen_wait(readiness, monkeypatch, capsys):
+    f = readiness
+    prepare(f, monkeypatch)
+    register(f)
+    created = f.q.enqueue_plan_tick(f.handlers)
+    assert created['created'], created
+    plan_id = created['created'][0]
+    now = f.clock[0]
+    with f.db.transaction() as db:
+        db.execute("""UPDATE jobs SET state='awaiting_review',stage='discovered',attempts=2,
+            error_code=?,updated_at=?,next_run=? WHERE job_id=?""", (op.ERROR, now, now, plan_id))
+        db.execute("""UPDATE replay_fifo_v4 SET state='hold',reason=?,plan_job_id=?,
+            download_job_id=NULL,publication_job_id=NULL,refresh_job_id=NULL,updated_at=?
+            WHERE source_id=?""", (op.ERROR, plan_id, now, f.raw['id']))
+    publish_revision(f)
+    out, code = run(monkeypatch, capsys, '--apply')
+    assert code == 0, out.get('errors')
+    assert out['errors'] == [] and out['rebased'] and out['rebased'][0]['kind'] == 'job'
+    job, candidate = f.db.get(plan_id), f.db.query('SELECT * FROM replay_fifo_v4')[0]
+    assert (job['state'], job['error_code'], job['attempts']) == ('pending', None, 2)
+    assert (candidate['state'], candidate['reason']) == ('plan_queued', None)
+    assert not f.db.query('SELECT * FROM publications')
+    assert f.db.query('SELECT * FROM youtube_readiness_waits_v4') == []
+
+
+def test_freshness_window_covers_one_monitor_interval_but_not_arbitrary_staleness(readiness, monkeypatch, capsys):
+    f = readiness
+    prepare(f, monkeypatch)
+    register(f)
+    publish_revision(f)
+    assert f.q.enqueue_plan_tick(f.handlers)['state'] == 'hold'
+    with f.db.transaction() as db:
+        db.execute('UPDATE youtube_videos SET last_api_check=? WHERE video_id=?',
+                   (f.clock[0] - op.OBSERVATION_MAX_AGE_SECONDS + 1, f.raw['id']))
+    fresh, code = run(monkeypatch, capsys)
+    assert fresh['skipped'] == [] and fresh['approvals'], fresh
+    with f.db.transaction() as db:
+        db.execute('UPDATE youtube_videos SET last_api_check=? WHERE video_id=?',
+                   (f.clock[0] - op.OBSERVATION_MAX_AGE_SECONDS - 1, f.raw['id']))
+    stale, code = run(monkeypatch, capsys)
+    assert stale['skipped'][0]['reason'] == 'OFFICIAL_SOURCE_NOT_FRESH'
+
+
 def test_crashed_download_is_requeued_without_resetting_attempts(readiness, monkeypatch, capsys):
     f = readiness
     prepare(f, monkeypatch)

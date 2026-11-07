@@ -18,26 +18,30 @@ def transport(f, *, malformed_upload=False, lookup_unknown=False):
         def __init__(self,settings,manifest,*,assert_lease):
             self.settings,self.manifest,self.check=settings,manifest,assert_lease
         def operation(self,operation,**arguments):
-            # Match the real session's operation-level heavy admission; the
-            # actual ReplayVideoBrowser keeps its profile lock across phases.
+            # Match the real session: prepare/submit/lookup are local heavy
+            # phases, while upload is network-only and must not take heavy.
+            if operation=='upload':
+                return self._operation(operation,**arguments)
             with resource_guard(self.settings.root/'data/locks/heavy'):
-                self.check();counts[operation]+=1;m=self.manifest
-                job,binding,state=f['service'].snapshot(m['job_id'],write=False)
-                if operation=='upload':
-                    return {} if malformed_upload else {'upload_observation':upload_observation(binding,m['attempt_id'])}
-                if operation=='prepare':
-                    proof={'checks':{'cover':{'output':{'sha256':m['cover']['sha256']},
-                        'provenance':{'sha256':m['cover_derivation']['provenance_sha256']}}}}
-                    return {'native_preparation':native_prepare(f['fixture'],m['job_id'],m['attempt_id'],proof=proof,record=False)}
-                if operation=='submit':
-                    ticket=arguments['reservation']
-                    assert ticket['machine_evidence_sha256']==state['machine_acceptance']['evidence_sha256']
-                    assert job['state']=='processing' and state['state']=='submitting'
-                    return {'result_observation':result_observation(m['attempt_id'],binding)}
-                if lookup_unknown:return {'candidate_only':True}
-                assert m['cover'] is None and m['cover_derivation'] is None
-                return {'result_observation':{**result_observation(m['attempt_id'],binding,'completed'),
-                    'public_accessible':True,'public_lookup_observed_at':datetime.now(timezone.utc).isoformat()}}
+                return self._operation(operation,**arguments)
+        def _operation(self,operation,**arguments):
+            self.check();counts[operation]+=1;m=self.manifest
+            job,binding,state=f['service'].snapshot(m['job_id'],write=False)
+            if operation=='upload':
+                return {} if malformed_upload else {'upload_observation':upload_observation(binding,m['attempt_id'])}
+            if operation=='prepare':
+                proof={'checks':{'cover':{'output':{'sha256':m['cover']['sha256']},
+                    'provenance':{'sha256':m['cover_derivation']['provenance_sha256']}}}}
+                return {'native_preparation':native_prepare(f['fixture'],m['job_id'],m['attempt_id'],proof=proof,record=False)}
+            if operation=='submit':
+                ticket=arguments['reservation']
+                assert ticket['machine_evidence_sha256']==state['machine_acceptance']['evidence_sha256']
+                assert job['state']=='processing' and state['state']=='submitting'
+                return {'result_observation':result_observation(m['attempt_id'],binding)}
+            if lookup_unknown:return {'candidate_only':True}
+            assert m['cover'] is None and m['cover_derivation'] is None
+            return {'result_observation':{**result_observation(m['attempt_id'],binding,'completed'),
+                'public_accessible':True,'public_lookup_observed_at':datetime.now(timezone.utc).isoformat()}}
         def close(self):counts['closed']+=1
     return ReplayVideoBrowser(f['s'],session_factory=OwnedSession),counts
 

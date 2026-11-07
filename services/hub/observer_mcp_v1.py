@@ -119,6 +119,8 @@ class Job(PublicModel):
     published_url: str | None = None
     progress: Progress
     resolution: TranslationResolution | None = None
+    normal_wait: bool = False
+    attention: Code | None = None
 
     @field_validator('source_url', 'published_url')
     @classmethod
@@ -140,6 +142,8 @@ class Replay(PublicModel):
     updated_at: Nonnegative
     source_url: str | None = None
     published_urls: Annotated[list[str], Field(max_length=32)]
+    normal_wait: bool = False
+    attention: Code | None = None
 
     @field_validator('source_url')
     @classmethod
@@ -235,6 +239,7 @@ class Snapshot(PublicModel):
     jobs: Annotated[list[Job], Field(max_length=250)]
     replays: Annotated[list[Replay], Field(max_length=250)]
     failures: Annotated[list[Job], Field(max_length=250)]
+    waiting: Annotated[list[Job], Field(max_length=250)] = Field(default_factory=list)
     daily_report: DailyReport
     backup: Backup
 
@@ -312,9 +317,25 @@ def create_server(snapshot_path=None):
 
     @server.tool(annotations=read)
     def get_system_status() -> dict:
-        """Read current health, queues, backup status and active replay summaries; explicitly report stale snapshots."""
+        """Read current health, queues, backup status, waiting jobs and replay summaries; explicitly report stale snapshots."""
         meta, body = reader.load()
-        return {**meta, **({key: body[key] for key in ('health', 'system', 'containers', 'pipelines', 'backup', 'replays')} if body else {})}
+        if body is None:
+            return meta
+        jobs = {job['job_id']: job for job in body['jobs']}
+        replays = []
+        for replay in body['replays']:
+            plan = jobs.get(replay.get('plan_job_id'))
+            if plan is None:
+                candidates = [job for job in body['jobs']
+                              if job['source_id'] == replay['source_id'] and job.get('normal_wait')]
+                plan = candidates[0] if len(candidates) == 1 else None
+            normal_wait = bool(plan.get('normal_wait')) if plan else False
+            normal_wait = normal_wait or bool(replay.get('normal_wait'))
+            attention = ((plan.get('attention') if plan and plan.get('normal_wait') else None) or
+                         (replay.get('attention') if normal_wait else None))
+            replays.append({**replay, 'normal_wait': normal_wait, 'attention': attention})
+        return {**meta, **{key: body[key] for key in ('health', 'system', 'containers', 'pipelines', 'backup')},
+                'replays': replays, 'waiting': body.get('waiting', [])}
 
     @server.tool(annotations=read)
     def list_jobs(state: State | None = None, limit: Limit = 50,
@@ -338,10 +359,11 @@ def create_server(snapshot_path=None):
 
     @server.tool(annotations=read)
     def list_failures(limit: Limit = 50) -> dict:
-        """Read current actionable exceptions; omit superseded source versions and do not retry them."""
+        """Read current actionable exceptions; omit normal waits and superseded source versions; never retry them."""
         meta, body = reader.load()
         if body is None: return meta
         items = [job for job in body['failures'] if job['is_current'] and not job['is_historical'] and
+                 not job.get('normal_wait') and
                  job['state'] in ('failed', 'awaiting_review', 'publish_unknown', 'auth_expired', 'upload_pending')]
         return {**meta, 'failures': items[:limit], 'matching_in_snapshot': len(items)}
 
