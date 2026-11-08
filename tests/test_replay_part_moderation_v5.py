@@ -79,6 +79,7 @@ def lookup(runtime):
                         if f.mode=='busy_after_launch':raise HubError('HEAVY_RESOURCE_BUSY',retryable=True)
                         if f.mode=='auth_expired':raise HubError('AUTH_EXPIRED')
                         if f.mode=='network':raise HubError('OWNED_LOOKUP_NETWORK_DOWN',retryable=True)
+                        if f.mode=='near_end':raise HubError('REPLAY_PART_NEAR_END_SEEK_UNKNOWN',review=True)
                         if f.mode=='unknown':return {'state':'unknown'}
                         job=f.db.get(f.parent);p=job['payload'];s=job['result'][STATE]
                         return {'result_observation':{'version':f.lookup.RESULT_OBSERVATION_VERSION,'attempt_id':s['attempt_id'],
@@ -169,6 +170,17 @@ def test_parent_change_after_child_claim_is_rejected_before_launch(lookup):
     parent=f.db.get(f.parent);parent['payload']['metadata_sha256']='0'*64
     with f.db.transaction() as db:db.execute('UPDATE jobs SET payload=? WHERE job_id=?',(encode(parent['payload']),f.parent))
     assert f.worker.once('moderation');assert f.db.get(child)['state']=='awaiting_review' and not f.platform
+
+def test_near_end_verification_unknown_marks_parent_review_not_upload_pending(lookup):
+    f=lookup;before=f.db.get(f.group);assert before['state']=='upload_pending'
+    child=schedule(f)['scheduled'][0];f.mode='near_end'
+    assert f.worker.once('moderation')
+    parent=f.db.get(f.group);assert parent['state']=='awaiting_review'
+    assert parent['stage']=='replay_parts_child_reconciliation_pending'
+    assert parent['error_code']=='REPLAY_PART_NEAR_END_SEEK_UNKNOWN'
+    assert f.db.get(child)['state']=='awaiting_review'
+    assert f.db.query("SELECT * FROM events WHERE name='review.required'")
+
 
 def test_auth_expiry_blocks_poll_stream_without_changing_parent_or_resetting_attempts(lookup):
     f=lookup;before=parent_snapshot(f);child=schedule(f)['scheduled'][0];f.mode='auth_expired'

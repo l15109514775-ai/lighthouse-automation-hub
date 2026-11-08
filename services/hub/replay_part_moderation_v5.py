@@ -8,12 +8,12 @@ from copy import deepcopy
 from datetime import datetime,timezone
 from pathlib import Path
 from urllib.parse import urlsplit,urljoin,parse_qsl
-import json,re,time,uuid
+import hashlib,json,re,time,uuid
 
 from .db import encode
 from .errors import HubError
 from .locks import resource_guard
-from .replay_parts_v5 import ReplayPartVideoWeb,POLICY,PART_JOB_TYPES,STATE,KIND,index_from_job,document,reference_body
+from .replay_parts_v5 import ReplayPartVideoWeb,ReplayPartGroupsV5,POLICY,PART_JOB_TYPES,STATE,KIND,index_from_job,document,reference_body
 from .replay_moderation_common import assert_lookup_lease,day_bounds
 from .youtube_download import digest
 from .worker import Worker
@@ -123,6 +123,58 @@ class LookupService(ReplayPartVideoWeb):
         self._lookup_job=child
         try:return self.record_result(LOOKUP_PRINCIPAL,context[0]['job_id'],observation,lookup=True,result_reference=result_reference)
         finally:self._lookup_job=None
+
+    def record_publication_candidate(self,child,reason):
+        """Persist a manager-published BV even when only player verification failed."""
+        context,_=lookup_context(self.settings,self.store,self,child)
+        parent,binding,state,pub,_,_=context
+        folder=self.settings.root/'media'/parent['job_id']/'replay-browser-part-v5'/state['attempt_id']/'later-lookups-v2'
+        files=sorted(folder.glob('*/publication-observed.json'),key=lambda p:p.stat().st_mtime,reverse=True)
+        if not files:
+            return None
+        path=files[0]
+        if path.is_symlink() or path.resolve()!=path:fail('REPLAY_PART_PUBLICATION_EVIDENCE_PATH')
+        try:body=json.loads(path.read_text('utf-8'))
+        except (OSError,ValueError):fail('REPLAY_PART_PUBLICATION_EVIDENCE_INVALID')
+        bv=body.get('external_id') if isinstance(body,dict) else None
+        if (body.get('version')!='replay-part-publication-observed-v5' or not isinstance(bv,str) or
+                not re.fullmatch('BV[A-Za-z0-9]{10}',bv)):
+            fail('REPLAY_PART_PUBLICATION_EVIDENCE_INVALID')
+        self._lookup_job=child
+        try:
+            now=time.time();child_job=self.store.get(parent['job_id'])
+            with self.store.transaction() as db:
+                current=db.execute('SELECT state,external_publish_id FROM jobs WHERE job_id=?',(parent['job_id'],)).fetchone()
+                if not current or current['external_publish_id'] not in (None,bv):fail('REPLAY_PART_PUBLICATION_CANDIDATE_CHANGED')
+                db.execute("UPDATE publications SET state='awaiting_moderation',external_id=?,external_url=?,updated_at=? "
+                           "WHERE job_id=? AND idempotency_key=? AND state IN ('unknown','dispatching') AND external_id IS NULL",
+                           (bv,'https://www.bilibili.com/video/'+bv,now,parent['job_id'],state['key']))
+                db.execute("UPDATE replay_part_children_v5 SET state='awaiting_moderation',external_id=? "
+                           "WHERE child_job_id=? AND idempotency_key=? AND state IN ('unknown','dispatching')",
+                           (bv,parent['job_id'],state['key']))
+                result=child_job['result'] or {}
+                observation={'version':'replay-part-publication-observation-v5','external_id':bv,
+                             'external_url':'https://www.bilibili.com/video/'+bv,'reason':reason,
+                             'complete_part_playability_verified':False,
+                             'evidence':{'file':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}}
+                result['publication_observation']=observation
+                db.execute('UPDATE jobs SET external_publish_id=?,stage=?,error_code=?,result=?,updated_at=? '
+                           'WHERE job_id=? AND state=?',
+                           (bv,'replay_part_platform_published_completeness_unverified',reason,
+                            encode(result),now,parent['job_id'],parent['state']))
+                group=self.store.get(binding['parent_job_id'])
+                group_result=group['result'] or {}
+                group_result['publication_observation']=observation
+                db.execute('UPDATE jobs SET state=?,stage=?,error_code=?,result=?,updated_at=? WHERE job_id=? AND state=?',
+                           ('awaiting_review','replay_parts_platform_published_completeness_pending',
+                            'REPLAY_PART_PUBLIC_VERIFICATION_PENDING',encode(group_result),now,
+                            binding['parent_job_id'],group['state']))
+                db.execute('INSERT INTO audit(at,principal,action,target,outcome) VALUES(?,?,?,?,?)',
+                           (now,LOOKUP_PRINCIPAL,'replay_part_publication_candidate',parent['job_id'],
+                            encode({'external_id':bv,'reason':reason,'evidence':str(path)})))
+            return observation
+        finally:
+            self._lookup_job=None
 
     def record_draft_lookup(self,child,observation,*,result_reference):
         """Save a source-bound native draft location; never complete or resend."""
@@ -308,6 +360,14 @@ class LookupHandler:
         with self.browser.session(manifest,assert_lease=check,before_launch=before_launch,**options) as session:
             try:value=session.operation('lookup',**({'external_id':child['payload']['external_id']} if child['payload']['external_id'] else {}))
             except HubError as exc:
+                if exc.code in ('REPLAY_PART_NEAR_END_SEEK_UNKNOWN','REPLAY_PART_NEAR_END_PLAY_UNKNOWN'):
+                    # The platform may already have published the BV; a player
+                    # verification timeout must move the group to review, not
+                    # leave the parent in upload_pending.
+                    try:self.service.record_publication_candidate(child,exc.code)
+                    except HubError:pass
+                    ReplayPartGroupsV5(self.settings,self.store).mark_parent_review(binding['parent_job_id'],exc.code)
+                    raise
                 if exc.code not in ('REPLAY_PART_OWNER_VERIFIED_RECONCILE_REQUIRED','REPLAY_PART_OWNER_RECONCILE_REQUIRED'):raise
                 # The owner assistance/inspection ended, not the publication.
                 # Schedule another read-only lookup; never re-run a submit.

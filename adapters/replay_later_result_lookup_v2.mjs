@@ -308,7 +308,7 @@ export async function observeLaterReplayResult({page,context,spec,root,known_ext
     await publicPage.evaluate(()=>{const items=[...document.querySelectorAll('video')].filter(v=>{const r=v.getBoundingClientRect();return r.width>0&&r.height>0;});
      if(items.length!==1)throw new Error('REPLAY_PART_PLAYER_AMBIGUOUS');const v=items[0];v.pause();v.currentTime=Math.max(0,v.duration-5);});
     common.player_seeks=1;
-    const seekEnd=Date.now()+budget(10000);let before=null;
+    const seekEnd=Date.now()+budget(30000);let before=null;
     do{
      await protection(publicPage,'https://www.bilibili.com','/video/'+candidate,{publicIdentity:true});dom=await read();
      const videos=dom.videos.filter(v=>v.visible);
@@ -317,14 +317,21 @@ export async function observeLaterReplayResult({page,context,spec,root,known_ext
      if(!v.seeking&&v.ready_state>=2&&Math.abs(v.duration_seconds-spec.duration_seconds)<=2&&v.current_time>=Math.max(0,v.duration_seconds-5)-0.05){before=v.current_time;break;}
      await publicPage.waitForTimeout(100);
     }while(Date.now()<seekEnd);
-    if(before===null)fail('REPLAY_PART_NEAR_END_SEEK_UNKNOWN');
+    if(before===null){
+     const publication=await write(path.join(output,'publication-observed.json'),{
+      version:'replay-part-publication-observed-v5',...common,observed_at:new Date().toISOString(),external_id:candidate,
+      manager_observation:managerRef,reason:'REPLAY_PART_NEAR_END_SEEK_UNKNOWN',visible_dom:dom,
+      player:{duration_seconds:spec.duration_seconds,expected_near_end:Math.max(0,spec.duration_seconds-5)}});
+     common.publication_observation=publication;
+     fail('REPLAY_PART_NEAR_END_SEEK_UNKNOWN');
+    }
     await protection(publicPage,'https://www.bilibili.com','/video/'+candidate,{publicIdentity:true});
     // Bounded play promise; neither the browser's clock nor an assignment to
     // currentTime is substituted for observed decoded playback progress.
     const played=await publicPage.evaluate(async()=>{const videos=[...document.querySelectorAll('video')].filter(v=>{const r=v.getBoundingClientRect();return r.width>0&&r.height>0;});
      if(videos.length!==1)return false;let timer;try{return await Promise.race([videos[0].play().then(()=>true,()=>false),new Promise(resolve=>{timer=setTimeout(()=>resolve(false),5000);})]);}finally{clearTimeout(timer);}});
     if(!played)fail('REPLAY_PART_NEAR_END_PLAY_BLOCKED');
-    const playEnd=Date.now()+budget(10000);let progressed=false;
+    const playEnd=Date.now()+budget(30000);let progressed=false;
     do{
      await protection(publicPage,'https://www.bilibili.com','/video/'+candidate,{publicIdentity:true});dom=await read();
      const videos=dom.videos.filter(v=>v.visible);if(videos.length!==1)fail('REPLAY_PART_PLAYER_AMBIGUOUS');const v=videos[0];
@@ -334,7 +341,14 @@ export async function observeLaterReplayResult({page,context,spec,root,known_ext
       v.current_time>=Math.max(0,v.duration_seconds-5)&&(v.current_time-before>0.1||v.ended===true)&&v.seekable_ranges.some(r=>r.end>r.start);
      if(progressed)break;await publicPage.waitForTimeout(100);
     }while(Date.now()<playEnd);
-    if(!progressed)fail('REPLAY_PART_NEAR_END_PLAY_UNKNOWN');
+    if(!progressed){
+     const publication=await write(path.join(output,'publication-observed.json'),{
+      version:'replay-part-publication-observed-v5',...common,observed_at:new Date().toISOString(),external_id:candidate,
+      manager_observation:managerRef,reason:'REPLAY_PART_NEAR_END_PLAY_UNKNOWN',visible_dom:dom,
+      player:{duration_seconds:spec.duration_seconds,before,after:playback?.after??null}});
+     common.publication_observation=publication;
+     fail('REPLAY_PART_NEAR_END_PLAY_UNKNOWN');
+    }
    }
    const finalDescriptions=dom.descriptions.filter(x=>x.visible);
    const descriptionDisplay=standalone&&finalDescriptions.length===1?publicDescriptionDisplayEvidence(finalDescriptions[0].text,spec.metadata.description,spec.source_url,spec.metadata_sha256,true):null;

@@ -806,6 +806,25 @@ class ReplayPartGroupsV5:
         except HubError:raise
         except (OSError,ValueError,KeyError,TypeError,AttributeError):fail('REPLAY_PART_WORKFLOW_LAUNCH_REQUIRED')
 
+    def mark_parent_review(self,parent_job_id,code):
+        """A child awaiting review must never leave the parent in upload_pending."""
+        parent=self.store.get(parent_job_id)
+        if not parent or parent['job_type']!=GROUP_JOB or parent['state'] not in ('upload_pending','publishing','awaiting_review'):
+            return False
+        now=time.time()
+        with self.store.transaction() as db:
+            current=db.execute('SELECT state FROM jobs WHERE job_id=?',(parent_job_id,)).fetchone()
+            if not current or current['state'] not in ('upload_pending','publishing','awaiting_review'):
+                return False
+            if db.execute("UPDATE jobs SET state='awaiting_review',stage='replay_parts_child_reconciliation_pending',"
+                          "error_code=?,updated_at=? WHERE job_id=? AND state IN ('upload_pending','publishing','awaiting_review')",
+                          (code,now,parent_job_id)).rowcount!=1:
+                return False
+            db.execute('INSERT INTO audit(at,principal,action,target,outcome) VALUES(?,?,?,?,?)',
+                       (now,'system:replay-parts-admission-v5','replay_parts_child_review',parent_job_id,
+                        encode({'code':code,'previous_state':current['state'],'new_state':'awaiting_review'})))
+        return True
+
     def aggregate(self,parent_job_id):
         """All actual child publications, never a fabricated shared BV."""
         self.initialize();parent=self.store.get(parent_job_id)
