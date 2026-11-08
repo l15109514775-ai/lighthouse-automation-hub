@@ -8,6 +8,7 @@ import aiohttp
 
 BASE='https://example-env.api.tcloudbasegateway.com'
 RPC=BASE+'/v1/rdb/rest/rpc/st_purge_worker'
+RETENTION_RPC=BASE+'/v1/rdb/rest/rpc/st_subtitle_retention_worker'
 
 def validate(value):
     if not isinstance(value,dict) or not isinstance(value.get('idle'),bool):raise ValueError('Invalid cleanup response')
@@ -34,6 +35,10 @@ async def cleanup_pass(conf,sender,deadline,transport=None):
     """Deletion is reconciled by the next RPC's real storage metadata, never a guessed receipt."""
     async def operate(call):
         count=0
+        retention=await call('POST',RETENTION_RPC,{'Authorization':'Bearer '+conf['publishable_key']},
+            {'p_key':conf['gateway_key'],'p_sender':sender,'p_days':30})
+        if not isinstance(retention,dict) or not isinstance(retention.get('requests'),int) or not isinstance(retention.get('jobs'),int):
+            raise ValueError('Invalid retention response')
         for _ in range(100):
             if asyncio.get_running_loop().time()>=deadline:break
             result=await call('POST',RPC,{'Authorization':'Bearer '+conf['publishable_key']},
