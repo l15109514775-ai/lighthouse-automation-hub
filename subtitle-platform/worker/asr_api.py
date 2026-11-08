@@ -275,7 +275,7 @@ def cut_window(audio, start, end, out):
     return out
 
 
-def whisper_primary(audio, cfg, duration, key=None):
+def whisper_primary(audio, cfg, duration, key=None, usage_sink=None):
     key = resolve_key(cfg, cfg.get('asr_primary_key_env', 'OPENAI_API_KEY'), key)
     url = cfg.get('asr_primary_base_url', 'https://api.openai.com/v1').rstrip('/') + '/audio/transcriptions'
     fields = {'model': cfg.get('asr_primary_model', 'whisper-1'), 'response_format': 'verbose_json',
@@ -286,10 +286,16 @@ def whisper_primary(audio, cfg, duration, key=None):
         fields['prompt'] = cfg['asr_prompt']
     payload = _post(url, key, fields=fields,
                     files={'file': ('audio.mp3', Path(audio).read_bytes(), 'audio/mpeg')})
+    if usage_sink is not None:
+        usage = payload.get('usage') if isinstance(payload.get('usage'), dict) else {}
+        usage = dict(usage)
+        usage.setdefault('requests', 1)
+        usage.setdefault('seconds', round(float(duration), 3))
+        usage_sink('whisper', usage)
     return parse_whisper(payload, duration)
 
 
-def qwen_window(audio, start, end, cfg, workdir, key=None):
+def qwen_window(audio, start, end, cfg, workdir, key=None, usage_sink=None):
     import base64
     key = resolve_key(cfg, cfg.get('asr_qwen_key_env', 'DASHSCOPE_API_KEY'), key)
     part = cut_window(audio, start, end, Path(workdir) / f'qwen-{int(start):05d}.wav')
@@ -301,16 +307,30 @@ def qwen_window(audio, start, end, cfg, workdir, key=None):
                                                            'input_audio': {'data': 'data:audio/wav;base64,' + encoded}}]}],
                'asr_options': {'language': cfg.get('asr_language', 'ja'), 'enable_itn': False}}
     url = cfg.get('asr_qwen_base_url', 'https://dashscope.aliyuncs.com/compatible-mode/v1').rstrip('/') + '/chat/completions'
-    return parse_qwen(_post(url, key, json_body=payload))
+    response = _post(url, key, json_body=payload)
+    if usage_sink is not None:
+        usage = response.get('usage') if isinstance(response.get('usage'), dict) else {}
+        usage = dict(usage)
+        usage.setdefault('requests', 1)
+        usage.setdefault('seconds', round(float(end) - float(start), 3))
+        usage_sink('qwen', usage)
+    return parse_qwen(response)
 
 
-def arbiter_window(audio, start, end, cfg, workdir, key=None):
+def arbiter_window(audio, start, end, cfg, workdir, key=None, usage_sink=None):
     key = resolve_key(cfg, cfg.get('asr_arbiter_key_env', 'OPENAI_API_KEY'), key)
     part = cut_window(audio, start, end, Path(workdir) / f'arbiter-{int(start):05d}.wav')
     url = cfg.get('asr_arbiter_base_url', 'https://api.openai.com/v1').rstrip('/') + '/audio/transcriptions'
     fields = {'model': cfg.get('asr_arbiter_model', 'gpt-4o-transcribe'), 'response_format': 'json'}
-    return parse_openai_text(_post(url, key, fields=fields,
-                                   files={'file': ('window.wav', part.read_bytes(), 'audio/wav')}))
+    response = _post(url, key, fields=fields,
+                     files={'file': ('window.wav', part.read_bytes(), 'audio/wav')})
+    if usage_sink is not None:
+        usage = response.get('usage') if isinstance(response.get('usage'), dict) else {}
+        usage = dict(usage)
+        usage.setdefault('requests', 1)
+        usage.setdefault('seconds', round(float(end) - float(start), 3))
+        usage_sink('arbiter', usage)
+    return parse_openai_text(response)
 
 
 def transcribe(video, workdir, cfg, *, primary_key=None, qwen_key=None, arbiter_key=None):

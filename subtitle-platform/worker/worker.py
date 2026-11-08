@@ -372,6 +372,12 @@ def prepare_audio(video, audio, duration, limit):
 
 def execute_job(args, cfg, video, duration, job):
     text_readiness(cfg)
+    asr_usage=[]
+    def capture_asr(kind, usage):
+        entry=dict(usage) if isinstance(usage,dict) else {}
+        entry.setdefault('requests',1)
+        asr_usage.append({'checkpoint':f'asr-api/{kind}-{len(asr_usage):05d}.json',
+                          'state':'completed','phase':kind,'usage':entry})
     secondary_path=Path(args.secondary).resolve() if args.secondary else None
     if secondary_path:
         if not secondary_path.is_file():
@@ -424,7 +430,8 @@ def execute_job(args, cfg, video, duration, job):
             from asr_api import whisper_primary
             save(cues_path,[{'id':index+1,'start':row['start'],'end':row['end'],'text':row['text'],
                              'review':False,'timing_method':'whisper_api_segment_timestamps'}
-                            for index,row in enumerate(whisper_primary(audio,cfg,duration))])
+                            for index,row in enumerate(whisper_primary(audio,cfg,duration,
+                                                                       usage_sink=capture_asr))])
         else:
             save(cues_path,transcribe(audio,job,cfg))
     rows=read(cues_path);validate_cues(rows,duration)
@@ -444,12 +451,12 @@ def execute_job(args, cfg, video, duration, job):
             workdir.mkdir(parents=True,exist_ok=True)
             secondary=[]
             def qwen_call(start,end):
-                text=qwen_window(audio,start,end,cfg,workdir)
+                text=qwen_window(audio,start,end,cfg,workdir,usage_sink=capture_asr)
                 secondary.append({'id':len(secondary)+1,'start':start,'end':end,'text':text,'review':True,
                                   'timing_method':'source_audio_window_interval_not_word_alignment'})
                 return text
             def arbiter_call(start,end):
-                return arbiter_window(audio,start,end,cfg,workdir)
+                return arbiter_window(audio,start,end,cfg,workdir,usage_sink=capture_asr)
             cross=cross_check(rows,duration,cfg,qwen_call,arbiter_call)
             save(job/'secondary-cues.json',secondary)
         else:
@@ -495,6 +502,7 @@ def execute_job(args, cfg, video, duration, job):
     usage=[]
     for path in sorted(job.glob('text/*/request-state.json')) + sorted(job.glob('qwen/*/request-state.json')):
         usage.append({'checkpoint':str(path.relative_to(job)),**read(path)})
+    usage.extend(asr_usage)
     save(job/'delivery'/'usage.json',{'requests':usage,'actual_billing_verified':False})
     files=[{'name':p.name,'sha256':digest(p),'bytes':p.stat().st_size} for p in sorted((job/'delivery').iterdir()) if p.is_file() and p.name != 'manifest.json']
     save(job/'delivery'/'manifest.json',{'state':'ready_for_upload_not_uploaded','job_id':args.job_id,'files':files,'human_review_required':True})

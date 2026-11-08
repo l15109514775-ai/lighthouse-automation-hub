@@ -3,6 +3,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -133,6 +134,46 @@ class HttpHelpersTest(unittest.TestCase):
             del os.environ['ASR_TEST_KEY_FILE']
         with self.assertRaises(asr_api.AsrError):
             asr_api.resolve_key({}, 'ASR_MISSING_KEY')
+
+
+class UsageSinkTest(unittest.TestCase):
+    def test_whisper_usage_is_forwarded_without_changing_return_shape(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            audio = Path(tmp) / 'audio.mp3'
+            audio.write_bytes(b'audio')
+            response = {'segments': [{'start': 0, 'end': 1, 'text': 'あ'}],
+                        'usage': {'input_tokens': 5, 'output_tokens': 2, 'total_tokens': 7}}
+            sink = []
+            with patch.object(asr_api, '_post', return_value=response):
+                rows = asr_api.whisper_primary(audio, {}, 1.0, key='dummy',
+                                               usage_sink=lambda kind, usage: sink.append((kind, usage)))
+        self.assertEqual(rows, [{'start': 0, 'end': 1, 'text': 'あ'}])
+        self.assertEqual(sink[0][0], 'whisper')
+        self.assertEqual(sink[0][1]['total_tokens'], 7)
+        self.assertEqual(sink[0][1]['seconds'], 1.0)
+
+    def test_qwen_and_arbiter_usage_are_forwarded_with_official_shape(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            audio = Path(tmp) / 'audio.wav'
+            audio.write_bytes(b'audio')
+            part = Path(tmp) / 'part.wav'
+            part.write_bytes(b'wav')
+            qwen_response = {'choices': [{'message': {'content': 'あ'}, 'finish_reason': 'stop'}],
+                             'usage': {'prompt_tokens': 53, 'completion_tokens': 14,
+                                       'total_tokens': 67, 'seconds': 2}}
+            arbiter_response = {'text': 'あ', 'usage': {'input_tokens': 8, 'output_tokens': 3,
+                                                        'total_tokens': 11}}
+            sink = []
+            with patch.object(asr_api, 'cut_window', return_value=part), \
+                 patch.object(asr_api, '_post', side_effect=[qwen_response, arbiter_response]):
+                self.assertEqual(asr_api.qwen_window(audio, 0, 2, {}, tmp, key='dummy',
+                                                     usage_sink=lambda kind, usage: sink.append((kind, usage))), 'あ')
+                self.assertEqual(asr_api.arbiter_window(audio, 0, 2, {}, tmp, key='dummy',
+                                                       usage_sink=lambda kind, usage: sink.append((kind, usage))), 'あ')
+        self.assertEqual([row[0] for row in sink], ['qwen', 'arbiter'])
+        self.assertEqual(sink[0][1]['seconds'], 2)
+        self.assertEqual(sink[0][1]['prompt_tokens'], 53)
+        self.assertEqual(sink[1][1]['seconds'], 2.0)
 
 
 if __name__ == '__main__':

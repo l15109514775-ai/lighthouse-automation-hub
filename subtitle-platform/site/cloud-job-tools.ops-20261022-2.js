@@ -2,7 +2,9 @@
 (function(root){
  const reasons={short_duration:'显示时间短于0.5秒',reading_speed:'阅读速度超过当前18字/秒警戒值',review_requested:'识别或模型提出人工复核；具体语义原因尚未核实',overlap:'与其他字幕重叠，可能是正常多人同时发言'};
  const count=v=>Number.isSafeInteger(v)&&v>=0&&v<=1e12?v:null;
+ const measure=v=>Number.isFinite(v)&&v>=0&&v<=1e12?v:null;
  const show=v=>count(v)===null?'未上报':String(v);
+ const showNumber=v=>measure(v)===null?'未上报':String(v);
  const requests=v=>count(v)===null?'未上报':String(v)+'次';
  const time=v=>Number.isFinite(v)&&v>=0&&v<=1200.2?`${Math.floor(v/60)}:${(v%60).toFixed(2).padStart(5,'0')}`:null;
  const uuid=v=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(v);
@@ -50,21 +52,35 @@
           note:'结构检查和警告不能证明听校完成或语义准确。原始字幕保留；请在字幕软件中按编号、时间段定位。'};
  }
  function usageLines(usage){
-  return ['text','qwen'].map(provider=>{
-   const u=usage?.[provider];const label=provider==='text'?'文字服务商':'千问服务商';
-   if(!u||!count(u.reported_requests))return label+'：尚无可识别的token用量返回；不代表零用量或零费用。';
+  const labels={text:'OpenAI 文字（翻译/复核）',qwen:'千问（旧本地）',
+                qwen_asr:'千问 ASR（官方 API）',openai_asr:'OpenAI ASR（whisper/裁判）'};
+  return Object.entries(labels).map(([provider,label])=>{
+   const u=usage?.[provider];
+   if(!u||!count(u.reported_requests))return label+'：尚无可识别的用量返回；不代表零用量或零费用。';
    const metric=key=>count(u[key])===null?'未返回该字段':`${show(u[key])}（${show(u[key+'_reports'])}次有此字段）`;
-   return `${label}返回用量：输入token ${metric('input_tokens')}，输出token ${metric('output_tokens')}；仅覆盖已保存响应，不是最终账单。`;
+   const total=count(u.total_tokens)===null?'':`，总token ${metric('total_tokens')}`;
+   const seconds=measure(u.seconds)===null?'':`，音频${showNumber(u.seconds)}秒`;
+   return `${label}返回用量：输入token ${metric('input_tokens')}，输出token ${metric('output_tokens')}${total}${seconds}；仅覆盖已保存响应，不是最终账单。`;
   });
  }
  function usageFile(report){
   if(!report||!Array.isArray(report.requests))return null;
-  const out={text:{reported_requests:0},qwen:{reported_requests:0}};
-  for(const request of report.requests.slice(0,440)){
-   const p=String(request.checkpoint||'').replaceAll('\\','/');const provider=p.startsWith('text/')?'text':p.startsWith('qwen/')?'qwen':null;
+  const out={text:{reported_requests:0},qwen:{reported_requests:0},
+             qwen_asr:{reported_requests:0},openai_asr:{reported_requests:0}};
+  for(const request of report.requests.slice(0,520)){
+   const p=String(request.checkpoint||'').replaceAll('\\','/');
+   const provider=p.startsWith('text/')?'text':p.startsWith('qwen/')?'qwen':
+     p.startsWith('asr-api/qwen')?'qwen_asr':
+     (p.startsWith('asr-api/whisper')||p.startsWith('asr-api/arbiter'))?'openai_asr':null;
    if(!provider||!request.usage||typeof request.usage!=='object')continue;
    let found=false;const u=out[provider];
-   for(const key of ['input_tokens','output_tokens','total_tokens']){const n=count(request.usage[key]);if(n!==null){u[key]=(u[key]??0)+n;u[key+'_reports']=(u[key+'_reports']??0)+1;found=true;}}
+   for(const key of ['input_tokens','output_tokens','total_tokens','seconds']){
+    const n=key==='seconds'?measure(request.usage.seconds):
+      key==='input_tokens'?(count(request.usage.input_tokens)??count(request.usage.prompt_tokens)):
+      key==='output_tokens'?(count(request.usage.output_tokens)??count(request.usage.completion_tokens)):
+      count(request.usage[key]);
+    if(n!==null){u[key]=(u[key]??0)+n;u[key+'_reports']=(u[key+'_reports']??0)+1;found=true;}
+   }
    if(found)u.reported_requests++;
   }return out;
  }
