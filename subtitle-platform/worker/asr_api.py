@@ -221,10 +221,22 @@ def parse_whisper(payload, duration):
             text = str(item['text']).strip()
         except (KeyError, TypeError, ValueError):
             raise AsrError('ASR_WHISPER_SEGMENT_INVALID') from None
-        if not text or not 0 <= start < end or start < previous_end - 0.5 or end > duration + 2:
+        if not text or not 0 <= start < end:
             raise AsrError('ASR_WHISPER_SEGMENT_INVALID')
-        rows.append({'start': round(start, 3), 'end': round(min(end, duration), 3), 'text': text})
+        # Whisper can hallucinate repeated segments past the end of a short clip.
+        # Ignore segments that start beyond the actual audio and clamp a segment
+        # that only overruns the tail; do not fail an otherwise valid transcript.
+        if start >= duration + 0.001:
+            continue
+        end = min(end, duration)
+        if end <= start:
+            continue
+        if start < previous_end - 0.5:
+            raise AsrError('ASR_WHISPER_SEGMENT_INVALID')
+        rows.append({'start': round(start, 3), 'end': round(end, 3), 'text': text})
         previous_end = end
+    if not rows:
+        raise AsrError('ASR_WHISPER_SEGMENT_INVALID')
     return rows
 
 

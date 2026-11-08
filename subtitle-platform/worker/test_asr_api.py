@@ -98,6 +98,14 @@ class ParseTest(unittest.TestCase):
         with self.assertRaises(asr_api.AsrError):
             asr_api.parse_whisper({'segments': []}, 10)
 
+    def test_whisper_clamps_tail_and_drops_beyond_audio_hallucinations(self):
+        rows = asr_api.parse_whisper({'segments': [
+            {'start': 0.0, 'end': 1.0, 'text': 'あ'},
+            {'start': 47.0, 'end': 58.0, 'text': 'い'},
+            {'start': 49.0, 'end': 50.0, 'text': 'う'}]}, 48.0)
+        self.assertEqual(rows, [{'start': 0.0, 'end': 1.0, 'text': 'あ'},
+                                {'start': 47.0, 'end': 48.0, 'text': 'い'}])
+
     def test_qwen(self):
         payload = {'choices': [{'finish_reason': 'stop', 'message': {'content': ' あい '}}]}
         self.assertEqual(asr_api.parse_qwen(payload), 'あい')
