@@ -899,12 +899,14 @@ class ReplayPartGroupsV5:
             service._registry(job,job['payload'],db);service._source_publications(job,job['payload'],db)
             state=job['result'][STATE]['state'];own=[p for p in all_pubs if p['job_id']==job['job_id']]
             if len(own)>1:fail('REPLAY_PART_PUBLICATION_CHANGED')
-            if own and (own[0]['state'] in ('unknown','dispatching') or state in ('submitting','submit_unknown')):states.append('unknown')
+            if job['state']=='awaiting_review':states.append('review')
+            elif own and (own[0]['state'] in ('unknown','dispatching') or state in ('submitting','submit_unknown')):states.append('unknown')
             elif own and own[0]['state']=='awaiting_moderation':states.append('awaiting_moderation')
             elif child['state']=='completed' and state=='completed' and own and own[0]['state']=='completed' and own[0]['external_id']==child['external_id']:states.append('completed')
-            elif job['state'] in ('failed','awaiting_review','auth_expired') or state=='upload_unknown':states.append('hold')
+            elif job['state'] in ('failed','auth_expired') or state=='upload_unknown':states.append('hold')
             else:states.append('publication_queued')
         if all(v=='completed' for v in states) and parent['state']=='completed':return 'completed',None,parent['job_id']
+        if 'review' in states:return 'hold','REPLAY_PART_PUBLIC_VERIFICATION_PENDING',parent['job_id']
         if 'unknown' in states:return 'unknown','RECONCILE_BEFORE_RETRY',parent['job_id']
         if 'hold' in states:return 'hold','REPLAY_PART_CHILD_REQUIRES_RECONCILIATION',parent['job_id']
         if 'awaiting_moderation' in states:return 'awaiting_moderation',None,parent['job_id']
