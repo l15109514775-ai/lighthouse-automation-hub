@@ -3,8 +3,8 @@ let subtitleRequests=[],subtitleUploading=false,showDeletedSubtitleRequests=fals
 const requestedIntake=new URLSearchParams(location.search).get('request');
 let focusedIntake=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(requestedIntake||'')?requestedIntake:null;
 const requestStates={uploading:'上传未完成',pending:'待组长审批',approved:'已批准',rejected:'已驳回',withdrawn:'已撤回'};
-const requestPanel=document.createElement('section');requestPanel.id='subtitle-request-panel';requestPanel.className='card';
-requestPanel.innerHTML=`<div class="section-heading"><div><div class="eyebrow">SUBTITLE REQUESTS</div><h2>字幕申请与审批</h2></div><button id="subtitle-request-refresh" type="button">刷新申请</button></div>
+const requestPanel=document.createElement('details');requestPanel.id='subtitle-request-panel';requestPanel.className='card collapsible-panel';
+requestPanel.innerHTML=`<summary><span class="eyebrow">SUBTITLE REQUESTS</span> 字幕申请与审批</summary><div class="section-heading"><div><div class="eyebrow">SUBTITLE REQUESTS</div><h2>字幕申请与审批</h2></div><button id="subtitle-request-refresh" type="button">刷新申请</button></div>
 <p class="muted">组员上传登记 → 白名单自动批准（未在白名单时由组长手动批准）→ 自托管执行器自动领取 → 字幕自动回传 → 人工听校。登记和批准本身不会调用识别或翻译接口。</p>
 <p class="muted">执行器每 5 分钟检查一次：白名单申请自动批准并领取，开始与完成会私聊申请人和组长；未在白名单的申请仍由组长手动批准。登记草稿不会通知。原视频上传完成后保留7天，到期后在下一检查时段自动清理，字幕与报告继续保留；执行中或结果待核对的任务暂缓清理。</p>
 <details><summary>登记字幕申请</summary><p class="muted">单视频不超过20分钟、1GB。每人最多3项待处理申请；上传中断不支持续传，可撤回后重传。等待审批时不生成云端执行任务。</p>
@@ -130,8 +130,8 @@ async function renderAutoPolicyPanel(){
  if(!data?.me?.owner)return;
  const list=document.getElementById('subtitle-request-list');if(!list)return;
  let panel=document.getElementById('subtitle-auto-policy');
- if(!panel){panel=document.createElement('section');panel.id='subtitle-auto-policy';panel.className='card';
-  panel.innerHTML='<h2>自动审批白名单</h2><div id="subtitle-auto-policy-body" class="muted">加载中…</div>';list.before(panel);}
+ if(!panel){panel=document.createElement('details');panel.id='subtitle-auto-policy';panel.className='card collapsible-panel';
+  panel.innerHTML='<summary>自动审批白名单</summary><div id="subtitle-auto-policy-body" class="muted">加载中…</div>';list.before(panel);}
  if(autoPolicyLoading||autoPolicyLoaded)return;
  autoPolicyLoading=true;
  try{const value=await rpc('st_subtitle_auto_policy_list');autoPolicyLoaded=true;renderAutoPolicy(value);}
