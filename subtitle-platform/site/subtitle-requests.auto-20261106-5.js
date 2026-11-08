@@ -29,7 +29,7 @@ $('#subtitle-request-deleted').onclick=()=>run(async()=>{showDeletedSubtitleRequ
 $('#subtitle-request-all').onclick=()=>run(async()=>{focusedIntake=null;await loadSubtitleRequests();},'#subtitle-request-message');
 function renderSubtitleRequests(){
  const owner=!!data?.me.owner;
- $('#subtitle-request-list').innerHTML=subtitleRequests.map(r=>`<article class="version" id="subtitle-request-${esc(r.id)}"><header><b>${esc(r.stream_title)}｜${esc(r.timestamp_label)}</b><span class="badge">${esc(requestStates[r.state])}</span></header><p class="muted">${esc(subtitleSourceExpired(r)&&r.state==='pending'?'原视频保留期已满，请撤回后重新上传申请。':CloudJobTools.requestHint(r))}</p><p>${esc(r.submitter)} · ${esc(r.declared_seconds)}秒 · ${esc(MediaFiles.bytes(r.byte_size))}</p><p class="muted">${esc(r.file_name)}${r.notes?' · '+esc(r.notes):''}</p>${r.review_note?'<p>审批意见：'+esc(r.review_note)+'</p>':''}${r.job_id?'<p>云任务：'+esc(cloudStates[r.job_state]||r.job_state)+'<br><small>'+esc(r.job_id)+'</small></p>':''}${r.source_delete_after?'<p class="muted">原视频：'+(r.source_cleaned_at?'已清理，字幕与报告继续保留。':subtitleSourceExpired(r)?'保留期已满，待检查时段清理；执行中或待核对任务暂缓。':'保留至 '+esc(new Date(r.source_delete_after).toLocaleString('zh-CN'))+'，之后在检查时段自动清理。')+'</p>':''}<small>申请 ${esc(r.id)} · ${esc(new Date(r.created_at).toLocaleString('zh-CN'))}</small><div class="toolbar">${r.can_delete&&(r.state==='withdrawn'||(owner&&r.state==='approved'&&r.job_state==='cancelled'))?'<button type="button" '+(r.deleted_at?'data-request-restore':'data-request-delete')+'="'+esc(r.id)+'">'+(r.deleted_at?'恢复申请':'删除申请')+'</button>':''}${owner&&showDeletedSubtitleRequests&&['withdrawn','rejected'].includes(r.state)&&!r.job_id?'<button type="button" data-request-purge="'+esc(r.id)+'">永久删除</button>':''}${owner&&r.state==='pending'&&!subtitleSourceExpired(r)?'<button type="button" data-request-review="'+esc(r.id)+'">审批申请</button>':''}${['uploading','pending'].includes(r.state)?'<button type="button" data-request-withdraw="'+esc(r.id)+'">撤回申请</button>':''}${owner?'<button type="button" data-request-packet="'+esc(r.id)+'">复制通知摘要</button>':''}${owner&&r.state==='approved'&&r.job_state==='queued'&&!subtitleSourceExpired(r)?'<button type="button" data-request-copy="'+esc(r.id)+'">复制云端执行指令</button><button type="button" data-request-refresh="'+esc(r.id)+'">刷新素材授权</button>':''}</div>${r.state==='approved'&&r.job_state==='queued'?'<p class="muted">素材授权到期：'+esc(new Date(r.source_expires_at).toLocaleString('zh-CN'))+'；由组长手动在 Codex Cloud 发送一次执行指令。</p>':''}</article>`).join('')||empty(showDeletedSubtitleRequests?'暂无已删除申请。':'暂无字幕申请。');
+ $('#subtitle-request-list').innerHTML=subtitleRequests.map(r=>`<article class="version" id="subtitle-request-${esc(r.id)}"><header><b>${esc(r.stream_title)}｜${esc(r.timestamp_label)}</b><span class="badge">${esc(requestStates[r.state])}</span></header><p class="muted">${esc(subtitleSourceExpired(r)&&r.state==='pending'?'原视频保留期已满，请撤回后重新上传申请。':CloudJobTools.requestHint(r))}</p><p>${esc(r.submitter)} · ${esc(r.declared_seconds)}秒 · ${esc(MediaFiles.bytes(r.byte_size))}</p><p class="muted">${esc(r.file_name)}${r.notes?' · '+esc(r.notes):''}</p>${r.review_note?'<p>审批意见：'+esc(r.review_note)+'</p>':''}${r.job_id?'<p>云任务：'+esc(cloudStates[r.job_state]||r.job_state)+'<br><small>'+esc(r.job_id)+'</small></p>':''}${r.source_delete_after?'<p class="muted">原视频：'+(r.source_cleaned_at?'已清理，字幕与报告继续保留。':subtitleSourceExpired(r)?'保留期已满，待检查时段清理；执行中或待核对任务暂缓。':'保留至 '+esc(new Date(r.source_delete_after).toLocaleString('zh-CN'))+'，之后在检查时段自动清理。')+'</p>':''}<small>申请 ${esc(r.id)} · ${esc(new Date(r.created_at).toLocaleString('zh-CN'))}</small><div class="toolbar">${(r.state==='withdrawn'||(owner&&r.state==='approved'&&['cancelled','failed','succeeded'].includes(r.job_state)))?'<button type="button" '+(r.deleted_at?'data-request-restore':'data-request-delete')+'="'+esc(r.id)+'">'+(r.deleted_at?'恢复申请':'删除申请')+'</button>':''}${owner&&showDeletedSubtitleRequests&&['withdrawn','rejected'].includes(r.state)&&!r.job_id?'<button type="button" data-request-purge="'+esc(r.id)+'">永久删除</button>':''}${owner&&r.state==='pending'&&!subtitleSourceExpired(r)?'<button type="button" data-request-review="'+esc(r.id)+'">审批申请</button>':''}${['uploading','pending'].includes(r.state)?'<button type="button" data-request-withdraw="'+esc(r.id)+'">撤回申请</button>':''}${owner?'<button type="button" data-request-packet="'+esc(r.id)+'">复制通知摘要</button>':''}${owner&&r.state==='approved'&&r.job_state==='queued'&&!subtitleSourceExpired(r)?'<button type="button" data-request-copy="'+esc(r.id)+'">复制云端执行指令</button><button type="button" data-request-refresh="'+esc(r.id)+'">刷新素材授权</button>':''}</div>${r.state==='approved'&&r.job_state==='queued'?'<p class="muted">素材授权到期：'+esc(new Date(r.source_expires_at).toLocaleString('zh-CN'))+'；由组长手动在 Codex Cloud 发送一次执行指令。</p>':''}</article>`).join('')||empty(showDeletedSubtitleRequests?'暂无已删除申请。':'暂无字幕申请。');
  document.querySelectorAll('[data-request-delete],[data-request-restore]').forEach(b=>b.onclick=()=>run(async()=>{
   const deleting=!!b.dataset.requestDelete,id=b.dataset.requestDelete||b.dataset.requestRestore;
   const session=SessionFence.capture();if(deleting&&!await confirmRequestDelete(id))return;session.check();b.disabled=true;
@@ -146,7 +146,8 @@ function renderAutoPolicy(value){
   <td><input type="checkbox" class="auto-enabled" ${m.enabled?'checked':''}></td>
   <td><input type="number" class="auto-jobs" min="0" max="10" value="${Number(m.daily_jobs)}" style="width:5em"></td>
   <td><input type="number" class="auto-seconds" min="0" max="7200" step="60" value="${Number(m.daily_seconds)}" style="width:7em"></td>
-  <td><button type="button" class="auto-save">保存</button></td></tr>`).join('');
+  <td><button type="button" class="auto-save">保存</button><button type="button" class="auto-delete">移入回收站</button></td></tr>`).join('');
+ const deleted=(value.deleted||[]).map(m=>`<article class="version"><header><b>${esc(m.name)}</b><span class="badge">已删除</span></header><p class="muted">删除于 ${esc(new Date(m.deleted_at).toLocaleString('zh-CN'))} · 30 天后自动清理</p><button type="button" data-auto-restore="${esc(m.member_id)}">恢复白名单</button></article>`).join('');
  body.innerHTML=`<p class="muted">自动审批只对勾选成员生效；按北京时间每天统计，超限的申请会留在待审批列表。单条上限仍为 20 分钟 / 1 GiB。</p>
  <div class="toolbar" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
   <label><input type="checkbox" id="auto-global-enabled" ${limits.enabled?'checked':''}> 总开关</label>
@@ -155,6 +156,7 @@ function renderAutoPolicy(value){
   <button type="button" id="auto-global-save">保存全局限额</button>
  </div>
  <table class="table"><thead><tr><th>成员</th><th>启用</th><th>每天条数</th><th>每天分钟</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="5">没有可配置的成员</td></tr>'}</tbody></table>
+ <details id="auto-policy-trash"><summary>已删除白名单（${(value.deleted||[]).length}）</summary>${deleted||'<p class="muted">暂无已删除白名单。</p>'}</details>
  <p id="subtitle-auto-policy-message" class="muted"></p>`;
  document.getElementById('auto-global-save').onclick=()=>saveAutoPolicy(async()=>{
   await rpc('st_subtitle_auto_limits_set',{p_enabled:document.getElementById('auto-global-enabled').checked,
@@ -169,7 +171,14 @@ function renderAutoPolicy(value){
     p_daily_jobs:Number(row.querySelector('.auto-jobs').value),
     p_daily_seconds:Number(row.querySelector('.auto-seconds').value)});
   });
+  row.querySelector('.auto-delete').onclick=()=>saveAutoPolicy(async()=>{
+   if(!confirm('将此成员移入自动审批白名单回收站？30 天后自动清理；期间可恢复。'))return;
+   await rpc('st_subtitle_auto_policy_set_deleted',{p_member:member,p_deleted:true});
+  });
  });
+ body.querySelectorAll('[data-auto-restore]').forEach(button=>button.onclick=()=>saveAutoPolicy(async()=>{
+  await rpc('st_subtitle_auto_policy_set_deleted',{p_member:button.dataset.autoRestore,p_deleted:false});
+ }));
 }
 async function saveAutoPolicy(action){
  const message=document.getElementById('subtitle-auto-policy-message');

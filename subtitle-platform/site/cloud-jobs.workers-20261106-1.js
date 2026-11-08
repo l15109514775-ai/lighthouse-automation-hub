@@ -49,7 +49,7 @@ function renderCloudJob(j){
  <p>${esc(j.state==='succeeded'?'字幕与报告已回传，等待人工听校':cloudStages[j.stage]||'当前阶段未提供')}</p><div class="cloud-next"><b>下一步 · ${esc(info.who)}</b><p>${esc(info.next)}</p>${info.stale?'<p class="cloud-stale">超过3分钟没有状态更新，当前信息可能已过期，不能据此确认云端仍在运行；请组长核对原对话，勿重复启动。</p>':''}</div>
  <p class="muted">${esc(j.file_name)} · ${esc(MediaFiles.bytes(j.byte_size))} · 批准上限：${esc(j.max_video_seconds)}秒 / 文字${esc(j.max_text_requests)}次 / 千问${esc(j.max_secondary_requests)}次</p>
  <p>${esc(info.reserved)}</p><details class="cloud-evidence"><summary>已完成步骤、文件保留与用量依据</summary><p>${esc(info.retained)}</p><p>${esc(info.preservation)}</p>${CloudJobTools.usageLines(info.usage).map(line=>'<p>'+esc(line)+'</p>').join('')}<p class="muted">未接入最终账单核验，不计算或展示“实际费用”；请以供应商账单为准。预留次数不会因刷新或新建对话自动归零。</p></details>
- <small>任务 ${esc(j.id)} · 更新于 ${esc(new Date(j.updated_at).toLocaleString('zh-CN'))}</small><div class="toolbar">${data?.me.owner&&j.state==='queued'?'<button type="button" data-cloud-instructions="'+esc(j.id)+'">复制云端执行指令</button>':''}${info.canPublishOnly&&data?.me.owner?'<button type="button" data-cloud-publish-only="'+esc(j.id)+'">复制仅补传指令</button>':''}${j.state==='succeeded'?'<button type="button" data-cloud-report="'+esc(j.id)+'">查看质量与用量报告</button><button type="button" data-cloud-files="'+esc(j.id)+'">下载字幕与报告</button>':''}${data?.me.owner&&!['succeeded','cancelled'].includes(j.state)?'<button type="button" data-cloud-cancel="'+esc(j.id)+'">取消此云任务</button>':''}</div><div id="cloud-report-${esc(j.id)}" class="cloud-report">${cloudReportViews.get(j.id)||''}</div><div id="cloud-files-${esc(j.id)}"></div></article>`;
+ <small>任务 ${esc(j.id)} · 更新于 ${esc(new Date(j.updated_at).toLocaleString('zh-CN'))}</small><div class="toolbar">${data?.me.owner&&j.state==='queued'?'<button type="button" data-cloud-instructions="'+esc(j.id)+'">复制云端执行指令</button>':''}${info.canPublishOnly&&data?.me.owner?'<button type="button" data-cloud-publish-only="'+esc(j.id)+'">复制仅补传指令</button>':''}${j.state==='succeeded'?'<button type="button" data-cloud-report="'+esc(j.id)+'">查看质量与用量报告</button><button type="button" data-cloud-files="'+esc(j.id)+'">下载字幕与报告</button>':''}${data?.me.owner&&['succeeded','failed','cancelled'].includes(j.state)?'<button type="button" data-cloud-delete="'+esc(j.id)+'">移入回收站</button>':''}${data?.me.owner&&!['succeeded','cancelled'].includes(j.state)?'<button type="button" data-cloud-cancel="'+esc(j.id)+'">取消此云任务</button>':''}</div><div id="cloud-report-${esc(j.id)}" class="cloud-report">${cloudReportViews.get(j.id)||''}</div><div id="cloud-files-${esc(j.id)}"></div></article>`;
 }
 function bindCloudReports(){
  document.querySelectorAll('[data-cloud-publish-only]').forEach(button=>button.onclick=()=>run(async()=>{
@@ -83,6 +83,11 @@ function renderCloud(){
  $('#cloud-deleted-workers').innerHTML=(cloudState.deleted_workers||[]).map(w=>`<article class="cloud-worker-item"><p><b>${esc(w.label)}</b> · ${esc(w.id.slice(0,8))} · 已撤销</p><button type="button" data-restore-worker="${esc(w.id)}">恢复记录</button></article>`).join('')||empty('暂无已删除身份。');
  for(const action of ['rename','delete','restore'])document.querySelectorAll('[data-'+action+'-worker]').forEach(b=>b.onclick=()=>openCloudWorkerAction(b.dataset[action+'Worker'],action));
  $('#cloud-job-list').innerHTML=cloudState.jobs.map(renderCloudJob).join('')||empty('尚无云端字幕任务。');
+ let jobTrash=document.getElementById('cloud-job-trash');
+ if(!jobTrash){jobTrash=document.createElement('details');jobTrash.id='cloud-job-trash';jobTrash.innerHTML='<summary>已删除交付</summary><div id="cloud-deleted-job-list"></div>';document.getElementById('cloud-job-list').after(jobTrash);}
+ const deletedJobs=cloudState.deleted_jobs||[];
+ jobTrash.querySelector('summary').textContent='已删除交付（'+deletedJobs.length+'）';
+ document.getElementById('cloud-deleted-job-list').innerHTML=deletedJobs.map(j=>`<article class="version"><header><b>${esc(j.project_title)}</b><span class="badge">已删除</span></header><p class="muted">${esc(j.state)} · 删除于 ${esc(new Date(j.deleted_at).toLocaleString('zh-CN'))} · 30 天后自动清理</p><button type="button" data-cloud-restore="${esc(j.id)}">恢复交付</button></article>`).join('')||empty('暂无已删除交付。');
  bindCloudReports();
  document.querySelectorAll('[data-cloud-instructions]').forEach(b=>b.onclick=()=>run(async()=>{await navigator.clipboard.writeText(CloudLaunch.instructions(b.dataset.cloudInstructions));$('#cloud-message').textContent='执行指令已复制，请在已发布的 Codex Cloud 字幕环境新任务中发送。';},'#cloud-message'));
  document.querySelectorAll('[data-cloud-start]').forEach(b=>b.onclick=()=>run(async()=>{
@@ -93,6 +98,13 @@ function renderCloud(){
  },'#cloud-message'));
  document.querySelectorAll('[data-revoke-worker]').forEach(b=>b.onclick=()=>run(async()=>{await rpc('st_cloud_worker_revoke',{p_worker:b.dataset.revokeWorker});clearCloudKey();await loadCloud();},'#cloud-message'));
  document.querySelectorAll('[data-cloud-cancel]').forEach(b=>b.onclick=()=>run(async()=>{await rpc('st_cloud_cancel',{p_job:b.dataset.cloudCancel});await loadCloud();},'#cloud-message'));
+ document.querySelectorAll('[data-cloud-delete]').forEach(b=>b.onclick=()=>run(async()=>{
+  if(!confirm('将此云任务及交付移入回收站？30 天后自动清理；期间可恢复。'))return;
+  await rpc('st_cloud_job_set_deleted',{p_job:b.dataset.cloudDelete,p_deleted:true});await loadCloud();
+ },'#cloud-message'));
+ document.querySelectorAll('[data-cloud-restore]').forEach(b=>b.onclick=()=>run(async()=>{
+  await rpc('st_cloud_job_set_deleted',{p_job:b.dataset.cloudRestore,p_deleted:false});await loadCloud();
+ },'#cloud-message'));
  document.querySelectorAll('[data-cloud-files]').forEach(b=>b.onclick=()=>run(async()=>{
   const files=await rpc('st_cloud_files',{p_job:b.dataset.cloudFiles}),box=document.getElementById('cloud-files-'+b.dataset.cloudFiles);box.replaceChildren();
   for(const f of files){const button=document.createElement('button');button.type='button';button.textContent='下载 '+f.name;button.onclick=()=>run(async()=>{const bytes=Uint8Array.from(atob(f.base64),c=>c.charCodeAt(0));const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');if(hash!==f.sha256||bytes.length!==f.bytes)throw Error('文件校验失败，未下载');const url=URL.createObjectURL(new Blob([bytes],{type:f.name.endsWith('.json')?'application/json':'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);},'#cloud-message');box.append(button);}
