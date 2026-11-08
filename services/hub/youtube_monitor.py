@@ -85,13 +85,17 @@ class YouTubeMonitor:
         except (ValueError, TypeError, AttributeError):
             raise HubError('YOUTUBE_LIVE_TIMESTAMPS_INVALID', review=True) from None
         public = video.get('status', {}).get('privacyStatus') == 'public'
-        state = ('unavailable' if not public else 'ended' if live.get('actualEndTime') else
+        upload_status = video.get('status', {}).get('uploadStatus')
+        state = ('unavailable' if not public else
+                 'processing' if live.get('actualEndTime') and upload_status in ('uploaded', 'processing') else
+                 'ended' if live.get('actualEndTime') else
                  'live' if live.get('actualStartTime') else 'upcoming' if
                  live.get('scheduledStartTime') or snippet.get('liveBroadcastContent') == 'upcoming' else
                  'unknown' if snippet.get('liveBroadcastContent') == 'live' else 'ordinary')
         now = time.time()
         duration = video.get('contentDetails', {}).get('duration')
         url = 'https://www.youtube.com/watch?v=' + ident
+        stored_state = 'unknown' if state == 'processing' else state
         with self.store.transaction() as db:
             previous = db.execute('SELECT state,channel_id FROM youtube_videos WHERE video_id=?', (ident,)).fetchone()
             if previous and previous['channel_id'] != expected_channel_id:
@@ -103,11 +107,13 @@ class YouTubeMonitor:
                 actual_start=excluded.actual_start,actual_end=excluded.actual_end,duration=excluded.duration,
                 last_seen_at=excluded.last_seen_at,last_api_check=excluded.last_api_check,
                 source_api=excluded.source_api,metadata=excluded.metadata''',
-                (ident,expected_channel_id,snippet['title'],snippet['publishedAt'],url,state,
+                (ident,expected_channel_id,snippet['title'],snippet['publishedAt'],url,stored_state,
                  live.get('scheduledStartTime'),live.get('actualStartTime'),live.get('actualEndTime'),duration,
                  now,now,now,'youtube-data-v3-official',encode(video)))
             if state in ('upcoming','live','ended') and (not previous or previous['state'] != state):
                 self.store._event(db, 'youtube.' + state, {'video_id':ident,'channel_id':expected_channel_id,'url':url})
+            elif state == 'processing' and (not previous or previous['state'] != 'unknown'):
+                self.store._event(db, 'youtube.processing', {'video_id':ident,'channel_id':expected_channel_id,'url':url})
         if state == 'ended':
             if not duration:
                 raise HubError('YOUTUBE_REPLAY_DURATION_UNAVAILABLE', retryable=True)

@@ -19,10 +19,12 @@ def atom(channel=CHANNEL, video=VIDEO):
     <link rel="alternate" href="https://untrusted.example.invalid/"/></entry></feed>'''.encode()
 
 
-def video(live=None, privacy='public', channel=CHANNEL):
+def video(live=None, privacy='public', channel=CHANNEL, upload=None):
+    status={'privacyStatus':privacy}
+    if upload is not None:status['uploadStatus']=upload
     return {'id':VIDEO,'snippet':{'channelId':channel,'title':'Synthetic stream',
             'publishedAt':'2026-10-30T00:00:00Z','liveBroadcastContent':'none'},
-            'status':{'privacyStatus':privacy},'contentDetails':{'duration':'PT1H'},
+            'status':status,'contentDetails':{'duration':'PT1H'},
             'liveStreamingDetails':live or {}}
 
 
@@ -67,6 +69,19 @@ def test_live_lifecycle_and_restart_enqueue_one_replay(runtime):
     assert len(store.query("SELECT * FROM jobs WHERE job_type='video_process'"))==1
     names=[row['name'] for row in store.query('SELECT name FROM events')]
     assert names==['youtube.upcoming','youtube.live','youtube.ended']
+
+
+def test_ended_but_not_processed_replay_waits_without_plan_or_download(runtime):
+    settings,store=runtime
+    monitor=YouTubeMonitor(settings,store,None)
+    ended={'actualStartTime':'2026-10-30T01:01:00Z','actualEndTime':'2026-10-30T02:01:00Z'}
+    assert monitor.observe_video(video(ended,upload='uploaded'),CHANNEL)=='processing'
+    assert monitor.observe_video(video(ended,upload='processing'),CHANNEL)=='processing'
+    assert not store.query("SELECT * FROM jobs WHERE job_type='video_process'")
+    assert monitor.observe_video(video(ended,upload='processed'),CHANNEL)=='ended'
+    assert len(store.query("SELECT * FROM jobs WHERE job_type='video_process'"))==1
+    names=[row['name'] for row in store.query('SELECT name FROM events')]
+    assert names==['youtube.processing','youtube.ended']
 
 
 def test_ordinary_private_and_invalid_end_do_not_queue_replays(runtime):
