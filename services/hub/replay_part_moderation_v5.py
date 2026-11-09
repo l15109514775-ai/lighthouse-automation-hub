@@ -296,20 +296,26 @@ class QueueView:
     def __init__(self,store):self.store=store
     def __getattr__(self,name):return getattr(self.store,name)
     def beat(self,name):self.store.beat('worker:video-part-moderation-v5')
-    def claim(self,queue,lease_seconds,max_attempts):
+    def claim(self,queue,lease_seconds,max_attempts,*,job_types=None):
         if queue!='moderation':raise ValueError('REPLAY_PART_LOOKUP_QUEUE_SCOPE')
+        from .job_scope import job_type_filter
+        scope,types=job_type_filter(job_types)
         now=time.time();owner=str(uuid.uuid4())
         with self.store.transaction() as db:
             if db.execute("SELECT paused FROM pipelines WHERE name='video'").fetchone()['paused']:return None
-            row=db.execute("SELECT job_id FROM jobs WHERE queue='video' AND source_platform='bilibili' AND job_type=? AND policy_version=? AND state IN ('pending','retry_scheduled') AND next_run<=? AND attempts<? ORDER BY created_at,job_id LIMIT 1",(LOOKUP_JOB_TYPE,POLICY,now,max_attempts)).fetchone()
+            row=db.execute(f"SELECT job_id FROM jobs WHERE queue='video' AND {scope} AND source_platform='bilibili' AND job_type=? AND policy_version=? AND state IN ('pending','retry_scheduled') AND next_run<=? AND attempts<? ORDER BY created_at,job_id LIMIT 1",(*types,LOOKUP_JOB_TYPE,POLICY,now,max_attempts)).fetchone()
             if not row:return None
             db.execute("UPDATE jobs SET state='processing',attempts=attempts+1,lease_owner=?,lease_until=?,updated_at=? WHERE job_id=?",(owner,now+lease_seconds,now,row['job_id']))
         return self.store.get(row['job_id'])
-    def recover(self,queue,max_attempts,*,all_processing=False):
+    def recover(self,queue,max_attempts,*,all_processing=False,job_types=None):
         if queue!='moderation':raise ValueError('REPLAY_PART_LOOKUP_QUEUE_SCOPE')
+        from .job_scope import job_type_filter
+        from .locks import require_queue_lock
+        scope,types=job_type_filter(job_types)
+        if all_processing:require_queue_lock(self.store,queue)
         now=time.time()
         with self.store.transaction() as db:
-            rows=db.execute("SELECT * FROM jobs WHERE queue='video' AND source_platform='bilibili' AND job_type=? AND policy_version=? AND state='processing' AND (? OR lease_until<?)",(LOOKUP_JOB_TYPE,POLICY,all_processing,now)).fetchall()
+            rows=db.execute(f"SELECT * FROM jobs WHERE queue='video' AND {scope} AND source_platform='bilibili' AND job_type=? AND policy_version=? AND state='processing' AND (? OR lease_until<?)",(*types,LOOKUP_JOB_TYPE,POLICY,all_processing,now)).fetchall()
             for row in rows:
                 state='failed' if row['attempts']>=max_attempts else 'retry_scheduled'
                 db.execute('UPDATE jobs SET state=?,error_code=?,lease_owner=NULL,lease_until=NULL,next_run=?,updated_at=? WHERE job_id=?',(state,'REPLAY_PART_LOOKUP_INTERRUPTED',now,now,row['job_id']))

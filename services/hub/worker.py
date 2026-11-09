@@ -87,9 +87,9 @@ class Worker:
         cfg = self.settings.config
         try:
             with exclusive(self.settings.root / 'data/locks' / queue):
-                self.store.recover(queue, cfg['max_attempts'], all_processing=True)
+                self.store.recover(queue, cfg['max_attempts'], all_processing=True, job_types=tuple(self.handlers))
                 self.store.beat('worker:' + queue)
-                job = self.store.claim(queue, cfg['lease_seconds'], cfg['max_attempts'])
+                job = self.store.claim(queue, cfg['lease_seconds'], cfg['max_attempts'], job_types=tuple(self.handlers))
                 if not job:
                     return False
                 stop = threading.Event()

@@ -1,3 +1,5 @@
+from pathlib import Path as _RecoveryPath
+from services.hub.locks import exclusive as _recovery_lock
 """Owned synthetic observations; fault injection never calls external services."""
 from copy import deepcopy
 from datetime import datetime,timezone
@@ -73,7 +75,9 @@ def test_file_write_failure_does_not_expose_child_and_new_attempt_can_recover(in
     orphans=list((settings.root/'media').glob('*/browser-source.png'))
     assert len(orphans)==1
     monkeypatch.setattr(service,'_write_durable',original)
-    store.recover('tweet',4,all_processing=True);recovered=store.claim('tweet',180,4)
+    with _recovery_lock(_RecoveryPath(store.path).parent / "locks" / 'tweet'):
+        store.recover('tweet',4,all_processing=True)
+        recovered=store.claim('tweet',180,4)
     assert recovered['job_id']==parent['job_id'] and recovered['lease_owner']!=parent['lease_owner']
     value=service.ingest(recovered,record,'machine-tweet-v1')
     assert counts(store)==(1,1) and value['created']

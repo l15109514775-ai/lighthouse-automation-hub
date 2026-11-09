@@ -108,22 +108,28 @@ class QueueView:
             self.store.beat('worker:video-main-'+self.heartbeat_suffix)
     def _queue(self,queue):
         if queue!=('moderation' if self.lookups else 'video'):raise ValueError('REPLAY_QUEUE_VIEW_SCOPE')
-    def claim(self,queue,lease_seconds,max_attempts):
+    def claim(self,queue,lease_seconds,max_attempts,*,job_types=None):
         self._queue(queue);now=time.time();owner=str(uuid.uuid4());operator='=' if self.lookups else '<>'
+        from .job_scope import job_type_filter
+        scope,types=job_type_filter(job_types)
         with self.store.transaction() as db:
             if db.execute("SELECT paused FROM pipelines WHERE name='video'").fetchone()['paused']:return None
-            row=db.execute(f"""SELECT job_id FROM jobs WHERE queue='video' AND job_type{operator}?
+            row=db.execute(f"""SELECT job_id FROM jobs WHERE queue='video' AND {scope} AND job_type{operator}?
                 AND state IN ('pending','retry_scheduled') AND next_run<=? AND attempts<? ORDER BY created_at LIMIT 1""",
-                (self.lookup_job_type,now,max_attempts)).fetchone()
+                (*types,self.lookup_job_type,now,max_attempts)).fetchone()
             if not row:return None
             db.execute("UPDATE jobs SET state='processing',attempts=attempts+1,lease_owner=?,lease_until=?,updated_at=? WHERE job_id=?",
                 (owner,now+lease_seconds,now,row['job_id']))
         return self.store.get(row['job_id'])
-    def recover(self,queue,max_attempts,*,all_processing=False):
+    def recover(self,queue,max_attempts,*,all_processing=False,job_types=None):
         self._queue(queue);now=time.time();operator='=' if self.lookups else '<>'
+        from .job_scope import job_type_filter
+        from .locks import require_queue_lock
+        scope,types=job_type_filter(job_types)
+        if all_processing:require_queue_lock(self.store,queue)
         with self.store.transaction() as db:
-            rows=db.execute(f"SELECT * FROM jobs WHERE queue='video' AND job_type{operator}? AND state='processing' AND (? OR lease_until<?)",
-                (self.lookup_job_type,all_processing,now)).fetchall()
+            rows=db.execute(f"SELECT * FROM jobs WHERE queue='video' AND {scope} AND job_type{operator}? AND state='processing' AND (? OR lease_until<?)",
+                (*types,self.lookup_job_type,all_processing,now)).fetchall()
             for row in rows:
                 publication=db.execute('SELECT * FROM publications WHERE job_id=?',(row['job_id'],)).fetchone()
                 if publication and publication['state']!='rejected':state,code='publish_unknown','RECONCILE_BEFORE_RETRY'

@@ -4,6 +4,7 @@ import json
 import sqlite3
 import time
 import uuid
+from .job_scope import job_type_filter
 
 
 def encode(value):
@@ -73,14 +74,15 @@ class Store:
             row[field] = json.loads(row[field])
         return row
 
-    def claim(self, queue, lease_seconds, max_attempts):
+    def claim(self, queue, lease_seconds, max_attempts, *, job_types=None):
+        scope, types = job_type_filter(job_types)
         now = time.time()
         owner = str(uuid.uuid4())
         with self.transaction() as db:
             if db.execute('SELECT paused FROM pipelines WHERE name=?', (queue,)).fetchone()['paused']:
                 return None
-            row = db.execute('''SELECT job_id FROM jobs WHERE queue=? AND state IN ('pending','retry_scheduled')
-                AND next_run<=? AND attempts<? ORDER BY created_at LIMIT 1''', (queue, now, max_attempts)).fetchone()
+            row = db.execute(f'''SELECT job_id FROM jobs WHERE queue=? AND {scope} AND state IN ('pending','retry_scheduled')
+                AND next_run<=? AND attempts<? ORDER BY created_at,job_id LIMIT 1''', (queue, *types, now, max_attempts)).fetchone()
             if not row:
                 return None
             db.execute('''UPDATE jobs SET state='processing',attempts=attempts+1,lease_owner=?,lease_until=?,updated_at=?
@@ -113,12 +115,16 @@ class Store:
                 raise RuntimeError('LEASE_LOST')
         job['stage'], job['result'] = stage, result
 
-    def recover(self, queue, max_attempts, *, all_processing=False):
+    def recover(self, queue, max_attempts, *, all_processing=False, job_types=None):
         # all_processing may ONLY be used after acquiring the corresponding OS queue lock.
+        scope, types = job_type_filter(job_types)
+        if all_processing:
+            from .locks import require_queue_lock
+            require_queue_lock(self, queue)
         now = time.time()
         with self.transaction() as db:
-            rows = db.execute('SELECT * FROM jobs WHERE queue=? AND state=? AND (? OR lease_until<?)',
-                              (queue, 'processing', all_processing, now)).fetchall()
+            rows = db.execute(f'SELECT * FROM jobs WHERE queue=? AND {scope} AND state=? AND (? OR lease_until<?)',
+                              (queue, *types, 'processing', all_processing, now)).fetchall()
             for row in rows:
                 publication = db.execute('SELECT * FROM publications WHERE job_id=?', (row['job_id'],)).fetchone()
                 if publication and publication['state']!='rejected':

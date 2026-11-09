@@ -1,3 +1,5 @@
+from pathlib import Path as _RecoveryPath
+from services.hub.locks import exclusive as _recovery_lock
 """Owned SQLite/lease/visible-control boundaries, no live platform claims.
 
 The old publisher snapshot/model gate is an explicit upstream seam here;
@@ -128,7 +130,9 @@ def test_crash_after_durable_observation_reuses_audit_without_second_browser(sub
     f=submission;submit(f);f.clock['now']+=300;job=f.db.claim('tweet',180,4)
     service=TweetRepostCheck(f.s,f.db,observer=write_observation);result=service.process(job)
     assert f.db.get(f.check)['state']=='processing' and 'final_observation' in result
-    fresh=Store(f.s.db_path);fresh.recover('tweet',4,all_processing=True)
+    fresh=Store(f.s.db_path)
+    with _recovery_lock(_RecoveryPath(fresh.path).parent / "locks" / 'tweet'):
+        fresh.recover('tweet',4,all_processing=True)
     again=TweetRepostCheck(f.s,fresh,observer=lambda *a:pytest.fail('A durable check must not reopen native UI'))
     assert Worker(f.s,fresh,{JOB_TYPE:again.process}).once('tweet')
     assert fresh.get(f.check)['state']=='completed' and fresh.get(f.check)['result']==result

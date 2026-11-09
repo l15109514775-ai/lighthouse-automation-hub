@@ -16,6 +16,7 @@ import time
 import uuid
 
 from .errors import HubError
+from .job_scope import job_type_filter
 from .replay_fifo_v4 import PLAN_JOB,DOWNLOAD_JOB,REFRESH_JOB,VERSION as FIFO_POLICY
 from .replay_parts_v5 import ReplayPartVideoWeb,ReplayPartGroupsV5,PART_JOB_TYPES,POLICY
 from .replay_multipart_worker_runtime_v4 import Coordinator as AcquisitionCoordinator,QueueView as AcquisitionQueue,run_loop
@@ -53,10 +54,12 @@ class QueueView(AcquisitionQueue):
         marks=','.join('?' for _ in PART_JOB_TYPES)
         return '('+original+" OR (source_platform='youtube' AND policy_version=? AND job_type IN ("+marks+')))',(*args,POLICY,*PART_JOB_TYPES)
 
-    def claim(self,queue,lease_seconds,max_attempts):
+    def claim(self,queue,lease_seconds,max_attempts,*,job_types=None):
         self._queue(queue)
         if not self.acquisition_enabled:return None
         scope,args=self._scope();now=time.time();owner=str(uuid.uuid4())
+        types_sql,types=job_type_filter(job_types)
+        scope,args=f'({scope}) AND {types_sql}',(*args,*types)
         with self.store.transaction() as db:
             if db.execute("SELECT paused FROM pipelines WHERE name='video'").fetchone()['paused']:return None
             marks=','.join('?' for _ in PART_JOB_TYPES)

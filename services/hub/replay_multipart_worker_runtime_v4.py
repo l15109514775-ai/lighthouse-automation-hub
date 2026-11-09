@@ -13,6 +13,8 @@ import time
 import uuid
 
 from .errors import HubError
+from .job_scope import job_type_filter
+from .locks import require_queue_lock
 from .replay_fifo_v4 import (ReplayFIFOV4, VERSION as FIFO_VERSION,
     PLAN_JOB, DOWNLOAD_JOB, REFRESH_JOB, PUBLISH_JOB)
 from .youtube_download_v4 import (YouTubeWholeReplayPrepare, worker_handlers,
@@ -57,11 +59,13 @@ class QueueView:
         self.store.beat(name)
         self.store.beat('worker:video-main-v4')
 
-    def claim(self, queue, lease_seconds, max_attempts):
+    def claim(self, queue, lease_seconds, max_attempts, *, job_types=None):
         self._queue(queue)
         if not self.acquisition_enabled:
             return None
         scope, args = self._scope()
+        types_sql, types = job_type_filter(job_types)
+        scope, args = f'({scope}) AND {types_sql}', (*args, *types)
         now, owner = time.time(), str(uuid.uuid4())
         with self.store.transaction() as db:
             if db.execute("SELECT paused FROM pipelines WHERE name='video'").fetchone()['paused']:
@@ -76,12 +80,16 @@ class QueueView:
                 (owner, now + lease_seconds, now, row['job_id']))
         return self.store.get(row['job_id'])
 
-    def recover(self, queue, max_attempts, *, all_processing=False):
+    def recover(self, queue, max_attempts, *, all_processing=False, job_types=None):
         # Worker calls this only while it owns the real video OS lock.
         self._queue(queue)
+        if all_processing:
+            require_queue_lock(self.store, queue)
         if not self.acquisition_enabled:
             return 0
         scope, args = self._scope()
+        types_sql, types = job_type_filter(job_types)
+        scope, args = f'({scope}) AND {types_sql}', (*args, *types)
         now = time.time()
         with self.store.transaction() as db:
             rows = db.execute(f"""SELECT * FROM jobs WHERE queue='video' AND {scope}

@@ -1,3 +1,5 @@
+from pathlib import Path as _RecoveryPath
+from services.hub.locks import exclusive as _recovery_lock
 """Owned real tracks/merge/packets/SQLite, never YouTube or Bilibili calls."""
 from copy import deepcopy
 import json,time
@@ -109,7 +111,9 @@ def test_exit_after_first_unlink_recovers_same_job_and_never_downloads_again(rel
     with pytest.raises(OSError):service.run(f.job,b,check=guard(f,b))
     paths=raw_paths(b,area);assert not paths[0].exists() and paths[1].exists() and (area/'original.mp4').exists()
     assert json.loads(f.db.query('SELECT record FROM '+TABLE)[0]['record'])['progress'][str(paths[0])]=='deleting'
-    f.db.recover('video',4,all_processing=True);f.job=f.db.claim('video',180,4)
+    with _recovery_lock(_RecoveryPath(f.db.path).parent / "locks" / 'video'):
+        f.db.recover('video',4,all_processing=True)
+        f.job=f.db.claim('video',180,4)
     assert f.job['attempts']==2
     result=f.service.process(f.job);assert result[STATE]['state']=='parts_verified' and all(not p.exists() for p in paths)
     assert f.calls==['owned_track_copy_not_youtube'] and len(called)==1

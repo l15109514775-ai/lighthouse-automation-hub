@@ -1,3 +1,5 @@
+from pathlib import Path as _RecoveryPath
+from services.hub.locks import exclusive as _recovery_lock
 """V2 pilot query-only child leases. No v3 grant, platform or new upload."""
 from contextlib import contextmanager
 from copy import deepcopy
@@ -93,8 +95,10 @@ def test_pilot_side_restart_cannot_recover_active_download_and_main_cannot_take_
     side=v.QueueView(f['db'],lookups=True,lookup_job_type=v.LOOKUP_JOB_TYPE,heartbeat_suffix='v2b')
     active=main_view.claim('video',60,4);query=side.claim('moderation',60,4)
     assert active['job_id']==main and query['job_id']==child
-    assert side.recover('moderation',4,all_processing=True)==1
+    with _recovery_lock(_RecoveryPath(side.path).parent / "locks" / 'moderation'):
+        assert side.recover('moderation',4,all_processing=True)==1
     assert f['db'].get(main)['lease_owner']==active['lease_owner'] and f['db'].get(main)['state']=='processing'
     recovered=side.claim('moderation',60,4);assert recovered['attempts']==2
-    assert main_view.recover('video',4,all_processing=True)==1
+    with _recovery_lock(_RecoveryPath(main_view.path).parent / "locks" / 'video'):
+        assert main_view.recover('video',4,all_processing=True)==1
     assert f['db'].get(child)['lease_owner']==recovered['lease_owner'] and f['db'].get(child)['state']=='processing'

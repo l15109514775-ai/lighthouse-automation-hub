@@ -1,3 +1,5 @@
+from pathlib import Path as _RecoveryPath
+from services.hub.locks import exclusive as _recovery_lock
 """Real files/probes/SQLite; identified native transport doubles, no platform."""
 from contextlib import contextmanager
 from copy import deepcopy
@@ -121,7 +123,8 @@ def test_interrupted_probe_stays_unknown_with_same_attempt_and_cannot_reselect(p
     result = claimed['result']
     result[STATE]['state'] = 'uploading'
     f['db'].checkpoint(claimed, 'Owned native intent may exist', result)
-    assert view.recover('video', 4, all_processing=True) == 1
+    with _recovery_lock(_RecoveryPath(view.path).parent / "locks" / 'video'):
+        assert view.recover('video', 4, all_processing=True) == 1
     current = f['db'].get(ident)
     assert current['state'] == 'upload_pending' and current['attempts'] == 1
     assert current['result'][STATE]['state'] == 'upload_unknown' and current['payload'] == before

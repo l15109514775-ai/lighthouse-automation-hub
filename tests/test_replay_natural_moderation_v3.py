@@ -1,3 +1,5 @@
+from pathlib import Path as _RecoveryPath
+from services.hub.locks import exclusive as _recovery_lock
 """Owned SQLite leases and native transport observations; no account or HTTP."""
 from contextlib import contextmanager
 from copy import deepcopy
@@ -69,10 +71,12 @@ def test_role_claim_and_recover_cannot_steal_other_roles_processing_job(known):
     main_view=m.QueueView(store,lookups=False);lookup_view=m.QueueView(store,lookups=True)
     main_job=main_view.claim('video',60,4);assert main_job['job_id']==main
     lookup_job=lookup_view.claim('moderation',60,4);assert lookup_job['job_id']==child
-    assert main_view.recover('video',4,all_processing=True)==1
+    with _recovery_lock(_RecoveryPath(main_view.path).parent / "locks" / 'video'):
+        assert main_view.recover('video',4,all_processing=True)==1
     assert store.get(child)['state']=='processing' and store.get(child)['lease_owner']==lookup_job['lease_owner']
     resumed=main_view.claim('video',60,4);assert resumed['job_id']==main and resumed['attempts']==2
-    assert lookup_view.recover('moderation',4,all_processing=True)==1
+    with _recovery_lock(_RecoveryPath(lookup_view.path).parent / "locks" / 'moderation'):
+        assert lookup_view.recover('moderation',4,all_processing=True)==1
     assert store.get(main)['state']=='processing' and store.get(main)['lease_owner']==resumed['lease_owner']
     assert lookup_view.claim('moderation',60,4)['job_id']==child
     with pytest.raises(ValueError):main_view.claim('system',60,4)

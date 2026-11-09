@@ -1,3 +1,5 @@
+from pathlib import Path as _RecoveryPath
+from services.hub.locks import exclusive as _recovery_lock
 """Positive type scoping and real FIFO group projection; no browser/network."""
 from copy import deepcopy
 import json,time
@@ -83,7 +85,8 @@ def test_current_unknown_child_never_recovered_as_fresh_upload_and_other_parent_
         for job in (own,legacy):db.execute("UPDATE jobs SET state='processing',attempts=2,lease_owner='owned lost',lease_until=0 WHERE job_id=?",(job,))
         db.execute('INSERT INTO publications VALUES(?,?,?,?,?,?,?,?,?,?,?)',('a'*64,own,'bilibili','youtube','oldClaim','site_uid:owned','owned','unknown',None,None,time.time()))
     before=f.db.get(legacy);q=QueueView(f.db,publish_enabled=True,acquisition_enabled=True)
-    assert q.recover('video',4,all_processing=True)==1
+    with _recovery_lock(_RecoveryPath(q.path).parent / "locks" / 'video'):
+        assert q.recover('video',4,all_processing=True)==1
     assert f.db.get(own)['state']=='publish_unknown' and f.db.get(own)['attempts']==2 and q.claim('video',30,4) is None
     assert f.db.get(legacy)==before
 

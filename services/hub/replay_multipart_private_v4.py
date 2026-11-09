@@ -94,13 +94,15 @@ class ProbeQueueView:
         return ('job_id=? AND policy_version=? AND source_platform=? AND job_type=?',
                 (self.job_id, POLICY, 'maintenance', JOB_TYPE))
 
-    def claim(self, queue, lease_seconds, max_attempts):
+    def claim(self, queue, lease_seconds, max_attempts, *, job_types=None):
         self._queue(queue)
+        from .job_scope import job_type_filter
+        scope, types = job_type_filter(job_types)
         now, owner = time.time(), str(uuid.uuid4())
         with self.store.transaction() as db:
             if db.execute("SELECT paused FROM pipelines WHERE name='video'").fetchone()['paused']:
                 return None
-            row = db.execute('SELECT * FROM jobs WHERE job_id=?', (self.job_id,)).fetchone()
+            row = db.execute(f'SELECT * FROM jobs WHERE job_id=? AND {scope}', (self.job_id, *types)).fetchone()
             if (not row or row['job_type'] != JOB_TYPE or row['policy_version'] != POLICY or row['source_platform'] != 'maintenance' or
                     row['queue'] != 'video' or row['state'] != 'upload_pending' or row['attempts'] != 0 or
                     row['lease_owner'] is not None or row['lease_until'] is not None or json.loads(row['result'])[STATE]['state'] != 'prepared'):
@@ -111,10 +113,15 @@ class ProbeQueueView:
                 (owner, now + lease_seconds, now, self.job_id))
         return self.store.get(self.job_id)
 
-    def recover(self, queue, max_attempts, *, all_processing=False):
+    def recover(self, queue, max_attempts, *, all_processing=False, job_types=None):
         self._queue(queue)
+        from .job_scope import job_type_filter
+        from .locks import require_queue_lock
+        scope, types = job_type_filter(job_types)
+        if all_processing:
+            require_queue_lock(self.store, queue)
         with self.store.transaction() as db:
-            row = db.execute('SELECT * FROM jobs WHERE job_id=?', (self.job_id,)).fetchone()
+            row = db.execute(f'SELECT * FROM jobs WHERE job_id=? AND {scope}', (self.job_id, *types)).fetchone()
             if (not row or row['job_type'] != JOB_TYPE or row['policy_version'] != POLICY or row['source_platform'] != 'maintenance' or
                     row['queue'] != 'video' or row['state'] != 'processing' or not (all_processing or (row['lease_until'] or 0) < time.time())):
                 return 0

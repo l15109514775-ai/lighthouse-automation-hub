@@ -1,3 +1,5 @@
+from pathlib import Path as _RecoveryPath
+from services.hub.locks import exclusive as _recovery_lock
 """Owned SQLite/Worker/FFmpeg integration; no platform or paid API calls."""
 from copy import deepcopy
 from datetime import datetime, timezone
@@ -66,7 +68,8 @@ def test_recovery_never_touches_old_processing_unknown_or_unhandled_publish_rows
             db.execute("UPDATE jobs SET state='processing',attempts=1,lease_owner='Owned crashed',lease_until=0 WHERE job_id=?", (ident,))
     before = {i: f.db.get(i) for i in (old, publish)}
     view = rt.QueueView(f.db, acquisition_enabled=True)
-    assert view.recover('video', 4, all_processing=True) == 1
+    with _recovery_lock(_RecoveryPath(view.path).parent / "locks" / 'video'):
+        assert view.recover('video', 4, all_processing=True) == 1
     recovered = f.db.get(own)
     assert recovered['state'] == 'retry_scheduled' and recovered['attempts'] == 1
     assert recovered['error_code'] == 'PROCESS_INTERRUPTED' and recovered['lease_owner'] is None
@@ -82,7 +85,8 @@ def test_recovery_of_reserved_v4_source_is_unknown_without_retransmission(config
             ('Owned-key', ident, 'bilibili', 'youtube', 'Owned-source', 'site_uid:Owned', 'Owned-kind', 'unknown', None, None, time.time()))
     publications = f.db.query('SELECT * FROM publications')
     view = rt.QueueView(f.db, acquisition_enabled=True)
-    assert view.recover('video', 4, all_processing=True) == 1
+    with _recovery_lock(_RecoveryPath(view.path).parent / "locks" / 'video'):
+        assert view.recover('video', 4, all_processing=True) == 1
     assert f.db.get(ident)['state'] == 'publish_unknown'
     assert view.claim('video', 60, 4) is None
     assert f.db.query('SELECT * FROM publications') == publications
@@ -281,7 +285,8 @@ def test_register_only_cannot_claim_recover_or_run_existing_v4_work(fifo, monkey
     worker, coordinator = rt.build_worker(f.s, f.db)
     monkeypatch.setattr(worker, 'once', lambda *args: pytest.fail('register-only called Worker.once'))
     assert worker.store.claim('video', 60, 4) is None
-    assert worker.store.recover('video', 4, all_processing=True) == 0
+    with _recovery_lock(_RecoveryPath(worker.store.path).parent / "locks" / 'video'):
+        assert worker.store.recover('video', 4, all_processing=True) == 0
     assert rt.run_loop(worker, coordinator, once=True) is False
     assert all(f.db.get(i) == value for i, value in before.items())
     assert not f.db.query('SELECT * FROM api_calls')
