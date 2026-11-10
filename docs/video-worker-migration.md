@@ -221,3 +221,23 @@ This is newly packaged historical test input, not a regenerated acceptance proof
 The fixed old builder checks every reviewed source digest. Current backup fixes
 were not reverted and a negative test confirms their old qualification is rejected.
 No archive, source sample or old unit was deployed to the live application.
+
+## Closed historical work is not reset for this migration
+
+Owner clarification on 2026-11-10: leave closed historical tasks and one-off
+operators alone if they do not affect future jobs. The remaining old fixture
+failures are listed, not waived as passing or allowed to expand repair scope.
+Nine pending legacy rows and six review holds still exist in the database; preserve
+their exact state/attempts. Actual final-image isolation tests prove their type/state
+shape neither executes nor starves a newer V4 job. Do not reset or migrate these
+rows merely to make a dashboard or old test green. This does not authorize ignoring
+a failure in a shared Store/lock/lease component or a current acquisition path.
+
+Historical deployment fixtures additionally use the private seven-source bundle
+`historical-deployment-source-inputs.tar`, SHA-256
+`7903c13bb927b3a03d6d3c5b3213365c298b871381ae35e8c9dc00b5795bc93d`.
+Six source versions were located in original Git history; the native installer
+matched its unchanged historical pin in the original private checkout. Member
+bytes are bounded, uniquely addressed and independently SHA-256 checked; no
+archive is extracted into runtime code. Current-source negative cases still refuse
+old deployment approval. This test packaging is not a production installation.

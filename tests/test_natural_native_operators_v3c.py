@@ -9,6 +9,7 @@ from types import SimpleNamespace
 import importlib.util
 import json
 import pytest
+from ops.historical_artifacts import historical_member
 
 REPO=Path(__file__).resolve().parents[1]
 def load(name):
@@ -123,7 +124,11 @@ def test_pinned_tweet_v4_layout_is_observed_without_reverting_other_services(tmp
 def test_same_pilot_issuer_body_preserves_real_evidence_and_no_network_no_queue_fences():
     old=load('issue_natural_candidate_v3b_cache')
     assert c.ISSUE==old.ISSUE and c.PILOT==old.PILOT
-    assert c.INSTALLER_SHA==d.digest(Path(d.__file__).read_bytes())
+    original=historical_member('historical-deployment-source-inputs.tar',
+        'scripts/ops/'+Path(d.__file__).name,c.INSTALLER_SHA)
+    assert c.INSTALLER_SHA==d.digest(original)
+    # Today's changed installer must not inherit a historical release's approval.
+    with pytest.raises(AssertionError):c.load(Path(d.__file__).resolve())
     assert c.DESTINATION!=old.DESTINATION
     assert 'actual_owner_launch_response=auth' in c.ISSUE
     assert 'Store.claim=Store.recover=Store.enqueue=Store.finish=refuse' in c.ISSUE

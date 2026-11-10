@@ -90,8 +90,8 @@ disabled. This correction is to
 the browser test environment, not a change to the acquisition service's privileges.
 
 Across the original 4,587 cases, the union of the full run and corrective targeted
-runs is now 4,547 passing, 19 failing, 20 setup errors and one skipped. **This is not
-a single clean full-suite run.** All 39 remaining cases also failed or errored on
+runs is now 4,552 passing, 14 failing, 20 setup errors and one skipped. **This is not
+a single clean full-suite run.** All 34 remaining cases also failed or errored on
 baseline; none of the baseline-passing cases remains unresolved after the targeted
 runs. This does not establish identical causes or remove suite-order concerns.
 `video-worker-regression-v2.json` records case IDs and evidence hashes. The final
@@ -145,9 +145,9 @@ The later offline continuation candidate is
 the read-only preflight tool and explicit publisher error classifier fix; base
 identity and layer ancestry were verified. The actual Docker build used no
 network or package installation. Its staged-policy preflight and publisher-error
-contract were run successfully with networking disabled. The full SIGKILL/lease
-acceptance evidence above belongs to the prior image; this additive build did not
-rerun or change those worker modules. Neither image has been activated in production.
+contract were run successfully with networking disabled. The initial SIGKILL/lease evidence above belongs to the prior image. The later
+final-image requalification below now also exercises this exact additive image.
+Neither image has been activated in production.
 
 ## Configuration and source portability continuation
 
@@ -198,8 +198,10 @@ future permitted environment still needs genuine download/recovery acceptance.
    Live files remain unchanged: acquisition is off, policy files are unreadable by
    UID 10001, channel scope and planning fingerprint still differ. Recheck source
    hashes/active-task inventory before migration; never recalculate old job bindings.
-2. Resolve remaining baseline failures and suite-order qualification. Old
-   operational proofs require separate qualification, not checksum substitution.
+2. Qualify future acquisition/publication/shared-component behavior. Per the
+   subsequent owner scope decision below, closed one-off and retired-route tests
+   are recorded without repairing or treating them as a new-service release gate.
+   They are not passing evidence; old proofs cannot qualify changed live code.
 3. Complete image supply-path qualification. The exact offline source export and
    immutable-base overlay path are verified, but the public compositor ref remains
    unavailable and clean Dockerfile APT/base inputs are not fully version-pinned.
@@ -299,3 +301,53 @@ All totals remain an evidence union over 4,587 original cases, not a clean final
 full-suite run. Three artifact-locator checks and four new current-source rejection
 checks are additional to that original population. Public source publication,
 production activation and another real YouTube download have not occurred.
+
+## Owner scope clarification and final-image verification (2026-11-10)
+
+The owner explicitly clarified that closed historical tasks need no repair when
+they cannot affect future work. Before this clarification, the five remaining
+historical deployment-source assertions were corrected using genuine archived
+inputs; their full Linux selection passed 146/146. Seven new member-validation
+and current-source rejection cases are additional to the original suite. No
+source pin, current operator or live configuration was changed. A preliminary
+Windows run had ten unrelated CRLF exact-byte failures; canonical Linux passed.
+
+The remaining 34 original cases are retained as unresolved historical diagnostics:
+28 retired X/browser and one-off inventory fixtures, plus six positive scenarios
+for the intentionally disabled old native multipart UI. They are not repaired,
+skipped, or represented as passed. Work on replacing those six tests was reverted
+at the owner's clarification; the original specimens and disabled runtime remain.
+There is no promise of a single clean full-suite run. This scope decision does not
+waive tests of Store, locks, leases, current acquisition, delivery, publication
+reconciliation, or shared tweet/backup components.
+
+Read-only live verification confirmed `x_api_enabled=true`, `x_web_enabled=false`
+and the visual-retirement marker on the actual running tweet container. The two
+one-off inventory scripts have no direct references in services/adapters/scheduler.
+The new V4 queue owns only plan/download/readiness/refresh; publication stays V5.
+No historical browser source was restored into the production image.
+
+Read-only live inventory also found nine old pending rows (one `video_process`,
+eight `youtube_discovery`) and six review holds (one source-revision history,
+five V4 readiness). Thus "historical work is closed" is not taken as permission
+to relabel/delete database records. A new real-SQLite test uses synthetic IDs with
+this exact type/state/count shape: old rows and attempts stay byte-equivalent,
+review holds never execute, and a later new acquisition job runs without starvation.
+The complete isolation selection passed 15/15 on Windows and in the **actual final
+candidate image**, with networking disabled and no live database mounted.
+
+The exact final image
+`sha256:5919670cf9656c0b6c41b7797161fe292d81efd2c40c107c88111cf5d433348f`
+now passed its own real Compose lifecycle acceptance at
+`/var/tmp/lighthouse-acquisition-vrcoyfjf/report.json`: hardening/resource limits,
+readonly Secret/profile, WAL, two containers sharing one physical video lock,
+SIGKILL/restart with a new boot identity, untouched foreign job, and guarded rollback
+stopping only the new container while retaining its DB/media. The test used owned
+synthetic policy/key/data, no network, no downloads, no publication and no live
+mount. The test container was stopped after acceptance; it is not a deployed service.
+
+Outstanding release work is the production-specific policy/launch qualification
+and authorized successful real-content acquisition/recovery. The only real source
+attempt was refused and is not repeated. Fresh public-image reconstruction remains
+a separate reproducibility limitation; the immutable existing-image route has
+actual container evidence and does not require enabling a paid API or changing IP.

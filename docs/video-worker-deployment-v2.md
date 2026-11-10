@@ -234,3 +234,19 @@ media tmpfs for UID/GID 10001. It starts actual GUI tools and checks loopback-on
 ports inside the container; never map those ports onto the host or mount live
 profiles for this test. The no-progress player test explicitly allows the real
 observer deadline to elapse; all other generic test deadlines stay unchanged.
+
+## Current release decision after the owner's scope clarification
+
+Do not spend further release work repairing already-closed one-off task scripts or
+retired visual fixtures unless a current call path depends on them. The 34 recorded
+legacy failures are not claimed green, but no longer block this additive worker
+by themselves. Shared DB/lock/lease safety, current acquisition/delivery and unknown
+publication reconciliation remain mandatory. Preserve all nonterminal old records.
+
+The final immutable candidate now has direct Compose restart/rollback proof; see
+the final-image section in the acceptance record. This closes the earlier evidence
+gap between the base candidate and the additive preflight/error-classifier image.
+It does not qualify real downloads or authorize startup against live data.
+Continue to keep the private staged acquisition switch false until the remaining
+real-content and production-policy gates are satisfied. No repeat probe of the
+restricted current server is part of this release plan.

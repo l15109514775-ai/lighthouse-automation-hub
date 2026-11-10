@@ -144,3 +144,30 @@ def test_reserved_publication_remains_unknown(runtime):
         assert store.recover('video', 4, all_processing=True, job_types=(PLAN_JOB,)) == 1
     assert store.get(ident)['state'] == 'publish_unknown'
     assert store.claim('video', 60, 4, job_types=(PLAN_JOB,)) is None
+
+
+def test_observed_legacy_backlog_and_review_holds_do_not_run_or_starve_new_acquisition(runtime):
+    """Synthetic IDs with the read-only 2026-11-10 production type/state shape."""
+    from services.hub.replay_multipart_worker_runtime_v4 import READINESS_JOB
+    settings,store=runtime
+    snapshots={}
+    shape=(('video_process','pending',1),('youtube_discovery','pending',8),
+        ('youtube_replay_download_source_revision_history_v1','awaiting_review',1),
+        (READINESS_JOB,'awaiting_review',5))
+    for kind,state,count in shape:
+        for index in range(count):
+            ident=add(store,kind,source='owned-backlog-'+kind+'-'+str(index))
+            if state!='pending':
+                with store.transaction() as db:
+                    db.execute("UPDATE jobs SET state=?,attempts=2,lease_until=0 WHERE job_id=?",(state,ident))
+            snapshots[ident]=store.get(ident)
+    view=QueueView(store,acquisition_enabled=True)
+    handlers={PLAN_JOB:lambda job:{'owned_synthetic_result':True},
+              READINESS_JOB:lambda job:pytest.fail('review hold must not execute')}
+    assert Worker(settings,view,handlers).once('video') is False
+    assert all(store.get(ident)==before for ident,before in snapshots.items())
+    fresh=add(store,PLAN_JOB,source='owned-new-future-source')
+    assert Worker(settings,view,handlers).once('video') is True
+    assert store.get(fresh)['state']=='completed' and store.get(fresh)['attempts']==1
+    assert all(store.get(ident)==before for ident,before in snapshots.items())
+    assert not store.query('SELECT * FROM publications')

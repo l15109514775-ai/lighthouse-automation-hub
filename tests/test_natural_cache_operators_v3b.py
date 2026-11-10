@@ -4,6 +4,7 @@ from pathlib import Path,PurePosixPath
 from types import SimpleNamespace
 import ast,contextlib,importlib.util,json
 import pytest
+from ops.historical_artifacts import historical_member
 
 REPO=Path(__file__).resolve().parents[1]
 def load(name):
@@ -95,7 +96,11 @@ def test_real_pilot_issuer_schema_network_and_queue_fences_are_identical_to_orig
  oldspec=importlib.util.spec_from_file_location('owned_original_issuer',REPO/'scripts/ops/issue_natural_candidate_v3.py')
  old=importlib.util.module_from_spec(oldspec);oldspec.loader.exec_module(old)
  assert c.ISSUE==old.ISSUE and c.PILOT==old.PILOT
- assert c.INSTALLER_SHA==d.digest(Path(d.__file__).read_bytes())
+ original=historical_member('historical-deployment-source-inputs.tar',
+     'scripts/ops/'+Path(d.__file__).name,c.INSTALLER_SHA)
+ assert c.INSTALLER_SHA==d.digest(original)
+ # Today's changed installer must not inherit a historical release's approval.
+ with pytest.raises(AssertionError):c.load(Path(d.__file__).resolve())
  assert c.DESTINATION!=old.DESTINATION
  assert 'actual_owner_launch_response=auth' in c.ISSUE and 'db.get(pilot)==prior' in c.ISSUE
 

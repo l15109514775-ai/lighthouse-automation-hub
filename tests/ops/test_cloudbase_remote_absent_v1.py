@@ -7,6 +7,7 @@ from pathlib import Path
 import sqlite3
 from types import SimpleNamespace
 import pytest
+from historical_artifacts import historical_member
 
 REPO=Path(__file__).resolve().parents[2]
 SPEC=importlib.util.spec_from_file_location('owned_absent',REPO/'scripts/ops/recover_cloudbase_remote_absent_v1.py')
@@ -212,7 +213,9 @@ def entry():
 def test_new_entry_pins_old_workflow_and_final_recovery_source():
     e=entry()
     assert e.SOURCES['cloudbase_backup_daily_retention_v2c.py']=='91fc68526997ebb6c336e4bf11849640208288162a9cae63a208b3d937c7db95'
-    for name,digest in e.SOURCES.items():assert r.sha((REPO/'scripts/ops'/name).read_bytes())==digest
+    for name,digest in e.SOURCES.items():
+        original=historical_member('historical-deployment-source-inputs.tar','scripts/ops/'+name,digest)
+        assert r.sha(original)==digest
     text=(REPO/'scripts/ops/cloudbase_backup_daily_retention_v2d.py').read_text()
     assert '7380' not in text and '7200' not in text and 'PINS=' not in text
 
@@ -258,3 +261,13 @@ def test_unchanged_previous_completed_pins_allow_multiple_daily_cycles(monkeypat
         previous=daily.execute(previous,runner=runner,saver=lambda value:saved.append(deepcopy(value)),validator=lambda _: '1'*64)
         ids.append(previous['daily_id']);assert previous['helper_pins']==scope['PINS']
     assert len(set(ids))==3 and calls==[('run_cloudbase_backup_sidecar_v1e.py',['--accept'],960)]*3
+
+
+def test_historical_daily_entry_rejects_current_source_before_import(tmp_path,monkeypatch):
+    e=entry();name='cloudbase_backup_daily_retention_v2c.py'
+    raw=(REPO/'scripts/ops'/name).read_bytes();assert r.sha(raw)!=e.SOURCES[name]
+    (tmp_path/name).write_bytes(raw)
+    monkeypatch.setattr(e,'OPS',tmp_path)
+    def owned_path_only(file):assert file==tmp_path/name
+    monkeypatch.setattr(e,'protected',owned_path_only)
+    with pytest.raises(AssertionError):e.load_module(name)

@@ -17,13 +17,13 @@
     "passed": 33
   },
   "current_evidence_union_not_single_run": {
-    "passed": 4547,
+    "passed": 4552,
     "error": 20,
-    "failed": 19,
+    "failed": 14,
     "skipped": 1
   },
   "unresolved_baseline_passed_cases": [],
-  "unresolved_count": 39,
+  "unresolved_count": 34,
   "unresolved_tests": [
     {
       "test": "tests.ops.test_capture_two_reference_sources_v2::test_real_recorded_capture_has_same_owner_receipts_original_time_and_no_models_or_publish",
@@ -33,12 +33,6 @@
     },
     {
       "test": "tests.ops.test_capture_two_reference_sources_v2::test_tampered_descriptor_raw_hash_cannot_qualify",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.ops.test_cloudbase_remote_absent_v1::test_new_entry_pins_old_workflow_and_final_recovery_source",
       "state": "failed",
       "baseline_state": "failed",
       "triage_category": "requires_individual_review"
@@ -66,18 +60,6 @@
       "state": "failed",
       "baseline_state": "failed",
       "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.ops.test_youtube_acceptance_pilot_deploy_v1::test_ubuntu_attestation_and_two_exact_source_hashes",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_youtube_monitor_refresh_deploy_v1::test_requires_actual_105_attestation_and_reads_exact_tested_source",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[complete]",
@@ -114,18 +96,6 @@
       "state": "failed",
       "baseline_state": "failed",
       "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_natural_cache_operators_v3b::test_real_pilot_issuer_schema_network_and_queue_fences_are_identical_to_original",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.test_natural_native_operators_v3c::test_same_pilot_issuer_body_preserves_real_evidence_and_no_network_no_queue_fences",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_reply_machine_browser::test_browser_collects_its_own_evidence_and_verifier_records_the_complete_pair",
@@ -975,8 +945,7 @@
   },
   "triage_category_counts": {
     "browser_or_compositor_fixture_contract": 28,
-    "historical_source_attestation": 2,
-    "requires_individual_review": 9
+    "requires_individual_review": 6
   },
   "triage_note": "Categories are diagnostic triage, not waivers or proof of a harmless defect. Historical hashes are unchanged.",
   "offline_continuation_runtime_commit": "98f62b0",
@@ -2498,5 +2467,85 @@
     "private_input_archive_sha256": "070517adad0216df3eb9e2da5bf599bca41d0fe25b9a266f9c502044da898e13",
     "production_backup_or_cleanup_run": false,
     "frozen_hashes_rewritten": false
+  },
+  "deployment_contract_qualification": {
+    "file": "deployment-contract-linux.xml",
+    "sha256": "308eeb0c9f8080b8289be5126a8c887b6fc7dd2a10a167d7318f4289b25a2b89",
+    "linux_passed": 146,
+    "resolved_original_suite_cases": [
+      {
+        "test": "tests.ops.test_cloudbase_remote_absent_v1::test_new_entry_pins_old_workflow_and_final_recovery_source",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.ops.test_youtube_acceptance_pilot_deploy_v1::test_ubuntu_attestation_and_two_exact_source_hashes",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_youtube_monitor_refresh_deploy_v1::test_requires_actual_105_attestation_and_reads_exact_tested_source",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.test_natural_cache_operators_v3b::test_real_pilot_issuer_schema_network_and_queue_fences_are_identical_to_original",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.test_natural_native_operators_v3c::test_same_pilot_issuer_body_preserves_real_evidence_and_no_network_no_queue_fences",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      }
+    ],
+    "source_archive_sha256": "7903c13bb927b3a03d6d3c5b3213365c298b871381ae35e8c9dc00b5795bc93d",
+    "new_tests": 7,
+    "runtime_or_production_changed": false
+  },
+  "legacy_scope_decision": {
+    "date": "2026-11-10",
+    "owner_instruction": "Closed historical work need not be repaired when it does not affect future jobs.",
+    "deferred_test_count": 34,
+    "not_claimed_passing": true,
+    "categories": {
+      "retired_x_and_one_off_inventory_fixtures": 28,
+      "disabled_legacy_native_multipart_positive_scenarios": 6
+    },
+    "future_worker_and_shared_component_checks_remain_required": true,
+    "production_jobs_reset": false
+  },
+  "current_backlog_type_isolation": {
+    "file": "current-backlog-shape-final-image.xml",
+    "sha256": "6cfb19a861df839488e1387290d6b32605b3917a9ffb3d64fb001658438b5503",
+    "passed": 15,
+    "new_cases": 1,
+    "candidate_image": "sha256:5919670cf9656c0b6c41b7797161fe292d81efd2c40c107c88111cf5d433348f",
+    "synthetic_rows": 15,
+    "live_rows_changed": false
+  },
+  "final_candidate_compose_requalification": {
+    "file": "final-candidate-compose-report.json",
+    "sha256": "44bc766a6a14a645cec24c53800ae7fd1b4f28786b502d860e8cee188789bb11",
+    "synthetic": true,
+    "real_youtube_download": false,
+    "published": false,
+    "root": "/var/tmp/lighthouse-acquisition-vrcoyfjf",
+    "image": "sha256:5919670cf9656c0b6c41b7797161fe292d81efd2c40c107c88111cf5d433348f",
+    "checks": {
+      "compose_isolation": true,
+      "runtime_hardening_and_limits": true,
+      "secret_permissions_wal": true,
+      "two_containers_shared_database_and_video_lock": true,
+      "boot_identity_changed_on_restart": true,
+      "sigkill_restart_and_foreign_job_preserved": true,
+      "rollback_stops_only_acquisition_and_preserves_job": true
+    },
+    "passed": true
   }
 }

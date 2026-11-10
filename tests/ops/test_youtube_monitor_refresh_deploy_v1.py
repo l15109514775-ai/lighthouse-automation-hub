@@ -9,6 +9,8 @@ import uuid
 
 import pytest
 
+from historical_artifacts import historical_member
+
 REPO=Path(__file__).resolve().parents[2]
 
 def load(name,path):
@@ -79,7 +81,7 @@ def test_missing_existing_pilot_sources_rejected_before_deployment(posix):
 @pytest.fixture
 def receipt(tmp_path,monkeypatch):
     ev=tmp_path/'evidence';folder=ev/('youtube-monitor-publication-overlay-v1-'+str(uuid.uuid4()));folder.mkdir(parents=True)
-    target=folder/'overlay'/m.SOURCE;target.parent.mkdir(parents=True);target.write_bytes((REPO/m.SOURCE).read_bytes())
+    target=folder/'overlay'/m.SOURCE;target.parent.mkdir(parents=True);target.write_bytes(historical_member('historical-deployment-source-inputs.tar',m.SOURCE,m.DIGEST))
     value={'version':'youtube-monitor-publication-overlay-ubuntu-tests-v1','image':m.TEST_IMAGE,
         'tests':105,'full_suite_passed':True,'groups':m.GROUPS,'failures':0,'errors':0,'skipped':0,'exit_code':0,'oom_killed':False,
         'network':'none','application_data_mounted':False,'whole_tree_deployed':False,'runtime_readonly_overlays_only':True,
@@ -167,3 +169,10 @@ def test_failure_rolls_back_only_compose_and_restarts_preserved_pilot(owned_depl
     assert all(p.read_bytes()==body for p,body in fixed.items())
     report=json.loads(next((root/'backups/youtube-monitor-deploy').glob('*/deployment-report.json')).read_bytes())
     assert report['rollback_verified'] is True and len([c for c in calls if c[0]=='up'])==1
+
+
+def test_historical_monitor_attestation_does_not_authorize_current_monitor(receipt):
+    path,_,target=receipt;raw=(REPO/m.SOURCE).read_bytes()
+    assert m.sha(raw)!=m.DIGEST
+    target.write_bytes(raw)
+    with pytest.raises(AssertionError):m.attest(path,m.sha(path.read_bytes()))

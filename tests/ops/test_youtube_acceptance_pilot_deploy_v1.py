@@ -13,6 +13,7 @@ import tomllib
 import uuid
 
 import pytest
+from historical_artifacts import historical_member
 
 FILE = Path(__file__).resolve().parents[2] / 'scripts/ops/deploy_youtube_acceptance_pilot_v1.py'
 SPEC = importlib.util.spec_from_file_location('youtube_pilot_deploy_owned', FILE)
@@ -146,7 +147,7 @@ def owned_attestation(tmp_path, monkeypatch):
     for name in pilot.SOURCES:
         target = evidence/'overlay'/name
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes((repo/name).read_bytes())
+        target.write_bytes(historical_member('historical-deployment-source-inputs.tar',name,pilot.SOURCES[name]))
     groups = {'tests/test_youtube_download.py': 71, 'tests/test_youtube_download_acceptance_only.py': 15}
     body = {'version': 'youtube-pilot-overlay-ubuntu-tests-v1', 'image': pilot.TEST_IMAGE,
             'tests': 86, 'failures': 0, 'errors': 0, 'skipped': 0, 'exit_code': 0, 'oom_killed': False,
@@ -276,3 +277,11 @@ def test_success_only_restarts_three_and_never_queues_target(owned_deploy):
     assert manifest['full_automatic_download_or_bilibili_publish_enabled'] is False
     assert tomllib.loads((root/'config/hub.toml').read_text())['youtube_download_acceptance_only'] is True
     assert tomllib.loads((root/'config/youtube-download-policy.toml').read_text())['activation_at'] == '2026-10-31T12:00:00Z'
+
+
+def test_historical_pilot_attestation_does_not_authorize_current_config(owned_attestation):
+    _,evidence,_,_=owned_attestation
+    name='services/hub/config.py';raw=(FILE.parents[2]/name).read_bytes()
+    assert pilot.sha(raw)!=pilot.SOURCES[name]
+    (evidence/'overlay'/name).write_bytes(raw)
+    with pytest.raises(AssertionError):pilot.read_attestation()
