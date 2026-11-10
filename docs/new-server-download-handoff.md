@@ -77,9 +77,17 @@ and SQLite tests. Its effective policy copies pass preflight; migration 018 on a
 snapshot preserved every existing table. See the migration and acceptance records
 for exact image digests and scope. These checks do not activate production.
 
-Still required: complete the authorized real acquisition/recovery test and final
-single-owner production cutover. The original host's restricted source attempt
-was not repeated there. A new-host acceptance exposed a missing HUB_CONFIG in the
-download helper environment before any download HTTP request; that configuration
-propagation bug is fixed and separately tested. No live task, publication or
-secret has been removed as part of this scope decision.
+The authorized real acquisition and same-job SIGKILL recovery test has passed on
+the new host: 1080p60, 6476.068571 seconds, 2,485,497,021 bytes, verified media and
+delivery hashes, no publication, and the isolated container stopped. The original
+host's restricted source attempt was not repeated there. The helper HUB_CONFIG
+propagation bug found during qualification is fixed and separately tested.
+
+Still required: final single-owner production cutover. The target's explicit
+seven-service startup list excludes the stopped legacy video/subtitle workers;
+acquisition has a separate unit and owner gate. Compose resolution preserved all
+nine captured services' environment values and immutable image references. These
+are configuration/static checks, not a claim that the installed production units
+have run. The new owner-authenticated Bilibili profile must survive the final
+source delta; the Shanghai ingest caller still needs its coordinated endpoint
+update. No live task, publication or secret has been removed.
