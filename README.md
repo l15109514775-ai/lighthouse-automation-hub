@@ -110,7 +110,7 @@ flowchart LR
 - **中枢与平台不共享数据库**：中枢用 SQLite（`services/hub/db.py` 建 `jobs` / `heartbeats` / `audit`），平台用 CloudBase PostgreSQL（`subtitle-platform/database/migrations/`）。两边唯一的关联是同一条内容在各自系统里都有记录，靠来源链接人工对齐。
 - **QQ 机器人不直连数据库**：它只调用 gateway 的 `st_qq_dispatch` / `st_qq_notification_feed`（`subtitle-platform/bot/plugins/astrbot_plugin_subtitle_bridge/bridge.py`、`.../subtitle_notify/main.py`），权限与数据边界都在 SQL 函数里。
 - **字幕执行器拆成上海 + 硅谷**：上海从 CloudBase 同地域下载原视频并只抽音频，硅谷用 whisper-1 / 千问 / gpt-4o 做识别、翻译和发布；两端都只走 RPC（`st_cloud_worker_call`、`st_subtitle_auto_decide` 等，见 `subtitle-platform/docs/AUTOMATION.md`）。
-- **白名单自动审批**：组长网页配置成员与每日限额，执行器每 5 分钟自动批准并领取；不在白名单的申请仍由组长手动批准。
+- **白名单自动审批**：组长网页配置成员与每日限额，执行器默认每 30 分钟自动批准并领取；不在白名单的申请仍由组长手动批准。间隔由 `SUBTITLE_POLL_SECONDS` 配置。
 - **译图是中枢的子进程**：`adapters/compositor.py` 调 `node adapters/render_bridge.mjs`（即 `compositor/` 子模块），只负责"文本 → PNG"，B 站发布由 `services/hub/publishing.py` 与 `adapters/bilibili.py` 负责。
 - **生产与公开版的区别**：公开版默认 `DRY_RUN=true`、所有采集/下载/发布开关为 `false`；生产环境验证过的流程在 `docs/` 各指南里单独标注。
 
@@ -173,7 +173,7 @@ vendor/subtitle-cloud-worker/  云端字幕 worker（git submodule）
 | 协作平台（网站 + 数据库 + 云端 worker 接口） | 在本仓库 `subtitle-platform/`，需要自己的 CloudBase 环境 |
 | QQ 机器人插件 | 在本仓库 `subtitle-platform/bot/`，需要 AstrBot 与 QQ 官方机器人 |
 | `tweet-zh-compositor` | **外部 submodule**（`compositor/`），`git clone --recursive` 获取 |
-| `subtitle-cloud-worker` | **外部 submodule**（`vendor/subtitle-cloud-worker/`），运行在 Codex Cloud |
+| `subtitle-cloud-worker` | **外部 submodule**（`vendor/subtitle-cloud-worker/`）；保留锁等实际依赖。当前字幕任务通过自托管 API 执行器运行，不依赖 Codex Cloud |
 | 平台历史实验（初版工作器、未启用调度器） | `subtitle-platform/experiments/`，仅作研究保留，不参与默认流程 |
 | 真实账号、Cookie、生产库、备份、媒体 | **不在仓库**；样例均为合成数据 |
 

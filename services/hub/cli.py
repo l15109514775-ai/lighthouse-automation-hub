@@ -6,37 +6,10 @@ from .config import Settings
 from .db import Store
 
 
-def runtime(settings, store):
-    from adapters.http import ProviderHTTP
-    from .budget import Budget
-    from .maintenance import Maintenance
-    from .pipelines import TweetPipeline
-    from .video_pipeline import VideoPipeline
-    from .youtube_monitor import YouTubeMonitor
-    from .youtube_download import YouTubeDownload
-    from .bilibili_service import BilibiliService
-    from .bilibili_tokens import BilibiliTokens
-    http = ProviderHTTP(Budget(store, settings.config['budgets']))
-    tweet, video, maintenance = TweetPipeline(settings, store, http), VideoPipeline(settings, store, http), Maintenance(settings, store)
-    monitor = YouTubeMonitor(settings, store, http)
-    bilibili = BilibiliService(settings,store,http)
-    from .web_queue import ReviewedWebQueue
-    web=ReviewedWebQueue(settings,store)
-    from .machine_routes import MachineRoutes
-    machine=MachineRoutes(settings,store)
-    from .x_official_capture_queue_v1 import OfficialCaptureQueue,JOB_TYPE as X_MEDIA_INGEST_JOB
-    from .x_official_reparse_v1 import OfficialSourceReparse,JOB_TYPE as X_CACHED_REPARSE_JOB
-    from .tweet_repost_check_v1 import TweetRepostCheck,JOB_TYPE as TWEET_REPOST_CHECK_JOB
-    return {TWEET_REPOST_CHECK_JOB:TweetRepostCheck(settings,store).process,
-            X_CACHED_REPARSE_JOB:OfficialSourceReparse(settings,store).process,
-            X_MEDIA_INGEST_JOB:OfficialCaptureQueue(settings,store).process,
-            'x_discovery':tweet.discovery, 'tweet_process':tweet.process, 'youtube_discovery':video.discovery,
-            'video_process':video.process, 'maintenance':maintenance.monitor, 'backup':maintenance.backup_job, 'cleanup':maintenance.cleanup,
-            'youtube_feed':monitor.feeds,'youtube_live_monitor':monitor.live,'bilibili_reconcile':bilibili.reconcile,
-            'youtube_download':YouTubeDownload(settings,store).process,
-            'bilibili_token_check':BilibiliTokens(settings,store,http).tick,
-            'tweet_web_publish':web.dispatch,'tweet_web_reconcile':web.reconcile,
-            'tweet_machine_publish':machine.dispatch,'tweet_machine_reconcile':machine.reconcile}
+def runtime(settings, store, queue=None):
+    # Keep the old union API for explicit compatibility callers only.
+    from .worker_handlers import build_handlers
+    return build_handlers(settings, store, queue)
 
 
 def main():
@@ -72,7 +45,7 @@ def main():
         instance.tick() if args.once else instance.run()
     elif args.command == 'worker':
         from .worker import Worker
-        worker = Worker(settings, store, runtime(settings, store))
+        worker = Worker(settings, store, runtime(settings, store, queue=args.queue))
         worker.once(args.queue) if args.once else worker.run(args.queue)
     elif args.command == 'status':
         from .control import Control

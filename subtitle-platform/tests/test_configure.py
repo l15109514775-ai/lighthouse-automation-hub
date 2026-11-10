@@ -21,6 +21,10 @@ class ConfigureTests(unittest.TestCase):
    self.assertIn('fixture-owner',(out/'database/SET_FIRST_OWNER.sql').read_text(encoding='utf8'))
    self.assertNotIn('administrator',(out/'database/SET_FIRST_OWNER.sql').read_text(encoding='utf8'))
    self.assertFalse((out/'bot/subtitle_bridge.json').exists())
+   self.assertIn('fixture-community.api.tcloudbasegateway.com',(out/'runner/poll_shanghai.py').read_text(encoding='utf8'))
+   self.assertIn('fixture-community.api.tcloudbasegateway.com',(out/'runner/fetch_shanghai.py').read_text(encoding='utf8'))
+   self.assertIn('Environment=SUBTITLE_POLL_SECONDS=1800',(out/'runner/systemd/subtitle-poller.service').read_text(encoding='utf8'))
+   self.assertIn('runner/',(out/'README_FIRST.txt').read_text(encoding='utf8'))
    with self.assertRaises(ValueError):m.render(self.cfg(),out)
  def test_website_only_can_leave_provider_inert(self):
   c=self.cfg();c['text_api_url']='https://text-provider.example.invalid/v1';m.validate(c)

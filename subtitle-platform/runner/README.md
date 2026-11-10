@@ -4,7 +4,7 @@
 
 | 文件 | 运行位置 | 作用 |
 | --- | --- | --- |
-| `poll_shanghai.py` | 上海 | 每 5 分钟调用 `st_subtitle_auto_decide`，对 queued job 运行 fetcher |
+| `poll_shanghai.py` | 上海 | 默认每 30 分钟调用 `st_subtitle_auto_decide`，对 queued job 运行 fetcher |
 | `fetch_shanghai.py` | 上海 | 领取 job、下载分片、校验、抽 mp3、上传硅谷、清理 |
 | `ingest.py` | 硅谷 | 接收音频与 claim，启动 worker 并发布 |
 | `runner.py` | 硅谷 | 兼容旧模式：直接从 CloudBase 下载并处理（大文件跨区时不推荐） |
@@ -27,21 +27,27 @@ docker run -d --name subtitle-ingest --restart unless-stopped \
 
 ```bash
 mkdir -p /root/subtitle
-cp poll_shanghai.py fetch_shanghai.py /root/subtitle/
+install -m 700 poll_shanghai.py /root/subtitle/poll.py
+install -m 700 fetch_shanghai.py /root/subtitle/fetch.py
 chmod 700 /root/subtitle
 # /root/subtitle/secrets.env
 # SUBTITLE_PLATFORM_TOKEN=...
 # SUBTITLE_PLATFORM_GATEWAY_KEY=...
 # SUBTITLE_INGEST_TOKEN=...
 chmod 600 /root/subtitle/secrets.env
+install -m 644 systemd/subtitle-poller.service /etc/systemd/system/subtitle-poller.service
+systemctl daemon-reload
 systemctl enable --now subtitle-poller
 ```
 
 - 需要 `python3`、`ffmpeg`、`curl`；
 - `poll_shanghai.py` 带文件锁，systemd `Restart=always`；
+- 服务文件显式设置 `SUBTITLE_POLL_SECONDS=1800`，代码未配置时也默认 1800 秒；修改频率使用 systemd drop-in，不要把原服务的环境设置覆盖掉。
 - 成功后 fetcher 删除 `/root/subtitle-work/<job>`；另建议每 30 分钟清理 2 小时以上残留。
 
 ## systemd 示例
+
+上述命令面向新的部署目录。更新已有服务时先保存现有 unit 和 drop-in、核对差异，保留已配置的凭据路径和环境设置；本仓库变更不会自动更新线上服务。
 
 见 `systemd/subtitle-ingest.service` 与 `systemd/subtitle-poller.service`。
 

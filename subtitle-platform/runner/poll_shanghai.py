@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shanghai poller: every 5 minutes approve queued jobs and run the audio fetcher."""
+"""Shanghai poller: every 30 minutes approve queued jobs and run the audio fetcher."""
 import fcntl
 import json
 import os
@@ -8,11 +8,11 @@ import sys
 import time
 import urllib.request
 
-API = 'https://subtitledev-d2gwhqslfee550692.api.tcloudbasegateway.com/v1/rdb/rest/rpc/st_subtitle_auto_decide'
+API = 'https://example-env.api.tcloudbasegateway.com/v1/rdb/rest/rpc/st_subtitle_auto_decide'
 SECRETS = '/root/subtitle/secrets.env'
 FETCH = '/root/subtitle/fetch.py'
 LOCK = '/root/subtitle/poll.lock'
-INTERVAL = int(os.environ.get('SUBTITLE_POLL_SECONDS', '300'))
+INTERVAL = int(os.environ.get('SUBTITLE_POLL_SECONDS', '1800'))
 
 
 def load_env():

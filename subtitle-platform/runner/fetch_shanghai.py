@@ -10,7 +10,7 @@ import time
 import urllib.error
 import urllib.request
 
-API = 'https://subtitledev-d2gwhqslfee550692.api.tcloudbasegateway.com/v1/rdb/rest/rpc/st_cloud_worker_call'
+API = 'https://example-env.api.tcloudbasegateway.com/v1/rdb/rest/rpc/st_cloud_worker_call'
 INGEST = 'http://43.153.83.217:18081/ingest'
 ROOT = '/root/subtitle-work'
 

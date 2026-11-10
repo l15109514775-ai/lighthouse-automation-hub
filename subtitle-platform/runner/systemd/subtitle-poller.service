@@ -4,6 +4,7 @@ After=network-online.target
 
 [Service]
 Type=simple
+Environment=SUBTITLE_POLL_SECONDS=1800
 ExecStart=/usr/bin/python3 /root/subtitle/poll.py
 Restart=always
 RestartSec=30

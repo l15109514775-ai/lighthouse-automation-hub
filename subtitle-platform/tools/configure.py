@@ -30,7 +30,7 @@ def render(cfg,out):
   'text-provider.example.invalid':urlsplit(cfg['text_api_url']).hostname,
   'gpt-6-luna':cfg['text_model'],
  }
- for folder in ['site','worker','bot','ops','database','tools']:
+ for folder in ['site','worker','runner','bot','ops','database','tools']:
   for source in (ROOT/folder).rglob('*'):
    if not source.is_file() or any(x in {'.venv','__pycache__','node_modules'} for x in source.parts):continue
    if source.suffix in {'.pyc','.log','.sqlite3'}:continue
@@ -67,7 +67,7 @@ INSERT INTO public.st_member_roles(member_id,role_code) SELECT id,'owner' FROM p
 COMMIT;
 """
  (out/'database/SET_FIRST_OWNER.sql').write_text(owner,encoding='utf8')
- (out/'README_FIRST.txt').write_text('部署文件只在本地生成，尚未上传或购买资源。按仓库 docs/从零搭建.md 操作。只上传 site/ 内文件到静态网站；不要上传整个目录。数据库文件只用于全新空环境。worker/ 是 Cloud 工作器；bot/ 是机器人插件。\n',encoding='utf8')
+ (out/'README_FIRST.txt').write_text('部署文件只在本地生成，尚未上传或购买资源。按仓库 docs/从零搭建.md 操作。只上传 site/ 内文件到静态网站；不要上传整个目录。数据库文件只用于全新空环境。runner/ 是自托管 API 执行入口；worker/ 提供字幕处理模块；bot/ 是机器人插件。旧 Cloud 安装说明不适用于当前路线。\n',encoding='utf8')
  with zipfile.ZipFile(out/'website-upload.zip','w',zipfile.ZIP_DEFLATED) as z:
   for p in (out/'site').rglob('*'):
    if p.is_file():z.write(p,p.relative_to(out/'site').as_posix())

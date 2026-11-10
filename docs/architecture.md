@@ -64,7 +64,7 @@ flowchart TB
 | 异地备份 | `services/hub/cloudbase_backup_runtime.py`、`adapters/cloudbase_cos_backup.py` | systemd timer 触发，写收据到 `audit` |
 | 平台权限与任务流 | `subtitle-platform/database/migrations/002_closed_application_functions.sql`（`st_claim_task`、`st_submit`、`st_review`）、`016_project_claim_workflow.sql`、`045_credit_reporting.sql` | 所有业务规则在 SQL 函数里，前端不直写表 |
 | QQ 指令 | `subtitle-platform/bot/plugins/astrbot_plugin_subtitle_bridge/bridge.py`（命令表、`st_qq_dispatch` 调用）、`.../subtitle_notify/main.py`（`st_qq_notification_feed`） | 机器人只发 RPC，不直连数据库 |
-| 云端字幕执行 | `subtitle-platform/database/migrations/021_cloud_jobs.sql`（`st_cloud_prepare`、`st_cloud_worker_call`）、`vendor/subtitle-cloud-worker/worker.py` | 站长在网站启动，worker 在 Codex Cloud 里跑并回传 |
+| API 字幕执行 | `subtitle-platform/runner/poll_shanghai.py`、`fetch_shanghai.py`、`ingest.py`，通过 `st_subtitle_auto_decide` / `st_cloud_worker_call` 等 RPC 访问平台 | 常驻服务器领取、执行并回传；不依赖 Codex Cloud。`st_cloud_*` 是仍在使用的数据库接口名，不是删除依据 |
 
 ## 边界
 
