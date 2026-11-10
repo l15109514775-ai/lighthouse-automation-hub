@@ -17,9 +17,9 @@ import time
 import uuid
 
 if __package__:
-    from .test_acquisition_overlay_bundle import read_bundle, safe_path
+    from .test_acquisition_overlay_bundle import SOURCE_BINDING_VERSIONS, read_bundle, safe_path
 else:
-    from test_acquisition_overlay_bundle import read_bundle, safe_path
+    from test_acquisition_overlay_bundle import SOURCE_BINDING_VERSIONS, read_bundle, safe_path
 
 
 APP = Path('/opt/lighthouse-hub')
@@ -69,7 +69,7 @@ def idle_clone(path):
             raise ValueError('SNAPSHOT_HAS_ACTIVE_ACQUISITION_WORK')
 
 
-def boot(image, mounts, env, database):
+def boot(image, mounts, env, database, code_hashes):
     label = uuid.uuid4().hex
     name = 'lighthouse-offline-history-' + label
     args = ['run', '--detach', '--name', name, '--label', 'lighthouse.history-probe=' + label,
@@ -85,6 +85,12 @@ def boot(image, mounts, env, database):
         info = json.loads(docker('inspect', ident))[0]
         if info['Image'] != image or info['HostConfig']['NetworkMode'] != 'none':
             raise ValueError('PROBE_CONTAINER_MISMATCH')
+        observed = {}
+        for line in docker('exec', ident, 'sha256sum', *(APP / n for n in sorted(code_hashes))).splitlines():
+            digest, path = line.split(maxsplit=1)
+            observed[str(Path(path).relative_to(APP))] = digest
+        if observed != code_hashes:
+            raise ValueError('PROBE_ACTIVE_CODE_MISMATCH')
         first = None
         deadline = time.monotonic() + 105
         while time.monotonic() < deadline:
@@ -116,7 +122,7 @@ def boot(image, mounts, env, database):
 
 def qualify(args):
     manifest = json.loads(safe_path(args.manifest).read_bytes())
-    if manifest['version'] != 'acquisition-source-bindings-v1':
+    if manifest['version'] not in SOURCE_BINDING_VERSIONS:
         raise ValueError('SOURCE_BINDING_MANIFEST_REQUIRED')
     bindings = read_bundle(manifest, safe_path(args.archive))
     live = json.loads(docker('inspect', args.container))[0]
@@ -158,29 +164,34 @@ def qualify(args):
         key.chmod(0o400)
         os.chown(key, 10001, 10001)
         mounts[Path('/run/secrets/youtube-api-key')] = (key, False)
+        previous_hashes = {}
         for n in CODE:
-            dest = root / n
+            dest = root / 'previous-code' / n
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(sources[str(APP / n)], dest)
             dest.chmod(0o444)
             mounts[APP / n] = (dest, False)
+            previous_hashes[n] = hashlib.sha256(dest.read_bytes()).hexdigest()
         candidate_mounts = dict(mounts)
+        candidate_hashes = dict(previous_hashes)
         for n, raw in bindings.items():
-            dest = root / n
+            dest = root / 'candidate-code' / n
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_bytes(raw)
             dest.chmod(0o444)
             candidate_mounts[APP / n] = (dest, False)
+            candidate_hashes[n] = manifest['files'][n]['sha256']
         original_schema, original = fingerprint(dbfile)
         boots = []
-        for phase, image, files in (('candidate', manifest['base_image'], candidate_mounts),
-                                    ('rollback', manifest['source_image'], mounts)):
-            boots.append(boot(image, files, env, dbfile))
+        for phase, image, files, code in (('candidate', manifest['base_image'], candidate_mounts, candidate_hashes),
+                                          ('rollback', manifest['source_image'], mounts, previous_hashes)):
+            boots.append(boot(image, files, env, dbfile, code))
             schema, rows = fingerprint(dbfile)
             changes = sorted(k for k in rows.keys() | original.keys() if rows.get(k) != original.get(k))
             if schema != original_schema or changes:
                 raise ValueError('CLONE_SCHEMA_OR_ROW_CHANGE: ' + ','.join(changes))
-            phases[phase] = {'image': image, 'two_producer_ticks': True, 'all_compared_tables_unchanged': True}
+            phases[phase] = {'image': image, 'two_producer_ticks': True, 'all_compared_tables_unchanged': True,
+                             'mounted_code_sha256': code}
         if boots[0] == boots[1]:
             raise ValueError('BOOT_ID_REUSED')
     if ids_before != set(docker('ps', '--no-trunc', '--format', '{{.ID}}').splitlines()):

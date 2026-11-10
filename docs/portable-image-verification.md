@@ -163,20 +163,21 @@ use different commits and image hashes. [Full build and comparison](releases/pin
 ### Preparing the production-bound acquisition candidate
 
 On a Linux Docker host with the exact candidate image already present, use the
-reviewed checkout, a private copy of the 163,840-byte tar, and a new directory
+reviewed checkout, a private copy of the 184,320-byte V2 binding tar, and a new directory
 under a root-controlled release path. Supply absolute paths.
 
 ```sh
 python3 scripts/prepare_acquisition_source_bindings.py \
-  --manifest "$PWD/docs/releases/rebuilt-acquisition-bindings-20261111.json" \
+  --manifest "$PWD/docs/releases/acquisition-source-bindings-v2-20261111.json" \
   --archive "$private_archive" --directory "$new_release_dir"
 ```
 
 The tool checks the local image ID, verifies the archive and every member and
 emits `candidate.compose.json` in the new directory. Keep the declaration with
-its seven files. Append it as the final `-f` input to the existing private
-Compose arguments for `config --format json`. The accepted render changed only
-the acquisition image and its seven read-only file mounts. Nine other service
+its nine files. Append it as the final `-f` input to the existing private
+Compose arguments with `--profile '*' config --format json` to compare all
+service definitions. The accepted render changed only
+the acquisition image and its code mounts. Nine other service
 definitions matched; the existing data, config, browser and Secret declarations
 matched too. Rendering is sufficient for checking the prepared declaration.
 
@@ -186,9 +187,32 @@ using synthetic data on a Linux test host, run:
 ```sh
 python3 scripts/test_acquisition_container.py --compose "$PWD/compose.yaml" \
   --image "$qualified_image_id" \
-  --overlay-manifest "$PWD/docs/releases/rebuilt-acquisition-bindings-20261111.json" \
+  --overlay-manifest "$PWD/docs/releases/acquisition-source-bindings-v2-20261111.json" \
   --overlay-archive "$private_archive"
 ```
+
+The V2 archive adds the dispatcher and corrected numbered-readiness source
+guard to the original seven private compatibility modules. Its SHA-256 is
+`c8ccb3620d0676ecd69e921cc04013fbfe3f04c51ab8d8e676b0e2c8264820bc`.
+Retain the old manifest and tar together for earlier releases. The owner's
+pause configuration remains a separate read-only production input.
+
+To exercise both images on a fresh idle database snapshot on the Docker host,
+run the following command. Each container must produce two heartbeats. The
+tool compares the executable mount hashes inside each running container and
+compares every business table before each switch. The two releases have
+separate code directories even when a mount destination has the same name.
+
+```sh
+python3 scripts/test_acquisition_snapshot_rollback.py \
+  --manifest "$PWD/docs/releases/acquisition-source-bindings-v2-20261111.json" \
+  --archive "$private_archive"
+```
+
+The migrated-host rehearsal preserved 22,207 jobs and 95 publication records
+across the two boots. The separate synthetic Compose run checked SIGKILL,
+exclusive locking, restart and stop-only rollback with the same archive.
+[Release qualification](releases/acquisition-readiness-release-qualification-20261111.json).
 
 For an actual future promotion, retain the previous private Compose arguments,
 image and source-control files. Follow the existing acquisition deployment

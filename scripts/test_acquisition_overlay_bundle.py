@@ -21,6 +21,10 @@ SOURCE_BINDINGS = {
     'services/hub/replay_multipart_private_v4.py', 'services/hub/youtube_download.py',
     'services/hub/budget.py', 'adapters/http.py', 'adapters/safe_https.py',
 }
+SOURCE_BINDING_VERSIONS = {
+    'acquisition-source-bindings-v1': SOURCE_BINDINGS,
+    'acquisition-source-bindings-v2': SOURCE_BINDINGS | {'services/hub/worker.py', 'services/hub/source_controls.py'},
+}
 
 
 def safe_path(path):
@@ -31,8 +35,7 @@ def safe_path(path):
 
 
 def read_bundle(manifest, archive):
-    allowed = {'acquisition-effective-release-v1': FILES,
-               'acquisition-source-bindings-v1': SOURCE_BINDINGS}.get(manifest['version'])
+    allowed = {'acquisition-effective-release-v1': FILES, **SOURCE_BINDING_VERSIONS}.get(manifest['version'])
     file_info = archive.lstat()
     if (allowed is None or not stat.S_ISREG(file_info.st_mode) or
             not re.fullmatch(r'sha256:[0-9a-f]{64}', manifest['base_image']) or

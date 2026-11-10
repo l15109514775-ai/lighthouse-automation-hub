@@ -5,7 +5,7 @@ import tarfile
 
 import pytest
 
-from scripts.test_acquisition_overlay_bundle import FILES, SOURCE_BINDINGS, read_bundle
+from scripts.test_acquisition_overlay_bundle import FILES, SOURCE_BINDINGS, SOURCE_BINDING_VERSIONS, read_bundle
 from scripts.prepare_acquisition_source_bindings import prepare
 
 
@@ -45,9 +45,9 @@ def test_source_bindings_have_their_own_exact_allowlist(tmp_path):
         read_bundle(manifest, archive)
 
 
-def test_prepared_override_requires_new_directory_and_only_mounts_reviewed_code(tmp_path):
-    archive, manifest, files = bundle(tmp_path, files=SOURCE_BINDINGS,
-                                      version='acquisition-source-bindings-v1')
+@pytest.mark.parametrize('version', sorted(SOURCE_BINDING_VERSIONS))
+def test_prepared_override_requires_new_directory_and_only_mounts_reviewed_code(tmp_path, version):
+    archive, manifest, files = bundle(tmp_path, files=SOURCE_BINDING_VERSIONS[version], version=version)
     out = tmp_path / 'release'
     declaration = json.loads(prepare(manifest, archive, out).read_bytes())
     assert set(declaration['services']) == {'replay-acquisition-worker'}
@@ -61,6 +61,12 @@ def test_prepared_override_requires_new_directory_and_only_mounts_reviewed_code(
         assert (out / name).read_bytes() == content
     with pytest.raises(FileExistsError):
         prepare(manifest, archive, out)
+
+
+def test_new_release_requires_both_dispatcher_and_source_guard(tmp_path):
+    archive, manifest, _ = bundle(tmp_path, files=SOURCE_BINDINGS, version='acquisition-source-bindings-v2')
+    with pytest.raises(ValueError, match='OVERLAY_MANIFEST_INVALID'):
+        read_bundle(manifest, archive)
 
 
 @pytest.mark.parametrize('mutation', ['traversal', 'symlink', 'duplicate'])

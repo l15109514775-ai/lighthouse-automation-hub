@@ -10,13 +10,13 @@ import re
 import subprocess
 
 if __package__:
-    from .test_acquisition_overlay_bundle import read_bundle, safe_path
+    from .test_acquisition_overlay_bundle import SOURCE_BINDING_VERSIONS, read_bundle, safe_path
 else:
-    from test_acquisition_overlay_bundle import read_bundle, safe_path
+    from test_acquisition_overlay_bundle import SOURCE_BINDING_VERSIONS, read_bundle, safe_path
 
 
 def prepare(manifest, archive, directory):
-    if manifest['version'] != 'acquisition-source-bindings-v1':
+    if manifest['version'] not in SOURCE_BINDING_VERSIONS:
         raise ValueError('ACQUISITION_SOURCE_RELEASE_REQUIRED')
     blobs = read_bundle(manifest, safe_path(archive))
     safe_path(directory)
@@ -48,8 +48,8 @@ def main():
         parser.add_argument('--' + option, required=True, type=Path)
     args = parser.parse_args()
     manifest = json.loads(safe_path(args.manifest).read_bytes())
-    if manifest['version'] != 'acquisition-source-bindings-v1':
-        parser.error('Expected acquisition-source-bindings-v1')
+    if manifest['version'] not in SOURCE_BINDING_VERSIONS:
+        parser.error('Expected an acquisition source-binding manifest')
     image = manifest['base_image']
     if not isinstance(image, str) or not re.fullmatch(r'sha256:[0-9a-f]{64}', image):
         parser.error('Expected a local immutable image ID')

@@ -220,3 +220,18 @@ the patched candidate. The original readiness test module remains intact for
 pinned historical attestations. The held job and its attempts, FIFO row and
 review history were preserved. No provider call was made for this qualification.
 [Case and release hashes](releases/readiness-child-channel-20261111.json).
+
+A subsequent network-disabled rehearsal used the incumbent's effective
+`HUB_CONFIG` and a new SQLite copy. The parent had one verified post-live
+observation. The rejected child had made zero provider calls. The official
+identity still matched and the original wait was valid until November 12 at
+04:14:34 Beijing time. On the copy, returning that wait to the coordinator
+preserved both attempts and produced exactly one numbered observation, sequence
+3. Another scheduler tick enqueued nothing. No downloads or publications were
+dispatched. The first probe using the default configuration correctly returned
+`YOUTUBE_WHOLE_DISABLED`; that probe supplied no production-policy evidence.
+
+Use the nine-module V2 binding archive for candidate migration testing. It
+includes the corrected guard and the dispatcher used by the incumbent. The
+seven-module archive remains available for reproducing the preceding release.
+[Deployment and rollback instructions](portable-image-verification.md).
