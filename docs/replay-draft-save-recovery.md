@@ -65,8 +65,15 @@ checks respectively, with overlap (not 70 unique tests). The final three source
 files are deployed in the healthy independent publisher; all other container
 IDs and the held job stayed unchanged. See
 [dated qualification/deployment evidence](releases/draft-save-ack-release-20261111.json).
-The final real prepare receipt passed, and the bounded continuation was seen
-running. Final publication is a separate acceptance step.
+The final real prepare receipt passed. On November 11 at 04:50 Beijing time
+the bounded worker finished its first public submission path. The creator
+manager showed the matching item as transcoding and under review, with
+candidate BV `BV1eNWL6tEh8`; a separate read-only lookup observed the
+same item 19 seconds later. There was no second upload. The child remained
+`publish_unknown` with no verified public URL. The lookup scheduler recorded
+one completed poll (`pending_unverified`) and scheduled another for 04:55:26.
+Do not submit again or clean the recording on the strength of a manager row.
+Public playback and the final stored link are separate acceptance steps.
 
 Promote only the three qualified runtime files in a versioned, read-only source
 overlay for the independent publication service. Save the prior Compose and
