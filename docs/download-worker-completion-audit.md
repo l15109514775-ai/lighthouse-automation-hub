@@ -58,11 +58,20 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    safe-deferral entry passed. After the real Asia/Shanghai day rollover, the
    unchanged budget allowed one normal-entry acceptance run at 2026-11-11 00:00:16.
    Invocation `036100ba2f34469b8d955f901f519312`, operation
-   `7e1f6b00-ead5-45ae-8ae4-be0e8cbf2b2e`, is uploading at the latest checkpoint;
-   its live sidecar and increasing TCP acknowledged-byte counters were observed.
-   This is progress, not restore success. The regular 03:30 timer is unchanged.
-   Observe this same invocation; do not start another operation on a timeout.
-   See [the dated in-progress record](releases/backup-acceptance-20261111.json).
+   `7e1f6b00-ead5-45ae-8ae4-be0e8cbf2b2e`, subsequently stopped at the old 30-minute
+   systemd timeout. The migrated host was missing the existing 75-minute drop-in;
+   it is now installed and effective. One budgeted exact-object HEAD confirmed
+   absence. The operation is `resolved_remote_absent`; all original reservations
+   and the failed daily pointer/history remain. A root-attested recovery gate
+   verifies the exact operation, original requests, plan and HEAD before allowing
+   a successor. It does not treat a 404 as a successful backup or refund usage.
+   Local and isolated Linux tests each passed 26 checks. The actual systemd entry
+   safely deferred with zero new operations/requests because the unchanged daily
+   budget cannot fit another full transfer plan. The 03:30 timer is unchanged;
+   the next eligible daily period is November 12 CST, subject to monthly headroom.
+   Full new-host upload/GET/restore remains unverified. See
+   [timeout repair and reconciliation](releases/backup-timeout-repair-20261111.json).
+   See [the dated attempt record](releases/backup-acceptance-20261111.json).
    Require a budget-permitted real upload, captured remote GET, all-entry hashes
    and restored SQLite integrity/foreign-key results. A local code archive, old
    verified backup, canary or enabled timer is not this evidence. Preserve errors,

@@ -18,7 +18,7 @@ OPS = Path('/usr/local/lib/lighthouse-backup-ops')
 DAILY_STATE = Path('/var/lib/lighthouse-backup-ops/retention-v2b/daily-state')
 SOURCES = {
     'cloudbase_backup_budget_recovery.py':
-        '3e4bac49187929e784b4c11171286fb55b37271a45aed776dc67f443f85261f9',
+        'ea18a1bb3bb30e49c89816f94dace7b4ca74133aa67ed97d64d5880e256691ed',
     'cloudbase_backup_daily_retention_v2c.py':
         'fe6642eea6ddeeb1a829a0bf75e62a012712a827f2174b9d118c4908d321587f',
     'recover_cloudbase_remote_absent_v1.py':

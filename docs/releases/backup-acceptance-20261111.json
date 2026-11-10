@@ -71,5 +71,9 @@
   },
   "acceptance_complete": false,
   "remote_restore_verified": false,
-  "note": "An actual normal-entry run is in progress, not a successful backup claim. Inspect this invocation and ledger before any further action."
+  "note": "The original invocation was terminated by the missing 75-minute systemd drop-in. One budgeted HEAD confirmed remote absence. Original reservations and daily history remain; no full restore passed.",
+  "status": "interrupted_upload_confirmed_remote_absent",
+  "terminal_result": "systemd_timeout",
+  "successor_gate": "budget_deferred",
+  "superseding_evidence": "backup-timeout-repair-20261111.json"
 }

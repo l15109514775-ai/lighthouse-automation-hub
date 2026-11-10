@@ -1,0 +1,153 @@
+{
+  "version": "backup-timeout-repair-20261111",
+  "original_invocation": "036100ba2f34469b8d955f901f519312",
+  "original_result": "timeout",
+  "original_limit_seconds": 1800,
+  "installed_existing_limit_seconds": 4500,
+  "local_tests": "26 passed",
+  "evidence": {
+    "report": {
+      "at": 1794328343.1983202,
+      "change": "install-existing-missing-systemd-timeout-dropin",
+      "dropin": "/etc/systemd/system/lighthouse-cloudbase-backup.service.d/90-transfer-timeout.conf",
+      "sha256": "eaeb70dbc227a8a2da0f28c0886f213d7480839a8be534bd0588a4856d80ce46",
+      "before": [
+        "TimeoutStartUSec=30min",
+        "Result=timeout",
+        "ActiveState=failed",
+        "DropInPaths=",
+        "InvocationID=036100ba2f34469b8d955f901f519312"
+      ],
+      "after": [
+        "TimeoutStartUSec=1h 15min",
+        "Result=timeout",
+        "ActiveState=failed",
+        "DropInPaths=/etc/systemd/system/lighthouse-cloudbase-backup.service.d/90-transfer-timeout.conf",
+        "InvocationID=036100ba2f34469b8d955f901f519312"
+      ],
+      "running_container_ids_unchanged": true,
+      "backup_timer_unchanged": true,
+      "backup_restarted": false,
+      "failed_operation_preserved": true,
+      "rollback": "Remove only this newly installed drop-in and run systemctl daemon-reload; do not restart the failed backup."
+    },
+    "head-result": {
+      "operation_id": "7e1f6b00-ead5-45ae-8ae4-be0e8cbf2b2e",
+      "request": "HEAD",
+      "remote_verified": false,
+      "puts": 0,
+      "gets": 0,
+      "state": "absent",
+      "error_code": "CLOUDBASE_BACKUP_REMOTE_NOT_FOUND",
+      "at": 1794328555.1420462
+    },
+    "reconciliation-report": {
+      "at": 1794328825.1851478,
+      "budget": {
+        "backup_started": false,
+        "backup_success_claimed": false,
+        "budget_refunded": false,
+        "external_requests": 0,
+        "limits": {
+          "daily_network_bytes": 512000000,
+          "daily_requests": 50,
+          "max_archive_bytes": 192000000,
+          "monthly_network_bytes": 8000000000,
+          "monthly_requests": 250
+        },
+        "periods": {
+          "daily": {
+            "bytes": 189853149,
+            "period": "2026-11-11",
+            "requests": 5
+          },
+          "monthly": {
+            "bytes": 2431747837,
+            "period": "2026-11",
+            "requests": 107
+          }
+        },
+        "required_network_bytes_upper": 386648864,
+        "required_requests": 7,
+        "state": "budget_deferred"
+      },
+      "budget_refunded": false,
+      "daily_pointer_and_history_preserved": true,
+      "external_requests": 0,
+      "helper_sha256": "ea18a1bb3bb30e49c89816f94dace7b4ca74133aa67ed97d64d5880e256691ed",
+      "operation_id": "7e1f6b00-ead5-45ae-8ae4-be0e8cbf2b2e",
+      "original_requests_preserved": true,
+      "restore_verified": false,
+      "retry_performed": false,
+      "rollback_code_files": [
+        "/var/lib/lighthouse-migration/backup-timeout-repair-v1/budget-helper.before.py",
+        "/var/lib/lighthouse-migration/backup-timeout-repair-v1/daily-wrapper.before.py"
+      ],
+      "state": "resolved_remote_absent",
+      "wrapper_sha256": "738486daa7fc28c60808ac40eb2da5805c57bdc2a57d72eda774740e84f0ee7d"
+    },
+    "unit-deferral": {
+      "at": 1794328918.9187498,
+      "state": "actual_systemd_safe_deferral_verified",
+      "systemd": {
+        "TimeoutStartUSec": "1h 15min",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "InvocationID": "ec91f82439bc4f5489375c427e02a4d1"
+      },
+      "ledger_tables_unchanged": [
+        "operations",
+        "requests",
+        "plans"
+      ],
+      "failed_latest_unchanged": true,
+      "external_requests": 0,
+      "new_operations": 0,
+      "decision": {
+        "backup_started": false,
+        "backup_success_claimed": false,
+        "budget_refunded": false,
+        "external_requests": 0,
+        "failure_history_preserved": true,
+        "limits": {
+          "daily_network_bytes": 512000000,
+          "daily_requests": 50,
+          "max_archive_bytes": 192000000,
+          "monthly_network_bytes": 8000000000,
+          "monthly_requests": 250
+        },
+        "periods": {
+          "daily": {
+            "bytes": 189853149,
+            "period": "2026-11-11",
+            "requests": 5
+          },
+          "monthly": {
+            "bytes": 2431747837,
+            "period": "2026-11",
+            "requests": 107
+          }
+        },
+        "previous_daily_id": "bf4d9cce-2df7-463a-9aa2-86102b51ea40",
+        "required_network_bytes_upper": 386648864,
+        "required_requests": 7,
+        "state": "budget_deferred"
+      },
+      "restore_verified": false
+    },
+    "linux_tests": {
+      "at": 1794328883.9214737,
+      "returncode": 0,
+      "network": "none",
+      "readonly_rootfs": true,
+      "uid": 10001,
+      "live_mounts": false,
+      "summary": "26 passed in 0.11s"
+    }
+  },
+  "full_external_restore_verified": false,
+  "migration_transport_archives_deleted": false,
+  "remaining": "Next full upload and captured-GET restore must fit unchanged daily/monthly budgets. No retry or budget refund was performed."
+}

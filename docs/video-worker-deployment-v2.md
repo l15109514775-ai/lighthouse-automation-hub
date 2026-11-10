@@ -150,6 +150,36 @@ requires the current owner and acquisition-enabled markers under
 
 ## Service rollback versus reverse migration
 
+### Preserve backup systemd drop-ins during migration
+
+Copy the existing `scripts/ops/lighthouse-cloudbase-backup.service.d/90-transfer-timeout.conf`
+to `/etc/systemd/system/lighthouse-cloudbase-backup.service.d/` as root-owned mode
+0644, alongside the inspected service definition. Run `systemctl daemon-reload`
+and verify `systemctl show lighthouse-cloudbase-backup.service -p TimeoutStartUSec -p DropInPaths`.
+The effective timeout must be **1h 15min**, not the base unit's 30min. Inner
+transfer helpers remain bounded at 3600 seconds; budgets and the 03:30 timer are
+unchanged. A copied base unit without its drop-in caused the November 11 real
+backup to be killed mid-PUT. Installing this drop-in requires no container restart.
+
+An interrupted upload must first be reconciled against its exact object using a
+budgeted request. Do not restart it blindly. The budget recovery helper accepts
+an `accept_started` pointer only with a root-owned `remote-absent-recovery/<daily-id>.json`
+proof binding the unchanged daily history, terminal operation, original requests,
+plan and budgeted HEAD 404. It otherwise retains the original interruption gate.
+The normal entry can defer without starting a new backup when remaining budget
+cannot cover the whole upload/readback plan. Neither deferral nor remote absence
+is restore acceptance. Preserve the failed archive and recovery materials until
+the separate full remote restore passes.
+
+For the November 11 timeout repair, code rollback copies and the pre-transition
+ledger are retained under the private `backup-timeout-repair-v1` evidence directory.
+Rolling back helper code must restore its paired wrapper hash pin. Removing only
+the newly installed timeout drop-in and reloading systemd restores the previous
+unit configuration, but also restores its known premature-timeout risk. Do not
+undo the proven absence record or restart a stale/unknown upload during rollback.
+
+### Acquisition rollback
+
 For an acquisition-only fault, first stop and disable its systemd startup unit
 and preserve its original enable state in the maintenance record. Verify the
 container identity before using the independently tested stop-only helper:

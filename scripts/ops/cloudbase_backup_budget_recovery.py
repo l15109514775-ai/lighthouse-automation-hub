@@ -1,4 +1,4 @@
-"""Resume only an explicitly attested zero-request budget failure.
+"""Resume explicitly attested preupload failures or reconciled absent uploads.
 
 The host's original daily locks and runtime runner lock remain authoritative.
 No ledger mutation, refunds, remote requests, receipt rewriting or backup cleanup
@@ -11,11 +11,25 @@ import json
 from pathlib import Path
 import sqlite3
 import tomllib
+import uuid
 from zoneinfo import ZoneInfo
 
 
 VERSION = 'cloudbase-preupload-budget-proof-v1'
 ERROR = 'CLOUDBASE_BACKUP_BUDGET_EXCEEDED'
+ABSENT_VERSION = 'cloudbase-remote-absent-proof-v1'
+
+
+def absent_proof_path(state, previous):
+    if not previous or previous.get('state') != 'accept_started':
+        return None
+    value = previous.get('daily_id')
+    try:
+        if str(uuid.UUID(value)) != value:
+            return None
+    except (ValueError, TypeError, AttributeError):
+        return None
+    return state / 'remote-absent-recovery' / (value + '.json')
 
 
 class BudgetDeferred(Exception):
@@ -83,6 +97,43 @@ def headroom(limits, periods):
             'backup_started': False, 'backup_success_claimed': False}
 
 
+def verify_absence(previous, proof, operation, requests, plan, *, latest_sha,
+                   history_sha, unresolved_count):
+    """A real, budgeted 404 closes one exact interrupted upload, never success."""
+    need(proof.get('version') == ABSENT_VERSION and previous['state'] == 'accept_started'
+         and 'acceptance' not in previous, 'ABSENT_RECOVERY_DAILY_INVALID')
+    need(proof.get('daily_id') == previous['daily_id'] and
+         proof.get('failed_daily_sha256') == latest_sha == history_sha,
+         'ABSENT_RECOVERY_DAILY_CHANGED')
+    need(proof.get('operation_id') == operation['operation_id'] and
+         proof.get('operation_sha256') == hashlib.sha256(encoded(operation)).hexdigest() and
+         operation['state'] == 'resolved_remote_absent' and
+         operation['error_code'] == 'CLOUDBASE_BACKUP_UPLOAD_CONFIRMED_ABSENT' and
+         operation['receipt'] is None, 'ABSENT_RECOVERY_OPERATION_CHANGED')
+    need(proof.get('requests_sha256') == hashlib.sha256(encoded(requests)).hexdigest() and
+         proof.get('plan_sha256') == hashlib.sha256(encoded(plan)).hexdigest(),
+         'ABSENT_RECOVERY_LEDGER_CHANGED')
+    head = [r for r in requests if r['request_id'] == proof.get('head_request_id')]
+    originals = [r for r in requests if r['request_id'] != proof.get('head_request_id')]
+    need(len(head) == 1 and head[0]['method'] == 'HEAD' and head[0]['state'] == 'error' and
+         head[0]['error_code'] == 'CLOUDBASE_BACKUP_REMOTE_NOT_FOUND' and
+         head[0]['reserved_bytes'] == 300000, 'ABSENT_RECOVERY_HEAD_NOT_ABSENT')
+    need(len(originals) == 4 and sum(r['method'] == 'GET' and r['state'] == 'done' for r in originals) == 3
+         and sum(r['method'] == 'PUT' and r['state'] == 'reserved' for r in originals) == 1
+         and proof.get('original_requests_sha256') == hashlib.sha256(encoded(originals)).hexdigest(),
+         'ABSENT_RECOVERY_ORIGINAL_REQUESTS_CHANGED')
+    need(all(r['operation_id'] == operation['operation_id'] for r in requests) and
+         plan['operation_id'] == operation['operation_id'] and unresolved_count == 0,
+         'ABSENT_RECOVERY_ACTIVE_OR_FOREIGN_OPERATION')
+    observation = proof.get('head_result', {})
+    need(observation.get('operation_id') == operation['operation_id'] and
+         observation.get('state') == 'absent' and observation.get('request') == 'HEAD' and
+         observation.get('error_code') == 'CLOUDBASE_BACKUP_REMOTE_NOT_FOUND' and
+         observation.get('remote_verified') is False and observation.get('puts') == observation.get('gets') == 0 and
+         proof.get('budget_refunded') is False and proof.get('backup_success_claimed') is False,
+         'ABSENT_RECOVERY_INVALID_ATTESTATION')
+
+
 def inspect(daily, root, state, previous):
     """Read a consistent ledger snapshot; retain all existing file guards."""
     policy = daily.safe(root / 'config/cloudbase-backup.toml', root)
@@ -112,6 +163,22 @@ def inspect(daily, root, state, previous):
             verify_failure(previous, proof, dict(row), latest_sha=latest_sha,
                            history_sha=history_sha, request_count=counts[0],
                            plan_count=counts[1], unresolved_count=unresolved)
+        elif previous and previous['state'] == 'accept_started':
+            path = absent_proof_path(state, previous)
+            need(path is not None, 'ABSENT_RECOVERY_DAILY_INVALID')
+            proof, _ = daily.read_record(path, state, root_owned=True)
+            ident = daily.ident(previous['daily_id'])
+            current, latest_sha = daily.read_record(state / 'latest.json', state, root_owned=True)
+            history, history_sha = daily.read_record(state / 'history' / (ident + '.json'), state, root_owned=True)
+            need(current == history == previous, 'ABSENT_RECOVERY_POINTER_CHANGED')
+            operation_id = daily.ident(proof['operation_id'])
+            row = db.execute('SELECT * FROM operations WHERE operation_id=?', (operation_id,)).fetchone()
+            plan = db.execute('SELECT * FROM plans WHERE operation_id=?', (operation_id,)).fetchone()
+            need(row is not None and plan is not None, 'ABSENT_RECOVERY_OPERATION_MISSING')
+            requests = [dict(r) for r in db.execute('SELECT * FROM requests WHERE operation_id=? ORDER BY created_at,request_id', (operation_id,))]
+            unresolved = db.execute("SELECT COUNT(*) FROM operations WHERE state IN ('preparing','uploading','upload_unknown')").fetchone()[0]
+            verify_absence(previous, proof, dict(row), requests, dict(plan), latest_sha=latest_sha,
+                           history_sha=history_sha, unresolved_count=unresolved)
         for label, field, value in (('daily', 'day', current_time.strftime('%Y-%m-%d')),
                                     ('monthly', 'month', current_time.strftime('%Y-%m'))):
             row = db.execute('SELECT COUNT(*),COALESCE(SUM(reserved_bytes),0) FROM requests WHERE ' + field + '=?', (value,)).fetchone()
@@ -130,7 +197,8 @@ def bind(daily, *, root=Path('/opt/lighthouse-hub'),
     def execute(previous=None, **kwargs):
         # Cleanup resumes exact verified work; never let network budget block it.
         # Interrupted/unknown acceptance retains the original reconciliation gate.
-        eligible = previous is None or previous['state'] in ('completed', 'accept_failed')
+        absent = absent_proof_path(state, previous)
+        eligible = previous is None or previous['state'] in ('completed', 'accept_failed') or (absent is not None and absent.is_file())
         if not eligible:
             return original(previous, **kwargs)
         report = inspector(daily, root, state, previous)
@@ -142,7 +210,7 @@ def bind(daily, *, root=Path('/opt/lighthouse-hub'),
         need(report['state'] == 'budget_available', 'BUDGET_RECOVERY_BAD_DECISION')
         # Only inspect()'s exact root-attested failed operation can reach this.
         # The failed record stays in history; original save() creates a new ID.
-        if previous and previous['state'] == 'accept_failed':
+        if previous and previous['state'] in ('accept_failed', 'accept_started'):
             previous = None
         return original(previous, **kwargs)
 
