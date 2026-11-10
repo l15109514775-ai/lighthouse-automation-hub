@@ -706,3 +706,23 @@ allowlist, archive/member digest changes, traversal, symlinks and duplicates).
 Production container IDs stayed unchanged. No live DB, profile, secret or provider
 request was used. The release JSON now includes fixture hashes and restore evidence.
 This does not qualify a fresh public-tree rebuild or production reverse migration.
+
+### Effective-source compatibility checkpoint (2026-11-10)
+
+Read-only inspection compared 160 current acquisition source/SQL/dependency files
+with public revision 5402be7: 140 match; 20 are classified and hash-bound. Four
+identity/display differences are AST-identical after exact known placeholder
+mapping; three concern shared transport/accounting versions; thirteen concern
+routes not registered as acquisition handlers. No file was overwritten or deleted.
+
+Actual current-image tests passed 47 budget/HTTP, task-isolation and recovery-fault
+cases. A readonly production-config/data preflight passed, and actual constructor
+inspection registered exactly the four V4 acquisition job types, with publication
+disabled. Producer tick, Worker execution and Store initialization were not called.
+Historical row counts remain 1324 video / 474 terminal FIFO. This count observation
+does not replace the earlier all-column migration fingerprint comparison.
+
+Details and remaining limits: video-worker-current-compatibility.md and the
+versioned source-compatibility JSON under docs/releases. The 34 deferred historical
+failures remain failures/errors; no clean full-suite result or fresh public-tree
+build is claimed. Production containers were unchanged and provider requests zero.

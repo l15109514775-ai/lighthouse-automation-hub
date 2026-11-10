@@ -1,0 +1,90 @@
+# Effective acquisition compatibility checkpoint — 2026-11-10
+
+This checkpoint inspects the **currently running acquisition service**, including
+its source-control bind mounts. It does not assume that an image tag or a public
+Git revision describes every effective file. The immutable image remains
+`sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414`.
+The compared public revision is `5402be7`; no production code was changed by this
+audit. Full file hashes, classifications, policy bindings and test observations
+are recorded in [the versioned evidence](releases/acquisition-source-compatibility-20261110.json).
+
+## Source comparison and migration implications
+
+The read-only inventory covers 160 Python, SQL and dependency/project files under
+services, adapters and scheduler. Of these, 140 match the public revision, allowing
+only line-ending normalization; 20 differ.
+
+| Difference | Files | Observed implication |
+|---|---:|---|
+| Production identity/display constants | 4 | FIFO, planning, private sample metadata and channel allowlist use the actual authorized account/channels rather than public placeholders. AST equality after the exact known identity/display mapping was verified. |
+| Shared budget/HTTP/HTTPS versions | 3 | The acquisition image retains conservative gross budget accounting, no X receipt-credit hook, and a bounded 20-second HTTPS default. The reviewed YouTube callers do not request the newer configurable timeout. Current acquisition tests pass; this does not qualify these versions for the tweet or backup service. |
+| Routes not registered as acquisition handlers | 13 | Older CLI, X, website, backup and legacy runtime modules remain in this captured image. The acquisition entry does not register their business handlers. Preserve them; this is not a proof that every possible dynamic import is unreachable or that deletion is safe. |
+
+The 13 modules are named individually in the evidence file. Do not deploy the
+entire public tree over the private image to remove these differences. In
+particular, substituting public identity placeholders would break existing policy
+bindings, while applying an unrelated X/backup update might require modules or
+schema not present in this service. Other services use their own independently
+qualified images and overlays.
+
+## Actual current-runtime checks
+
+An actual offline, read-only UID10001 container used the qualified image and the
+current Worker/source-control overlays. Three focused suites passed **47 tests**:
+
+- `tests/test_budget_http.py`: concurrent reservation limits, refusal before
+  networking, provider status classification and preservation of uncertain costs.
+- `tests/test_worker_type_isolation.py`: SQL type scopes, claim/recovery isolation,
+  competing workers and the real video lock boundary.
+- `tests/test_acquisition_recovery_faults.py`: lease fencing, heartbeat failure,
+  stable file-error handling, retained partials and corrupt verification evidence.
+
+These use synthetic jobs and real temporary SQLite/files. They do not claim a new
+real YouTube download, a fresh full-suite pass, or a new publication. Production
+container identities were unchanged. No live credentials were mounted.
+
+A separate network-disabled container inspected current production config/data
+through read-only mounts as UID10001. The preflight reported no blockers, SQLite
+WAL, 1,324 historical video rows and 474 terminal FIFO rows. FIFO, acquisition and
+planning policy digests remain coherent. No initialization, migration, attempt
+reset or historical-job update was performed. This read-only observation counts
+rows; the earlier migration evidence remains the separate all-column preservation
+comparison.
+
+The actual `build_worker(..., mode='acquisition_only')` constructor was then
+checked with read-only production bindings. Its handler set is exactly:
+
+```text
+youtube_replay_download_v4
+youtube_replay_plan_v4
+youtube_replay_readiness_v4
+youtube_replay_refresh_v4
+```
+
+Publication is disabled in that entry. The probe did not call a producer tick,
+Worker execution or `Store.init`. Source controls still pause Yuuhi's X and
+YouTube identities while leaving Chise enabled. A preflight's
+`production_activation_allowed=false` is intentional: configuration validation
+cannot grant deployment or content authorization.
+
+## Regression disposition and remaining acceptance
+
+The existing 34 unresolved historical cases remain failed/error in their original
+record. The owner's closed-history scope defers six one-off capture/inventory
+cases, 22 retired visual/browser cases and six disabled native multipart cases.
+This checkpoint does not relabel them as passed, skip them, or add 47 to the
+historical evidence-union count. New acquisition and shared-component regressions
+must still be fixed when demonstrated.
+
+The private captured base passed a fresh Docker/containerd import; its current
+overlay archive separately passed restore verification. These prove a repeatable
+captured release, not a fresh build of all public source. Base/APT build pinning,
+complete cross-service source provenance and redistribution review are separate
+limits. Service stop-only rollback has isolated test evidence; production
+reverse-host migration remains documented, not executed.
+
+New-host external backup upload/GET/restore still requires its next within-budget
+run. A naturally arriving Chise replay has not yet completed through the new
+production queue. Those observations must not be replaced by synthetic tests or
+by retrying a platform-restricted source. This is a compatibility checkpoint,
+not a declaration that the full goal is complete.

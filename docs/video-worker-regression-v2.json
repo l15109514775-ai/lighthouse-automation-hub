@@ -2638,5 +2638,19 @@
     "new_full_suite_run": false,
     "no_production_records_changed": true,
     "current_shared_component_checks_remain_required": true
+  },
+  "current_effective_acquisition_checks": {
+    "evidence_file": "docs/releases/acquisition-source-compatibility-20261110.json",
+    "evidence_sha256": "b7e55832a648e4fd5d315687e92e965262e9cdd7e43fc4bc405d3e45cf186150",
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "compared_public_commit": "5402be78fe534ef10ffee65c1e91922700a24902",
+    "source_files": 160,
+    "source_matches": 140,
+    "classified_differences": 20,
+    "focused_runtime_tests_passed": 47,
+    "new_full_suite_run": false,
+    "historical_test_counts_unchanged": true,
+    "production_mutation": false,
+    "configuration_consistent": true
   }
 }

@@ -8,6 +8,12 @@ old host is fenced. This is a production activation checkpoint, **not full goal
 completion**. See [acceptance evidence](video-worker-acceptance-v2.md) and the
 append-only [migration history](video-worker-migration.md).
 
+The latest [effective-source compatibility check](video-worker-current-compatibility.md)
+compares 160 running source/dependency files against the public revision, records
+all 20 differences, and verifies current policy bindings and the four-handler
+acquisition boundary. Its 47 focused runtime tests supplement historical results;
+they do not relabel the 34 deferred legacy failures as passing.
+
 The new host passed an isolated authorized real download, media verification and
 SIGKILL/resume with the same task. A naturally arriving replay has not yet been
 observed completing through the new production queue. No test publication was

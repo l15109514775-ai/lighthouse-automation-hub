@@ -1,0 +1,518 @@
+{
+  "version": "acquisition-source-compatibility-v1",
+  "observed_at": 1794321463.5084229,
+  "compared_public_commit": "5402be78fe534ef10ffee65c1e91922700a24902",
+  "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+  "effective_source_files": 160,
+  "matched_current_public_files": 140,
+  "source_comparison_allows_line_ending_normalization": true,
+  "all_effective_source_sha256": {
+    "services/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "services/hub/__init__.py": "0f405c14fd86f3460ee6a8cf51d5af82a517861dabde8ff12d98d01f5c406a78",
+    "services/hub/acquisition_health.py": "b8079c0dfa223d9cba9f46cf0675248825aaad7bff9b86efce533058d18270ec",
+    "services/hub/acquisition_preflight.py": "f890d86c21d469036fbe4da0ac2b16950af2c82eaf2de182036b025755161b7a",
+    "services/hub/api.py": "d60bcc4923bc408121e88ce6a8245264ecdcad7eba5769e635c5666ad36ca0c5",
+    "services/hub/archive_source_autorun_v2.py": "f55b84a24ccb04364c451ef4a829d85ffa46372138d9d5ee12d2d52ff261aade",
+    "services/hub/archive_source_retention_v2.py": "cb81506a9fc0b65a85f25c3f4417496a50fb0bd22e216b4003826d11f2bb2a5e",
+    "services/hub/bilibili_service.py": "ca9a427b032e40ef2c3b15d777816053b1d950beed4ef5996f9618cfd50873e1",
+    "services/hub/bilibili_tokens.py": "59cb39750d03c6f979812346c9064086642a43584a1094dca7817dd19e517f27",
+    "services/hub/budget.py": "1de68d1a9937e229be76fc5fe2de21ae1814a9cfc0158096f86bc67bd87f827e",
+    "services/hub/cli.py": "8ce8736e4e276a1e30b6114071a33e0e40d773c105a04242c06babaab06d2fd7",
+    "services/hub/cloudbase_backup_runtime.py": "ed47e411c6f96696b2886c8a6d8379b4f15df9c1b0ed3257d439d1cdc4277099",
+    "services/hub/config.py": "f55248558e7582d3d6a38165512704886e4a3f7554ce8b3b8325edf65f80888c",
+    "services/hub/control.py": "1182fd0d022ea5ea04137fc4359c39d11873401cb41cc818d6c286321af96f03",
+    "services/hub/cover_normalizer.py": "79b481b99fc5c345ae871e34c88c057b3b3392c50cc2dc54448a5fa7d2a5ab32",
+    "services/hub/cover_normalizer_v4.py": "bbc133b7469578650069d6ecc32b593c6b141a55e56afcdb52938eb2558b00ae",
+    "services/hub/db.py": "4984bb5f5a962f6bec70d71136ad197eab593b41544d63ae68e09429ead07e09",
+    "services/hub/errors.py": "ddf166cb4af7f47ee5344bcabbe3397e46abb33c99c87f8748f1f6fc0d6cfd26",
+    "services/hub/events.py": "2c85e9119841ee66690e512840327db517abf5e00deec9db86e57ad54185630a",
+    "services/hub/evidence.py": "f69064b1cd7873b385bfb2ddb3b07296915b5ac0bc6b5879adc0fe9b5a716710",
+    "services/hub/extended_web_source.py": "e69d2d89c5056bb73dd5d86413aa55bf5fc719b5fff95b72fcf9382f3fe51a31",
+    "services/hub/job_scope.py": "4f8ddc27b2ac3486a20cca669150cc3396dde725ec7401539c39a4cd2459157f",
+    "services/hub/locks.py": "66db713dbb023ed543a3cbd6660fe04b1b51d87c443cb4120f84d028ea25dd1b",
+    "services/hub/machine_routes.py": "77a1823a875546592bf8490ff2e64c79d1c85cf9d55995bfa55be6046ad74417",
+    "services/hub/machine_tweets.py": "019502e27a46fd37791d666a7f9f99edbd20378aa574f0dc8d2f479c68faf6cf",
+    "services/hub/machine_tweets_api.py": "c701f00744ccef16b5ee5af4243e603362e7dad905896cdac7558aff97d2d823",
+    "services/hub/machine_tweets_v2.py": "90a4618fac039df5fdaacdaea14ba2e5e83ba12f93ad5f8051350b7cab4a2c17",
+    "services/hub/maintenance.py": "7f78219d4a0e097b95791e655e31b766befb6d3ce393b8c90b10874784c03f03",
+    "services/hub/manual.py": "4fdca0c5f434d4cbabfd1a2e1dfec5a460ea8a709ce647d03deba747f0b47ec6",
+    "services/hub/mcp_server.py": "30a41b6e955695fde715ab430c2b5352785188169dd8d0270b12b8400d3bc9ab",
+    "services/hub/media_processing.py": "9de0e6b0cad29931ca9ac4a975f162405829903a5bc7e5527f1859b27580da8f",
+    "services/hub/model_contract.py": "a2ae9ba10997cc0b2b6b5e2d548a917165967275462336bb6b5289f46418ab26",
+    "services/hub/model_profiles.py": "d2ce2222da324f095b2954c6d4c9bb5b056dae854df9920d514ece94c11b5a1b",
+    "services/hub/model_receipts.py": "587dc44c8d36a1165bfd64fdf6a4b7c0f81f0ca308bd6f5b285163dc19ad0e97",
+    "services/hub/model_revision.py": "233851f607849633f6cd008737b2c78df1cf66389b2ca189b4cb00be8ac340a4",
+    "services/hub/monitoring.py": "7bf2940ee6be9264799fc9d0cf99e7a7bf88d3e1e927577a0667e32c15ae8e1c",
+    "services/hub/outcomes.py": "3a55475a66626538afa0e6215964bff7e6cafedf367a934173ced5a7893c16a1",
+    "services/hub/owner_assisted_short_result_v1.py": "9c8a3cceffd96335aafc97ff90685b68fe35bfdd992a932a7b636ef7b62cb7f0",
+    "services/hub/pilot_published_retention_v2.py": "e67256e6c8974cd9c6a278cd59672e9f6e8165a22cb82aa1577b9e6220de4a5e",
+    "services/hub/pipelines.py": "20349d8125ce5e1cb2447d545b078a47b5d327392c55b42f60d06e9d91754336",
+    "services/hub/publishing.py": "bbd239763cb2145582d471a483d3ac9d25ae971e5525bf9393c141cf64d551ac",
+    "services/hub/readiness.py": "7d33036614389c22a813abe3b49df72a0ef7c1ba85807faef08baea183310cff",
+    "services/hub/recovered_submit_ticket.py": "cdb31fbd7542c6a61272751c446d5650406d75f329e9a48215f9a2259a096e12",
+    "services/hub/render_acceptance.py": "c556857c7dfe9aeac14aadae173a73e5d46b86c25bf7eba1fca4be27f8e9441c",
+    "services/hub/replay_delivery_v5.py": "0f9fcf3a0179ea8517037e21630fbfc5e69ee1451ccf87661d4b20dbb9e0213e",
+    "services/hub/replay_fifo_v4.py": "279600d746528fe5de12dcef6d642c4028f2ef104ceebe4867186b7ccc354b50",
+    "services/hub/replay_highest_coverage_v2.py": "dbba8457a11c01f46d64364993f3a5c19ddfe0a81149b8b1dfc980f96f31602e",
+    "services/hub/replay_highest_limits_v2.py": "e6bc3b1ac860797b4f786a69ea39b7443302f2a5bcad0541f70e8faf95f688b5",
+    "services/hub/replay_highest_moderation_v2b.py": "f285c85f2d576d221f5b760902c661e8942c51fd6eb4f7e33a7e416baa5529cd",
+    "services/hub/replay_highest_video_v2.py": "2481d6a2122b270f7bd92d4d9c639666d973ac62f1a49848ba4621398e28aac0",
+    "services/hub/replay_highest_worker_runtime_v2.py": "e43b25f10145e755f62671c22f70b2d70c8e73f3060f66c60105c382b5980235",
+    "services/hub/replay_later_native_result_v1.py": "4e789ae7a7f101cd4bdc7019a6cdfb51328c6a9f7ca6767bec2b2d28ae5c4d9d",
+    "services/hub/replay_later_native_result_v2.py": "80d6f66bb9b404786cbba16b743bb4e469231ee37413c37693a590f751ad8a6b",
+    "services/hub/replay_machine_checks.py": "1879757741d61173c9b5a27e6e3a210294b4c3efa9952e6b9483e97dd1fb6588",
+    "services/hub/replay_moderation_common.py": "f8ca387c63683396cb0fb80004f9b22d7e155df8648590a68b8d8b6baf81b9c6",
+    "services/hub/replay_multipart_private_v4.py": "db5de80b750fd808715c84e2d13941ffafb68454141f7f65ca5abed233ed5f2e",
+    "services/hub/replay_multipart_v4.py": "3b196519cdda068d7e1b780deb6540318a9b5a624861b96551c643290e723399",
+    "services/hub/replay_multipart_video_v4.py": "4e693a7382fbb3d749934fc05e206f31b6b11a06fc58da3cff84bb207bebd110",
+    "services/hub/replay_multipart_worker_runtime_v4.py": "1eb3d0c302b1ed86ebb8d124a3fd89ae642719fa17f5d84cef87ec498ff9050b",
+    "services/hub/replay_natural_launch_v3.py": "cfc3b5a730ff0a9a38684cbd0c3a5383d238273bf011ffd1caacb457245cdb48",
+    "services/hub/replay_natural_moderation_v3.py": "bb9d5492ad912aa2b74e49a405476ce7c9040f276ba00ab2b635853c34197beb",
+    "services/hub/replay_natural_video_v3.py": "572f59f809ea37bbed9e3fb893f1252182e22ec98c645ecc67fd3d3765f19c7c",
+    "services/hub/replay_natural_worker_runtime_v3.py": "73685a6f0f5b9a3b44de79e5d8dfd89972c86c40a4cd9a053f8430fcd044b0d0",
+    "services/hub/replay_packet_cache_v1.py": "7727417e5064cd669d416ce9cee4209caaddc8b3e84a59c490031ad5c6b2a2f1",
+    "services/hub/replay_part_moderation_v5.py": "9982fef86796def58c785c794bede45f3e9ae06d632888d2cc6ae5382649cf72",
+    "services/hub/replay_part_owner_handoff_v5.py": "856048cbc62023b8a88d6b8ffc4a196ea41cd5e7250027db082504d94c027e0d",
+    "services/hub/replay_part_public_evidence_v5.py": "8f4dec12cb781f307e3b7822a3ad0f0de6b1b08a8bbbe1e34c3353620fae2178",
+    "services/hub/replay_part_publish_worker_v5.py": "6502ef9f0b8cc0abda13bdc8b72caf90498b21b2a7f5d907d9ebe846095a8d6a",
+    "services/hub/replay_parts_retention_v5.py": "414a193b955295893094d3d903c67c3289f6e35df84d1d2363b01fe5d72045f3",
+    "services/hub/replay_parts_v5.py": "c1b7da009a43a99fe79c4185a71494957018bf1b77dbc33cc548cc7a71ee4ee6",
+    "services/hub/replay_parts_worker_runtime_v5.py": "7a4ea2180cc2f5dd732591bce30b4f240a8a1eb6d7c415bdd92955c782fbd1d5",
+    "services/hub/replay_video_browser.py": "510a0649955f611279670761c9c9905d10bb4bb9584b5e7ab994753875b7776f",
+    "services/hub/replay_video_cover.py": "51f4367d9fc7a94cb88d95a169f9dce1e105f585f0d4c18a79964880494e3527",
+    "services/hub/replay_video_web.py": "d82ef20a0e990d835577b0737cf2eefd2324b4215026352963694ee18f0e1046",
+    "services/hub/replay_worker_runtime.py": "e593e5d9024007afa36adb9577f9dfe5d31ac8a627f85046c9413d4e716e70c2",
+    "services/hub/reply_evidence.py": "2407e849a1c8ec55e64d1a4923944a7e6a339415a89c420371fa7e58b822fa99",
+    "services/hub/reply_evidence_v2.py": "a3b6466b4f9c0cc0e76a76643ed73e30afe3164a118cb97a3b5f15ab80ce1e45",
+    "services/hub/resource_wait_v1.py": "0527e716782a5217436822d4157f282b2ac235c49d7a070a9fe088b2cde2fb38",
+    "services/hub/review_protocol.py": "97404a982abb297a9cc40418934665c5c7e3049ba5a8b7c450cbf36af4c7e008",
+    "services/hub/review_signer.py": "78b64f3a567e9cb03b2f072e3dc13a37878e5452ffb0adc9b03d40315f2c4c7b",
+    "services/hub/short_video_web.py": "ca7f6c3530a9495ce276db4bfa3d11d50cad062a55d4d4e2c33973f73437db3b",
+    "services/hub/source_controls.py": "3ec8fca0cf158de20c438a65b9a88ef6b0011b1c7010869ab856990804b581ad",
+    "services/hub/source_receipts.py": "66fb5a8d3fc7efe67b51f726c04dd16360f46cdb5df86ac92907aa78d9dc2b01",
+    "services/hub/supervised_web.py": "5f3e1ec6ba1eb5d4cda501ede1a20c8f6e6319acaa85e994ffbda1dc0359457e",
+    "services/hub/translation_revision.py": "03594eb9c84656e3279cd806cc888d35f5a465883739cd75d1291b57596829b6",
+    "services/hub/tweet_reviews.py": "34a3908a388efe8dff3f5c2721f3237c493a248d745ccdafd95008b345eadb24",
+    "services/hub/verified_track_release_v4.py": "629c69acc7a8c37a6304c3b0b86221b1d721af719ee5ef33fb7deee219c7fa02",
+    "services/hub/video_pipeline.py": "d58c5d3adf2fdec889c06b2e01b318708ef37ada41809e833662afac1f635b71",
+    "services/hub/video_retention_refresh_v1.py": "f43e0d19d6bc494621f5eeff1687c6f7b5785810b5bc90185879c8b7071c17e7",
+    "services/hub/video_retention_scheduler_v2.py": "194513fdc3fe96608c10ead71dc5bac0d4e44c1e651f9557bb552d0b7751aef1",
+    "services/hub/video_reviews.py": "8e9e8c3d5c08960b0e53c07bc49a746ec556c72383facd277853c103997127f0",
+    "services/hub/video_source_retention_natural_formats_v3.py": "8ac970acbedff547d39ef55724303f9dc366171394ce3b853d85ac52123cb897",
+    "services/hub/video_source_retention_v2.py": "91c2031401d69c072f66d4bb1c7e88d2f85aac8e5396688df1678230d8229e4c",
+    "services/hub/web_publish.py": "3d2d6a37af8a77878d36dfe85d1fe64bd837302b8a2f8d10e1da7bc01e655751",
+    "services/hub/web_queue.py": "dd3b56fe449293f0e27e8eb811e5e916e66918b11988fae30ea4004ac1e0c6af",
+    "services/hub/web_source.py": "88bf43628169b2fb65e7d691b512e17318f02df1129fb0163416578b21f3651f",
+    "services/hub/worker.py": "5f9ae7942665a9fb5718af3894fdc1934c4c225be65f43c79c06fbd4a6d66190",
+    "services/hub/x_api_discovery.py": "5216b57a7ea70dd8f08331303d68a5cf116e0c80da828d1578a6de25bf136564",
+    "services/hub/youtube_access.py": "595143caa5787b33f1ade8f541f69f5d72f97d6489507fa739c761ee4a87a7ba",
+    "services/hub/youtube_credentials.py": "44d4e0a71988ffcbb30e1bd93b6c5a76648f2d0a8658eca4068d529ca6614d52",
+    "services/hub/youtube_download.py": "bf23f72e176e80a44219f6ed02f70db4bec77583b95e987497d29007a2d3a7ae",
+    "services/hub/youtube_download_v2.py": "76f14796fb3d9b9641099ef2cc59c38f207989ede8acd7e88d678e43315b52d6",
+    "services/hub/youtube_download_v3.py": "fbabef820c284ed832671fc7b0bcab874b033c7bbae97ff7b62f8362fad87132",
+    "services/hub/youtube_download_v4.py": "566e8796510d698f7f699ce87c83ed2f37a83aad714d2f4818dbaa18fca2d338",
+    "services/hub/youtube_highest_plan_v2.py": "cb4cbeda699dd282cd196291c8cf2a16799ab9b2b00c4c268f7745a35f2e6091",
+    "services/hub/youtube_monitor.py": "5466acf7505c2808ea00e478836b76ad79ebf5d0693350f2da5be5b0739dc75b",
+    "services/hub/youtube_natural_plan_v3.py": "b6fb2c72a0ef1634a46bb31ef3784a751b0655c42a91279c7edca9f9dcc164a5",
+    "services/hub/youtube_readiness_v3.py": "1e2173ee546a9f59a664148de1dbdab79f8f19e3dcf354bd315f420a09a31c93",
+    "services/hub/youtube_readiness_v4.py": "86572e7ed9907da339134ef403f0231522cb9b925a26d0188862fa90f49ffe33",
+    "adapters/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "adapters/assets.py": "bd04b88bd88c1a629b9cfae52280bc517b06d641a78ed9d63498e30475b7baa6",
+    "adapters/bilibili.py": "0587284b03a42351416c778e935ff29330de2fcdedb082a336f4ab9338f828b0",
+    "adapters/bilibili_web_video.py": "cacaa232336ab395f1f2d64705ab0791f4e785a62214b0b6bb744b069261f918",
+    "adapters/cloudbase_backup.py": "9ea003479b4f702f64797c132c8c953d7c62eca20402a4b01109c68e7e7f0228",
+    "adapters/cloudbase_cos_backup.py": "22a7be1803e4da5cf23536ae7a931fbe709b01d2e145af82f0c7a373c41ff718",
+    "adapters/compositor.py": "745d56e7954a97395e174e3fc4338a7069d720ccad472da24e175e1b7bdd3b8d",
+    "adapters/http.py": "28e68b1ed5017e1c51dee2d77a6edaf8d1ca7833d2b60b82a628c7fa5e5a8250",
+    "adapters/machine_compositor.py": "c7c737248ba68bb8d54e4b25d0bebc4acf8a3975bb89e363d0b8085e3126422c",
+    "adapters/media_probe.py": "251bbcbe9aeac15f04e75cc80c6a7a0e8b2d2af030e0cb5afdc0a14b7724ba40",
+    "adapters/media_tools.py": "0d8a4d8e8cb1f57dc0e7bda4d0375a5058469107ec6fbd9f82fb8a0fb8054253",
+    "adapters/model.py": "c2353714bc43e342df4add6359fea90c9ebd100d4dd62740eeab7a684b1afe94",
+    "adapters/official_photo_url.py": "30151bff471f4bda056fe0c1f810e398995efffcc960ca6a5b7b1d887f45ab3b",
+    "adapters/reply_compositor.py": "c07237142a5fc1cd3b105b8815c59a80812678657a64f52613706a0452abaeeb",
+    "adapters/safe_https.py": "8d393985e41f2409e9a1fa738e3ed2d2842d7dc4bd02ebe9c79a25bb9b01149f",
+    "adapters/video.py": "5b3a0609dfc0bdafb17ab52d39595857e0694417f999f57ebfc46b84c917f768",
+    "adapters/x.py": "28d1459fe2eeba3cb4a6e6becfe68a60a9d3add20452bc3bbdbbfb5abed5da89",
+    "adapters/youtube.py": "82a1d645a342665188e6cbe53cc2a821b3ff57492e3360f3427ba403dfae1fb0",
+    "adapters/youtube_feed.py": "718d398f92eb425c2ae4165a9756b05840820325f0f4d665b06398e5f26ed5aa",
+    "adapters/youtube_public_material.py": "e95224eda5e4153bfc1cae47d31e8c8d3bc43ecec7369b22cde10222f4ac4dfb",
+    "adapters/youtube_readiness_evidence_v3.py": "6ef1b7bb3d75b9bbd42992cade469607d564ce9b87376dbb7c741062c0fc570e",
+    "adapters/ytdlp_highest_v2.py": "41bd43d83ba9e6db44f462799c09ec075b292bb095fc1345b5d34282615129f7",
+    "adapters/ytdlp_natural_plan_v3.py": "7fa9553b2f4d24d9d6412937b49980c48443e60019757f20d2b4fbe4891f193d",
+    "adapters/ytdlp_natural_readiness_v3.py": "ccb6a09122f87450704da5bf505f3b83525a8df9b7463c7352924e959f38e1fa",
+    "adapters/ytdlp_natural_v3.py": "7ce79506d7e2fa52d63935c80a7c4a0a87f4f92f4fd79908ac6bd8ad0cecf1a0",
+    "adapters/ytdlp_replay.py": "c7244476c73548eb3e57ef79f7016279c206870b9486f58cf4300e2967ae6180",
+    "adapters/ytdlp_whole_plan_v4.py": "bae81772b0e2c2a09bcdb4ac5adc40a4bdf0ad036acb5e274e9f350d8171d6b4",
+    "adapters/ytdlp_whole_readiness_v4.py": "1d8feb9bfcd90ca267540fc78e33914569bf3cde8d1b9c376c9819af389acf9c",
+    "adapters/ytdlp_whole_v4.py": "acaae8151dfa916be4f2dbd843456d11b35247c9d496c9dd1863aeff7cb835d5",
+    "scheduler/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "scheduler/migrations/001_initial.sql": "4cada95a6a14a816f1bb2e09e6f2490144678ba1e8d4ab1e44abf0f0f46e19dd",
+    "scheduler/migrations/002_provider_checkpoints.sql": "bc461eef17740c97e3e65afb0a76d1705384e46e5fd41fb97452d1bf10cadc4a",
+    "scheduler/migrations/003_publication_reviews.sql": "eb8fc179dac369e8668b199a1f3b5ecde337486427818413953c904c7226468f",
+    "scheduler/migrations/004_usage_details.sql": "41d3e379a60b3c17783e4d1bdecf3a674310389dad6df4ea1b919e581e6a3c6c",
+    "scheduler/migrations/005_youtube_observations.sql": "fd765cb33086a996dbc5c15da114c25aa88f7bbfdb6c882289027e0b435b4a7f",
+    "scheduler/migrations/006_bilibili_uploads.sql": "2e92844d898015069725f4b659d6fbb156d51f296f8fb8773cd66d6cbab9afe3",
+    "scheduler/migrations/007_signed_video_reviews.sql": "2f96d8bab2a6090f13b96934aa6faba3f0ebf482a2d259ac12646ffbb1449b17",
+    "scheduler/migrations/008_bilibili_tokens.sql": "0e4510026d3d024a11c88976a0b359c7b619488a843d1aada7b5342c3a5c24a9",
+    "scheduler/migrations/009_source_receipts.sql": "d7fde2910d156067fb935ecdeccb0f6a91ffcb10544b0ad2be859a8660592355",
+    "scheduler/migrations/010_signed_tweet_reviews.sql": "5a689580655d16ed5dfd5a4ce2e417157b4396f101c29906e8f87e0ed07ab698",
+    "scheduler/migrations/011_model_receipts.sql": "487238cbfc663d5b44bba7d20e21ca4439f28ff581b261744f8ee4b85e0ace7f",
+    "scheduler/migrations/012_web_machine.sql": "61168ef4b4ab53447508557ddfd1e91a5e97d8123a19d98a84c08f96310c141e",
+    "scheduler/migrations/013_source_tombstones.sql": "8dce6e626d8c35b58b8cdb6ee4a7c0d70365afbcb82ea69317278fe14c1527d2",
+    "scheduler/migrations/014_extended_web_source.sql": "dfd5564781e6aaef5cb85a1b47998ddd899a8f953217e3873a992a5ef420bda6",
+    "scheduler/migrations/015_model_request_profiles.sql": "e100495fdf5c286c031cfc071c5d01be0f368302b2bfd7730c1d9202206c2122",
+    "scheduler/migrations/016_api_resource_usage.sql": "dccac18865db21930bb917ae7f9a2b70af7e1c1a75f197b21408716d870d2c6d",
+    "scheduler/migrations/018_youtube_acquisition_access.sql": "75e3f741c30f68c64aae5e7296f054b3403bdc80668d0b2e1ca454ef049384e9",
+    "scheduler/prototypes/reply_machine_v1.sql": "d9867bcc057c96f7c5aa65a74ab4be4f013b4e51afae9dbdb4f2c9d8b09db04a",
+    "scheduler/service.py": "2afcaf01cf53f702768ccf6d90517a4730b25b8bec33ea261d66662f8c4143c4",
+    "requirements.lock": "bb7bfac3c14b222bd4c98f552a23a705b8b8d90e456a255e181df8c21e179614",
+    "pyproject.toml": "7760af9285a16a5609de3107f9c384800e4b8d995802f185d44bd06d85d48fc7"
+  },
+  "changed_files": {
+    "services/hub/budget.py": {
+      "classification": "shared_transport_acquisition_compatible",
+      "changed_functions": [
+        "Budget",
+        "Budget.reserve",
+        "Budget.report"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [
+        "Budget.note_x_receipt"
+      ],
+      "changed_constant_names": [],
+      "source_sha256": "1de68d1a9937e229be76fc5fe2de21ae1814a9cfc0158096f86bc67bd87f827e"
+    },
+    "services/hub/cli.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "main",
+        "runtime"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "8ce8736e4e276a1e30b6114071a33e0e40d773c105a04242c06babaab06d2fd7"
+    },
+    "services/hub/cloudbase_backup_runtime.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "OperationalArchive.build",
+        "OperationalArchive"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [
+        "_oneoff_audit_need",
+        "_oneoff_read",
+        "_oneoff_reference",
+        "_oneoff_reference_scope",
+        "_oneoff_root_metadata",
+        "_oneoff_root_protected",
+        "native_repost_evidence",
+        "oneoff_age_audit",
+        "reference_backfill_audit"
+      ],
+      "changed_constant_names": [
+        "CACHED_BACKFILL_SCOPES",
+        "ONEOFF_AGE_JOB",
+        "ONEOFF_AGE_MODEL",
+        "REFERENCE_BACKFILL_AUDITS",
+        "ONEOFF_AGE_OWNER_RESPONSE",
+        "ONEOFF_AGE_SOURCE",
+        "ONEOFF_AGE_GRANT_KEYS",
+        "REFERENCE_V2_SCOPES",
+        "ONEOFF_AGE_PLAN_KEYS",
+        "ONEOFF_AGE_TARGET"
+      ],
+      "source_sha256": "ed47e411c6f96696b2886c8a6d8379b4f15df9c1b0ed3257d439d1cdc4277099"
+    },
+    "services/hub/machine_tweets.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "MachineTweets",
+        "MachineTweets.policy"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "019502e27a46fd37791d666a7f9f99edbd20378aa574f0dc8d2f479c68faf6cf"
+    },
+    "services/hub/machine_tweets_api.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "MachineTweetsAPIReference._relation_caption",
+        "MachineTweetsAPIReference",
+        "MachineTweetsAPI"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [
+        "MachineTweetsAPI._link_card_caption",
+        "MachineTweetsAPI._relation_caption"
+      ],
+      "changed_constant_names": [],
+      "source_sha256": "c701f00744ccef16b5ee5af4243e603362e7dad905896cdac7558aff97d2d823"
+    },
+    "services/hub/machine_tweets_v2.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "MachineTweetsV2.policy",
+        "MachineTweetsV2"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "90a4618fac039df5fdaacdaea14ba2e5e83ba12f93ad5f8051350b7cab4a2c17"
+    },
+    "services/hub/replay_fifo_v4.py": {
+      "classification": "identity_and_display_binding",
+      "changed_functions": [],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [
+        "UID"
+      ],
+      "source_sha256": "279600d746528fe5de12dcef6d642c4028f2ef104ceebe4867186b7ccc354b50",
+      "ast_equal_after_exact_identity_display_normalization": true
+    },
+    "services/hub/replay_multipart_private_v4.py": {
+      "classification": "identity_and_display_binding",
+      "changed_functions": [
+        "metadata"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [
+        "UID"
+      ],
+      "source_sha256": "db5de80b750fd808715c84e2d13941ffafb68454141f7f65ca5abed233ed5f2e",
+      "ast_equal_after_exact_identity_display_normalization": true
+    },
+    "services/hub/replay_multipart_v4.py": {
+      "classification": "identity_and_display_binding",
+      "changed_functions": [
+        "validate_planning_policy"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [
+        "DEFAULT_POLICY"
+      ],
+      "source_sha256": "3b196519cdda068d7e1b780deb6540318a9b5a624861b96551c643290e723399",
+      "ast_equal_after_exact_identity_display_normalization": true
+    },
+    "services/hub/replay_parts_worker_runtime_v5.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "main"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "7a4ea2180cc2f5dd732591bce30b4f240a8a1eb6d7c415bdd92955c782fbd1d5"
+    },
+    "services/hub/replay_worker_runtime.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [],
+      "live_only_functions": [
+        "load_youtube_key"
+      ],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "e593e5d9024007afa36adb9577f9dfe5d31ac8a627f85046c9413d4e716e70c2"
+    },
+    "services/hub/source_receipts.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "SourceReceipts",
+        "SourceReceipts._parent",
+        "SourceReceipts._official_gate",
+        "SourceReceipts.ingest_official",
+        "SourceReceipts.record"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [
+        "SourceReceipts._official_capture_owner",
+        "SourceReceipts._official_parent_row"
+      ],
+      "changed_constant_names": [],
+      "source_sha256": "66fb5a8d3fc7efe67b51f726c04dd16360f46cdb5df86ac92907aa78d9dc2b01"
+    },
+    "services/hub/web_publish.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "_run_website"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "3d2d6a37af8a77878d36dfe85d1fe64bd837302b8a2f8d10e1da7bc01e655751"
+    },
+    "services/hub/x_api_discovery.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "XAPIDiscovery.__init__",
+        "XAPIDiscovery.run",
+        "XAPIDiscovery"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "5216b57a7ea70dd8f08331303d68a5cf116e0c80da828d1578a6de25bf136564"
+    },
+    "services/hub/youtube_download.py": {
+      "classification": "identity_and_display_binding",
+      "changed_functions": [],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [
+        "CHANNELS"
+      ],
+      "source_sha256": "bf23f72e176e80a44219f6ed02f70db4bec77583b95e987497d29007a2d3a7ae",
+      "ast_equal_after_exact_identity_display_normalization": true
+    },
+    "services/hub/youtube_monitor.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "YouTubeMonitor",
+        "YouTubeMonitor.observe_video",
+        "YouTubeMonitor.live",
+        "YouTubeMonitor.feeds"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "5466acf7505c2808ea00e478836b76ad79ebf5d0693350f2da5be5b0739dc75b"
+    },
+    "adapters/cloudbase_cos_backup.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "CloudBaseCOSStorage._open",
+        "CloudBaseCOSStorage.__init__",
+        "CloudBaseCOSStorage"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "22a7be1803e4da5cf23536ae7a931fbe709b01d2e145af82f0c7a373c41ff718"
+    },
+    "adapters/http.py": {
+      "classification": "shared_transport_acquisition_compatible",
+      "changed_functions": [
+        "ProviderHTTP",
+        "ProviderHTTP.request_recorded"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "28e68b1ed5017e1c51dee2d77a6edaf8d1ca7833d2b60b82a628c7fa5e5a8250"
+    },
+    "adapters/safe_https.py": {
+      "classification": "shared_transport_acquisition_compatible",
+      "changed_functions": [
+        "open_request"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [],
+      "changed_constant_names": [],
+      "source_sha256": "8d393985e41f2409e9a1fa738e3ed2d2842d7dc4bd02ebe9c79a25bb9b01149f"
+    },
+    "adapters/x.py": {
+      "classification": "not_registered_as_acquisition_handler",
+      "changed_functions": [
+        "XOfficial.latest_official",
+        "_build_official_relations",
+        "XOfficial",
+        "_post"
+      ],
+      "live_only_functions": [],
+      "repo_only_functions": [
+        "is_youtube_live_link_card",
+        "native_context_card_notice",
+        "parser_revision"
+      ],
+      "changed_constant_names": [
+        "CONTENT_REJECTIONS"
+      ],
+      "source_sha256": "28d1459fe2eeba3cb4a6e6becfe68a60a9d3add20452bc3bbdbbfb5abed5da89"
+    }
+  },
+  "runtime_checks": {
+    "at": 1794321463.5084229,
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "runtime_test_summary": "47 passed in 1.61s",
+    "preflight_configuration_consistent": true,
+    "read_only_production_config_db": true,
+    "credentials_mounted": false,
+    "external_requests": 0,
+    "production_container_ids_unchanged": true,
+    "source_controls": {
+      "x": [
+        "yuuhi_sendo"
+      ],
+      "youtube": [
+        "UCuDY3ibSP2MFRgf7eo3cojg"
+      ]
+    }
+  },
+  "handler_construction": {
+    "mode": "acquisition_only",
+    "handler_types": [
+      "youtube_replay_download_v4",
+      "youtube_replay_plan_v4",
+      "youtube_replay_readiness_v4",
+      "youtube_replay_refresh_v4"
+    ],
+    "publication_enabled": false,
+    "producer_tick_invoked": false,
+    "worker_once_invoked": false,
+    "store_init_invoked": false
+  },
+  "configuration": {
+    "policy_files": {
+      "replay-fifo-policy-v4.json": {
+        "readable": true,
+        "sha256": "36e8f87ab0a20f365292a47c75a3408a8d2fe4b2e4f502f698886e4a1d3eafd6"
+      },
+      "youtube-whole-replay-download-policy-v4.toml": {
+        "readable": true,
+        "sha256": "3712b7fce9f7278ce9d262ad177a3c40cef77d39a93597bb3a283382b90496ae"
+      },
+      "whole-replay-planning-policy-v4.toml": {
+        "readable": true,
+        "sha256": "47a225bd14a34ac0c97112d57c30af9cc4b8f5376b5aef4dd5080c9dd78a146d"
+      }
+    },
+    "planning_sha256": "aa29d4e6bc242ee80b9e2285a652274eed0d4cda18714ceacb520bb0a770df71",
+    "blockers": [],
+    "source_controls": {
+      "x": [
+        "yuuhi_sendo"
+      ],
+      "youtube": [
+        "UCuDY3ibSP2MFRgf7eo3cojg"
+      ]
+    },
+    "access_policy": {
+      "metadata_interval_seconds": 1.0,
+      "media_interval_seconds": 0.25,
+      "between_downloads_seconds": 60,
+      "rate_limit_cooldown_seconds": 3600,
+      "network_retry_seconds": 60,
+      "network_max_attempts": 3
+    },
+    "configuration_consistent": true
+  },
+  "historical_database": {
+    "access": "read_only_mount",
+    "journal_mode": "wal",
+    "video_job_rows": 1324,
+    "terminal_fifo_rows": 474,
+    "migration_or_reset_performed": false
+  },
+  "limits": [
+    "No clean full regression rerun; 47 targeted tests use actual effective acquisition image and source overlays.",
+    "Nonregistered legacy routes remain in the private image; no deletion or activation inferred.",
+    "Not a fresh build of the full public source tree. Other production service images are not covered by this acquisition-source comparison.",
+    "Natural new replay and within-budget new-host external backup restoration remain separate acceptance items."
+  ]
+}
