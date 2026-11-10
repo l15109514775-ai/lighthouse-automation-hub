@@ -158,6 +158,13 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    verified backup, canary or enabled timer is not this evidence. Preserve errors,
    reservations and the unknown-upload guard. Do not raise budgets or create
    repeated speculative backup operations.
+   The existing 03:30 timer subsequently ran naturally on November 11 and exited
+   successfully at 03:30:02 with the safe budget deferral. Its invocation changed
+   to `48d05c9cc63d4a599623c8f441c4812d`; request reservations and operation counts
+   matched the pre-timer observation, with no unresolved operation or new transfer.
+   The next actual timer is November 12 at 03:30 CST. This proves the scheduled
+   deferral path, not a successful remote backup. See
+   [scheduled deferral evidence](releases/backup-scheduled-deferral-20261111.json).
 
 3. **Owner-authorized cleanup after acceptance.** The subsequent owner instruction
    permits removing the inspected package cache, completed isolated test video,
