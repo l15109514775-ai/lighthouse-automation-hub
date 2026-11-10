@@ -19,6 +19,10 @@ service while leaving healthy tweet/status services running.
 - Record immutable image IDs, effective private Compose manifests, overlays,
   application UID/GID, restricted API-key files, policy hashes and systemd/cron
   state from the current owner. Keep credentials in private transport/storage.
+  Run the [runtime drift audit](production-runtime-audit.md) and transfer the
+  required external code overlays, including discovery-health; copying only the
+  application tree omits files under `/usr/local/lib`. The audit indexes selected
+  file mounts but does not itself copy them or cover every dependency.
 - Validate destination disk capacity against the current DB, required media,
   partial downloads, receipts, profiles and retained recovery copies. Preserve
   the operational free-space floor; never delete unverified source material to

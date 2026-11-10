@@ -88,3 +88,13 @@ run. A naturally arriving Chise replay has not yet completed through the new
 production queue. Those observations must not be replaced by synthetic tests or
 by retrying a platform-restricted source. This is a compatibility checkpoint,
 not a declaration that the full goal is complete.
+
+## Whole-running-release declaration check
+
+The later [production runtime audit](production-runtime-audit.md) compared all
+eight active services against both current private Compose manifests. Declared
+runtime fields matched, as did 33 individual executable-file mounts (30 distinct
+host source files), including discovery-health added after this acquisition source
+checkpoint. No production service was changed. This closes the selected-field
+manifest/overlay drift check; it is not full cross-service source provenance or
+an archive/restore test of every service.

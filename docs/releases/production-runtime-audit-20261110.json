@@ -1,0 +1,483 @@
+{
+  "version": "compose-runtime-audit-v1",
+  "at": 1794324323.9131231,
+  "services": {
+    "api": {
+      "checks": {
+        "image": true,
+        "running": true,
+        "user": true,
+        "working_dir": true,
+        "command": true,
+        "read_only": true,
+        "mem_limit": true,
+        "memswap_limit": true,
+        "cpus": true,
+        "pids_limit": true,
+        "init": true,
+        "cap_drop": true,
+        "security_opt": true,
+        "restart": true,
+        "restart_count_limit": true,
+        "logging": true,
+        "explicit_environment": true,
+        "mount_targets": true,
+        "bind_mounts": true
+      },
+      "matches": true,
+      "image": "sha256:cbc6cd5076960eba0adb723968bd10257c6691d62e3554cf48ae0ff0df5d8d10",
+      "container_id": "8db6a97d3c34e8102246f58d1ff84ad90b4fe945968112e33d0954ba787a4add",
+      "restart_count": 0,
+      "health": "healthy",
+      "explicit_environment_count": 28,
+      "code_overlays": [
+        {
+          "target": "/opt/lighthouse-hub/adapters/model.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/adapters/model.py",
+          "sha256": "c2353714bc43e342df4add6359fea90c9ebd100d4dd62740eeab7a684b1afe94",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/adapters/publication_window.mjs",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/adapters/publication_window.mjs",
+          "sha256": "55e1d9a21a6d9ade40ba03f2936531e75b701217e6a0f8666dcae4e881a4818b",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/adapters/render_machine_official_relations.mjs",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/adapters/render_machine_official_relations.mjs",
+          "sha256": "c456812d18aae0b40c79fca0c94ddf1f4f68c59c67d3a53f48677c700fb1f205",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/adapters/x.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/adapters/x.py",
+          "sha256": "28d1459fe2eeba3cb4a6e6becfe68a60a9d3add20452bc3bbdbbfb5abed5da89",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/config.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/config.py",
+          "sha256": "ba1e293d0119398f4b9952533e2b4719565db1d7217680fe89534957cda33e47",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/machine_routes.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/machine_routes.py",
+          "sha256": "77a1823a875546592bf8490ff2e64c79d1c85cf9d55995bfa55be6046ad74417",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/machine_tweets_api.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/machine_tweets_api.py",
+          "sha256": "c701f00744ccef16b5ee5af4243e603362e7dad905896cdac7558aff97d2d823",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/machine_tweets_v2.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/machine_tweets_v2.py",
+          "sha256": "90a4618fac039df5fdaacdaea14ba2e5e83ba12f93ad5f8051350b7cab4a2c17",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/model_contract.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/model_contract.py",
+          "sha256": "a2ae9ba10997cc0b2b6b5e2d548a917165967275462336bb6b5289f46418ab26",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/model_revision.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/model_revision.py",
+          "sha256": "233851f607849633f6cd008737b2c78df1cf66389b2ca189b4cb00be8ac340a4",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/pipelines.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/pipelines.py",
+          "sha256": "20349d8125ce5e1cb2447d545b078a47b5d327392c55b42f60d06e9d91754336",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/readiness.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/readiness.py",
+          "sha256": "7d33036614389c22a813abe3b49df72a0ef7c1ba85807faef08baea183310cff",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/source_receipts.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/source_receipts.py",
+          "sha256": "66fb5a8d3fc7efe67b51f726c04dd16360f46cdb5df86ac92907aa78d9dc2b01",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/x_api_discovery.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/74ea2516efc7925264fc225e50623f23d348497c4f4fbd264f8d16b31d664951/services/hub/x_api_discovery.py",
+          "sha256": "5216b57a7ea70dd8f08331303d68a5cf116e0c80da828d1578a6de25bf136564",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/youtube_download.py",
+          "source": "/usr/local/lib/lighthouse-video-pilot-v1/youtube_download.py",
+          "sha256": "bf23f72e176e80a44219f6ed02f70db4bec77583b95e987497d29007a2d3a7ae",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/youtube_monitor.py",
+          "source": "/usr/local/lib/lighthouse-youtube-monitor-v1/youtube_monitor.py",
+          "sha256": "b286819cd46a1092a292615ba81c76dd589b796016f9147ea8b893a7d2e95e8c",
+          "container_matches_host": true
+        }
+      ]
+    },
+    "scheduler": {
+      "checks": {
+        "image": true,
+        "running": true,
+        "user": true,
+        "working_dir": true,
+        "command": true,
+        "read_only": true,
+        "mem_limit": true,
+        "memswap_limit": true,
+        "cpus": true,
+        "pids_limit": true,
+        "init": true,
+        "cap_drop": true,
+        "security_opt": true,
+        "restart": true,
+        "restart_count_limit": true,
+        "logging": true,
+        "explicit_environment": true,
+        "mount_targets": true,
+        "bind_mounts": true
+      },
+      "matches": true,
+      "image": "sha256:cbc6cd5076960eba0adb723968bd10257c6691d62e3554cf48ae0ff0df5d8d10",
+      "container_id": "9265c18adcac8fe872609aed3024f9b74ec15badb56e73f69402945b68fbcf4a",
+      "restart_count": 0,
+      "health": null,
+      "explicit_environment_count": 28,
+      "code_overlays": [
+        {
+          "target": "/opt/lighthouse-hub/scheduler/service.py",
+          "source": "/usr/local/lib/lighthouse-x-relations-v1/normal-v4-scheduler/scheduler/service.py",
+          "sha256": "2afcaf01cf53f702768ccf6d90517a4730b25b8bec33ea261d66662f8c4143c4",
+          "container_matches_host": true
+        }
+      ]
+    },
+    "tweet-worker": {
+      "checks": {
+        "image": true,
+        "running": true,
+        "user": true,
+        "working_dir": true,
+        "command": true,
+        "read_only": true,
+        "mem_limit": true,
+        "memswap_limit": true,
+        "cpus": true,
+        "pids_limit": true,
+        "init": true,
+        "cap_drop": true,
+        "security_opt": true,
+        "restart": true,
+        "restart_count_limit": true,
+        "logging": true,
+        "explicit_environment": true,
+        "mount_targets": true,
+        "bind_mounts": true
+      },
+      "matches": true,
+      "image": "sha256:cdc38939b79d7f7542e6d4a4b6cb2ba0baad3ff5ed7130ec7cde4adc9db3bfd3",
+      "container_id": "841c79e5e75b7138f37a5ed5389d835755759586715b7fcfcb400884f12d5d73",
+      "restart_count": 0,
+      "health": null,
+      "explicit_environment_count": 28,
+      "code_overlays": [
+        {
+          "target": "/opt/lighthouse-hub/adapters/render_machine.mjs",
+          "source": "/opt/lighthouse-hub/backups/owner-backfill-code/render_machine.mjs",
+          "sha256": "f18e92974926ea1d4db07ce1a29becf7931b4ab69a99f76fb45f86b92326cb60",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/adapters/render_machine_official_relations.mjs",
+          "source": "/opt/lighthouse-hub/backups/owner-backfill-code/render_machine_official_relations.mjs",
+          "sha256": "6d7ae2ee8ddec10472c7c4c511d3d184d75693c50a6556c0863fd2d95c31695f",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/machine_tweets.py",
+          "source": "/opt/lighthouse-hub/backups/owner-backfill-code/machine_tweets.py",
+          "sha256": "019502e27a46fd37791d666a7f9f99edbd20378aa574f0dc8d2f479c68faf6cf",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/source_controls.py",
+          "source": "/usr/local/lib/lighthouse-source-controls/shared/services/hub/source_controls.py",
+          "sha256": "3ec8fca0cf158de20c438a65b9a88ef6b0011b1c7010869ab856990804b581ad",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/web_publish.py",
+          "source": "/opt/lighthouse-hub/backups/owner-backfill-code/web_publish.py",
+          "sha256": "96050918212ff515cdcfb02c665f30995424f6acc767565d58d62c523aba7716",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/worker.py",
+          "source": "/usr/local/lib/lighthouse-source-controls/tweet-worker/services/hub/worker.py",
+          "sha256": "bc1d613fc09407e971542d65b1c955727653719ead1bebf3f4ec20eed5b260d9",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/x_api_discovery.py",
+          "source": "/usr/local/lib/lighthouse-source-controls/tweet-worker/services/hub/x_api_discovery.py",
+          "sha256": "b3a131db30895d2a1320b3a943b8cec5bae7b0f9ce1b47555684e00a25eebed8",
+          "container_matches_host": true
+        }
+      ]
+    },
+    "system-worker": {
+      "checks": {
+        "image": true,
+        "running": true,
+        "user": true,
+        "working_dir": true,
+        "command": true,
+        "read_only": true,
+        "mem_limit": true,
+        "memswap_limit": true,
+        "cpus": true,
+        "pids_limit": true,
+        "init": true,
+        "cap_drop": true,
+        "security_opt": true,
+        "restart": true,
+        "restart_count_limit": true,
+        "logging": true,
+        "explicit_environment": true,
+        "mount_targets": true,
+        "bind_mounts": true
+      },
+      "matches": true,
+      "image": "sha256:a1337d4d7e3016d28e934135b1d428d0b6dc39a9d8bc2d71ead20307034314ce",
+      "container_id": "377bcc67b7b50f9c080efb2e5abc36f0a24659351ae396dfdda9837046a63a5f",
+      "restart_count": 0,
+      "health": null,
+      "explicit_environment_count": 28,
+      "code_overlays": [
+        {
+          "target": "/opt/lighthouse-hub/services/hub/config.py",
+          "source": "/usr/local/lib/lighthouse-video-pilot-v1/config.py",
+          "sha256": "f55248558e7582d3d6a38165512704886e4a3f7554ce8b3b8325edf65f80888c",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/discovery_health.py",
+          "source": "/usr/local/lib/lighthouse-discovery-health-v1/discovery_health.py",
+          "sha256": "1cca91994cf89b66506d2f069a4052d7aab32c3b89cccb42b0069b98f58c5b72",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/maintenance.py",
+          "source": "/usr/local/lib/lighthouse-discovery-health-v1/maintenance.py",
+          "sha256": "e7a4056c522a4a35b0e89f3fd541efe4c185fd9e16ae505b279881849009c8b8",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/source_controls.py",
+          "source": "/usr/local/lib/lighthouse-source-controls/shared/services/hub/source_controls.py",
+          "sha256": "3ec8fca0cf158de20c438a65b9a88ef6b0011b1c7010869ab856990804b581ad",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/worker.py",
+          "source": "/usr/local/lib/lighthouse-source-controls/system-worker/services/hub/worker.py",
+          "sha256": "15cec4847f838b885704d589b9e70beae9d75ab249e25255d9564025d35ca97c",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/youtube_download.py",
+          "source": "/usr/local/lib/lighthouse-video-pilot-v1/youtube_download.py",
+          "sha256": "bf23f72e176e80a44219f6ed02f70db4bec77583b95e987497d29007a2d3a7ae",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/youtube_monitor.py",
+          "source": "/usr/local/lib/lighthouse-source-controls/system-worker/services/hub/youtube_monitor.py",
+          "sha256": "a21f667fd45ffedc2f4d7f883da4dc057bf0ebac2461f39a9536966547ed4c2b",
+          "container_matches_host": true
+        }
+      ]
+    },
+    "subtitle-ingest": {
+      "checks": {
+        "image": true,
+        "running": true,
+        "user": true,
+        "working_dir": true,
+        "command": true,
+        "restart": true,
+        "restart_count_limit": true,
+        "logging": true,
+        "explicit_environment": true,
+        "mount_targets": true,
+        "bind_mounts": true
+      },
+      "matches": true,
+      "image": "sha256:6cbe4511f4a9782ea996ebc7d20acb87041e6b1bd841797a981af22831f0a0f0",
+      "container_id": "0c997bed64a5a864c1d8f7a0622c37c003ebc7bea8976f1798d7b57660d03a21",
+      "restart_count": 0,
+      "health": null,
+      "explicit_environment_count": 23,
+      "code_overlays": []
+    },
+    "lighthouse-observer-mcp-v1": {
+      "checks": {
+        "image": true,
+        "running": true,
+        "user": true,
+        "working_dir": true,
+        "command": true,
+        "entrypoint": true,
+        "stdin_open": true,
+        "read_only": true,
+        "mem_limit": true,
+        "memswap_limit": true,
+        "cpus": true,
+        "pids_limit": true,
+        "cap_drop": true,
+        "security_opt": true,
+        "restart": true,
+        "restart_count_limit": true,
+        "logging": true,
+        "explicit_environment": true,
+        "mount_targets": true,
+        "bind_mounts": true
+      },
+      "matches": true,
+      "image": "sha256:5c5391b8bf313525f6fc7c43db40ad6832b6c6b431e58a5aeb0bcf04bdc4e981",
+      "container_id": "2bcca3b125cc8be1c66542b4062a29cf88e4fd05bf28d592bc862d65fbf0c506",
+      "restart_count": 0,
+      "health": null,
+      "explicit_environment_count": 10,
+      "code_overlays": []
+    },
+    "lighthouse-observer-tunnel-v1": {
+      "checks": {
+        "image": true,
+        "running": true,
+        "user": true,
+        "working_dir": true,
+        "command": true,
+        "entrypoint": true,
+        "read_only": true,
+        "mem_limit": true,
+        "memswap_limit": true,
+        "cpus": true,
+        "pids_limit": true,
+        "cap_drop": true,
+        "security_opt": true,
+        "restart": true,
+        "restart_count_limit": true,
+        "logging": true,
+        "explicit_environment": true,
+        "mount_targets": true,
+        "bind_mounts": true
+      },
+      "matches": true,
+      "image": "sha256:5c5391b8bf313525f6fc7c43db40ad6832b6c6b431e58a5aeb0bcf04bdc4e981",
+      "container_id": "5a4d5bc805067edb9b3e9a6cdf5cde49156de3a6db465307abba50b7e6bd6d8d",
+      "restart_count": 0,
+      "health": null,
+      "explicit_environment_count": 9,
+      "code_overlays": []
+    },
+    "replay-acquisition-worker": {
+      "checks": {
+        "image": true,
+        "running": true,
+        "user": true,
+        "command": true,
+        "read_only": true,
+        "mem_limit": true,
+        "cpus": true,
+        "pids_limit": true,
+        "init": true,
+        "cap_drop": true,
+        "security_opt": true,
+        "restart": true,
+        "restart_count_limit": true,
+        "logging": true,
+        "explicit_environment": true,
+        "mount_targets": true,
+        "bind_mounts": true
+      },
+      "matches": true,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "container_id": "328a6731c9c687667519d1418012f7aac13b470e85212819c29f088530ca2175",
+      "restart_count": 0,
+      "health": "healthy",
+      "explicit_environment_count": 4,
+      "code_overlays": [
+        {
+          "target": "/opt/lighthouse-hub/services/hub/source_controls.py",
+          "source": "/usr/local/lib/lighthouse-source-controls/shared/services/hub/source_controls.py",
+          "sha256": "3ec8fca0cf158de20c438a65b9a88ef6b0011b1c7010869ab856990804b581ad",
+          "container_matches_host": true
+        },
+        {
+          "target": "/opt/lighthouse-hub/services/hub/worker.py",
+          "source": "/usr/local/lib/lighthouse-source-controls/replay-acquisition-worker/services/hub/worker.py",
+          "sha256": "5f9ae7942665a9fb5718af3894fdc1934c4c225be65f43c79c06fbd4a6d66190",
+          "container_matches_host": true
+        }
+      ]
+    }
+  },
+  "matches": true,
+  "provider_calls": 0,
+  "limits": [
+    "Selected declared fields only; no database or provider validation",
+    "Port/network/healthcheck/tmpfs contents not compared",
+    "Inherited image environment not compared; explicit environment compared without disclosure",
+    "No directory, secret, configuration content or media copied"
+  ],
+  "tool_sha256": "ffb4d5a24f4c9fb3e82f3adbbe1716aa7f5fa4fcbf7d5368f4b0ee7022f4122f",
+  "local_tests": "10 passed",
+  "production_container_ids_unchanged": true,
+  "earlier_attempts": [
+    {
+      "run": "v1",
+      "result": "Preflight refused missing explicit container_name; no changes"
+    },
+    {
+      "run": "v2",
+      "result": "Comparator refused null inherited entrypoint; no changes"
+    },
+    {
+      "run": "v3",
+      "result": "Seven services matched; seccomp path vs Docker embedded profile required semantic comparison"
+    },
+    {
+      "run": "v4",
+      "result": "Eight services matched; profile JSON content compared, no security policy changed"
+    }
+  ],
+  "private_overlay_capture": {
+    "version": "private-runtime-code-overlays-v1",
+    "at": 1794324490.2641528,
+    "archive": "code-overlays.tar",
+    "archive_sha256": "056e40f609eac021374cdd772fe9e82a1be00505f94ac945063bb288f30c2ac6",
+    "archive_bytes": 389120,
+    "file_count": 30,
+    "audit_sha256": "69bd1486a08a0a996bb0debbc462838d4993f2e4dcf28fc23b834966072be89d",
+    "isolated_file_restore_verified": true,
+    "containers_recreated": false,
+    "provider_requests": 0,
+    "scope": "Individual code overlays only; no image, data, config, directory mount or credentials copied; private artifact, not redistribution audit.",
+    "local_copy_hash_verified": true
+  }
+}
