@@ -183,7 +183,9 @@ def test_refresh_principal_cannot_invoke_unbound_write_or_become_worker(refresh)
 
 
 def test_daily_lookup_reservations_are_persistent_even_for_unknown_network_results(refresh):
-    f = refresh;browser = OwnedBrowser(f, change='network');clock = [time.time()]
+    f = refresh;browser = OwnedBrowser(f, change='network')
+    day = datetime(2026, 1, 15, tzinfo=timezone.utc)
+    clock = [(day + timedelta(hours=12)).timestamp()]
     for _ in range(module.PER_JOB_DAILY_LIMIT):
         with pytest.raises(HubError, match='REPLAY_BROWSER_RESPONSE_UNKNOWN'):
             maintenance(f, browser=browser, clock=lambda:clock[0]).refresh_once(f['id'], authorization_id=f['auth']['authorization_id'])
@@ -192,6 +194,11 @@ def test_daily_lookup_reservations_are_persistent_even_for_unknown_network_resul
         maintenance(f, browser=browser, clock=lambda:clock[0]).refresh_once(f['id'], authorization_id=f['auth']['authorization_id'])
     assert len(browser.calls) == module.PER_JOB_DAILY_LIMIT
     assert f['store'].query('SELECT COUNT(*) n FROM video_retention_refresh_lookups_v1')[0]['n'] == module.PER_JOB_DAILY_LIMIT
+    clock[0] = (day + timedelta(days=1)).timestamp()
+    with pytest.raises(HubError, match='REPLAY_BROWSER_RESPONSE_UNKNOWN'):
+        maintenance(f, browser=browser, clock=lambda:clock[0]).refresh_once(f['id'], authorization_id=f['auth']['authorization_id'])
+    assert len(browser.calls) == module.PER_JOB_DAILY_LIMIT + 1
+    assert f['store'].query('SELECT COUNT(*) n FROM video_retention_refresh_lookups_v1')[0]['n'] == len(browser.calls)
 
 
 def test_background_heartbeat_is_dedicated_and_parent_rows_stay_unchanged(refresh):
