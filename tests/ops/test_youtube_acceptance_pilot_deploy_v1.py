@@ -89,8 +89,9 @@ def test_canonical_text_only_adds_six_read_only_binds_and_preserves_profile(posi
     assert out.count(b'/usr/local/lib/lighthouse-video-pilot-v1/youtube_download.py') == 3
     assert out.count(b'"read_only":true') == 6
     assert out.count(b'"create_host_path":false') == 6
-    assert out.count(b'./data/browser-profiles/youtube:/opt/lighthouse-hub/data/browser-profiles/youtube:ro') == 1
-    for name in ('scheduler', 'tweet-worker'):
+    profile = b'./data/browser-profiles/youtube:/opt/lighthouse-hub/data/browser-profiles/youtube:ro'
+    assert raw.count(profile) >= 1 and out.count(profile) == raw.count(profile)
+    for name in ('scheduler', 'tweet-worker', 'replay-acquisition-worker'):
         def block(text):
             segment = text.split(('  '+name+':\n').encode(), 1)[1]
             return re.split(rb'\n  [A-Za-z0-9_-]+:\n', segment, maxsplit=1)[0]
