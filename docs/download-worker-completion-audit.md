@@ -1,6 +1,6 @@
 # Download Worker 2.0 — current completion audit
 
-Checkpoint: 2026-11-11, following qualified recovery commit `a925423`.
+Checkpoint: 2026-11-11, after the independent image restore and terminal public-image test run.
 **Overall goal remains active.** This index separates current evidence from the
 historical failed/blocked entries retained in the long acceptance log. It does
 not turn a successful probe, file restore or running container into an end-to-end
@@ -11,6 +11,26 @@ operators to be retired and closed-history failures to remain if they do not
 affect current tasks. Historical records and publication semantics still must be
 preserved. The new host is the sole production owner; the old host remains fenced.
 Yuuhi's tweet/replay forwarding is paused; only Chise is active.
+
+The new host remains on the repaired incumbent acquisition image. The source-built
+candidate was restored from the operator's verified image export on the former
+Tencent host. Its two-file systemd deployment configuration and fallback were
+staged on the new host. Neither step changed production ownership. [Independent
+image restore](releases/candidate-independent-import-20261111.json) and
+[systemd staging](releases/candidate-systemd-stage-20261111.json).
+
+The completed public-image Linux run collected 4,733 cases. It reported 4,699
+passed, 12 failed, 20 setup errors and two conditional skips, plus six passing
+subtests. Thirty failures/errors matched the historical, owner-deferred cases
+by test identity and diagnostic: 22 retired X visual cases, six disabled native
+multipart cases and two closed one-off capture cases. Four additional historical
+one-off inventory tests were absent from this checkout. The publisher GUI case
+failed in the acquisition image and passed separately in the publisher image.
+One quota test inadvertently advanced the clock across UTC midnight. Its focused
+reproduction failed before correction; the corrected test passed on the same
+image for the within-day limit and the next-day reset. Only the test changed.
+Raw suite status remains exit 1. The two skipped cases and the per-case results
+are listed in the [terminal test record](releases/source-regression-result-20261111.json).
 
 ## Requirement-to-evidence review
 

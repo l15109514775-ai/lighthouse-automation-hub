@@ -1,0 +1,299 @@
+{
+  "suite": {
+    "source_commit": "35e695e48bfbe656cb0ee434e3044b1880307fcf",
+    "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "test_directory": "tests",
+    "xml_sha256": "8af87396ef1383a62c336150aad362bbd64823a6d6d208d1f4828eae208b3d61",
+    "counts": {
+      "passed": 4699,
+      "failure": 12,
+      "skipped": 2,
+      "error": 20
+    },
+    "junit_tests_attribute_including_subtests": 4739,
+    "passed_subtests": 6,
+    "exit": 1,
+    "oom_killed": false,
+    "start": "2026-11-10T22:23:25.391008778Z",
+    "finish": "2026-11-10T23:34:11.071051433Z",
+    "production_containers_preserved": 8,
+    "launch_snapshot_ids_outside_verified_service_set": [
+      "2ff92dc80d86fc362b2dbf59df81e2fe53338cb27cebb25373fdaee02988a1ac"
+    ],
+    "independent_production_changes": [
+      "incumbent acquisition worker recreated for the separately recorded readiness guard correction"
+    ],
+    "private_code_bindings": false,
+    "network": "none",
+    "production_data_or_credentials": false
+  },
+  "test_inputs": {
+    "sandbox_sha256": "6fbfe3f512f65445b8bbf468034a3bc0fee95dd1734916e0e3dcb1a75b101e3a",
+    "archives": {
+      "historical-deployment-source-inputs.tar": "7903c13bb927b3a03d6d3c5b3213365c298b871381ae35e8c9dc00b5795bc93d",
+      "historical-retention-v2c-source-inputs.tar": "070517adad0216df3eb9e2da5bf599bca41d0fe25b9a266f9c502044da898e13",
+      "video-natural-formats-v3-overlay.tar.gz": "d2cbbacb026f89f853c29e5bb3fc1d9a77ec58e4b69e06300abff146dc0a2994",
+      "video-source-tracks-v2-overlay.tar.gz": "51b6f980f25bfe18da248625939873dc33078125ecbe9c2cd49b7624aa9f15ff"
+    },
+    "overlay_sources": {
+      "scripts/ops/prune_cloudbase_verified_clones_v1.py": "d181d970fdd0704ccc7fe4cefe1dc145835b63e115f87e9f2bd86ead3c7719ab",
+      "tests/ops/test_prune_cloudbase_verified_clones_v1.py": "296a62556c305da08a026cab521dba47da4cb8a48db2bab3a8203c66cee4b528",
+      "tests/test_cloudbase_backup_runtime.py": "0fbe37e8374cd64cd2bd413749d4c27a19ac1a37e55690de25e6980f10e51ed5"
+    }
+  },
+  "dispositions": {
+    "closed_one_off_operators": 2,
+    "disabled_legacy_native_multipart": 6,
+    "publisher_gui_verified_in_owning_image": 1,
+    "retired_x_visual_browser_fixtures": 22,
+    "test_clock_corrected_and_rerun": 1
+  },
+  "failed_cases": [
+    {
+      "test": "tests.ops.test_capture_two_reference_sources_v2::test_real_recorded_capture_has_same_owner_receipts_original_time_and_no_models_or_publish",
+      "state": "failure",
+      "disposition": "closed_one_off_operators",
+      "verified_diagnostic": "SOURCE_REQUEST_NOT_SUPPORTED"
+    },
+    {
+      "test": "tests.ops.test_capture_two_reference_sources_v2::test_tampered_descriptor_raw_hash_cannot_qualify",
+      "state": "failure",
+      "disposition": "closed_one_off_operators",
+      "verified_diagnostic": "SOURCE_REQUEST_NOT_SUPPORTED"
+    },
+    {
+      "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[complete]",
+      "state": "failure",
+      "disposition": "disabled_legacy_native_multipart",
+      "verified_diagnostic": "MULTIPART_NATIVE_SUBMISSION_MODE_NOT_VERIFIED"
+    },
+    {
+      "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[wrong_ticket]",
+      "state": "failure",
+      "disposition": "disabled_legacy_native_multipart",
+      "verified_diagnostic": "MULTIPART_NATIVE_SUBMISSION_MODE_NOT_VERIFIED"
+    },
+    {
+      "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[changed_file]",
+      "state": "failure",
+      "disposition": "disabled_legacy_native_multipart",
+      "verified_diagnostic": "MULTIPART_NATIVE_SUBMISSION_MODE_NOT_VERIFIED"
+    },
+    {
+      "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[missing_part]",
+      "state": "failure",
+      "disposition": "disabled_legacy_native_multipart",
+      "verified_diagnostic": "MULTIPART_NATIVE_SUBMISSION_MODE_NOT_VERIFIED"
+    },
+    {
+      "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[duplicate_playlist]",
+      "state": "failure",
+      "disposition": "disabled_legacy_native_multipart",
+      "verified_diagnostic": "MULTIPART_NATIVE_SUBMISSION_MODE_NOT_VERIFIED"
+    },
+    {
+      "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[expired_ticket]",
+      "state": "failure",
+      "disposition": "disabled_legacy_native_multipart",
+      "verified_diagnostic": "MULTIPART_NATIVE_SUBMISSION_MODE_NOT_VERIFIED"
+    },
+    {
+      "test": "tests.test_replay_part_handoff_gui_v5::test_real_gui_runtime_keeps_same_owned_page_and_removes_only_nonce_credentials",
+      "state": "failure",
+      "disposition": "publisher_gui_verified_in_owning_image",
+      "verified_diagnostic": "runtime_gui"
+    },
+    {
+      "test": "tests.test_reply_machine_browser::test_browser_collects_its_own_evidence_and_verifier_records_the_complete_pair",
+      "state": "failure",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_REPLY_PARENT_OR_CHAIN_AMBIGUOUS"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_real_browser_fixture_and_service_accept_source_only_rule_with_precise_time_attribution",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_v1_label_rule_is_not_relaxed_by_v2_without_label",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>0]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>1]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>2]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>3]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>4]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>5]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>6]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>7]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>8]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>9]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>10]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>11]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>12]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>13]",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_full_parent_clock_cannot_be_written_back_into_thread_day_observation",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_wrong_parent_day_is_checked_against_independent_permalink_full_time",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_changed_full_parent_text_or_timestamp_does_not_match_thread_source",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_reply_machine_v2::test_extended_reply_record_binds_two_exact_model_sources_with_raw_day_provenance",
+      "state": "error",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_source_positioning::test_native_source_positioning_keeps_strict_visibility_semantic_and_reply_boundaries",
+      "state": "failure",
+      "disposition": "retired_x_visual_browser_fixtures",
+      "verified_diagnostic": "WEB_SOURCE_ID_INVALID"
+    },
+    {
+      "test": "tests.test_video_retention_refresh_v1::test_daily_lookup_reservations_are_persistent_even_for_unknown_network_results",
+      "state": "failure",
+      "disposition": "test_clock_corrected_and_rerun",
+      "verified_diagnostic": "REPLAY_BROWSER_RESPONSE_UNKNOWN"
+    }
+  ],
+  "historically_deferred_tests_absent_from_collection": [
+    "tests.ops.test_inventory_today_x_gap_v1::test_budget_reservation_stops_before_timeline_and_partial_does_not_claim_missing_scan_complete",
+    "tests.ops.test_inventory_today_x_gap_v1::test_existing_jobs_and_publications_are_classified_without_new_import_or_send",
+    "tests.ops.test_inventory_today_x_gap_v1::test_two_handle_complete_raw_inventory_no_details_no_cursor_or_publication_changes",
+    "tests.ops.test_inventory_today_x_gap_v1::test_two_pages_each_cap_stays_partial_and_preserves_real_continuation"
+  ],
+  "skips": [
+    {
+      "test": "tests.test_linux_resource_faults::test_actual_full_media_filesystem_preserves_partial_and_holds_job",
+      "reason": "requires explicitly mounted isolated 1 MiB tmpfs"
+    },
+    {
+      "test": "tests.test_youtube_public_material::test_actual_missing_optional_extractor_dependency_returns_real_error_without_network",
+      "reason": "Missing-dependency probe only runs when the optional dependency is genuinely absent"
+    }
+  ],
+  "individual_retention_regression": {
+    "before": {
+      "test_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+      "selected_tests": [
+        "tests/test_video_retention_refresh_v1.py::test_daily_lookup_reservations_are_persistent_even_for_unknown_network_results"
+      ],
+      "versioned_overlay_sha256": {},
+      "counts": {
+        "tests": 1,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0
+      },
+      "exit": 1,
+      "junit_sha256": "18633fff58010d040c1c3aa59c1ccc4131772318e102b2a29742ad50827f188d",
+      "network": "none"
+    },
+    "after": {
+      "test_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+      "selected_tests": [
+        "tests/test_video_retention_refresh_v1.py::test_daily_lookup_reservations_are_persistent_even_for_unknown_network_results"
+      ],
+      "versioned_overlay_sha256": {
+        "tests/test_video_retention_refresh_v1.py": "662fd9e627d6b56aef223feca5fc3c7e4c17f5da2dd1ebc0fa0bf6cee03233b4"
+      },
+      "counts": {
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "junit_sha256": "b6c2d9fa036800a8be3b2da084848c1d809d819caf6aec89b2e30da6d1aafb69",
+      "network": "none"
+    }
+  },
+  "publisher_role_evidence": "publication-gui-role-regression-20261111.json",
+  "source_built_image_promoted": false
+}
