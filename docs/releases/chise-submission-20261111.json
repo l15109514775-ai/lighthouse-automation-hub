@@ -1,0 +1,21 @@
+{
+  "version": "chise-native-submission-observed-20261111",
+  "source_id": "_nadmR0WzqI",
+  "job_id": "d8274e7f-38a8-4e4e-b9ea-2bc8a9159658",
+  "observed_at": "2026-11-10T18:23:18.102Z",
+  "candidate_bv": "BV12iWG6zEP7",
+  "candidate_link": "https://www.bilibili.com/video/BV12iWG6zEP7",
+  "manager_markers": [
+    "转码中",
+    "审核中"
+  ],
+  "public_availability_verified": false,
+  "database_state": "publish_unknown",
+  "database_state_reason": "Existing policy requires full public owner/source/player evidence; moderation observation alone does not complete publication. Scheduled lookup remains read-only.",
+  "large_prior_upload_retried": false,
+  "evidence_sha256": {
+    "lookup-part-result.json": "7423284a5ee1038f40e87d775b95f4de67de376e54a154946770ab6f1106c926",
+    "later-lookups-v2/fb5c54c2-d814-4bdf-9939-42fb245f70d1/manager-row.json": "5aaee306a7a677bb99ebab3faafcf5d59365e66158baa5a9331e3895bb02ab2f",
+    "protection-readiness/49faab48-280a-4165-88f9-6fe69ae270a9/after.png": "ac76c52569426a6b1403efaecd1cf09d800dc9f80059b4c7e114c876727d0dfa"
+  }
+}

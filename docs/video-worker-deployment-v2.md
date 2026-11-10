@@ -316,3 +316,10 @@ on D:. It is not the pending full CloudBase backup/restore. See
 `releases/publication-oom-20261111.json` for the preserved failure, limit change
 and bundle hash. Existing test results remain applicable to the code; they do
 not prove large-file browser upload success under the revised memory ceiling.
+
+The subsequent 3255.1 MB upload completed and its automatic submission was
+observed in the official manager as `BV12iWG6zEP7`, transcoding/under review.
+The existing reconciliation policy requires public owner/source/player evidence,
+so the job remains conservatively unknown while bounded read-only lookup runs.
+Do not re-upload or reset it on that basis. Submission is now observed; public
+availability is not yet accepted. Evidence: `releases/chise-submission-20261111.json`.

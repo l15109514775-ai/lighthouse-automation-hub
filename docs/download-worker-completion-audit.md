@@ -79,6 +79,14 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    At epoch 1794334768 the official editor displayed 100% of 3255.1 MB, but still
    showed the uploading state. This is not a completed submission or a BV link.
    See [OOM and resource evidence](releases/publication-oom-20261111.json).
+   **Subsequent real submission:** the same child completed native upload,
+   metadata/cover preparation and submission. Two official manager observations
+   identified `BV12iWG6zEP7` with transcoding/moderation labels; the latest was
+   2026-11-10T18:23:18.102Z. The existing lookup policy conservatively retains
+   `publish_unknown` until full public owner/source/player verification; its
+   read-only lookup completed and scheduled another check. No resend occurred.
+   See [submission evidence](releases/chise-submission-20261111.json).
+   Public availability and the first source's upload recovery remain open.
    Preserve completed media until the existing publication and
    retention gates succeed; do not treat a healthy publisher as upload acceptance.
 2. **New-host full external backup and restore.** The daily budget refusal had
