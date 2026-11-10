@@ -555,3 +555,22 @@ Evidence on the new host: `/var/lib/lighthouse-migration/final-promotion.json`,
 `production-reboot-after.json`, `production-release-verification.json`,
 `core-compatibility-fix/report.json` and `rollback-plan-tests/report.json`.
 Local copies are under `work/zhiyin-migration-20261110/evidence-*`.
+
+### Backup-entry audit correction (2026-11-10 13:09 UTC)
+
+The optional `--verify-recovery` command returned
+`DAILY_RECOVERY_SUCCESSOR_REFUSED` / `ABSENT_TWO_LATEST_COPIES`. That command checks
+the historical **absent-latest recovery branch**. Current production has a
+completed `latest.json`; the normal daily entry instead validates that completed
+record. Running the applicable `--verify-only` and `validate_previous` checks
+passed, including the deployed helper pins. This is **not an active backup
+blocker** and no production code or backup records were changed to make it pass.
+The ledger has eleven verified operations and no uploading/unknown operation.
+The deployed retention wrapper differs from the public copy in pins for an
+already-deployed retention-cap transition; preserve that deployed graph rather
+than overwriting it with the older public helper. Its wrapper SHA-256 is
+`86d1c800d3fe18828a651eaea7eb94b386a1c9333c4a0bc17c54842da981e5bf`.
+Evidence: `backup-current-entry.json` is the applicable preflight result;
+the recovery diagnostic is retained with its inapplicability explained. This
+read-only check made zero external requests and did not create a new backup.
+Full new-host backup/restore acceptance remains outstanding.
