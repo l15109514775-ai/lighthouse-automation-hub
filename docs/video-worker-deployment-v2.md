@@ -366,3 +366,36 @@ not byte-for-byte equality with a Bilibili-side file (that flag remains false).
 See `releases/chise-public-verification-20261111.json`. The separate 11.2 GB
 failed upload and the full new-host CloudBase backup/restore are still pending;
 this acceptance is not completion of the entire migration goal.
+
+### Superseded recovery cover overlay — 2026-11-11
+
+The idle publisher was recreated with one additional qualified overlay,
+`services/hub/replay_video_cover.py`, to preserve verified cover reuse across an
+explicit bounded private-upload recovery. No video/moderation task was processing
+at stop; other container IDs were unchanged. The new publisher became healthy
+before the held job was resumed. The exact code, manifest, prior manifest and
+enable marker are retained under
+`/var/lib/lighthouse-migration/publication-cover-cache-v1` and copied to D:.
+The source hash, 19-test Linux result and actual unchanged cover-provenance hash
+are in `releases/publication-cover-cache-20261111.json`.
+
+The complete machine verifier and browser also require current-attempt cover
+provenance; the cache exception alone was insufficient. It has been rolled back
+by restoring the saved `compose-before.json` and `enabled-before.json` pair and
+recreating only the idle publisher. The exact original cover source hash was
+verified in the running container; other container IDs and job rows were
+unchanged. This is an executed configuration rollback, not a database rollback.
+The failed intermediate evidence is retained in the dated report.
+
+The final operator recovery generates current-attempt cover provenance from the
+verified cached original, archives the prior derived cover intact, and runs full
+machine QA before releasing the held task. Production cover/machine/browser
+checks remain unchanged. See `private-upload-recovery.md` for the two-stage
+operation and tested process-kill recovery; no automatic extra upload is granted.
+
+Final preflight and rollback evidence is in
+`releases/publication-cover-rebind-20261111.json`. The original strict cover module
+hash was checked in the replacement running container, the final recovery code
+passed 19 Linux tests, and complete production machine verification succeeded
+before the held task was released. The worker has claimed it normally; there is
+no large-file upload completion claim in this checkpoint.

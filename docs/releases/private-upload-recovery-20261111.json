@@ -1,0 +1,41 @@
+{
+  "version": "bounded-private-upload-recovery-20261111",
+  "at": 1794336289.3726938,
+  "tests": {
+    "at": 1794336073.8356118,
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "exit_code": 0,
+    "summary": "11 passed in 0.20s",
+    "network": "none",
+    "production_data_mounted": false,
+    "source_sha256": {
+      "scripts/ops/recover_private_upload.py": "e637f56d65ab5800ec9b03f1755ea2e6d1468897dfa29d7797f888bb20e36a0f",
+      "tests/test_recover_private_upload.py": "7646ab7560e04a3786ec885ac0e738d7103c9f2f504246ba6ac6b19c3d6de3c8"
+    }
+  },
+  "applied": {
+    "at": 1794336197.0775936,
+    "exit_code": 0,
+    "apply_requested": true,
+    "source_sha256": "e637f56d65ab5800ec9b03f1755ea2e6d1468897dfa29d7797f888bb20e36a0f",
+    "result": {
+      "state": "one_private_retry_pending",
+      "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+      "plan_sha256": "ae9cbe942830badf4b749c3bce0028e022ba3a00f39885129d57e3ace24908f3",
+      "new_attempt_id": "341aec7a-8f2e-484e-8e4a-d8b49f824ff7",
+      "attempts": 1,
+      "journal": "/opt/lighthouse-hub/media/82a818a5-6ac2-44e6-adbd-88a3a279e0f8/private-upload-recovery/ae9cbe942830badf4b749c3bce0028e022ba3a00f39885129d57e3ace24908f3",
+      "public_submits": 0
+    }
+  },
+  "same_payload_source_key": true,
+  "original_checkpoint_archived": true,
+  "original_intent_bytes_retained": true,
+  "current_state": "awaiting_review",
+  "current_stage": "replay_part_private_retry_pending",
+  "current_attempts": 2,
+  "error_code": "REPLAY_COVER_EXISTING_PROVENANCE_INVALID",
+  "public_submits_by_recovery": 0,
+  "old_private_blob_absence_proven": false,
+  "full_upload_acceptance": false
+}

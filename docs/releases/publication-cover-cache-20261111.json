@@ -1,0 +1,54 @@
+{
+  "tests.json": {
+    "at": 1794336455.8845596,
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "exit_code": 0,
+    "summary": "19 passed in 3.52s",
+    "network": "none",
+    "production_data_mounted": false,
+    "source_sha256": {
+      "scripts/ops/recover_private_upload.py": "e637f56d65ab5800ec9b03f1755ea2e6d1468897dfa29d7797f888bb20e36a0f",
+      "tests/test_recover_private_upload.py": "7646ab7560e04a3786ec885ac0e738d7103c9f2f504246ba6ac6b19c3d6de3c8",
+      "services/hub/replay_video_cover.py": "3614a807d797696eedd5dc9f6753c22dd5344675b92b0c6bbfc06d994c5462ab",
+      "tests/test_replay_video_cover.py": "43ef7cb5cb14fe81ab4526149d28234bdc757696cfc8ec5b9b2b04c0349c1fcb",
+      "tests/test_cover_normalizer_v4.py": "1d52d78fa8f002417aa2934b0be916828c6bc1c6b6d67520df6e3058804ae412"
+    }
+  },
+  "deployment.json": {
+    "at": 1794336543.9518864,
+    "new_container_id": "a06c50c95da8c5a82fee9dd1b8859ef453c9bb714aeed1391e2d40dbfdc18115",
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "source_sha256": "3614a807d797696eedd5dc9f6753c22dd5344675b92b0c6bbfc06d994c5462ab",
+    "compose_sha256": "1c805611633042f811c31acad15e56f2e83feba4bae1847d13e28680954a57ce",
+    "other_container_ids_unchanged": true,
+    "no_processing_video_jobs_before_stop": true,
+    "job_rows_changed": false,
+    "health": "starting"
+  },
+  "resumed.json": {
+    "at": 1794336641.003332,
+    "returncode": 0,
+    "container_id": "a06c50c95da8c5a82fee9dd1b8859ef453c9bb714aeed1391e2d40dbfdc18115",
+    "result": {
+      "at": 1794336640.9512491,
+      "state": "pending",
+      "attempts_preserved": 2,
+      "same_native_attempt": true,
+      "cover_reused": true,
+      "original_cover_provenance_sha256": "e3fa4dcd9d876691476d9e093587868cbc3b344c8b22fa2d5eade7b423e030cd",
+      "file_selections": 0,
+      "public_submits": 0
+    }
+  },
+  "off_server_files_sha256": {
+    "tests.json": "034750b6bbd2206539d08c36834967b067bb97c49a79b72219b00354cf57e64d",
+    "deployment.json": "3e0838ea0aaaa2a2c500f802e65728f167980a1d454fc1105a11f6abcda01034",
+    "resumed.json": "880cf385d5bf4b2e6a09566810cea29263a49e41baa9876b11fe03112f182647",
+    "compose-before.json": "cf13221734ef3f779dc2bc15ef5513c30ec00f79e126335a94a2909fc73f1466",
+    "enabled-before.json": "af3bfceb823af73c1214d4a6fbe35fd325371378c7f73aeffd46f2b38ace3f63",
+    "compose-current.json": "1c805611633042f811c31acad15e56f2e83feba4bae1847d13e28680954a57ce",
+    "enabled-current.json": "5a254a162c31f4a894fce63dc5a2129b8548fe80f8c1f9cd02dbe3001be651b0",
+    "replay_video_cover.py": "3614a807d797696eedd5dc9f6753c22dd5344675b92b0c6bbfc06d994c5462ab"
+  },
+  "full_upload_acceptance": false
+}

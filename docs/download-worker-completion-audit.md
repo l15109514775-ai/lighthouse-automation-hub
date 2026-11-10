@@ -94,6 +94,30 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    and one player seek. This is public UI/player verification, not a remote
    Bilibili file checksum. See [public verification](releases/chise-public-verification-20261111.json).
    The first source's upload recovery remains open.
+   A subsequent operator recovery verified the absence of local draft/save or
+   public-submit evidence, archived the consumed private selection and original
+   checkpoint, and admitted one new native upload attempt. It does not assert
+   private remote blob absence. The normal claim counter advanced from one to
+   two without resetting. That claim stopped before a browser launch on the
+   old cover provenance's attempt binding. After the tested cover compatibility
+   fix, the same unconsumed native attempt resumed; the ordinary claim counter
+   is now three. No extra public submission was authorized by recovery.
+   See [bounded recovery](private-upload-recovery.md) and its dated reports.
+   Other containers remained unchanged; only the idle publisher was recreated
+   to load the qualified cover module. Upload completion still needs evidence.
+   **Final preflight correction:** machine/browser validation also binds cover
+   provenance to the current attempt. The incomplete cache exception was rolled
+   back to the original strict module with the saved Compose/marker pair; this
+   exercised the actual configuration rollback without a database rollback.
+   The final recovery tool stages a hold, archives old cover assets and generates
+   current-attempt provenance from the verified cached original. Its 19 Linux
+   tests include the real machine cover verifier and a process-kill boundary.
+   The full production machine verifier then passed before release. The ordinary
+   worker claimed attempt four (previous counts preserved) using the same second
+   native attempt. This is not four uploads: the two intervening claims stopped
+   before any browser/video selection. See
+   [strict cover preflight and rollback](releases/publication-cover-rebind-20261111.json).
+   Current large-file upload/submission completion remains pending.
    The independent publisher's owner-display bridge compatibility was repaired
    and installed without restart. Both exact legacy/new runtime pairs are
    supported, concurrent publishers rejected, and 17 offline tests passed
