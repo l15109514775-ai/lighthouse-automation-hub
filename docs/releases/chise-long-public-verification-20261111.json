@@ -1,0 +1,105 @@
+{
+  "version": "chise-long-public-verification-20261111",
+  "at": 1794344245.9200258,
+  "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+  "source_id": "lWzXr6h0SyM",
+  "state": "completed",
+  "attempts": 5,
+  "publication": [
+    {
+      "state": "completed",
+      "external_id": "BV1eNWL6tEh8",
+      "external_url": "https://www.bilibili.com/video/BV1eNWL6tEh8"
+    }
+  ],
+  "parents": [
+    {
+      "job_id": "bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e",
+      "state": "completed",
+      "stage": "replay_parts_completed",
+      "error_code": null,
+      "external_publish_id": null
+    }
+  ],
+  "verified_receipt_sha256": "daa0d3b440c423f23db16eebd2fa4e8a5ab895a5d4d883bbbcd61808663cc4b8",
+  "checked_references": [
+    {
+      "kind": "manager_observation",
+      "bytes": 18615,
+      "sha256": "59dd5eb6846c8af231eacda8de8e10d78b69d8e5974c26e71760bfe8fa874046"
+    },
+    {
+      "kind": "public_observation",
+      "bytes": 3978,
+      "sha256": "84941e3cbc463090c1321e37ef58dff3fc5aa9fbcc35918d3735b737edd2e148"
+    },
+    {
+      "kind": "public_screenshot",
+      "bytes": 1007739,
+      "sha256": "ee75f4cb871fc462920069a50e7d121970e22fff6d0a588bb9e00a091d9f6503"
+    }
+  ],
+  "public_accessible": true,
+  "platform_file_hash_verified": false,
+  "lookup_file_selections": 0,
+  "lookup_submit_clicks": 0,
+  "lookup_player_seeks": 1,
+  "receipt_keys": [
+    "version",
+    "job_id",
+    "attempt_id",
+    "site_uid",
+    "source_id",
+    "source_url",
+    "metadata_sha256",
+    "binding_sha256",
+    "parent_job_id",
+    "part_index",
+    "part_count",
+    "part_idempotency_key",
+    "whole_plan_sha256",
+    "parts_manifest_sha256",
+    "artifact_sha256",
+    "file_bytes",
+    "policy_sha256",
+    "file_selections",
+    "save_clicks",
+    "submit_clicks",
+    "player_seeks",
+    "source_or_media_modified",
+    "external_id",
+    "observed_at",
+    "manager_observation",
+    "public_observation",
+    "public_screenshot"
+  ],
+  "observation_keys": [
+    "artifact_sha256",
+    "attempt_id",
+    "binding_sha256",
+    "external_id",
+    "file_bytes",
+    "human_review",
+    "job_id",
+    "metadata_sha256",
+    "native_result_evidence",
+    "origin",
+    "parent_job_id",
+    "part_count",
+    "part_idempotency_key",
+    "part_index",
+    "parts_manifest_sha256",
+    "policy_sha256",
+    "public_accessible",
+    "public_lookup_observed_at",
+    "same_submit_attempt_observed",
+    "server_file_hash_verified",
+    "site_uid",
+    "source_id",
+    "source_url",
+    "state",
+    "url",
+    "version",
+    "whole_plan_sha256"
+  ]
+}

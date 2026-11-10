@@ -44,7 +44,7 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
 
 ## Outstanding operational acceptance
 
-1. **Natural production download delivery passed; publication remains open.**
+1. **Two natural download deliveries and their Bilibili publications passed.**
    Chise source `lWzXr6h0SyM`, job `7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9`,
    completed at attempt 1. Independent SHA-256 and FFprobe checks verified the
    11,214,658,526-byte, 30,595.402-second 1080p60 H264/AAC deliverable and bound
@@ -173,6 +173,20 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    public submission, moderation or a saved BV. See
    [draft recovery qualification](releases/draft-save-ack-release-20261111.json) and
    [the preserved real failure](releases/large-draft-save-checkpoint-20261111.json).
+   The 04:50 CST creator-manager observations then identified the matching BV in
+   moderation. At the second scheduled lookup the public player check passed.
+   SQLite recorded the child and group as completed with the public URL in
+   the publication row. The lookup made one player seek and zero submissions.
+   The linked report records the three rehashed evidence files. Media
+   retention has a separate release and receipt.
+   [Long replay public verification](releases/chise-long-public-verification-20261111.json).
+   The two completed groups subsequently passed normal automatic local retention.
+   The migrated retention release still referenced 17 older source hashes. All
+   33 retention tests ran against the effective publisher image and code. The
+   installed qualification covers the same 141 files and existing authorization.
+   The worker removed two originals (14,627,870,894 logical bytes). Both
+   publication URLs and matching download/group deletion receipts were verified.
+   [Retention acceptance](releases/long-replay-retention-20261111.json).
 2. **New-host full external backup and restore.** The daily budget refusal had
    zero dispatched requests and has an exact guarded recovery proof. The actual
    safe-deferral entry passed. After the real Asia/Shanghai day rollover, the
@@ -219,7 +233,8 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    build cache. Known file/package allocation reclaimed was 3,632,848,896 bytes,
    plus 18.71 MB of build cache. Production images and running container IDs
    remained unchanged. See [cleanup evidence](releases/accepted-disposable-cleanup-20261111.json).
-   Current production media and the full migration archives remain preserved.
+   The two completed recordings subsequently followed the verified retention
+   policy above. The three migration archives still await external restore.
 
 These acceptance and conditional cleanup items remain open; none is a reason to disable the already
 qualified service or to repeat a healthy in-flight download. Fresh public-source

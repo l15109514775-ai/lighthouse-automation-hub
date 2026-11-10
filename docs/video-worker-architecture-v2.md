@@ -15,8 +15,9 @@ This design is not a declaration that production activation has passed.
 | API | Existing intake and status | existing hub.sqlite3 |
 | Scheduler | Existing channel discovery and due tasks | schedules, youtube_videos |
 | Tweet worker | Existing translation/composition/publication | unchanged deployment |
-| Video worker | Compatibility handlers, or existing V5 publication entry | positive handler scope; shared video lock |
+| Video worker | Legacy compatibility handlers, fenced on the migrated host | positive handler scope and shared video lock |
 | Replay acquisition worker | V4 plan/readiness/download/refresh and verified local delivery | same jobs, FIFO, events, audit, heartbeat |
+| Replay publication worker | Existing V5 upload, submission, independent moderation lookup and local media retention | part jobs, publication rows, public playback evidence and deletion receipts in shared storage |
 | System worker | Existing backup/maintenance | unchanged deployment |
 
 ```mermaid
@@ -30,7 +31,12 @@ flowchart LR
   VideoLock --> DB
   Acquisition --> ExistingV4[FIFO / readiness / whole-replay adapters]
   ExistingV4 --> Files[media/job UUID / partials / verified.json]
-  Files --> ExistingPublication[separate existing authorization and publication workflow]
+  Files --> Publisher[V5 publication-only worker]
+  Publisher --> VideoLock
+  Publisher --> Manager[Bilibili creator manager]
+  Manager --> Lookup[Read-only public player verification]
+  Lookup --> DB
+  DB --> Retention[Verified group retention]
 ```
 
 There is no network operation inside a claim/recovery SQLite transaction. The OS

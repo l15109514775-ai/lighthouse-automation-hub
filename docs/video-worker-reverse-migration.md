@@ -30,6 +30,12 @@ service while leaving healthy tweet/status services running.
 - Transfer and verify the exact current images. Prefer the same qualified image
   over an old image with unknown current-schema compatibility. Keep the
   destination owner marker absent and all producers/consumers/timers fenced.
+- Copy the current retention release with its two referenced, root-owned
+  evidence files under `config/retention-evidence-bffb95aadde36c50/`.
+  The config bundle and previous release hashes are recorded in the
+  [November 11 retention acceptance](releases/long-replay-retention-20261111.json).
+  Verify the release using the effective publisher code before enabling its
+  maintenance loop. Retain the SQLite deletion receipts for completed groups.
 - Include the separately enabled publication service, its paired
   `compose.publication.json` and `/etc/lighthouse-hub/publication-enabled.json`,
   `lighthouse-publication.service`, and the restricted owner-display bridge.

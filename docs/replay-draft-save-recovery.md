@@ -74,6 +74,10 @@ same item 19 seconds later. There was no second upload. The child remained
 one completed poll (`pending_unverified`) and scheduled another for 04:55:26.
 Do not submit again or clean the recording on the strength of a manager row.
 Public playback and the final stored link are separate acceptance steps.
+The subsequent 04:55 lookup verified public playback. The child and group
+completed, and SQLite recorded the URL for `BV1eNWL6tEh8`. The server
+rehashed the manager observation, public observation, and public screenshot.
+[Public verification record](releases/chise-long-public-verification-20261111.json).
 
 Promote only the three qualified runtime files in a versioned, read-only source
 overlay for the independent publication service. Save the prior Compose and
