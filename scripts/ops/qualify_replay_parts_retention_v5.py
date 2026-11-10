@@ -31,7 +31,7 @@ VERSION = 'replay-parts-retention-v5-ubuntu-tests'
 GROUP = 'tests.test_replay_parts_retention_v5'
 SELECTION = 'tests/test_replay_parts_retention_v5.py'
 AUTHORIZATION = '1fb26fc9-0324-4f13-9c30-64a767fbb012'
-UID = '1000000000000000'
+UID = '3747574504754572'
 RELEASE = 'replay-parts-retention-v5-release.json'
 NODE_SOURCES = (
     'adapters/bilibili_video_guard.mjs', 'adapters/browser_replay_part_v5.mjs',

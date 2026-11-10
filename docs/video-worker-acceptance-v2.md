@@ -90,8 +90,8 @@ disabled. This correction is to
 the browser test environment, not a change to the acquisition service's privileges.
 
 Across the original 4,587 cases, the union of the full run and corrective targeted
-runs is now 4,316 passing, 123 failing, 147 setup errors and one skipped. **This is not
-a single clean full-suite run.** All 270 remaining cases also failed or errored on
+runs is now 4,476 passing, 44 failing, 66 setup errors and one skipped. **This is not
+a single clean full-suite run.** All 110 remaining cases also failed or errored on
 baseline; none of the baseline-passing cases remains unresolved after the targeted
 runs. This does not establish identical causes or remove suite-order concerns.
 `video-worker-regression-v2.json` records case IDs and evidence hashes. The final
@@ -230,3 +230,29 @@ Compose assertion), `b09d1c0` (boot-specific health identity). These are local
 commits; this task has not pushed them. Continuation: `08eeae0` (fixture corrections,
 read-only preflight and locked source export), `98f62b0` (explicit oversized-image
 error compatibility). Documentation commits record evidence separately.
+
+## Further fixture qualification (offline, 2026-11-10)
+
+A further 160 originally unresolved cases now pass. Linux runs recorded 132/132
+identity/QA/source cases, 144/144 historical-input/backup cases, and 55/56 config
+and browser cases. The remaining browser case failed because its Chromium Unix
+socket path exceeded the platform limit; it passed separately (1/1) with a short
+`--basetemp=/testdata/px`. No sandbox restriction was relaxed. Three new artifact
+locator tests are outside the original 4,587 cases. Exact XML hashes and resolved
+case IDs are in `video-worker-regression-v2.json`; intermediate failures remain
+in private evidence. This is not a fresh full-suite pass.
+
+Corrections restore missing disabled examples, a frozen synthetic QA matrix,
+consistent fixture identities, the delayed visibility-check manifest contract,
+and historical source inputs. Existing strict policy checks, reviewed evidence
+hashes, actual production authorization, task state and service configuration are
+unchanged. The historical retention parser's exact original bytes include the
+public subtitle-account UID; this scope is intentionally documented, not a new
+authorization. The restored API-only Docker recipe has only static test evidence,
+not a build/deployment claim. Old operators whose genuine reviewed source still
+differs remain failed; current fixes are not reverted to make old proofs pass.
+
+Read-only production observation again found the API healthy, scheduler/tweet/
+system running, and the pre-existing video container stopped. SQLite quick_check
+was `ok`, journal mode WAL. These observations do not establish video end-to-end
+acceptance. No production file, database row, publication or cleanup was changed.

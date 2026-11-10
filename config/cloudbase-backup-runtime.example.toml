@@ -1,0 +1,37 @@
+# Private copy: config/cloudbase-backup.toml (gitignored). No credentials here.
+[cloudbase]
+enabled = false
+storage_mode = "classic"
+env_id = "example-cloudbase-env"
+bucket = "examplebucket-1250000000"
+region = "ap-shanghai"
+owner_app_id = "1250000000"
+object_prefix = "lighthouse-hub/backups/v1"
+storage_hosts = ["examplebucket-1250000000.cos.ap-shanghai.myqcloud.com"]
+existing_resource_authorized = false
+private_storage_verified = false
+cloudbase_storage_binding_reference = ""
+private_canary_reference = "" # Actual origin AND default TCB domain anonymous-denial evidence.
+private_canary_sha256 = "" # SHA256 of the immutable successful bootstrap result.json.
+credential_file = "/run/secrets/cloudbase-backup.json" # Read-only, root/application group only; never commit the file.
+max_archive_bytes = 8000000
+
+[limits]
+daily_network_bytes = 20000000
+monthly_network_bytes = 100000000
+daily_requests = 50
+monthly_requests = 200
+max_archive_bytes = 8000000
+max_uncompressed_bytes = 50000000
+max_log_source_bytes = 524288
+max_tweet_jobs = 200
+disk_floor_bytes = 15000000000
+
+[list_rates]
+standard_storage_cny_per_gb_month = 0.118
+internet_egress_cny_per_gb = 0.5
+read_cny_per_10000 = 0.01
+write_cny_per_10000 = 0.01
+gb_bytes = 1073741824
+source = "https://buy.cloud.tencent.com/price/cos"
+as_of = "2026-11-01T08:29:56.251Z"

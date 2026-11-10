@@ -94,13 +94,13 @@ def test_two_sources_continue_independently_and_first_api_failure_never_becomes_
     service.x.latest_official = latest
     with pytest.raises(HubError, match='PERMISSION_DENIED'):
         service.run(job)
-    assert calls == ['example_handle_a', 'example-channel-b'] and len(delegated) == 1
+    assert calls == ['example_handle_a', 'example_handle_b'] and len(delegated) == 1
     result = store.get(job['job_id'])['result']
     assert [row['state'] for row in result['sources']] == ['blocked', 'observed']
     assert result['new_jobs'] == 1 and result['browser_fallback'] is False
     polls = {row['source_key']: row for row in store.query('SELECT * FROM source_polls')}
     assert polls['x-api:example_handle_a']['last_success_at'] is None
-    assert polls['x-api:example-channel-b']['last_success_at'] is not None
+    assert polls['x-api:example_handle_b']['last_success_at'] is not None
     assert not store.query('SELECT * FROM api_calls') and not store.query('SELECT * FROM source_http_receipts')
 
 
@@ -117,9 +117,9 @@ def test_partial_first_source_keeps_its_cursor_but_second_source_can_advance(off
     with pytest.raises(HubError, match='X_CATCHUP_BOUND_REACHED') as error:
         service.run(job)
     assert error.value.retryable
-    assert seen == [('example_handle_a', '100'), ('example-channel-b', None)]
+    assert seen == [('example_handle_a', '100'), ('example_handle_b', None)]
     cursors = {row['key']: row['value'] for row in store.query('SELECT * FROM source_cursors')}
-    assert cursors == {'x-api:example_handle_a': '100', 'x-api:example-channel-b': '212'}
+    assert cursors == {'x-api:example_handle_a': '100', 'x-api:example_handle_b': '212'}
     assert store.get(job['job_id'])['result']['sources'][0]['catchup_complete'] is False
 
 

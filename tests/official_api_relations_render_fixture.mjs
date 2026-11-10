@@ -21,7 +21,7 @@ async function invoke(name,mixed,change=()=>{}){
  const fields={post:'post',parent:'post.parent',quote:'post.quoted'},ids={post:'9103',parent:'9101',quote:'9102'};
  const posts={},sources={},media={};
  for(const [index,role]of roles.entries()){
-  const handle=role==='post'?'example-channel-b':'owned_'+role,id=ids[role],original='本文 '+role+' 23:40',translation='完整正文 '+role+' 23:40';
+  const handle=role==='post'?'owned_post':'owned_'+role,id=ids[role],original='本文 '+role+' 23:40',translation='完整正文 '+role+' 23:40';
   posts[role]={id,url:`https://x.com/${handle}/status/${id}`,author:{name:'Owned '+role,handle,avatar,verified:false},
    originalText:original,translation,publishedAt:'2026-11-01T12:00:00+09:00',sourceTimezone:'Asia/Tokyo',
    sourceScreenshot:{file:null,capturedAt:null,reviewed:false},sourceMediaCount:1,sourceQuote:role==='post'?'present':'none',

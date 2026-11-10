@@ -1,0 +1,51 @@
+{
+  "version": "2.0",
+  "statement": [
+    {
+      "effect": "allow",
+      "action": [
+        "name/cos:PutObject"
+      ],
+      "resource": [
+        "qcs::cos:ap-shanghai:uid/1250000000:examplebucket-1250000000/lighthouse-hub/backups/v1/*"
+      ],
+      "condition": {
+        "ip_equal": {
+          "qcs:ip": [
+            "203.0.113.10/32"
+          ]
+        },
+        "bool_equal": {
+          "cos:secure-transport": "true"
+        },
+        "string_equal": {
+          "cos:x-cos-forbid-overwrite": "true",
+          "cos:x-cos-storage-class": "STANDARD"
+        },
+        "numeric_less_than_equal": {
+          "cos:content-length": 1000000000
+        }
+      }
+    },
+    {
+      "effect": "allow",
+      "action": [
+        "name/cos:GetObject",
+        "name/cos:HeadObject"
+      ],
+      "resource": [
+        "qcs::cos:ap-shanghai:uid/1250000000:examplebucket-1250000000/lighthouse-hub/backups/v1/*"
+      ],
+      "condition": {
+        "ip_equal": {
+          "qcs:ip": [
+            "203.0.113.10/32"
+          ]
+        },
+        "bool_equal": {
+          "cos:secure-transport": "true"
+        }
+      }
+    }
+  ]
+}

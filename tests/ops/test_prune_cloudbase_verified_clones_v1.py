@@ -29,7 +29,7 @@ def owned(tmp_path):
     receiptfile=put(root/'backups/cloudbase-receipts'/(remoteop+'.verified.json'),receipt)
     canaryfile=root/'data/cloudbase-backup-canary-checks'/(op+'.json')
     check={'version':'cloudbase-runtime-private-canary-v1','operation_id':op,'checked_at':now,'private_storage_verified':True,'canary':{'bytes':106,'sha256':'1'*64},
-        'signed_full_get':{'bytes':106,'sha256':'1'*64,'method':'full_remote_get'},'anonymous_observations':[{'host':h,'method':'GET','signed':False,'status':403} for h in (p.BUCKET+'.cos.ap-shanghai.myqcloud.com',p.BUCKET+'.tcb.qcloud.la')]}
+        'signed_full_get':{'bytes':106,'sha256':'1'*64,'method':'full_remote_get'},'anonymous_observations':[{'host':h,'method':'GET','signed':False,'status':403} for h in (p.BUCKET+'.cos.ap-shanghai.myqcloud.com','example-'+p.ENV+'-1250000000.tcb.qcloud.la')]}
     put(canaryfile,check);fresh={'file':str(canaryfile),'sha256':p.sha(canaryfile.read_bytes()),'private_storage_verified':True}
     remote={**receipt,'receipt_file':str(receiptfile)};runtime={'operation_id':op,'remote':remote,'bundle':{'archive':str(archive),'bytes':len(data),'sha256':archivehash,'manifest':manifest},'fresh_private_canary':fresh}
     put(area/'runtime-result.json',runtime);put(area/'remote-archive.tar.gz',data)

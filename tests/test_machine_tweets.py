@@ -25,7 +25,7 @@ def machine(runtime):
     settings.config['policy_version']=VERSION;settings.config['x_web_enabled']=True
     (settings.root/'config').mkdir()
     policy={'version':VERSION,'owner_confirmed_machine_mode':True,'human_review_required':False,
-        'target_site_uid':settings.config['target_bilibili_site_uid'],'x_handles':['example_handle_a','example-channel-b'],
+        'target_site_uid':settings.config['target_bilibili_site_uid'],'x_handles':['example_handle_a','example_handle_b'],
         'rights':{'owner_confirmed':True,'actions':['publish_translation','publish_image'],'reference':'owned synthetic authorization fixture'},
         'owner_response':'Synthetic policy fixture only; never a human review of a post',
         'max_post_age_seconds':7200,'activation_at':time.time()-60,

@@ -82,7 +82,7 @@ def test_cos_direct_roundtrip_uses_only_put_get_and_keeps_valid_durable_receipt(
 @pytest.mark.parametrize('changes,code', [
     ({'enabled':False},'CLOUDBASE_BACKUP_DISABLED'),({'private_storage_verified':False},'CLOUDBASE_BACKUP_AUTHORIZATION_REQUIRED'),
     ({'storage_mode':'pg'},'CLOUDBASE_BACKUP_STORAGE_MODE_UNSUPPORTED'),
-    ({'owner_app_id':'1250000000'},'CLOUDBASE_COS_RESOURCE_BINDING_REQUIRED'),
+    ({'owner_app_id':'1250000001'},'CLOUDBASE_COS_RESOURCE_BINDING_REQUIRED'),
     ({'cloudbase_storage_binding_reference':''},'CLOUDBASE_COS_RESOURCE_BINDING_REQUIRED'),
     ({'storage_hosts':('different.cos.ap-shanghai.myqcloud.com',)},'CLOUDBASE_COS_RESOURCE_BINDING_REQUIRED')])
 def test_resource_and_private_permission_gates_precede_key_access(fixture,changes,code):

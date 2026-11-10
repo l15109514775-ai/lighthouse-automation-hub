@@ -19,7 +19,8 @@ def test_cli_includes_versioned_track_mode_without_shell_input():
 def config_fixture(tmp_path,monkeypatch):
  monkeypatch.setattr(h,'protected',lambda p:p)
  monkeypatch.setattr(h,'command',lambda *a,**k:h.IMAGE+'\n')
- archive=Path(__file__).resolve().parents[4]/'outputs/video-natural-formats-v3-overlay.tar.gz'
+ from historical_artifacts import historical_artifact
+ archive=historical_artifact('video-natural-formats-v3-overlay.tar.gz')
  with tarfile.open(archive) as tar:
   manifest=json.load(tar.extractfile('manifest.json'))
   for name in h.PRODUCTION_FILES:

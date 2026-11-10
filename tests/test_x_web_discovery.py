@@ -44,7 +44,7 @@ def test_both_sources_checked_and_403_is_review_not_empty_success(runtime):
     ident=store.enqueue('scheduler','fixture','x_discovery','tweet',{},settings.config['policy_version'])
     assert Worker(settings,store,{'x_discovery':service.run}).once('tweet')
     job=store.get(ident)
-    assert seen==['example_handle_a','example-channel-b'] and job['state']=='awaiting_review'
+    assert seen==['example_handle_a','example_handle_b'] and job['state']=='awaiting_review'
     assert job['error_code']=='X_WEB_ACCESS_DENIED' and job['result']['new_jobs']==0
     polls=store.query("SELECT * FROM source_polls WHERE source_key LIKE 'x-web:%'")
     assert len(polls)==2 and all(p['last_success_at'] is None and p['error_code'] for p in polls)

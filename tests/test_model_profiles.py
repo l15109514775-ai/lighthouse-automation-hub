@@ -148,7 +148,8 @@ def test_v14_receipt_parameters_are_adopted_without_charging_after_environment_s
     before={table:store.query('SELECT * FROM '+table) for table in ('jobs','model_requests','model_call_receipts','api_calls')}
     store.init();store.init()
     assert store.query('SELECT version FROM schema_migrations WHERE version=15')==[{'version':15}]
-    assert store.query('SELECT MAX(version) n FROM schema_migrations')[0]['n']==16
+    # Later migrations must not invalidate adoption of v14 request receipts.
+    assert {row['version'] for row in store.query('SELECT version FROM schema_migrations')} >= {15,16}
     assert not store.query('SELECT * FROM model_request_profiles')
     assert all(store.query('SELECT * FROM '+table)==rows for table,rows in before.items())
     change_environment(monkeypatch)

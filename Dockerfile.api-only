@@ -1,0 +1,10 @@
+# Caller must select an immutable tested base, e.g. repository@sha256:<digest>.
+ARG HUB_BASE_IMAGE
+FROM ${HUB_BASE_IMAGE}
+ARG HUB_BASE_IMAGE
+USER 0:0
+WORKDIR /opt/lighthouse-hub
+COPY scripts/retire_x_visual_image.py ./scripts/retire_x_visual_image.py
+COPY services/hub/config.py ./services/hub/config.py
+RUN python scripts/retire_x_visual_image.py --base-image "$HUB_BASE_IMAGE"
+USER 10001:10001

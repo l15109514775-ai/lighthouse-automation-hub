@@ -4,7 +4,7 @@
   "human_review_required": false,
   "owner_response": "REPLACE_WITH_THE_EXISTING_OWNER_AUTHORIZATION_RECORD",
   "target_site_uid": "1000000000000000",
-  "x_handles": ["example_handle_a", "example-channel-b"],
+  "x_handles": ["example_handle_a", "example_handle_b"],
   "rights": {
     "owner_confirmed": false,
     "reference": "REPLACE_WITH_EXISTING_APPLICABLE_OWNER_RIGHTS_REFERENCE",

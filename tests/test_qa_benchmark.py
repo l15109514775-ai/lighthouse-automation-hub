@@ -15,7 +15,7 @@ from test_model_receipts import model_fixture
 @pytest.fixture
 def benchmark(model_fixture):
     s,d,*_=model_fixture
-    config=Path(__file__).resolve().parents[1]/'config/qa-benchmark-v1.json'
+    config=Path(__file__).resolve().parents[1]/'tests/fixtures/qa-benchmark-v1.json'
     file=s.root/'qa-benchmark-v1.json';file.write_bytes(config.read_bytes());plan=json.loads(file.read_text('utf-8'))
     ident=d.enqueue('acceptance','owned-qa-catalog','model_catalog_check','system',{},'owned-catalog-v1')
     with d.transaction() as db:db.execute("UPDATE jobs SET state='completed',result=? WHERE job_id=?",(encode({'ids':plan['models']}),ident))

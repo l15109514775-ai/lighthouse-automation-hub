@@ -185,3 +185,21 @@ isolated Compose testing confirmed DB/media preservation and no restart of legac
 workers. It never restores a stale DB, rewrites attempts, changes publication
 records or requeues unknown results. This verified additive rollback is distinct
 from a still-unqualified production-wide image/config rollback.
+
+## Frozen compatibility inputs restored
+
+The original eight-case synthetic QA matrix is now in
+`tests/fixtures/qa-benchmark-v1.json`, retaining PLAN_SHA
+`f01fc2787eceabf198090b1a6e99a04a12d440abfa58b2b449e1be8ca82c5bf8`.
+`qualify_replay_parts_retention_v5.py` was restored byte-for-byte from the original
+checkout to existing M_SHA
+`4e451f198c2f4e57534a71898d497693b57b0bf94aee1712453f0e1b266f70b3`.
+Its historical public account UID 3747574504754572 is retained intentionally;
+Git attributes preserve those reviewed bytes. No operator was run against live
+data and no proof digest was updated. Other changed historical operators remain
+unqualified rather than being rolled back to obsolete code.
+
+Two genuine historical overlay archives are private external test inputs, selected
+by an explicit directory and verified against their original hashes. They are not
+new deployment packages and are not installed in production. Missing inputs fail
+clearly instead of downloading or regenerating evidence. No old adapter was deleted.

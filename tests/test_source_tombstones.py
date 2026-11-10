@@ -21,7 +21,7 @@ def machine(runtime):
     settings.config.update(machine_tweet_enabled=True,x_web_enabled=True,policy_version=VERSION)
     (settings.root/'config').mkdir()
     policy={'version':VERSION,'owner_confirmed_machine_mode':True,'human_review_required':False,
-        'target_site_uid':settings.config['target_bilibili_site_uid'],'x_handles':['example_handle_a','example-channel-b'],
+        'target_site_uid':settings.config['target_bilibili_site_uid'],'x_handles':['example_handle_a','example_handle_b'],
         'rights':{'owner_confirmed':True,'actions':['publish_translation','publish_image'],
                   'reference':'Owned synthetic machine-policy fixture only'},
         'owner_response':'Owned synthetic policy fixture, never a post human-review claim',
@@ -266,7 +266,13 @@ def test_lookup_result_can_be_recorded_after_source_is_cleared_without_new_send(
     job=store.get(job['job_id']);folder=settings.root/'media'/job['job_id'];folder.mkdir()
     image=folder/'mock-ui-screenshot.png';image.write_bytes(b'Owned synthetic UI-result fixture bytes')
     manifest={'target_site_uid':settings.config['target_bilibili_site_uid'],'caption':'Owned synthetic caption',
+        'target_name':'Owned synthetic account','source_url':job['payload']['url'],
         'render':{'sha256':'owned-artifact'}}
+    import hashlib
+    manifest['caption_sha256']=hashlib.sha256(manifest['caption'].encode()).hexdigest()
+    job['result']['machine_web']['manifest_sha256']=hashlib.sha256(encode(manifest).encode()).hexdigest()
+    with store.transaction() as db:
+        db.execute('UPDATE jobs SET result=? WHERE job_id=?',(encode(job['result']),job['job_id']))
     packet={'version':'operator-browser-publication-observation-v1','owned_fixture_only':True,
         'url':'https://t.bilibili.com/123','site_uid':manifest['target_site_uid'],'caption':manifest['caption'],
         'artifact_sha256':'owned-artifact','screenshot_file':str(image),'screenshot_sha256':sha256_file(image),
@@ -279,3 +285,6 @@ def test_lookup_result_can_be_recorded_after_source_is_cleared_without_new_send(
     assert store.query('SELECT * FROM publications')[0]['state']=='completed'
     assert len(store.query('SELECT * FROM source_tombstones'))==1
     assert not store.query("SELECT * FROM audit WHERE action='reserve_machine_website'")
+    checks=store.query("SELECT payload,next_run FROM jobs WHERE job_type='tweet_repost_check_v1'")
+    assert len(checks)==1 and checks[0]['next_run']>time.time()+290
+    assert json.loads(checks[0]['payload'])['submission_job_id']==job['job_id']

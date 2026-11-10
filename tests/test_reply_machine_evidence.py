@@ -22,6 +22,7 @@ def iso(epoch):return datetime.fromtimestamp(epoch,timezone.utc).isoformat()
 @pytest.fixture
 def reply_packet(runtime):
     settings,store=runtime
+    settings.config['sources'][1]['x_handle']='reply_fixture'
     parent_id=store.enqueue('scheduler','owned-reply-discovery','x_discovery','tweet',{},'machine-reply-prototype')
     discovery=store.claim('tweet',180,4)
     base=settings.root/'media'/parent_id/'reply-machine'/str(uuid.uuid4());base.mkdir(parents=True)
@@ -51,9 +52,9 @@ def reply_packet(runtime):
             'payload':source,'facts':facts,'screenshot':screenshot,'visibility':visibility,'navigation_id':nav,'page_url':page_url}
         return artifact(name+'.json',observation)
     parent_url='https://x.com/parent_fixture/status/1000000000000000001'
-    reply_url='https://x.com/example-channel-b/status/1000000000000000002'
+    reply_url='https://x.com/reply_fixture/status/1000000000000000002'
     p=observe('parent-thread','parent_in_thread','1000000000000000001','parent_fixture','架空原推20:00',thread_nav,now,reply_url)
-    r=observe('reply-thread','reply_in_thread','1000000000000000002','example-channel-b','架空回复21:00',thread_nav,now,reply_url)
+    r=observe('reply-thread','reply_in_thread','1000000000000000002','reply_fixture','架空回复21:00',thread_nav,now,reply_url)
     reread=observe('parent-reread','parent_independent_reread','1000000000000000001','parent_fixture','架空原推20:00',reread_nav,now+.1,parent_url)
     packet={'version':PACKET_VERSION,'capture_id':base.name,'rule':RULE,'observer_kind':'server_rendered_dom',
         'human_review':False,'official_api':False,'parent_in_thread':p,'reply_in_thread':r,'parent_reread':reread,

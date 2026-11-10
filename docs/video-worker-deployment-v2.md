@@ -198,3 +198,26 @@ do not substitute a mutable tag or a different build-stage digest.
 If later replacing an existing V5 image, separately qualify restoring that exact
 previous image plus its mount manifest. Revert only changed service configuration,
 never live DB contents; leave previously stopped services stopped.
+
+## Reproducing the offline compatibility tests
+
+Keep the existing browser seccomp profile, UID 10001, readonly root,
+cap_drop ALL and no-new-privileges. Provide writable private HOME/XDG directories
+on tmpfs plus 256 MiB shared memory. Use a short pytest basetemp such as
+`/testdata/t`; long nested pytest paths can exceed Chromium's Unix socket limit.
+These settings are for isolated tests, not privileges to add to the download
+service or a reason to disable Chromium sandboxing.
+
+Historical archive tests accept `LIGHTHOUSE_TEST_ARTIFACT_DIR`, an absolute
+non-symlink directory holding the two exact archives registered in
+`tests/ops/historical_artifacts.py`. The default is the original workspace outputs
+directory; an independent checkout must explicitly supply the archived inputs.
+The locator checks registered names, bounds and fixed SHA-256. It performs no
+network access and never regenerates proofs. These legacy inputs are not shipped
+in the public repository; missing them is a real reproducibility limitation.
+
+`Dockerfile.api-only` was restored with its immutable-base requirement and existing
+visual-retirement guard. It has static compatibility evidence only; it was not
+built, used to replace a service, or presented as the new download image.
+The two restored CloudBase templates are disabled examples with placeholder
+resources and no credentials; they do not authorize backup access.

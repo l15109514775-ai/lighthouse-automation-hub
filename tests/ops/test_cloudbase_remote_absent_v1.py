@@ -244,7 +244,7 @@ def test_unchanged_previous_completed_pins_allow_multiple_daily_cycles(monkeypat
     daily=importlib.util.module_from_spec(spec);spec.loader.exec_module(daily)
     tree=ast.parse((REPO/'scripts/ops/cloudbase_backup_daily_retention_v2c.py').read_text());nodes=[]
     for node in tree.body:
-        if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id in ('IMAGE','PINS','LEGACY_PINS') for t in node.targets):nodes.append(node)
+        if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id in ('IMAGE','PINS','LEGACY_PINS','PRE_PRUNE_CAP_PINS') for t in node.targets):nodes.append(node)
         elif isinstance(node,ast.FunctionDef) and node.name=='validate_previous':nodes.append(node)
     scope={};exec(compile(ast.Module(body=nodes,type_ignores=[]),'<pinned-old-validation>','exec'),scope)
     monkeypatch.setattr(daily,'PINS',scope['PINS']);monkeypatch.setattr(daily,'accept_reference',lambda _: {'report_file':'owned-report'})
