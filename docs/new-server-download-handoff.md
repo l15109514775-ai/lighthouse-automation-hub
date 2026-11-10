@@ -72,9 +72,14 @@ and the 15-case type-isolation selection, including a newer job behind old rows.
 See [the acceptance report](video-worker-acceptance-v2.md) for exact evidence.
 No test in this scope update changes those results or adds a real-download pass.
 
-Still required: qualify any subsequently reduced runtime artifact, configure and
-test the new host, and complete the authorized real acquisition/recovery test.
-The previous real-source attempt returned `YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED`;
-it was not retried. The new server connection is not yet provided. No new worker
-has been activated on production, and no live task, publication or secret has
-been removed as part of this scope decision.
+The migration host is now provisioned and has passed reboot, isolated container
+and SQLite tests. Its effective policy copies pass preflight; migration 018 on a
+snapshot preserved every existing table. See the migration and acceptance records
+for exact image digests and scope. These checks do not activate production.
+
+Still required: complete the authorized real acquisition/recovery test and final
+single-owner production cutover. The original host's restricted source attempt
+was not repeated there. A new-host acceptance exposed a missing HUB_CONFIG in the
+download helper environment before any download HTTP request; that configuration
+propagation bug is fixed and separately tested. No live task, publication or
+secret has been removed as part of this scope decision.

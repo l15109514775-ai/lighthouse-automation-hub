@@ -137,8 +137,10 @@ See the acceptance record for the exact scope and evidence.
 
 See [video-worker-deployment-v2.md](video-worker-deployment-v2.md) for the ordered
 policy/version reconciliation, source-overlay qualification and targeted startup.
-Do not activate until release gates pass. No schema migration is required by this
-refactor; explicit existing FIFO/V5 table initialization remains unchanged.
+Do not activate until release gates pass. The original isolation refactor did not
+need a schema migration; the subsequent access-protection release requires the
+additive migration 018 described in the new-server handoff. Existing FIFO/V5
+initialization and historical task semantics remain unchanged.
 
 ## Offline continuation: production policy staging
 
@@ -250,3 +252,30 @@ matched its unchanged historical pin in the original private checkout. Member
 bytes are bounded, uniquely addressed and independently SHA-256 checked; no
 archive is extracted into runtime code. Current-source negative cases still refuse
 old deployment approval. This test packaging is not a production installation.
+
+## Migration-host configuration and database qualification
+
+On 2026-11-10, all four pre-copied production policies matched the private
+transfer bundle's reviewed before-hashes. The staged policies were installed
+only in an isolated qualification directory, owned root:10001 with mode 0640.
+Migration 018 was applied transactionally to an SQLite backup copy. All 59
+pre-existing tables retained identical row counts and SHA-256 row digests,
+including 21,123 jobs; integrity_check passed. No live database was modified.
+
+The actual candidate's read-only preflight then reported only
+`YOUTUBE_WHOLE_DISABLED`. A separate qualification-only configuration with that
+switch enabled passed all configuration checks, preserving 474 terminal FIFO
+records and their policy bindings. This did not start a worker. A stopped WAL
+snapshot initially lacked readable sidecars for its read-only container mount;
+the host's read-only inspection prepared the sidecars and the container check
+passed. Do not solve this by opening a changing production database as immutable
+or disabling the database checks.
+
+The first new-host real acceptance stopped with `YOUTUBE_WHOLE_DISABLED` in the
+download helper, after a successful official metadata refresh. Its download HTTP
+counter was zero. The parent used `HUB_CONFIG=.../video-runtime-v5.toml`, but the
+sanitized child environment dropped that path and loaded the default hub.toml.
+The fix retains only a validated, regular configuration path inside HUB_ROOT;
+API keys, credential file variables, proxies and Python injection variables stay
+excluded. The original failed test records are retained; no production attempts
+or publication records are reset to resume the acceptance exercise.

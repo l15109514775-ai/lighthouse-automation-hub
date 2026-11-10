@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import re
 import signal
+import stat
 import subprocess
 import sys
 import time
@@ -222,6 +223,22 @@ def private_environment(root):
     env = {k: os.environ[k] for k in ('PATH', 'SYSTEMROOT', 'WINDIR', 'TEMP', 'TMP', 'TMPDIR', 'LANG', 'LC_ALL') if k in os.environ}
     env.update(HUB_ROOT=str(root), PYTHONNOUSERSITE='1', YTDLP_NO_PLUGINS='1',
                HOME='/tmp/lighthouse-ytdlp', XDG_CONFIG_HOME='/tmp/lighthouse-ytdlp', XDG_CACHE_HOME='/tmp/lighthouse-ytdlp')
+    # The parent may use a dedicated video configuration. Keep that selection
+    # in the helper without inheriting API keys, proxies or other environment.
+    selected = os.environ.get('HUB_CONFIG')
+    if selected is not None:
+        try:
+            path = Path(selected)
+            base = Path(root).resolve()
+            if (not path.is_absolute() or path.resolve() != path or not path.is_relative_to(base)
+                    or any(p.is_symlink() for p in (path, *path.parents))):
+                raise ValueError()
+            info = path.stat()
+            if not stat.S_ISREG(info.st_mode) or not 0 < info.st_size <= 262144:
+                raise ValueError()
+            env['HUB_CONFIG'] = str(path)
+        except (OSError, ValueError):
+            raise HubError('YOUTUBE_DOWNLOAD_CONFIG_PATH_INVALID', review=True) from None
     return env
 
 

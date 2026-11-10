@@ -396,3 +396,39 @@ Still outstanding: effective production-policy qualification, migration 018 on
 the final database, authorized real-content acquisition/recovery and production
 cutover with one owner. Backup-object read/write and hash checks on the migration
 host passed separately; they are not a full backup restore qualification.
+
+## Dedicated child configuration regression (2026-11-10)
+
+Real new-host acceptance exposed a subprocess boundary missing from the synthetic
+tests: the parent selected the dedicated video configuration but the helper loaded
+the disabled default. Download-side HTTP count was zero. Official metadata refresh
+succeeded; this is neither successful media acquisition nor a platform refusal.
+
+The fix only adds a validated HUB_CONFIG path to the existing sanitized helper
+environment. The new tests start a real Python helper with an explicitly disabled
+default configuration and enabled alternate configuration, check the selected
+switch, and reject credential/proxy/injection inheritance, missing/outside/relative
+paths, directories, oversized files and symlinks. Linux passed all eight cases;
+Windows passed seven with the Linux symlink case explicitly skipped.
+
+The related Linux downloader/transport/access selection initially had 134 passes
+and one new fixture failure: its template flag had an inline comment or could be
+absent, unlike the local ignored configuration. The fixture now explicitly sets
+the default false and alternate true independently of the template's original
+value; the eight-case rerun passed. Production code was not changed to fix that
+fixture issue. This is a targeted evidence union, not a new clean full-suite run.
+
+Runtime image with the fix:
+`sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414`.
+Its test derivative:
+`sha256:e9b04314e4172aef4222e1620cb42b17540eeac778fcd36874284faf9752a14c`.
+The base adapter before-hash was verified before replacement; no dependency was
+upgraded. The final test-only fixture was overlaid read-only and recorded as
+SHA-256 `6aa755ac35de1c6da060c945751cb219f3e46deaba2b65b8c41ed7c6af3e3e43`.
+The actual test derivative passed Compose restart, WAL/lock, foreign-task
+preservation and stop-only rollback at
+`/var/tmp/lighthouse-acquisition-74w4zjj4/report.json`.
+
+Production remains on the original host. A fresh isolated real-source acceptance
+uses this fixed runtime; the prior failed test database is retained, not reset.
+Its final outcome must be recorded separately before any activation decision.
