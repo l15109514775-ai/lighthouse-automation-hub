@@ -1,0 +1,48 @@
+{
+  "version": "acquisition-effective-release-v1",
+  "base_image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+  "base_archive_sha256": "69bf7bd9dd7201b049cf89692e794a7f52275003cfcd94e6848bab2eae5f9f9d",
+  "files": {
+    "services/hub/worker.py": {
+      "sha256": "5f9ae7942665a9fb5718af3894fdc1934c4c225be65f43c79c06fbd4a6d66190",
+      "bytes": 11208,
+      "mode": "0644"
+    },
+    "services/hub/source_controls.py": {
+      "sha256": "663738abb2b0d6b807f7456e49a38f8417a10615b8581d49ffe9c89b21a25169",
+      "bytes": 5010,
+      "mode": "0644"
+    },
+    "config/source-controls.json": {
+      "sha256": "608209d67a559c30bdea3f5a41e6593e8b0bbd43e75c48b9ff74159fcbc20474",
+      "bytes": 227,
+      "mode": "0640"
+    }
+  },
+  "overlay_archive_bytes": 20480,
+  "overlay_archive_sha256": "c056c7fac7da0b98d880af8276b1d1216bc32df68a99a8e5855782caa7238a05",
+  "overlay_restore_evidence": {
+    "state": "restored_overlay_bundle_offline_tests_passed",
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "archive_sha256": "c056c7fac7da0b98d880af8276b1d1216bc32df68a99a8e5855782caa7238a05",
+    "files_verified": 3,
+    "fixture_sha256": {
+      "tests/conftest.py": "d5073b16a642a6f6b9468ece57a1c32895107225fae8ae31d055b507b1eacec5",
+      "tests/test_source_controls.py": "b71f498f4849e3d3889bfb88fda134b93315031b8ee94d956d9719fcd4fb9bad",
+      "config/hub.toml": "491c4c211d649cb6947a3fa973e12973ad7bbe384bc8491eeb06d6d2f86bc8b7"
+    },
+    "paused": {
+      "x": [
+        "yuuhi_sendo"
+      ],
+      "youtube": [
+        "UCuDY3ibSP2MFRgf7eo3cojg"
+      ]
+    },
+    "production_container_ids_unchanged": true,
+    "live_data_mounts": false,
+    "external_requests": 0
+  },
+  "restored_runtime_tests_passed": 5,
+  "qualification_scope": "Incumbent fallback including the active numbered readiness guard and owner pause policy"
+}

@@ -15,13 +15,12 @@ acquisition boundary. Its 47 focused runtime tests supplement historical results
 they do not relabel the 34 deferred legacy failures as passing.
 
 The new host passed an isolated authorized real download, media verification and
-SIGKILL/resume with the same task. Both naturally discovered Chise downloads
-completed; one also reached verified public publication as `BV12iWG6zEP7`.
-The 11.2 GB source's bounded upload recovery has completed file transfer and
-integrity coverage, but stopped after a draft-save redirect without committing
-the preparation receipt. Its existing upload must be reconciled and reused;
-submission and public verification remain open. These are
-authorized real-content operations, not synthetic test publications.
+SIGKILL/resume with the same task. The first two Chise recordings reached
+verified public publication. The receipt for `_nadmR0WzqI` records
+`BV12iWG6zEP7`. The 11.2 GB recording `lWzXr6h0SyM` also completed after
+recovery and has a verified public receipt for `BV1eNWL6tEh8`. Preserve both
+records when migrating. [First public receipt](releases/chise-public-verification-20261111.json)
+and [long recording receipt](releases/chise-long-public-verification-20261111.json).
 
 Full new-host external backup/restore remains outstanding. The later within-budget
 attempt hit an inherited 30-minute service timeout. The missing 75-minute drop-in
@@ -90,13 +89,16 @@ UID 10001 container probe. See [the portable test procedure](portable-image-veri
 The companion private manifest records all 20 rootfs layer hashes and source
 checkpoint `463675e`. It is a captured runtime, not the whole evolving public tree.
 
-The current effective service additionally mounts two source-control modules and
-an operational pause configuration. Their exact hashes and base binding are in
-[`releases/acquisition-source-controls-v1.json`](releases/acquisition-source-controls-v1.json).
-The private 20,480-byte `overlays.tar` is retained separately from the base image;
-do not deploy the base alone and assume that it enforces the owner's pause.
-Its isolated archive restoration, exact-file probe and five focused runtime tests
-passed against the qualified image without live data mounts. Current package versions and
+The current service additionally mounts the dispatcher, the updated numbered
+readiness guard and the owner's pause configuration. Restore the three files
+from the private `overlays.tar` paired with the
+[current fallback manifest](releases/incumbent-fallback-20261111.json).
+Verify its SHA-256, `c056c7fac7da0b98d880af8276b1d1216bc32df68a99a8e5855782caa7238a05`,
+and match the three mounted file hashes after rollback. This package restores
+the worker that resumed the November 11 recording. An isolated restore of this
+exact archive passed the file/config probe and five runtime tests. The
+[earlier manifest](releases/acquisition-source-controls-v1.json) documents the
+release that held numbered readiness children before the repair. Package versions and
 selected runtime hashes are in
 [`releases/acquisition-runtime-0722.json`](releases/acquisition-runtime-0722.json).
 This inventory is evidence about the captured runtime, not a new APT lockfile.

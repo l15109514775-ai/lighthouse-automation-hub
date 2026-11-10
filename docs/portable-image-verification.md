@@ -74,7 +74,7 @@ This proves captured-base portability on the tested Linux amd64 environment.
 It does **not** prove fresh public-source reproducibility, private-image
 redistribution safety or a real YouTube request. The two current source-control
 modules and pause file are separately hash-bound to the base; see the
-[effective release manifest](releases/acquisition-source-controls-v1.json).
+[current fallback manifest](releases/incumbent-fallback-20261111.json).
 
 ## Effective overlay restore test
 
@@ -83,7 +83,8 @@ Use a bundle containing `manifest.json`, `overlays.tar` and the synthetic
 `fixtures/` directory described below. The verifier checks the release's
 base image and archive digest before starting the private daemon, then runs
 the overlay test on the private socket before shutting it down. The former
-production host passed this combined drill.
+production host passed this combined drill using the pre-repair
+[source-control manifest](releases/acquisition-source-controls-v1.json).
 [Standby run](releases/fenced-standby-image-20261111.json).
 
 The captured base alone predates the source-control change. To validate the
@@ -107,6 +108,14 @@ python3 scripts/test_acquisition_overlay_bundle.py \
 The fixture directory must contain `tests/conftest.py`,
 `tests/test_source_controls.py` and synthetic `config/hub.toml`. Their hashes are
 recorded in the report. Never substitute a real secret-bearing configuration.
+
+For a rollback from the source-built candidate, use the November 11 fallback
+manifest and matching private archive. That archive was reconstructed from the
+three files mounted in the healthy incumbent after the readiness repair.
+The production guard digest starts with `663738ab`; the earlier guard digest
+starts with `3ec8fca0`. Check the full hashes in the manifest. Fresh offline
+containers verified all three files, the selected owner pause and five worker
+tests using the retained synthetic fixtures. [Fallback restore evidence](releases/incumbent-fallback-20261111.json).
 
 The actual restored overlay bundle passed the file/config probe and all five
 focused source-control/Worker tests against the qualified 0722 image. All six
