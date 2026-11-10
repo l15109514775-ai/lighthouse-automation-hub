@@ -14,14 +14,14 @@ from services.hub.evidence import sha256_file
 from services.hub.locks import resource_guard
 from services.hub.replay_multipart_v4 import (DEFAULT_POLICY,MultipartMediaProcessingV4,digest,
     evaluate_whole_resources,plan_whole_replay,validate_whole_replay_plan,validate_planning_policy)
-from services.hub.youtube_download import duration_seconds
+from services.hub.youtube_download import CHANNELS,duration_seconds
 from services.hub.youtube_natural_plan_v3 import natural_source_plan
 from test_media_processing import make_video,recover
 
 
 def evidence(*,seconds=108000,video_bytes=25_000_000_000,audio_bytes=1_000_000_000,width=1920,height=1080,fps=60):
     start=datetime(2026,10,31,16,tzinfo=timezone.utc);end=start+timedelta(seconds=seconds)
-    raw={'id':'ownedNew001','snippet':{'channelId':'UCaaaaaaaaaaaaaaaaaaaaaa','publishedAt':'2026-07-01T00:00:00Z'},
+    raw={'id':'ownedNew001','snippet':{'channelId':sorted(CHANNELS)[0],'publishedAt':'2026-07-01T00:00:00Z'},
         'status':{'privacyStatus':'public'},'contentDetails':{'duration':f'PT{seconds}S'},
         'liveStreamingDetails':{'actualStartTime':start.isoformat(),'actualEndTime':end.isoformat()}}
     formats=[{'format_id':'ownedVideo','ext':'mp4','protocol':'https','vcodec':'avc1.640028','acodec':'none',

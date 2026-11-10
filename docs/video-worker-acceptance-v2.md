@@ -351,3 +351,48 @@ and authorized successful real-content acquisition/recovery. The only real sourc
 attempt was refused and is not repeated. Fresh public-image reconstruction remains
 a separate reproducibility limitation; the immutable existing-image route has
 actual container evidence and does not require enabling a paid API or changing IP.
+
+## Migration-host candidate qualification (2026-11-10)
+
+The new Ubuntu 24.04 host passed an actual host reboot, with key SSH/sudo,
+firewall and Docker restored. Production ownership remains on the original host.
+No acquisition service has been enabled for real work on the migration host.
+
+An incremental candidate uses the immutable image above and six canonical runtime
+files from commit `54e16a72b0e7c21d89c03bfa616458800eaccc76`: the highest-download
+adapter, acquisition preflight/runtime, access policy, credential loader and
+migration 018. It preserves the existing CLI/publication modules and dependency
+versions. This is not a claim that the public repository reconstructs the entire
+private production image. No dependency installation occurs at container startup.
+
+Candidate image:
+`sha256:689e955a9654f9c4ea80ecd8adfdb67627fba55e857a4aaa2b3b6f0fa1be8240`.
+Its test-only derivative (fixtures/scripts added, no production data):
+`sha256:66089c763b34ae31a6930d72d5c27213c6fa423b07ae404b663357effd1823ac`.
+
+The derivative passed 178 tests across 14 current download/isolation/recovery
+modules in an actual Docker container: network none, UID/GID 10001, read-only
+root, capabilities dropped, no-new-privileges and explicit resource limits.
+The final derivative also passed Compose lifecycle checks for Secret permissions,
+WAL, two-container locking, SIGKILL/restart, preservation of foreign tasks and
+stop-only rollback. Its synthetic evidence is in
+`/var/tmp/lighthouse-acquisition-p2vkjwgv/report.json` on the migration host.
+All test containers were stopped. No YouTube download or publication occurred.
+
+Three synthetic fixture helpers now derive their channel identities from the
+candidate's existing channel scope, rather than hardcoding public placeholder
+IDs. No production authorization or identity guard was relaxed. Their full
+Windows selection passed 84 tests; the Linux selection above also exercised the
+helpers. Tests need a repository-root working directory.
+
+Earlier attempts are retained as failures: 40 failed/98 passed/52 errors, then
+19 failed/159 passed. An overbroad CLI overlay depended on an absent X module and
+was withdrawn. Fixture IDs were corrected; the synthetic media work directory
+was moved from a 512 MiB tmpfs to the actual host disk, so the real 15 GiB resource
+gate stays active. These results do not supersede the unresolved historical
+diagnostics documented above or claim a clean full-suite run.
+
+Still outstanding: effective production-policy qualification, migration 018 on
+the final database, authorized real-content acquisition/recovery and production
+cutover with one owner. Backup-object read/write and hash checks on the migration
+host passed separately; they are not a full backup restore qualification.

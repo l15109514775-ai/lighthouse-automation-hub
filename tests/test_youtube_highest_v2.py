@@ -15,7 +15,7 @@ from adapters.ytdlp_highest_v2 import select_highest,preflight_budget,budget_lim
 from services.hub.budget import Budget
 from adapters import ytdlp_replay as legacy
 
-CHANNEL='UCaaaaaaaaaaaaaaaaaaaaaa'
+CHANNEL=sorted(CHANNELS)[0]
 START='2026-10-31T16:00:36Z'
 
 def plan(**changes):
@@ -42,6 +42,11 @@ def write_policy(s,value):
 @pytest.fixture
 def highest(runtime,monkeypatch):
     s,db=runtime;s.config['youtube_highest_download_enabled']=True
+    # Match the candidate's existing channel scope without changing its guards.
+    # All observations and transports below remain synthetic and offline.
+    assert len(s.config['sources'])==len(CHANNELS)
+    for source,channel in zip(s.config['sources'],sorted(CHANNELS)):
+        source['youtube_channel_id']=channel
     raw={'id':VIDEO_ID,'snippet':{'channelId':CHANNEL,'title':'Owned highest replay','publishedAt':'2026-11-01T01:44:55Z'},
         'status':{'privacyStatus':'public'},'contentDetails':{'duration':'PT7H8M35S'},
         'liveStreamingDetails':{'actualStartTime':START,'actualEndTime':'2026-10-31T23:09:22Z'}}

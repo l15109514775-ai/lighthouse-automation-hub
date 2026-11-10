@@ -6,10 +6,11 @@ import pytest
 
 from services.hub.errors import HubError
 from services.hub.youtube_natural_plan_v3 import natural_source_plan,VERSION
+from services.hub.youtube_download import CHANNELS
 
 
 def fixture():
-    raw={'id':'ownedNew001','snippet':{'channelId':'UCaaaaaaaaaaaaaaaaaaaaaa','publishedAt':'2026-07-01T00:00:00Z'},
+    raw={'id':'ownedNew001','snippet':{'channelId':sorted(CHANNELS)[0],'publishedAt':'2026-07-01T00:00:00Z'},
         'status':{'privacyStatus':'public'},'contentDetails':{'duration':'PT1H'},
         'liveStreamingDetails':{'actualStartTime':'2026-11-01T02:00:00Z','actualEndTime':'2026-11-01T03:00:00Z'}}
     def video(name,height,fps,size,rate,codec='avc1.640028'):
