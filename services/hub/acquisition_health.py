@@ -1,5 +1,6 @@
 """Read-only health probe: both producer and worker must belong to this boot."""
 import json
+from contextlib import closing
 import os
 from pathlib import Path
 import sqlite3
@@ -24,7 +25,7 @@ def healthy(database, marker=MARKER, *, now=None, max_age=150):
         started = json.loads(marker.read_text('utf-8'))['started_at']
         if not isinstance(started, (float, int)) or not 0 < started <= now:
             return False
-        with sqlite3.connect(Path(database).resolve().as_uri() + '?mode=ro', uri=True, timeout=2) as db:
+        with closing(sqlite3.connect(Path(database).resolve().as_uri() + '?mode=ro', uri=True, timeout=2)) as db:
             rows = dict(db.execute('SELECT name,at FROM heartbeats WHERE name IN (?,?)', NAMES))
         return all(name in rows and started <= rows[name] <= now and now - rows[name] <= max_age for name in NAMES)
     except (OSError, ValueError, KeyError, TypeError, sqlite3.Error):
