@@ -55,7 +55,14 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    preserve the stop and report the actual code.
 2. **New-host full external backup and restore.** The daily budget refusal had
    zero dispatched requests and has an exact guarded recovery proof. The actual
-   safe-deferral entry passed; next normal timer is 2026-11-11 03:30 Asia/Shanghai.
+   safe-deferral entry passed. After the real Asia/Shanghai day rollover, the
+   unchanged budget allowed one normal-entry acceptance run at 2026-11-11 00:00:16.
+   Invocation `036100ba2f34469b8d955f901f519312`, operation
+   `7e1f6b00-ead5-45ae-8ae4-be0e8cbf2b2e`, is uploading at the latest checkpoint;
+   its live sidecar and increasing TCP acknowledged-byte counters were observed.
+   This is progress, not restore success. The regular 03:30 timer is unchanged.
+   Observe this same invocation; do not start another operation on a timeout.
+   See [the dated in-progress record](releases/backup-acceptance-20261111.json).
    Require a budget-permitted real upload, captured remote GET, all-entry hashes
    and restored SQLite integrity/foreign-key results. A local code archive, old
    verified backup, canary or enabled timer is not this evidence. Preserve errors,

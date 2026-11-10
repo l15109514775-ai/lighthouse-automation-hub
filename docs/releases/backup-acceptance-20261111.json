@@ -1,0 +1,75 @@
+{
+  "version": "new-host-within-budget-backup-acceptance-v1",
+  "requested_at": 1794326416.8562343,
+  "at_shanghai": "2026-11-11T00:00:16.856479+08:00",
+  "invocation_id": "036100ba2f34469b8d955f901f519312",
+  "budget_preflight": {
+    "state": "budget_available",
+    "required_network_bytes_upper": 386648864,
+    "required_requests": 7,
+    "periods": {
+      "daily": {
+        "period": "2026-11-11",
+        "requests": 0,
+        "bytes": 0
+      },
+      "monthly": {
+        "period": "2026-11",
+        "requests": 102,
+        "bytes": 2241894688
+      }
+    },
+    "limits": {
+      "daily_network_bytes": 512000000,
+      "monthly_network_bytes": 8000000000,
+      "daily_requests": 50,
+      "monthly_requests": 250,
+      "max_archive_bytes": 192000000
+    },
+    "external_requests": 0,
+    "budget_refunded": false,
+    "backup_started": false,
+    "backup_success_claimed": false
+  },
+  "normal_timer_changed": false,
+  "automatic_retry": false,
+  "observation": {
+    "at": 1794326852.4666038,
+    "requested_at": 1794326416.8562343,
+    "systemd": {
+      "MainPID": "54614",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ActiveState": "activating",
+      "SubState": "start",
+      "InvocationID": "036100ba2f34469b8d955f901f519312"
+    },
+    "requested_invocation": "036100ba2f34469b8d955f901f519312",
+    "new_operations": [
+      {
+        "operation_id": "7e1f6b00-ead5-45ae-8ae4-be0e8cbf2b2e",
+        "state": "uploading",
+        "error_code": null
+      }
+    ],
+    "new_requests": {
+      "7e1f6b00-ead5-45ae-8ae4-be0e8cbf2b2e": {
+        "done": 3,
+        "reserved": 1
+      }
+    },
+    "latest": {
+      "daily_id": "bf4d9cce-2df7-463a-9aa2-86102b51ea40",
+      "state": "accept_started",
+      "error_code": null
+    },
+    "acceptance": {},
+    "restore_reports": [],
+    "live_sidecars": [
+      "1a079b3cf1ad lighthouse-cloudbase-backup-92f054b9-55e6-46e9-8cbe-b074f3eedbf5"
+    ]
+  },
+  "acceptance_complete": false,
+  "remote_restore_verified": false,
+  "note": "An actual normal-entry run is in progress, not a successful backup claim. Inspect this invocation and ledger before any further action."
+}

@@ -91,3 +91,25 @@ again. This rollback is prepared, not executed against production.
 
 Full upload, captured remote GET and restore acceptance still await the next
 within-budget run. No remote success has been synthesized.
+
+## Within-budget acceptance started — 2026-11-11
+
+At the actual Asia/Shanghai day rollover, the read-only guard observed zero new
+daily usage, sufficient unchanged daily/monthly headroom and no unresolved backup
+operation. At 00:00:16 the existing systemd entry was started exactly once:
+invocation `036100ba2f34469b8d955f901f519312`, daily
+`bf4d9cce-2df7-463a-9aa2-86102b51ea40`, operation
+`7e1f6b00-ead5-45ae-8ae4-be0e8cbf2b2e`. The regular 03:30 timer was not changed.
+
+The current checkpoint is **uploading**, with three completed requests and one
+reserved/in-flight request. A live sidecar and increasing acknowledged bytes on
+its established connection prove transport progress; a healthy process alone
+would not. No restore report exists yet. The old budget failure and all usage
+remain unchanged; no refund, limit increase or duplicate retry occurred.
+
+Private request/start/observation records are under
+`/var/lib/lighthouse-migration/within-budget-backup-acceptance-v1`; the sanitized
+[public checkpoint](releases/backup-acceptance-20261111.json) is explicitly pending.
+Observe the same invocation/operation until terminal, then inspect the captured
+GET and restore proof. Do not infer completion from a systemd `Result=success`
+field while the oneshot unit is still `activating`.
