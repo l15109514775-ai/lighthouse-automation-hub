@@ -1,0 +1,108 @@
+{
+  "at": 1794324640.6364558,
+  "video_jobs": {
+    "original_rows": 1324,
+    "missing_rows": 0,
+    "changed_rows": 0,
+    "compared_columns": [
+      "job_id",
+      "source_platform",
+      "source_id",
+      "job_type",
+      "queue",
+      "state",
+      "created_at",
+      "updated_at",
+      "attempts",
+      "error_code",
+      "external_publish_id",
+      "policy_version",
+      "payload",
+      "result",
+      "stage",
+      "next_run",
+      "lease_owner",
+      "lease_until"
+    ],
+    "added_columns": []
+  },
+  "publication_records": {
+    "original_rows": 92,
+    "missing_rows": 0,
+    "changed_rows": 0,
+    "compared_columns": [
+      "idempotency_key",
+      "job_id",
+      "platform",
+      "source_platform",
+      "source_id",
+      "account_id",
+      "kind",
+      "state",
+      "external_id",
+      "external_url",
+      "updated_at"
+    ],
+    "added_columns": []
+  },
+  "frozen_fifo_states": {
+    "completed": 14,
+    "excluded": 458,
+    "existing": 2
+  },
+  "current_fifo_states": {
+    "completed": 14,
+    "download_queued": 1,
+    "excluded": 458,
+    "existing": 2,
+    "plan_queued": 1
+  },
+  "sqlite_integrity": "ok",
+  "foreign_key_violation_count": 0,
+  "historical_fifo": {
+    "original_rows": 474,
+    "missing_rows": 0,
+    "changed_rows": 0,
+    "compared_columns": [
+      "candidate_id",
+      "source_id",
+      "target_uid",
+      "channel_id",
+      "actual_start",
+      "actual_end",
+      "registered_at",
+      "updated_at",
+      "state",
+      "reason",
+      "policy_sha256",
+      "identity_sha256",
+      "source_payload",
+      "source_metadata_sha256",
+      "plan_job_id",
+      "download_job_id",
+      "publication_job_id",
+      "refresh_job_id"
+    ],
+    "added_columns": []
+  },
+  "acquisition": {
+    "container_id": "328a6731c9c687667519d1418012f7aac13b470e85212819c29f088530ca2175",
+    "running": true,
+    "restarts": 0,
+    "health": "healthy",
+    "health_exit": 0
+  },
+  "source_pause": {
+    "version": "source-controls-v1",
+    "paused_x_handles": [
+      "yuuhi_sendo"
+    ],
+    "paused_youtube_channel_ids": [
+      "UCuDY3ibSP2MFRgf7eo3cojg"
+    ],
+    "reason": "Owner requested Yuuhi forwarding pause; keep Chise active"
+  },
+  "backup_next": "Wed 2026-11-11 03:30:00 CST",
+  "database_mutations": false,
+  "history_preserved": true
+}

@@ -2,6 +2,10 @@
 
 ## Current checkpoint
 
+The [current completion audit](download-worker-completion-audit.md) maps the full
+scope to evidence and records the outstanding operational observations. Dated
+sections below preserve historical failures as well as later corrections.
+
 The new-host acquisition service is active and has passed isolated real download,
 SIGKILL/resume, current-image Docker restart and stop-only rollback acceptance.
 The owner-requested Yuuhi pause remains active. On 2026-11-10 a user-reported

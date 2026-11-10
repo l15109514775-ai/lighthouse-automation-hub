@@ -94,9 +94,13 @@ Bilibili profile survived the final source delta, Shanghai ingestion moved to
 the new host, and a real dot query passed. The old source remains fenced.
 
 The qualified immutable image now has a private portable archive with validated
-OCI/layer hashes and a real same-daemon load/offline probe. The current
-[deployment guide](video-worker-deployment-v2.md) lists its hash and limitations.
-Do not mistake that for a fresh public-source build or clean-daemon import.
+OCI/layer hashes and a successful genuinely empty Docker/containerd import and
+offline probe. Current executable overlays separately passed archive restoration
+and Compose acceptance. The [deployment guide](video-worker-deployment-v2.md)
+lists hashes and limits; no fresh public-source build or redistribution audit is
+claimed. See the [current completion audit](download-worker-completion-audit.md)
+for the requirement-by-requirement status rather than treating older blocked
+entries as the current deployment state.
 
 Remaining acceptance includes full new-host remote backup/restore after budget
 headroom returns, final goal-wide evidence/provenance review, and observing a
