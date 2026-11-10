@@ -160,6 +160,27 @@ requires the current owner and acquisition-enabled markers under
 `/etc/lighthouse-hub`. Use these units for the installed release. A generic
 `docker compose up` may revive retired services and bypass the owner gate.
 
+### Pending switch from the incumbent to the source-built image
+
+The installed acquisition marker records the exact image, source and job ID
+of a real accepted download. The existing receipt belongs to the incumbent
+`0722adba`. Retain it with the previous configuration. For the candidate
+`a87681b0`, record the actual accepted job and verified media from that image
+before arming permanent startup. The offline regression and clean import are
+separate evidence. A recording already in flight keeps its original worker
+through transfer and media verification.
+
+The systemd unit consumes two Compose declarations. Use the prepared
+`installed-candidate.compose.json` when switching, and its byte-identical
+`installed-previous.compose.json` when reverting. Keep the matching owner
+and acquisition records private. Check the host video lock and processing
+jobs together immediately before stopping a worker. Apply the declaration to
+the live acquisition file and its migration mirror. Verify the running image,
+the nine candidate mounts (or two incumbent code mounts on rollback), boot
+heartbeats, and the other service IDs. The publisher continues to own its
+existing job, lookup and BV record. [Prepared deployment pair](releases/candidate-systemd-stage-20261111.json)
+and [incumbent fallback](releases/incumbent-fallback-20261111.json).
+
 ## Service rollback versus reverse migration
 
 ### Preserve backup systemd drop-ins during migration
