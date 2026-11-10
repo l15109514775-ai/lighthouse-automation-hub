@@ -4,6 +4,10 @@ Download Worker 2.0 isolates the existing FIFO V4 acquisition implementation in 
 dedicated container. It does not change persisted job_type versions or introduce
 a new queue, database, scheduler, downloader, publisher or LLM.
 
+Deployment gates, production configuration conflicts and rollback commands:
+[video-worker-deployment-v2.md](video-worker-deployment-v2.md).
+This design is not a declaration that production activation has passed.
+
 ## Responsibilities
 
 | Service | Responsibility | State / coordination |

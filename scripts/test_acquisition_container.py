@@ -10,8 +10,66 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
+
+
+def check_concurrent_workers(image, root):
+    """Two real containers, one SQLite DB and one physical video lock."""
+    setup = '''
+import sys,time,tomllib
+from pathlib import Path
+from services.hub.config import Settings
+from services.hub.db import Store
+from services.hub.worker import Worker
+root=Path('/fixture');settings=Settings(root,tomllib.loads((root/'config/hub.toml').read_text()))
+store=Store(settings.db_path)
+'''
+    left = setup + '''
+ident=store.enqueue('youtube','synthetic-left','synthetic_left','video',{},'synthetic')
+def handler(job):
+ (root/'lock-held').write_text('held')
+ until=time.monotonic()+45
+ while not (root/'release-lock').exists() and time.monotonic()<until:time.sleep(.05)
+ assert (root/'release-lock').exists()
+ return {'synthetic':True}
+worker=Worker(settings,store,{'synthetic_left':handler});worked=False;until=time.monotonic()+10
+while not worked and time.monotonic()<until:
+ worked=worker.once('video')
+ if not worked:time.sleep(.1)
+assert worked
+assert store.get(ident)['state']=='completed'
+'''
+    right = setup + '''
+ident=store.enqueue('youtube','synthetic-right','synthetic_right','video',{},'synthetic')
+worker=Worker(settings,store,{'synthetic_right':lambda job:{'synthetic':True}})
+worked=worker.once('video')
+if sys.argv[1]!='blocked':
+ until=time.monotonic()+10
+ while not worked and time.monotonic()<until:
+  time.sleep(.1);worked=worker.once('video')
+row=store.get(ident)
+if sys.argv[1]=='blocked':assert not worked and row['state']=='pending' and row['attempts']==0
+else:assert worked and row['state']=='completed' and row['attempts']==1
+'''
+    base = ['docker','run','--rm','--network','none','--read-only','--user','10001:10001',
+        '--cap-drop','ALL','--security-opt','no-new-privileges','--memory','192m',
+        '--cpus','0.25','--tmpfs','/tmp:size=32m','-v',str(root)+':/fixture',
+        '--entrypoint','python',image,'-c']
+    process = subprocess.Popen([*base,left])
+    try:
+        until = time.monotonic() + 30
+        while not (root/'lock-held').exists() and process.poll() is None and time.monotonic()<until:
+            time.sleep(.1)
+        assert (root/'lock-held').exists()
+        subprocess.run([*base,right,'blocked'],check=True,timeout=30)
+        (root/'release-lock').write_text('release')
+        assert process.wait(timeout=30) == 0
+        subprocess.run([*base,right,'complete'],check=True,timeout=30)
+    finally:
+        (root/'release-lock').write_text('release')
+        if process.poll() is None:process.wait(timeout=50)
 
 
 def main():
@@ -24,6 +82,10 @@ def main():
     project = root.name
     (root / '.env').write_text('')
     shutil.copyfile(args.compose, root / 'compose.yaml')
+    # The production image need not ship example configuration. Seed only from
+    # the public sample beside the explicitly supplied source Compose file.
+    shutil.copyfile(args.compose.resolve().parent / 'config/hub.example.toml', root / 'test-example.toml')
+    (root / 'test-example.toml').chmod(0o444)
     (root / 'test.yaml').write_text('services:\n  replay-acquisition-worker:\n    network_mode: none\n')
     env = {**os.environ, 'LIGHTHOUSE_ACQUISITION_IMAGE': args.image}
     compose = ['docker', 'compose', '-p', project, '-f', str(root / 'compose.yaml'),
@@ -37,7 +99,7 @@ from services.hub.db import Store
 from services.hub.youtube_download import CHANNELS
 from test_replay_fifo_v4 import fifo
 from test_youtube_download_v4 import configure_v4
-root=Path('/fixture');raw=Path('config/hub.example.toml').read_text()
+root=Path('/fixture');raw=(root/'test-example.toml').read_text()
 cfg=tomllib.loads(raw);s=Settings(root,cfg);s.prepare();store=Store(s.db_path);store.init()
 f=configure_v4(fifo.__wrapped__((s,store)))
 raw=raw.replace('youtube_whole_replay_download_enabled = false','youtube_whole_replay_download_enabled = true')
@@ -108,6 +170,8 @@ print('permissions-secret-wal-no-external-work: PASS')
 '''
         subprocess.run(['docker', 'exec', ident, 'python', '-c', probe], check=True)
         report['checks']['secret_permissions_wal'] = True
+        check_concurrent_workers(args.image, root)
+        report['checks']['two_containers_shared_database_and_video_lock'] = True
         subprocess.run(['docker', 'kill', '--signal', 'KILL', ident], check=True, stdout=subprocess.DEVNULL)
         subprocess.run(['docker', 'start', ident], check=True, stdout=subprocess.DEVNULL)
         wait_healthy(ident, allow_restart=True)
@@ -120,6 +184,19 @@ print('permissions-secret-wal-no-external-work: PASS')
             assert current == prior
             assert db.execute('pragma integrity_check').fetchone()[0] == 'ok'
         report['checks']['sigkill_restart_and_foreign_job_preserved'] = True
+        rollback = Path(__file__).with_name('rollback_acquisition.py')
+        rollback_args = [sys.executable, str(rollback), '--container', ident,
+            '--expected-image-id', info['Image'], '--expected-data-root', str(root / 'data')]
+        subprocess.run(rollback_args, check=True)
+        assert json.loads(subprocess.check_output(['docker','inspect',ident]))[0]['State']['Running']
+        subprocess.run([*rollback_args, '--apply'], check=True)
+        assert not json.loads(subprocess.check_output(['docker','inspect',ident]))[0]['State']['Running']
+        with sqlite3.connect('file:' + str(root / 'data/hub.sqlite3') + '?mode=ro', uri=True) as db:
+            db.row_factory = sqlite3.Row
+            current = dict(db.execute('SELECT * FROM jobs WHERE job_id=?', (prior['job_id'],)).fetchone())
+            for key in ('payload', 'result'):current[key] = json.loads(current[key])
+            assert current == prior
+        report['checks']['rollback_stops_only_acquisition_and_preserves_job'] = True
         report['passed'] = True
     finally:
         call('stop', 'replay-acquisition-worker')

@@ -82,3 +82,60 @@ is tested against one consistent clock.
 The vendored upstream lock requires CRLF for files whose Git blobs may use LF;
 materialization retains those original verified bytes. Its working tree can show
 newline-only changes; no upstream source commit or lock checksum was changed.
+
+## Phase 4 — Linux and Docker evidence
+
+Linux/Python 3.12 targeted run: 89 passed, 1 failed in 124.11 seconds. The failure
+was incomplete restoration of a deliberate readonly filesystem fault: SQLite
+mirrored mode 0400 onto its WAL/SHM files, but the test restored only the main DB.
+The test now closes its checkpoint reader and restores all its own fixture files;
+the two real resource-fault tests then passed in 0.53 seconds. Production code
+never chmods database files to defeat a permission error. All 90 scoped cases
+therefore have passing results across these runs, not a fabricated single-run total.
+
+Real Docker acceptance, including two separate containers sharing one SQLite DB
+and physical video lock, passed for the effective-production candidate. The second
+worker cannot claim while the first holds the lock, then completes once with one
+attempt; unrelated historical processing rows remain unchanged. A fixture was
+corrected to wait a bounded interval for ordinary idle lock contention, rather
+than assume the first scheduling attempt always wins.
+
+Candidate report: `/var/tmp/lighthouse-acquisition-b8kg57be/report.json`.
+Earlier runtime-image report: `/var/tmp/lighthouse-acquisition-c6__lq1i/report.json`.
+Both cover profile/ports, UID, readonly mounts, Secret readability, capabilities,
+limits, WAL, SIGKILL/restart and the rollback script. Networking was disabled;
+synthetic configuration is not production authorization. The real production
+containers and database were not used as fault-injection targets.
+
+Full canonical-source regression run and baseline comparison are recorded in the
+acceptance report when finished. A sample historical archive-proof failure already
+reproduces on baseline `1272f86`; its frozen code hashes are not rewritten here.
+
+## Production preflight and migration gate
+
+Real-content preflight used a private temporary DB, an existing authorized source
+observation and copies of actual configuration. It stopped before network access:
+the production acquisition switch is off, FIFO policy is unreadable by UID 10001,
+acquisition permits one channel while FIFO/configuration expect two, and FIFO's
+planning fingerprint does not match the planning file. Temporary copies were used
+to isolate these errors; production policies, authorization references and bindings
+were not edited. This is **not** a successful real YouTube download acceptance.
+
+See [video-worker-deployment-v2.md](video-worker-deployment-v2.md) for the ordered
+policy/version reconciliation, source-overlay qualification and targeted startup.
+Do not activate until release gates pass. No schema migration is required by this
+refactor; explicit existing FIFO/V5 table initialization remains unchanged.
+
+## Historical cleanup and rollback scope
+
+Deleted files: **none**. No historical adapter, payload/result format, maintenance
+entry or recovery script has been proved safe to delete. Shared SQL scope/lock
+ownership/receipt reading reduce duplication without removing versioned contracts.
+The legacy V5 combined entry and original job types remain compatible.
+
+`scripts/rollback_acquisition.py` is default-plan-only and checks service identity,
+command, immutable image and data mount. `--apply` stops only that container. Actual
+isolated Compose testing confirmed DB/media preservation and no restart of legacy
+workers. It never restores a stale DB, rewrites attempts, changes publication
+records or requeues unknown results. This verified additive rollback is distinct
+from a still-unqualified production-wide image/config rollback.
