@@ -1,0 +1,36 @@
+{
+  "source_commit": "ef5338650d09f362874faac7d58764efe50569f4",
+  "image": "sha256:bdc7ec91ff17c34b49d0788330c6b316605bfdc6dbc8d12fd29180d3e517dcba",
+  "context_sha256": "a3be265b4f474172976c50d4c87fdb2d885f7133c6d61b51791f79904b27970d",
+  "fresh_build_exit": 0,
+  "cached_build_steps": true,
+  "checks": {
+    "upstream": "{\"upstream_files_verified\": 281}",
+    "pip": "No broken requirements found.",
+    "node": "v24.22.1",
+    "python": "Python 3.12.3",
+    "yt_dlp": "2026.10.26",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ffprobe": "ffprobe version 6.1.1-3ubuntu5 Copyright (c) 2007-2023 the FFmpeg developers",
+    "chromium": "156.0.8078.4",
+    "worker": "usage: replay_multipart_worker_runtime_v4.py [-h] [--once] [--check]",
+    "isolation": "61 passed in 26.83s"
+  },
+  "tests_passed": 61,
+  "junit_sha256": "9194390c68a1eb1caa9642dd859476feedb6fab95b14e95b12ad950186274ac0",
+  "network_during_tests": "none",
+  "fixture": "tracked config/hub.example.toml mounted read-only as config/hub.toml",
+  "original_running_containers_preserved": 9,
+  "promoted": false,
+  "ubuntu_base_digests": [
+    "sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852"
+  ],
+  "image_config_digest": "sha256:3cc44dee347d732fd6c86fd5bf504fb9ba190fe5327684a76cc9dd31dc8f1d09",
+  "dependency_inventory_sha256": "bb3a6d638647c9faf72834c0af6aeafa4b01b3ad54fe52df8ea5e6b9f4dd66f8",
+  "os_packages": 366,
+  "python_distributions": 47,
+  "cached_instructions": [
+    "FROM docker.io/library/ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852"
+  ],
+  "docker_build_no_cache_flag": true
+}

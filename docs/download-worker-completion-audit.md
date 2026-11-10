@@ -26,7 +26,7 @@ Yuuhi's tweet/replay forwarding is paused; only Chise is active.
 | File paths, receipts, cancellation, FFprobe/SHA/content checks | Path/receipt tests and actual isolated 1080p60 acquisition with stream/duration/full-packet-coverage and delivery hashes. A receipt or a partial-file byte count alone is insufficient. |
 | Crash boundaries, SQLite WAL/write-lock/unwritable filesystem/disk floor | Linux fault records and `test_download_crash_boundaries.py` cover result/verified receipt boundaries, SIGKILL, SQLite write lock and process/WAL crash. Actual Docker restart and real same-job download SIGKILL/resume also passed. No production disk was filled for testing. |
 | Resource limits, UID10001, readonly mounts, Secrets, no public download port | Current isolated Compose checks and live acquisition inspection. Original eight-service selected-field audit verifies declarations and code mounts; its network/healthcheck exclusions remain exclusions. The later independent publisher is separately qualified. The corrected root host collector and a real current dot query now enumerate all nine containers; see `releases/publication-host-monitor-20261111.json`. |
-| Locked effective runtime and repeatable deployment | Immutable 0722 base archive passed truly empty Docker/containerd import, all 20 rootfs layer hashes and offline startup. Exact source-control overlay archive passed isolated restore and current-image Compose acceptance. No fresh full public Dockerfile rebuild is claimed. |
+| Locked effective runtime and repeatable deployment | Immutable 0722 base archive passed empty Docker/containerd import, all 20 rootfs layer hashes and offline startup. The source-control overlay passed isolated restore and Compose acceptance. A separate fresh Dockerfile build at `ef53386` passed all 281 upstream file checks as UID 10001 and 61 offline acquisition checks. The source-built image is a candidate. [Build evidence](releases/source-image-verification-20261111.json). |
 | Effective configuration compatibility and migration | Private policy bundle/identity mapping, actual config preflight, additive migration 018 and original-table comparison. Core discovery mismatch was subsequently found and fixed; normal scheduled official monitoring now reaches FIFO. |
 | Preserve other workflows and authorization | Other effective service declarations and mounted code match; legacy video/subtitle runner remain stopped. Tweet discovery has natural scheduled evidence; no fake publication or new blanket authorization was used to manufacture acceptance. New-host real tweet publication is not claimed by these checks. |
 | Four testing layers and regression classification | Unit/real temporary SQLite, actual Docker and simulated/authorized real-download evidence are distinguished. Historical evidence union remains 4,552 passed, 14 failed, 20 errors, 1 skipped, not one clean full-suite run. The 34 unresolved cases are individually classified as owner-deferred closed/retired scope; shared/current failures cannot use that deferral. |
@@ -237,7 +237,7 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    policy above. The three migration archives still await external restore.
 
 These acceptance and conditional cleanup items remain open; none is a reason to disable the already
-qualified service or to repeat a healthy in-flight download. Fresh public-source
-rebuild/redistribution and actual reverse-host execution remain explicitly
-unproven capabilities, not hidden passes. Before final closure re-read current
+qualified service or to repeat a healthy in-flight download. Redistribution
+review, exact future build reproducibility and actual reverse-host execution
+remain unverified. Before final closure re-read current
 states and compare them against this full scope, including any newly found defect.

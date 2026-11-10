@@ -106,3 +106,48 @@ local archive safety tests also passed. Production container IDs were unchanged;
 no live database/profile/secrets were mounted and no provider request was made.
 Both original failure evidence and successful reports are retained. This is an
 isolated restore acceptance, not a production rollback or publisher activation.
+
+## Source build on the migrated host, November 11
+
+Commit `ef53386` built on Linux amd64 from the committed Git tree and the
+281 checksum-verified files listed by the two pinned submodules. Docker ran
+every COPY and RUN instruction with `--no-cache`. The Ubuntu base image
+was present locally. The [build receipt](releases/source-image-verification-20261111.json)
+records the base digest, image manifest, image config and test results. The
+[dependency inventory](releases/source-image-dependencies-20261111.json)
+lists the versions of 366 OS packages and 47 Python distributions installed
+in this build. Future builds against changing package repositories can differ.
+
+The initial build passed the upstream integrity check as root. The app UID
+could not traverse a submodule directory extracted with mode 0700. A repeat
+build with corrected staging directory modes reused the affected cached COPY
+layer. The Dockerfile now grants traversal on restrictive submodule directories
+and runs the checksum check as UID 10001 at build time.
+
+For an isolated check on a Linux host with a clean checkout and initialized
+submodules, run these commands from the repository root. The public example
+supplies the test configuration. A first test invocation without this mount
+passed 16 tests and failed setup for the other 45 because `hub.toml` was
+absent. With the example mounted, all 61 passed. The run covered the four V4
+handlers, SQLite claims, crash recovery and synthetic media delivery. Chromium
+also launched and rendered a local page with the network disabled.
+
+```sh
+git submodule update --init --recursive
+python3 scripts/verify_upstream.py
+docker build --no-cache -t lighthouse-source-check:local .
+proof_dir=$(mktemp -d)
+sudo chown 10001:10001 "$proof_dir"
+docker run --rm --network none --read-only --user 10001:10001 --cap-drop ALL \
+  --security-opt no-new-privileges:true --tmpfs /tmp:size=256m,mode=1777 \
+  --mount "type=bind,src=$PWD/config/hub.example.toml,dst=/opt/lighthouse-hub/config/hub.toml,readonly" \
+  --mount "type=bind,src=$proof_dir,dst=/proof" \
+  lighthouse-source-check:local python -m pytest -p no:cacheprovider -q \
+  --basetemp=/proof/tmp --junitxml=/proof/result.xml \
+  tests/test_worker_type_isolation.py tests/test_acquisition_recovery_faults.py \
+  tests/test_download_crash_boundaries.py tests/test_replay_multipart_worker_runtime_v4.py
+```
+
+Production still uses the qualified immutable image and private policy/code
+overlays. Promotion of the source-built image requires checking those overlays
+against its effective runtime.
