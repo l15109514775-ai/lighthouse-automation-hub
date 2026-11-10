@@ -1,0 +1,36 @@
+{
+  "acquisition": {
+    "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "exit": 1,
+    "tools": {
+      "Xvfb": true,
+      "x11vnc": false,
+      "websockify": false,
+      "xauth": true
+    },
+    "junit_sha256": "e4a3a4b521f4f820a8f2a9537185ae85b09dcc2d76ac25244e52a5b506ea2a37",
+    "passed": false,
+    "diagnostic_codes": [
+      "REPLAY_PART_HANDOFF_TOOL_UNAVAILABLE"
+    ]
+  },
+  "publisher": {
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "exit": 0,
+    "tools": {
+      "Xvfb": true,
+      "x11vnc": true,
+      "websockify": true,
+      "xauth": true
+    },
+    "junit_sha256": "a5e8a1824aa065cd1fa7838fcd3149377f15962c4986e9e66c9fdf9f508d3f9d",
+    "passed": true
+  },
+  "network": "none",
+  "live_browser_profile": false,
+  "real_publishing": false,
+  "test": "tests/test_replay_part_handoff_gui_v5.py",
+  "synthetic_config": true,
+  "writable_media_tmpfs": true,
+  "exposed_ports": 0
+}

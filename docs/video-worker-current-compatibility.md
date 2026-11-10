@@ -235,3 +235,29 @@ Use the nine-module V2 binding archive for candidate migration testing. It
 includes the corrected guard and the dispatcher used by the incumbent. The
 seven-module archive remains available for reproducing the preceding release.
 [Deployment and rollback instructions](portable-image-verification.md).
+
+### Publication GUI test in the two runtime images
+
+`test_replay_part_handoff_gui_v5.py` opens an owned test page and exercises
+the publisher's temporary VNC handoff. With an enabled synthetic configuration
+in both containers, it failed on the source-built acquisition image with
+`REPLAY_PART_HANDOFF_TOOL_UNAVAILABLE`. That image has Xvfb and xauth and
+lacks x11vnc and websockify. In the isolated production publisher image all
+four programs were present and the same test passed, including removal of
+temporary credentials. No platform action occurred. Retain both outcomes in
+the regression record.
+
+For this role-specific run, put `bilibili-video-handoff-v5.json` in a fresh
+root-owned configuration directory with mode 0755. Use mode 0444 for the file
+and the following synthetic contents:
+
+```json
+{"version":"bilibili-video-owner-handoff-v5","enabled":true,"ttl_seconds":900}
+```
+
+Mount that directory read-only at `/opt/lighthouse-hub/config`. Provide an
+empty 32 MiB tmpfs at `/opt/lighthouse-hub/media` owned by UID/GID 10001 with
+mode 0700. Use the public test and its `tests/replay_part_handoff_v5_fixture.mjs`
+fixture, the browser seccomp profile, a writable private HOME and 256 MiB shared
+memory. Run the single test in the publisher image with networking disabled
+and no host ports. [Image IDs, capability probes and JUnit hashes](releases/publication-gui-role-regression-20261111.json).
