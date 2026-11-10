@@ -56,6 +56,12 @@ is a full source archive, **not** a qualified reduced runtime package.
 
 ## Current evidence and remaining work
 
+The four previously staged policy files are now preserved in a private, versioned
+transfer bundle, alongside their exact pre-migration versions and a manifest.
+See the deployment document's **Private policy transfer checkpoint**. This removes
+dependence on the old server's temporary staging directory; it is not a complete
+configuration backup, a lean runtime image or permission to start a download.
+
 The existing immutable candidate passed isolated Compose lifecycle/rollback tests
 and the 15-case type-isolation selection, including a newer job behind old rows.
 See [the acceptance report](video-worker-acceptance-v2.md) for exact evidence.

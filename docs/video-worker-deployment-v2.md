@@ -267,3 +267,27 @@ archive is retained in the private D: task evidence directory and contains no
 live configuration, credential files or Git history. It includes the final
 preflight/error-classifier implementation, unlike the earlier 08eeae0 checkpoint.
 This is a portable source artifact, not a fresh image build or real-download pass.
+
+## Private policy transfer checkpoint
+
+The qualified four-file policy staging set has been exported to the owner's
+private D: evidence storage as `download-policy-migration-v1.tar`, version
+`lighthouse-download-policy-migration-v1`, 30,720 bytes, SHA-256
+`f84ed3d1ca6fac8132b7d5e83d73950201d7a0eac35d7161a275480ade6282b4`.
+The directory is `work/video-worker-v2-audit/private-migration-bundle-20261110`
+under the original private task workspace, outside this Git checkout.
+
+The nine regular members contain four original files, four staged files and a
+manifest. Transfer/hash/member/size checks and JSON/TOML parsing all passed.
+The semantic changes are limited to the FIFO planning fingerprint and the
+acquisition channel scope. The runtime enable switch remains false; the runtime
+and planning policy contents are unchanged. Source hashes were revalidated
+against the live and staged files immediately before packaging.
+
+This artifact contains private account/authorization references and is **not**
+published in Git. It contains no keys, profiles, DB, media or full configuration.
+No production policy was written. Retained before-files are comparison evidence,
+not an automatic rollback over changed policies. Require root:10001 / 0640 on the
+target staged configuration, rerun preflight in the exact image, and complete the
+new-host/real-source acceptance gates before activation. The existing qualified
+image was confirmed present, but has not been transferred to a new server.
