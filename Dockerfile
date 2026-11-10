@@ -21,11 +21,12 @@ RUN cd compositor && npm ci && npm run setup && npx playwright install-deps chro
     && npx playwright install chromium --no-shell --no-remove
 COPY . .
 RUN pip install --no-deps -e . \
-    && python scripts/verify_upstream.py \
+    && find compositor vendor -type d ! -perm -0005 -exec chmod a+rx {} + \
     && /usr/sbin/groupadd -g 10001 lighthouse-app \
     && /usr/sbin/useradd -u 10001 -g 10001 -d /opt/lighthouse-hub -s /usr/sbin/nologin lighthouse-app \
     && mkdir -p data media logs backups \
     && chown -R 10001:10001 data media logs backups \
     && chmod -R a+rX compositor/runtime/browsers compositor/assets
 USER 10001:10001
+RUN python scripts/verify_upstream.py
 CMD ["python","-m","services.hub.cli","api"]
