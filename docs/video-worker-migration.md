@@ -279,3 +279,30 @@ The fix retains only a validated, regular configuration path inside HUB_ROOT;
 API keys, credential file variables, proxies and Python injection variables stay
 excluded. The original failed test records are retained; no production attempts
 or publication records are reset to resume the acceptance exercise.
+
+## New-host cutover findings (2026-11-10)
+
+Real acquisition and same-job interruption recovery have now passed; see the
+acceptance report for exact image, hashes, sample and test limits. Do not treat
+this as permission to run both hosts' schedulers or publishers concurrently.
+
+When reconstructing private Compose settings from `docker inspect`, Docker may
+serialize a seccomp policy as `seccomp={...}`. This is not a portable Compose file
+reference. Compare the parsed inline JSON to the copied, trusted profile, then
+use that profile's absolute deployment path. Stop on any semantic difference;
+do not replace it with `unconfined`. The migration generator now performs this
+comparison, and the sandboxed browser started with the preserved profile.
+
+The copied Bilibili profile required owner login on the new device. The owner
+completed official QR login; the expected account UID was confirmed. Preserve
+that newly authenticated private profile outside the final source-file delta,
+then install it after the delta while both browser writers are stopped. Never
+publish profile contents, copy them into an image, or overwrite this new session
+with the source server's stale profile.
+
+The Shanghai subtitle poller is active and its fetch process still targets the
+old host's authenticated ingest endpoint. Move this caller only after the target
+ingest service and source-restricted ingress have been verified; retain the old
+endpoint until then. A local-only target binding is staging isolation, not a
+working replacement for the remote caller. None of these checks has yet switched
+production ownership or enabled legacy stopped workers.

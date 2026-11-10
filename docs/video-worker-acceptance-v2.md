@@ -432,3 +432,37 @@ preservation and stop-only rollback at
 Production remains on the original host. A fresh isolated real-source acceptance
 uses this fixed runtime; the prior failed test database is retained, not reset.
 Its final outcome must be recorded separately before any activation decision.
+
+## Authorized real acquisition and recovery passed (2026-11-10)
+
+The fixed immutable runtime above completed the authorized `c18fHra3k2I`
+acquisition on the migration host. A deliberately killed isolated container
+retained 649,245,383 bytes. Restarting that same container allowed normal locked
+recovery to reclaim the same job, with attempts increasing from one to two.
+No state was manually reset; there was no third attempt. The original partial
+prefix was preserved and grew. The worker reached `completed`, stage `done`,
+with error_code cleared at 2026-11-10 11:42:28 UTC. The test container then stopped.
+
+An independent offline, read-only container inspected and hashed the final file:
+
+- 2,485,497,021 bytes; 6476.068571 seconds.
+- H.264 1920x1080 at 60fps; AAC 44.1kHz stereo.
+- SHA-256 `1a6405bb5f7fa3e62f65619563ab083e5b6e08d661c8540da8c2e9b2d1a74a4c`.
+- 388,560 video packets and 278,901 audio packets, with verified source-to-merged
+  coverage. The delivery manifest and database result reference the same asset.
+- Single whole-file passthrough delivery; raw tracks released only after verified
+  merge by the existing custody policy. The merged file remains available.
+- SQLite integrity check passed; publication rows remained zero. Neither machine
+  verification nor this test was recorded as human content review.
+
+Evidence on the migration host is under
+`/var/lib/lighthouse-migration/real-acquisition-once-v2/`:
+`controlled-restart.json`, `recovery-report.json`, `final-acceptance.json`, and the
+job's `verified.json` and `delivery-v5/manifest.json`. The original interrupted
+`report.json` is historical evidence; it is not the terminal recovery result.
+
+This closes the real-source acquisition and interruption-recovery test for this
+sample. It does not prove production cutover, a new whole-host reboot with live
+production, or every long/segmented input. Synthetic segmentation/fault evidence
+remains distinct. Production still belongs to the original host, pending final
+synchronization, caller routing, configuration deployment and single-owner checks.
