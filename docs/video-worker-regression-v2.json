@@ -17,1998 +17,1633 @@
     "passed": 33
   },
   "current_evidence_union_not_single_run": {
-    "passed": 4189,
+    "passed": 4316,
     "error": 147,
-    "failed": 250,
+    "failed": 123,
     "skipped": 1
   },
   "unresolved_baseline_passed_cases": [],
-  "unresolved_count": 397,
+  "unresolved_count": 270,
   "unresolved_tests": [
     {
       "test": "tests.ops.test_archive_retention_v2c::test_reproducible_narrow_build_preserves_runtime_scope_state_and_old_templates",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[failure]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[skip]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[wrong_count]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[wrong_source]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[network]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[production_mount]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[junit]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[proof_path]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-completed-True]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-accept_failed-False]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-accept_started-False]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[new-completed-True]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[new-accept_failed-True]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[unknown-completed-False]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[none]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[missing_receipt]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[history_changed]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[receipt_state]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[plan_changed]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[latest_reappeared]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[legacy_changed]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accept_started]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accept_failed]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accepted_pending_prune]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[prune_failed]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[release_check]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[unit_verify]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[reload]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_rollback_preserves_completed_history_and_restores_pointer_on_failure[False]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_archive_retention_v2c::test_rollback_preserves_completed_history_and_restores_pointer_on_failure[True]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_capture_two_reference_sources_v2::test_real_recorded_capture_has_same_owner_receipts_original_time_and_no_models_or_publish",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_capture_two_reference_sources_v2::test_tampered_descriptor_raw_hash_cannot_qualify",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_cloudbase_remote_absent_v1::test_new_entry_pins_old_workflow_and_final_recovery_source",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_cloudbase_remote_absent_v1::test_unchanged_previous_completed_pins_allow_multiple_daily_cycles",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_inventory_today_x_gap_v1::test_two_handle_complete_raw_inventory_no_details_no_cursor_or_publication_changes",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_inventory_today_x_gap_v1::test_two_pages_each_cap_stays_partial_and_preserves_real_continuation",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_inventory_today_x_gap_v1::test_budget_reservation_stops_before_timeline_and_partial_does_not_claim_missing_scan_complete",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_inventory_today_x_gap_v1::test_existing_jobs_and_publications_are_classified_without_new_import_or_send",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_prune_cloudbase_verified_clones_v1::test_exact_plan_checks_remote_entry_bytes_hashes_and_readonly_sqlite_integrity",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_prune_cloudbase_verified_clones_v1::test_nonverified_unknown_stale_or_changed_sources_do_not_make_plan[mtime]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_prune_cloudbase_verified_clones_v1::test_completed_journal_retains_every_evidence_record_and_only_exact_candidates",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_prune_cloudbase_verified_clones_v1::test_interrupted_unlink_window_accepts_absence_only_after_durable_deleting_state",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_parent_requires_exact_saved_66_and26_raw_hashes_and_complete_junit",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_parent_retention_must_have_same_image_manifest_and_exact_parent",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_actual_group_count_comes_from_manifest_and_not_old66",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_scope_refuses_other_runtime_or_configuration_even_when_self_consistently_hashed",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_parent_manifest_and_141_source_membership_cannot_drift",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_test_counts_are_positive_integers_and_selections_cannot_inject_options",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_real_tar_bytes_are_verified_before_any_payload_is_written",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_tar_symlinks_and_path_traversal_are_rejected_without_writes",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_exact_two_runtime_deltas_are_required_and_no_third_is_accepted",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v8::test_existing_identical_frozen_parser_is_the_only_allowed_unchanged_payload",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_parent_requires_exact_saved_141_and26_raw_hashes_and_complete_junit",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_parent_retention_must_have_same_image_manifest_and_exact_parent",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_actual_group_count_comes_from_manifest_and_not_old141",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_scope_refuses_other_runtime_or_configuration_even_when_self_consistently_hashed",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_parent_manifest_and_141_source_membership_cannot_drift",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_test_counts_are_positive_integers_and_selections_cannot_inject_options",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_real_tar_bytes_are_verified_before_any_payload_is_written",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_tar_symlinks_and_path_traversal_are_rejected_without_writes",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_exact_three_runtime_deltas_are_required_and_no_fourth_is_accepted",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_download_access_v9::test_existing_identical_frozen_parser_is_the_only_allowed_unchanged_payload",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_parent_requires_exact_saved_254_and26_raw_hashes_and_complete_junit",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_parent_retention_must_have_same_image_manifest_and_exact_parent",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_actual_group_count_comes_from_manifest_and_not_old254",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_scope_refuses_other_runtime_or_configuration_even_when_self_consistently_hashed",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_parent_manifest_and_141_source_membership_cannot_drift",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_test_counts_are_positive_integers_and_selections_cannot_inject_options",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_real_tar_bytes_are_verified_before_any_payload_is_written",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_tar_symlinks_and_path_traversal_are_rejected_without_writes",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_exact_lookup_runtime_delta_is_required_and_no_second_is_accepted",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_draft_hydration_v7::test_existing_identical_frozen_parser_is_the_only_allowed_unchanged_payload",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_editor_v10::test_parent_manifest_910_and_runtime141_are_preserved",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_runtime_alias_v5::test_parent_requires_exact_saved_87_and26_raw_hashes_and_complete_junit",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_runtime_alias_v5::test_parent_retention_must_have_same_image_manifest_and_exact_parent",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_runtime_alias_v5::test_actual_group_count_comes_from_manifest_and_not_old87",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_runtime_alias_v5::test_scope_refuses_other_runtime_or_configuration_even_when_self_consistently_hashed",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_runtime_alias_v5::test_parent_manifest_and_141_source_membership_cannot_drift",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_runtime_alias_v5::test_test_counts_are_positive_integers_and_selections_cannot_inject_options",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_runtime_alias_v5::test_real_tar_bytes_are_verified_before_any_payload_is_written",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_replay_runtime_alias_v5::test_tar_symlinks_and_path_traversal_are_rejected_without_writes",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_source_inventory_v11::test_parent_manifest_914_and_runtime141_are_preserved",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_parent_requires_exact_saved_70_and26_raw_hashes_and_complete_junit",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_parent_retention_must_have_same_image_manifest_and_exact_parent",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_actual_group_count_comes_from_manifest_and_not_old70",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_scope_refuses_other_runtime_or_configuration_even_when_self_consistently_hashed",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_parent_manifest_and_141_source_membership_cannot_drift",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_test_counts_are_positive_integers_and_selections_cannot_inject_options",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_real_tar_bytes_are_verified_before_any_payload_is_written",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_tar_symlinks_and_path_traversal_are_rejected_without_writes",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_all_four_runtime_deltas_are_required_and_no_fifth_is_accepted",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_qualify_two_replay_repair_v6::test_existing_identical_frozen_parser_is_the_only_allowed_unchanged_payload",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_exact_recovery_keeps_attempt_two_payload_and_next_real_claim_is_three",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_active_lease_is_refused_without_stealing_or_reset",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_existing_publication_even_unknown_blocks_both_resumes",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[0]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[1]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[3]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_wrong_reviewed_snapshot_hash_rolls_back_without_any_queue_mutation",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_original_metadata_payload_ticket_change_is_refused_even_without_timestamp_change",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_exact_recovery_keeps_attempt_one_payload_and_next_real_claim_is_two",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_active_lease_is_refused_without_stealing_or_reset",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_existing_publication_even_unknown_blocks_both_resumes",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[0]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[2]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[3]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_wrong_reviewed_snapshot_hash_rolls_back_without_any_queue_mutation",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_resume_keeps_original_payload_result_partial_and_attempt_then_claims_two",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[lease]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[publication]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[binding]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[partial]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[wrong_plan]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3::test_plan_command_has_no_network_profile_secret_environment_or_media_write",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3::test_only_explicit_apply_makes_media_writable",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3::test_timeout_gracefully_stops_only_own_named_container_and_reports_unknown",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3::test_actual_95_file_proof_mounts_only_explicit_code_and_real_configuration_once",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3::test_duplicate_configuration_target_is_blocked_before_docker",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3::test_missing_production_dependency_is_rejected_without_test_config_fallback",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3::test_default_main_db_and_media_are_readonly_and_only_control_locks_have_write_access",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3::test_apply_input_plan_is_exact_readonly_mount_and_main_writes_require_explicit_apply",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_plan_command_has_no_network_profile_secret_environment_or_media_write",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_only_explicit_apply_makes_media_writable",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_timeout_gracefully_stops_only_own_named_container_and_reports_unknown",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_actual_95_file_proof_mounts_only_explicit_code_and_real_configuration_once",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_duplicate_configuration_target_is_blocked_before_docker",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_missing_production_dependency_is_rejected_without_test_config_fallback",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_default_main_db_and_media_are_readonly_and_only_control_locks_have_write_access",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_apply_input_plan_is_exact_readonly_mount_and_main_writes_require_explicit_apply",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_natural_formats_host_v3b::test_readonly_snapshot_mount_uses_independent_run_namespace_and_exact_hash",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_source_tracks_host_v2b::test_plan_command_has_no_network_profile_secret_environment_or_media_write",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_source_tracks_host_v2b::test_only_explicit_apply_makes_media_writable",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_source_tracks_host_v2b::test_timeout_gracefully_stops_only_own_named_container_and_reports_unknown",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_source_tracks_host_v2b::test_actual_93_file_proof_mounts_only_explicit_code_and_real_configuration_once",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_source_tracks_host_v2b::test_duplicate_configuration_target_is_blocked_before_docker",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_video_source_tracks_host_v2b::test_missing_production_dependency_is_rejected_without_test_config_fallback",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.ops.test_youtube_acceptance_pilot_deploy_v1::test_ubuntu_attestation_and_two_exact_source_hashes",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_youtube_monitor_refresh_deploy_v1::test_requires_actual_105_attestation_and_reads_exact_tested_source",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.test_browser_metadata_revision_sync::test_broker_only_syncs_exact_old_description_under_a_two_revision_capability[sync_success]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_browser_metadata_revision_sync::test_broker_only_syncs_exact_old_description_under_a_two_revision_capability[sync_wrong_old_description]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_browser_metadata_revision_sync::test_broker_only_syncs_exact_old_description_under_a_two_revision_capability[sync_missing_capability]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_browser_metadata_revision_sync::test_broker_only_syncs_exact_old_description_under_a_two_revision_capability[nav_unique]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_browser_metadata_revision_sync::test_broker_only_syncs_exact_old_description_under_a_two_revision_capability[nav_duplicate]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_browser_metadata_revision_sync::test_broker_only_syncs_exact_old_description_under_a_two_revision_capability[nav_draft_tab]",
       "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_publish_errors::test_profile_in_use_is_launch_only_safe_and_does_not_override_existing_errors",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[normal_cache]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[restored_cache]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[wrong_account]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[protection]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[expired_command_first_frame]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[missing_cache]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[wrong_cached_title]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[module_hash]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[submit_without_ticket]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_image]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_video_rejected]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_inspect]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_hq_image]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_hq_wrong_url]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_hq_wrong_path]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_derived_image]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_derived_wrong_provenance]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_derived_wrong_output_hash]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_image]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_large_image]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_source_changed]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_output_changed]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_wrong_output_sha]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_mixed_v3_binding]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_wrong_dimensions]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_wrong_source_url]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[normal]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[clear]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[replace]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[two_files]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[no_completion]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[unsupported_control]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[bad_intent]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[submit_throws]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[submit_true]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[chooser_normal]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[chooser_clear]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[chooser_txt]",
-      "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_cloudbase_backup_runtime::test_cli_missing_config_and_disabled_template_do_not_read_credentials",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_cloudbase_cos_backup::test_resource_and_private_permission_gates_precede_key_access[changes3-CLOUDBASE_COS_RESOURCE_BINDING_REQUIRED]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_cloudbase_cos_backup::test_actual_cam_template_is_prefix_and_ip_scoped_without_admin_or_delete_actions",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_extended_web_source::test_real_capture_and_atomic_binding_yield_stable_proof_and_exact_model_source",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_extended_web_source::test_link_source_or_actual_anchor_proof_cannot_be_replaced_by_model_style_pass_flags",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_extended_web_source::test_capture_file_failure_does_not_expose_a_processing_child",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_extended_web_source::test_database_binding_interruption_rolls_back_child_and_recovery_retries_cleanly",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_extended_web_source::test_cleared_sources_are_not_resurrected_in_extended_policy",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_extended_web_source::test_changed_screenshot_or_database_payload_invalidates_bound_source",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_extended_web_source::test_operator_cannot_claim_scheduler_orchestration_in_derived_source",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_extended_web_source::test_raw_helper_trigger_is_preserved_separately_from_orchestration",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_extended_web_source::test_current_dom_inventory_must_match_the_raw_capture_hash_not_just_pass_flags",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_machine_api_relations::test_original_core_template_renders_both_complete_graphs_and_blocks_wrong_edges_or_quote_qa",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_machine_readiness::test_valid_machine_policy_does_not_fabricate_real_publication",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_machine_tweets::test_legacy_source_claim_without_binding_cannot_start_machine_pipeline",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_expired_post_is_stopped_before_model_or_browser",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_naive_or_invalid_post_time_never_enters_machine_publishing[2026-10-31T12:00:00]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_naive_or_invalid_post_time_never_enters_machine_publishing[not a time]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_model_errors_keep_specific_codes_without_demanding_human_review[MODEL_CREDENTIAL_OR_SELECTION_REQUIRED-False-failed]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_model_errors_keep_specific_codes_without_demanding_human_review[MODEL_PERMISSION_DENIED-False-failed]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_model_errors_keep_specific_codes_without_demanding_human_review[NETWORK_TIMEOUT-True-retry_scheduled]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_machine_tweets::test_model_errors_keep_specific_codes_without_demanding_human_review[AUTH_EXPIRED-False-auth_expired]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_machine_tweets::test_translation_quality_failure_does_not_queue_or_publish",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_owner_queue_clearing_preserves_history_and_unresolved_publications",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_unknown_dispatch_after_restart_runs_lookup_only_even_if_source_expired",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_restart_resumes_prepared_manifest_without_rerender_or_new_child",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_initial_dispatch_hold_is_durable_and_expired_hold_does_not_delay_future_jobs",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_source_generation_has_canonical_job_policy_without_changing_publish_policy[1-machine-tweet-v1]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_source_generation_has_canonical_job_policy_without_changing_publish_policy[2-machine-tweet-v1:source-2]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_source_generation_has_canonical_job_policy_without_changing_publish_policy[1000-machine-tweet-v1:source-1000]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_current_generation_can_enter_machine_path_without_mutating_old_failure",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_machine_tweets::test_generation_upgrade_does_not_restart_two_hour_clock",
       "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[0]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[1001]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[true]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[false]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[\"2\"]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[2.0]",
-      "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_model_profiles::test_v14_receipt_parameters_are_adopted_without_charging_after_environment_switch",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[complete]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[wrong_ticket]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[changed_file]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[missing_part]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[duplicate_playlist]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[expired_ticket]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_natural_cache_operators_v3b::test_real_pilot_issuer_schema_network_and_queue_fences_are_identical_to_original",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_natural_native_operators_v3c::test_same_pilot_issuer_body_preserves_real_evidence_and_no_network_no_queue_fences",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_public_description_display_v2::test_recorded_198_to241_visible_difference_has_exact_versioned_explanation",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_public_description_display_v2::test_only_four_explicit_candidates_match_independently[False-True]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_public_description_display_v2::test_only_four_explicit_candidates_match_independently[True-True]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[recorded]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[changed_body]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[changed_space]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_public_x_session::test_fresh_public_x_sessions_do_not_load_or_mutate_stored_profiles",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_qa_benchmark::test_fixed_sixteen_qa_only_cells_have_raw_proofs_but_cannot_grant_publication_and_restart_is_free",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_error_consumes_cell_and_terminal_run_cannot_be_restarted_to_complete_the_matrix[timeout]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_error_consumes_cell_and_terminal_run_cannot_be_restarted_to_complete_the_matrix[schema]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_error_consumes_cell_and_terminal_run_cannot_be_restarted_to_complete_the_matrix[false_empty]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_error_consumes_cell_and_terminal_run_cannot_be_restarted_to_complete_the_matrix[true_issues]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_error_consumes_cell_and_terminal_run_cannot_be_restarted_to_complete_the_matrix[429]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_error_consumes_cell_and_terminal_run_cannot_be_restarted_to_complete_the_matrix[401]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_error_consumes_cell_and_terminal_run_cannot_be_restarted_to_complete_the_matrix[402]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_modified_expected_or_candidate_cannot_reset_the_frozen_plan",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_changed_profile_parameters_cannot_create_a_second_benchmark",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_finished_response_tampering_is_detected_without_another_dispatch",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_unlisted_model_cannot_be_used_despite_being_in_a_plan",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_qa_benchmark::test_budget_exhaustion_stops_the_matrix_without_an_http_attempt_or_restart",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_queue_highest_pilot_v2::test_actual_source_date_and_four_full_description_lines",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_render_acceptance::test_no_model_or_acceptance_job_created_for_changed_source_files",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_render_acceptance::test_render_acceptance_preserves_clear_marker_and_cannot_be_passed_to_publisher",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_render_acceptance::test_render_acceptance_without_real_model_receipts_never_reaches_renderer",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_render_acceptance::test_expired_discovery_lease_cannot_start_acceptance_or_bill_models",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_render_acceptance::test_actual_mock_qa_rejection_reason_and_receipts_survive_in_parent_status",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_render_acceptance::test_new_contract_acceptance_preserves_legacy_failure_and_same_version_deduplicates",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_replay_natural_video_v3::test_natural_highest_uses_per_video_720p30_ids_and_full_original_metadata",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_replay_part_handoff_gui_v5::test_real_gui_runtime_keeps_same_owned_page_and_removes_only_nonce_credentials",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_replay_part_native_v5::test_standalone_part_uses_real_delivery_and_one_native_file[public_no_progress]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_replay_part_native_v5::test_actual_python_qa_reservation_and_node_raw_evidence_complete_same_bound_part",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_reply_machine_browser::test_browser_collects_its_own_evidence_and_verifier_records_the_complete_pair",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_bounded_relationship_needs_all_evidence_and_survives_reopen",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_changed_screenshot_or_occluded_body_is_never_accepted",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_visibility_report_must_have_actual_unobscured_hit_tests",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_receipt_is_lease_bound_and_immutable_after_recording",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_parent_and_reply_have_four_distinct_persisted_calls_but_mock_is_not_live",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_good_reply_does_not_override_rejected_parent_translation",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_one_job_or_swapped_translations_cannot_establish_pair_acceptance",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_missing_parent_quality_receipt_or_changed_source_blocks_pair",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_evidence::test_persisted_pair_check_revalidates_raw_model_receipts_instead_of_trusting_pass_flag",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_reply_machine_v2::test_real_browser_fixture_and_service_accept_source_only_rule_with_precise_time_attribution",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_v1_label_rule_is_not_relaxed_by_v2_without_label",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>0]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>1]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>2]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>3]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>4]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>5]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>6]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>7]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>8]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>9]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>10]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>11]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>12]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>13]",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_full_parent_clock_cannot_be_written_back_into_thread_day_observation",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_parent_day_is_checked_against_independent_permalink_full_time",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_changed_full_parent_text_or_timestamp_does_not_match_thread_source",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_reply_machine_v2::test_extended_reply_record_binds_two_exact_model_sources_with_raw_day_provenance",
       "state": "error",
-      "baseline_state": "error"
+      "baseline_state": "error",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_complete]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_protection]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_ambiguous]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_unknown_once]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_short_video_native_controls::test_private_draft_native_confirmation_and_unknown_are_one_click_only[private_saved]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_short_video_native_controls::test_private_draft_native_confirmation_and_unknown_are_one_click_only[private_unknown_once]",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_source_positioning::test_native_source_positioning_keeps_strict_visibility_semantic_and_reply_boundaries",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
       "test": "tests.test_source_tombstones::test_new_generation_and_reset_job_error_cannot_revive_cleared_source_or_charge",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_automatic_window_retirement_uses_a_separate_persistent_origin",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_tombstone_job_changes_and_audit_rollback_together",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_source_with_unknown_publication_is_not_cleared_through_another_generation",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_discovery_skips_cleared_source_even_if_browser_returns_it_outside_seen_limit",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_discovery_seen_list_includes_cleared_old_generation_without_a_source_binding",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_billable_quality_request_is_blocked_if_source_is_cleared_during_translation",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_source_tombstones::test_reservation_rechecks_tombstone_inside_its_transaction",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_prepared_retry_cannot_reinsert_child_for_a_cleared_source",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_existing_unknown_can_still_run_lookup_only_with_source_tombstone",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "policy_or_identity_fixture_review"
     },
     {
       "test": "tests.test_source_tombstones::test_lookup_result_can_be_recorded_after_source_is_cleared_without_new_send",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_tweet_repost_reinspection_v2::test_normal_worker_consumes_actual_chromium_v2_without_any_send_handler",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_x_api_routing::test_two_sources_continue_independently_and_first_api_failure_never_becomes_browser",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_x_api_routing::test_partial_first_source_keeps_its_cursor_but_second_source_can_advance",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     },
     {
       "test": "tests.test_x_visual_image_retirement::test_dockerfile_has_no_mutable_default_or_root_runtime",
       "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "missing_fixture_or_historical_artifact"
     },
     {
       "test": "tests.test_x_web_discovery::test_both_sources_checked_and_403_is_review_not_empty_success",
       "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change0]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change1]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change2]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change3]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change4]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change5]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change6]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change7]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change8]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change9]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change10]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change11]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change12]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change13]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change14]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change15]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change16]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change17]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change18]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_missing_policy_does_not_turn_copyright_scope_into_acquisition_authorization",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_repeated_official_observations_queue_one_new_type_without_touching_old_metadata",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[channel]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[url]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[source_api]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[privacy]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[live]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[duration]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[db_metadata]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[db_state]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_daily_limit_is_persisted_and_dedup_does_not_consume_another_slot",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_completed_download_is_unpublished_and_reused_after_database_reopen",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[lease]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[policy]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[input]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[disabled]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[source]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[bytes]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[file]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[hash]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[duration]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[streams]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[packets]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_verified_material_tampering_is_not_redownloaded_or_republished",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_worker_records_bounded_network_retries_with_persistent_checkpoint",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_restart_recovers_same_download_job_and_keeps_original_checkpoint",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_child_binding_check_does_not_renew_lease_and_rejects_changed_binding",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_requires_all_explicit_session_authorization_fields[session_authorization_reference]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_requires_all_explicit_session_authorization_fields[session_authorized_at]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_requires_all_explicit_session_authorization_fields[session_profile]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change0]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change1]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change2]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change3]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change4]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change5]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change6]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change7]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_anonymous_policy_rejects_all_session_fields_instead_of_reading_cookies[session_profile-youtube]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_anonymous_policy_rejects_all_session_fields_instead_of_reading_cookies[session_authorized_at-2026-11-01T00:00:00Z]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_anonymous_policy_rejects_all_session_fields_instead_of_reading_cookies[session_authorization_reference-owned-fixture://login]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_anonymous_policy_rejects_all_session_fields_instead_of_reading_cookies[session_cookie_file-/tmp/forbidden]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_anonymous_binding_never_contains_account_or_profile_authority",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_authentication_creates_new_job_without_reviving_failed_anonymous_history",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_switching_back_to_anonymous_does_not_reuse_authenticated_task",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download::test_old_anonymous_processing_lease_cannot_borrow_new_authenticated_policy",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_missing_field_has_explicit_false_default",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_accepts_only_literal_boolean_values[true]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_accepts_only_literal_boolean_values[false]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[\"true\"]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[1]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[0]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[1.0]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[[]]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[{}]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[\"true\"]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[1]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[0]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[1.0]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[[]]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[{}]",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_download_v3::test_settings_default_off_and_rejects_simultaneous_legacy_automatic_download",
-      "state": "failed",
-      "baseline_state": "failed"
-    },
-    {
-      "test": "tests.test_youtube_monitor::test_live_scheduler_requires_key_and_coalesces_without_dot",
-      "state": "failed",
-      "baseline_state": "failed"
+      "baseline_state": "failed",
+      "triage_category": "requires_individual_review"
     }
   ],
   "evidence_sha256": {
@@ -2017,7 +1652,16 @@
     "browser-profile-recheck.xml": "0132a44b1cf6d899331bce44ba27cd2d1355c0a501b525351ee33addf61d0a0e",
     "compatibility-test-recheck.xml": "f8b6af623bfa629056360d6709d68e04e776239ad472734dfa49c4ff65073d06",
     "linux-resource-corrected.xml": "d8d3ea0befbd945f72453b89b6add8088d7d0e9ac639b1fde5dc3ebb4c915fc7",
-    "render-runtime-recheck.xml": "95a5e343839a958df6216d0a231304eb91baf179608a63d806cb4d67957eaef8"
+    "render-runtime-recheck.xml": "95a5e343839a958df6216d0a231304eb91baf179608a63d806cb4d67957eaef8",
+    "next-download-fixtures-final.xml": "df8f9f8ea7d407daecc18f15928d9b1e931059c9a3ce3255cc3f6385da13df1c",
+    "next-final-preflight.xml": "092cb8b313286c97dfe0fa72adb658138fea279d52f0a7be31f1338976baf938",
+    "next-publisher-errors.xml": "63c4dc4a6963fd1f37c765dc3ed0bdf73f62e79edac3d91390c64e0857a1c131",
+    "browser-home-cases.xml": "b6f51feae722bbc1f5677f1ed73f859cacc06a74a2850435a0d063fcb91d6873",
+    "next-packaging-linux.xml": "bda32c99466a522b2489e69863e07166bac34ec1226e309d35d54a6e481b4209",
+    "offline-final-image-verification.json": "da69d1356b8f29ecd79fd0b82d85053692571576696f02a5f33bc655093e501e",
+    "production-preflight-qualified.jsonl": "9bbf8d23cba053cc1fac8837c66db59819e862fa45ddad6d14395106d774f679",
+    "staged-policy-validation.json": "ce82cfbf39c1efdba52b2b2e4d468a38b0105a47af0cb704a1c36519ea5bfe4e",
+    "locked-source-linux-verification.json": "99547cc1275296f63009c30446fa417e6881d4b033f2222bbd1e37f32cee7b99"
   },
   "production_container_configuration_deltas": [],
   "production_quick_check": "ok",
@@ -2033,5 +1677,735 @@
     "container_stopped": true,
     "restart_count": 0,
     "further_attempts": "stopped_per_user_instruction"
+  },
+  "resolved_in_offline_continuation": {
+    "commit": "08eeae0",
+    "count": 127,
+    "cases": [
+      {
+        "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[0]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[1001]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[true]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[false]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[\"2\"]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_machine_tweets::test_settings_load_rejects_invalid_source_generation[2.0]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change0]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change1]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change2]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change3]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change4]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change5]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change6]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change7]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change8]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change9]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change10]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change11]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change12]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change13]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change14]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change15]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change16]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change17]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_policy_requires_separate_explicit_acquisition_basis[change18]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_missing_policy_does_not_turn_copyright_scope_into_acquisition_authorization",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_repeated_official_observations_queue_one_new_type_without_touching_old_metadata",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[channel]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[url]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[source_api]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[privacy]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[live]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[duration]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[db_metadata]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_official_ended_replay_binding_is_required[db_state]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_daily_limit_is_persisted_and_dedup_does_not_consume_another_slot",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_completed_download_is_unpublished_and_reused_after_database_reopen",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[lease]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[policy]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[input]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[disabled]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_inflight_check_aborts_on_revocation_or_changed_input[source]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[bytes]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[file]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[hash]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[duration]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[streams]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_downloaded_asset_cannot_claim_verification_with_invalid_evidence[packets]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_verified_material_tampering_is_not_redownloaded_or_republished",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_worker_records_bounded_network_retries_with_persistent_checkpoint",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_restart_recovers_same_download_job_and_keeps_original_checkpoint",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_child_binding_check_does_not_renew_lease_and_rejects_changed_binding",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_requires_all_explicit_session_authorization_fields[session_authorization_reference]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_requires_all_explicit_session_authorization_fields[session_authorized_at]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_requires_all_explicit_session_authorization_fields[session_profile]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change0]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change1]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change2]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change3]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change4]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change5]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change6]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authenticated_policy_cannot_select_arbitrary_profiles_or_imply_future_authorization[change7]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_anonymous_policy_rejects_all_session_fields_instead_of_reading_cookies[session_profile-youtube]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_anonymous_policy_rejects_all_session_fields_instead_of_reading_cookies[session_authorized_at-2026-11-01T00:00:00Z]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_anonymous_policy_rejects_all_session_fields_instead_of_reading_cookies[session_authorization_reference-owned-fixture://login]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_anonymous_policy_rejects_all_session_fields_instead_of_reading_cookies[session_cookie_file-/tmp/forbidden]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_anonymous_binding_never_contains_account_or_profile_authority",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_authentication_creates_new_job_without_reviving_failed_anonymous_history",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_switching_back_to_anonymous_does_not_reuse_authenticated_task",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download::test_old_anonymous_processing_lease_cannot_borrow_new_authenticated_policy",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_missing_field_has_explicit_false_default",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_accepts_only_literal_boolean_values[true]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_accepts_only_literal_boolean_values[false]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[\"true\"]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[1]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[0]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[1.0]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[[]]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_acceptance_only::test_settings_rejects_nonboolean_acceptance_only_values[{}]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[\"true\"]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[1]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[0]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[1.0]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[[]]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_v3::test_settings_rejects_nonboolean_natural_switch[{}]",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_download_v3::test_settings_default_off_and_rejects_simultaneous_legacy_automatic_download",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_youtube_monitor::test_live_scheduler_requires_key_and_coalesces_without_dot",
+        "state": "failed",
+        "baseline_state": "failed"
+      },
+      {
+        "test": "tests.test_browser_publish_errors::test_profile_in_use_is_launch_only_safe_and_does_not_override_existing_errors",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[normal_cache]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[restored_cache]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[wrong_account]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[protection]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[expired_command_first_frame]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[missing_cache]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[wrong_cached_title]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[module_hash]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[submit_without_ticket]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_image]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_video_rejected]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_inspect]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_hq_image]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_hq_wrong_url]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_hq_wrong_path]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_derived_image]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_derived_wrong_provenance]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video::test_recovered_editor_never_reselects_or_publishes_without_tickets[cover_derived_wrong_output_hash]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_image]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_large_image]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_source_changed]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_output_changed]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_wrong_output_sha]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_mixed_v3_binding]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_wrong_dimensions]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_recovered_short_video_v4::test_recovered_v4_png_is_bound_and_cannot_reuse_v3_provenance[v4_wrong_source_url]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[normal]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[clear]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[replace]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[two_files]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[no_completion]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[unsupported_control]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[bad_intent]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[submit_throws]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[submit_true]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[chooser_normal]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[chooser_clear]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_browser_short_video::test_upload_only_bridge_preserves_native_causality_and_never_submits[chooser_txt]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      }
+    ],
+    "reason": "Explicit fixture modes, non-duplicated TOML overrides, distinct anonymized channel, literal generation override; runtime guards unchanged. Writable sandboxed browser HOME/XDG test environment; preserve explicit IMAGE_TOO_LARGE_FOR_UPLOAD error."
+  },
+  "triage_category_counts": {
+    "browser_or_compositor_fixture_contract": 61,
+    "historical_source_attestation": 54,
+    "missing_fixture_or_historical_artifact": 38,
+    "policy_or_identity_fixture_review": 34,
+    "requires_individual_review": 83
+  },
+  "triage_note": "Categories are diagnostic triage, not waivers or proof of a harmless defect. Historical hashes are unchanged.",
+  "offline_continuation_runtime_commit": "98f62b0",
+  "new_preflight_and_packaging_tests": {
+    "linux_passed": 27,
+    "windows_passed": 27,
+    "outside_original_suite": 21
+  },
+  "offline_image": {
+    "base_image_id": "sha256:166bdd776615601eb159094b735bf047a4414f3b7a72b2e3d7d38d0300bdf6a4",
+    "candidate_image_id": "sha256:5919670cf9656c0b6c41b7797161fe292d81efd2c40c107c88111cf5d433348f",
+    "image_tag": "lighthouse-acquisition-candidate:98f62b0",
+    "source_commit": "98f62b0",
+    "network_used": false,
+    "package_installs": false,
+    "production_activation": false,
+    "overlay_sha256": {
+      "services/hub/acquisition_preflight.py": "71d4310a836880c5859f42e8c23a25bb576b71bd45603a34c5c83e36708d76eb",
+      "adapters/browser_publish_errors.mjs": "380a92aa03c657b53c86490f14c490cdb37452f83f91ced2a3fbdda697fc3eee"
+    }
+  },
+  "offline_source_archive": {
+    "archive_sha256": "065db9902cebd0be3e866c916a2e51f7d46822f8b4e600caa5c00d7b88ba0cfd",
+    "source_commit": "08eeae06d20a0645ee304dbc4a0079ceb661d224",
+    "manifest_files_verified": 1428,
+    "verification_exit": 0,
+    "image_rebuilt": false,
+    "production_changed": false,
+    "upstream": {
+      "upstream_files_verified": 281
+    }
+  },
+  "staged_policy": {
+    "validated_offline": true,
+    "live_files_changed": false,
+    "download_enabled": false,
+    "authorization_fields_changed": false,
+    "remaining_staged_blockers": [
+      "YOUTUBE_WHOLE_DISABLED"
+    ],
+    "historical_fifo_rows_preserved": 474,
+    "unstarted_rebind_candidates": 0
   }
 }

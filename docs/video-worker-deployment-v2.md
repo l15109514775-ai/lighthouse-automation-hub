@@ -18,8 +18,10 @@ An actual preflight against copies of the effective production configuration fou
 
 The first two were changed **only in a private temporary test copy**, to identify
 the subsequent conflicts. No production authorization, channel ID, policy digest,
-timestamp, database row or attempts counter was changed. Real YouTube access did
-not start. Resolve the intended policy set against genuine authorization records;
+timestamp, database row or attempts counter was changed. That initial preflight
+made no network request. A later explicitly authorized single acquisition attempt
+was refused by the platform and stopped; see the acceptance report. Resolve the
+intended policy set against genuine authorization records;
 do not copy values from a test fixture or regenerate a receipt just to pass.
 
 The public tree also contains anonymized account/channel values and differs from
@@ -55,6 +57,44 @@ were reused from the inspected image. No new production dependency or startup
 upgrade was added. Existing APT/base-image inputs are not completely pinned;
 fresh rebuild reproducibility is a known limitation. Qualify and retain immutable
 image IDs/digests; a mutable tag alone is not a release record.
+
+## Offline checks and portable source
+
+`python -m services.hub.acquisition_preflight` is a read-only inspection entry,
+not a worker. Run it in the exact candidate image as UID/GID 10001, with production
+data/config mounted read-only and networking disabled. It reports permission,
+channel and planning-policy conflicts, plus aggregated historical task state.
+Exit 2 means configuration is blocked; exit 0 means only that these checks passed.
+`production_activation_allowed` remains false regardless: this cannot certify
+real downloads, rights, publication approval or complete regression acceptance.
+
+Missing/unreadable policy bindings are reported as unknown, not mismatches.
+Completed/excluded/existing FIFO records retain their original policy hashes.
+An active record with a different policy remains a reconciliation blocker. No
+schema initialization, task recovery, automatic rebinding or policy writes occur.
+
+For transfer to a future server, export a committed source snapshot locally:
+
+```sh
+python scripts/export_locked_source.py --revision COMMIT \
+  --output /absolute/private/directory/lighthouse-source.tar.gz
+```
+
+This combines canonical committed source with the exact 281 locked upstream files,
+using original Git objects already available locally. It exports no Git history,
+uncommitted files, live configuration or browser profiles. It rejects unsafe paths
+and tracked private configuration rather than silently packaging them. The archive
+includes a file-hash manifest and preserves original upstream lock hashes. Missing
+Git objects cause failure; no fetching or replacement of locks occurs.
+
+Two actual exports of `08eeae0` were byte-identical (46,016,696 bytes, SHA-256
+`065db9902cebd0be3e866c916a2e51f7d46822f8b4e600caa5c00d7b88ba0cfd`).
+The transferred archive passed all 1,428 manifest file checks and the original
+281-file upstream verifier in a real, network-disabled Linux container. This is
+a **source checkpoint**, not a rebuilt or qualified production image. It predates
+the later publisher-error fix; export the final reviewed commit for deployment.
+The missing public submodule ref remains a fresh-clone issue, but this qualified
+offline source path no longer depends on it. APT/base-image pinning remains open.
 
 ## Before migration
 

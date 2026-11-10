@@ -140,6 +140,38 @@ policy/version reconciliation, source-overlay qualification and targeted startup
 Do not activate until release gates pass. No schema migration is required by this
 refactor; explicit existing FIFO/V5 table initialization remains unchanged.
 
+## Offline continuation: production policy staging
+
+Read-only inspection on 2026-11-10 found 474 FIFO records: 14 completed, 458
+excluded and two existing. None was an unstarted `registered` candidate eligible
+for rebinding. Their old policy hashes are historical evidence, not an instruction
+to reset or rewrite them. Recheck immediately before migration; this inventory is
+a snapshot, not permission to act on future rows.
+
+A private staged configuration bundle was prepared from byte-checked live files.
+It fixes application-group readability, aligns the acquisition channel list to
+the already-authorized two-channel runtime, and makes the FIFO planning digest
+match the actual existing planning policy. All original authorization references
+and dates are preserved. The whole-acquisition runtime switch remains **false**.
+No staged file was installed over production, and no DB row was changed.
+
+With those staged files, the actual candidate's validators passed in an isolated
+network-disabled container as UID/GID 10001. Read-only preflight reports only
+`YOUTUBE_WHOLE_DISABLED`; a separate in-memory switch was used solely to call policy
+validators, never a worker/producer/adapter. This is static configuration
+qualification, not real download or permission to activate. Private staging
+manifest/validation evidence is retained in `work/video-worker-v2-audit/` outside
+the public repository. Temporary host staging is not the authoritative live config.
+
+Apply only after real-content, regression and image gates pass, while video
+executors are stopped and their shared lock is held. Compare live file hashes
+against the staging manifest first, capture a consistent DB backup and previous
+file bytes/modes, and abort if config or active-task inventory changed. Install
+only the reviewed policy bundle and service override; preserve terminal hashes,
+attempts, results, publications and all unrelated files. Keep acquisition disabled
+until the deliberate activation step. Rollback restores the prior config bytes
+and modes while the new worker is stopped; never restore an old DB over live jobs.
+
 ## Historical cleanup and rollback scope
 
 Deleted files: **none**. No historical adapter, payload/result format, maintenance

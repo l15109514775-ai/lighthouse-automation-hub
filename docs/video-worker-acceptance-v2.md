@@ -42,6 +42,10 @@ metadata call and one download-side request; no paid service was enabled.
 | Rollback guard unit tests | 6 passed | Refuses changed service/command/image/mount; default plan only |
 | Final health/rollback local recheck | 8 passed | Includes explicit health-probe connection close; 0.19 s |
 | Boot-scoped health/runtime checks | 31 passed, plus 3 focused checks passed | Unique boot identity; other processes cannot mask a stalled producer |
+| Legacy fixture correction, Linux | 136 passed | 130 download/monitor tests plus initial six preflight tests; 17.84 s |
+| Final preflight/export/generation checks | 27 passed on Linux; 27 passed on Windows | 21 new cases plus six existing generation cases; Linux 2.79 s |
+| Writable HOME/XDG browser recheck | 38 passed | Previously failing cases; real Chromium sandbox retained, no network; 259.21 s |
+| Explicit publisher error compatibility | Passed | Local pytest plus actual final candidate; no browser launch or publication |
 | Full canonical-source regression | 3,971 passed; 431 failed; 184 errors; 1 skipped | 4,587 cases, 2,214.57 s; not a release pass |
 | Effective-production candidate Docker | Passed | Synthetic, network disabled; two containers sharing DB and video lock |
 | SIGKILL and container restart | Passed | Isolated Docker plus Linux child/SQLite-process tests |
@@ -86,12 +90,27 @@ disabled. This correction is to
 the browser test environment, not a change to the acquisition service's privileges.
 
 Across the original 4,587 cases, the union of the full run and corrective targeted
-runs is 4,189 passing, 250 failing, 147 setup errors and one skipped. **This is not
-a single clean full-suite run.** All 397 remaining cases also failed or errored on
+runs is now 4,316 passing, 123 failing, 147 setup errors and one skipped. **This is not
+a single clean full-suite run.** All 270 remaining cases also failed or errored on
 baseline; none of the baseline-passing cases remains unresolved after the targeted
 runs. This does not establish identical causes or remove suite-order concerns.
 `video-worker-regression-v2.json` records case IDs and evidence hashes. The final
 boot-health change was tested separately and in real Docker, not in a new full run.
+
+The autonomous continuation resolved 127 of the previous 397 cases: 88 fixture
+corrections, 38 browser environment cases and one explicit error-code omission.
+Legacy download tests now opt into automatic acquisition explicitly instead of
+inheriting the example's acceptance-only setting. Config tests remove the exact
+fields under test before constructing overrides, so duplicate TOML keys cannot
+mask validation. A sanitized wrong-channel fixture was corrected to remain wrong;
+the generation test now actually changes the setting instead of depending on an
+obsolete comment. No production safety switches or validators were relaxed.
+
+Remaining diagnostic categories: 61 browser/compositor contracts, 54 historical
+source attestations, 38 missing fixtures/artifacts, 34 policy/identity fixture
+reviews and 83 requiring individual review. These categories are not waivers.
+Historical attestations were not rewritten. Two of five HOME/XDG probe samples
+still failed for separate compositor/public-description reasons and remain open.
 
 An earlier full run was invalidated by inherited tests in the production base
 image; another used Windows checkout bytes incompatible with old exact hashes.
@@ -120,6 +139,35 @@ does nothing and apply stops only the new container while preserving DB/media.
 Synthetic configuration/credentials authorize no production action. The test
 container mounts only its private directory, never the live DB or real profiles.
 
+The later offline continuation candidate is
+`sha256:5919670cf9656c0b6c41b7797161fe292d81efd2c40c107c88111cf5d433348f`
+(`lighthouse-acquisition-candidate:98f62b0`). It extends the above image with only
+the read-only preflight tool and explicit publisher error classifier fix; base
+identity and layer ancestry were verified. The actual Docker build used no
+network or package installation. Its staged-policy preflight and publisher-error
+contract were run successfully with networking disabled. The full SIGKILL/lease
+acceptance evidence above belongs to the prior image; this additive build did not
+rerun or change those worker modules. Neither image has been activated in production.
+
+## Configuration and source portability continuation
+
+Production read-only checks found 474 terminal FIFO records (14 completed, 458
+excluded, two existing), and zero candidates eligible for an unstarted rebind.
+All rows retain their historical policies. Unreadable bindings are reported as
+unknown; exact matching was inspected using byte-identical private readable copies.
+
+A staged bundle fixes permissions, the two-channel acquisition scope and the FIFO
+planning fingerprint, while retaining authorization references/dates and leaving
+the actual acquisition switch off. Actual candidate policy validators passed;
+preflight reports only the intentional `YOUTUBE_WHOLE_DISABLED`. Production files
+and DB remain unchanged. This completes offline policy preparation, not deployment.
+
+The new source exporter produced two byte-identical committed-source archives.
+All 1,428 manifest entries and 281 locked upstream files were verified after
+transfer to the Linux server. This provides an offline alternative to fetching the
+unavailable public compositor ref. It does not resolve mutable APT inputs or prove
+a clean public Dockerfile build. Details and archive hash are in the deployment doc.
+
 ## One authorized real acquisition attempt
 
 After the initial preflight, the user authorized the existing server for a real
@@ -146,16 +194,16 @@ future permitted environment still needs genuine download/recovery acceptance.
 
 ## Production blockers and required next steps
 
-1. Reconcile the existing policy bundle. The switch is off; FIFO policy is
-   root:root 0640 and unreadable by UID 10001; acquisition policy covers one channel
-   while FIFO/runtime cover two; FIFO references a different planning fingerprint.
-   Preserve current files/history until a coherent, versioned, authorized migration
-   is prepared. Do not silently recalculate bindings on existing jobs.
+1. Apply the prepared policy bundle only after the remaining release gates pass.
+   Live files remain unchanged: acquisition is off, policy files are unreadable by
+   UID 10001, channel scope and planning fingerprint still differ. Recheck source
+   hashes/active-task inventory before migration; never recalculate old job bindings.
 2. Resolve remaining baseline failures and suite-order qualification. Old
    operational proofs require separate qualification, not checksum substitution.
-3. Make the genuine compositor commit available and qualify a reproducible image
-   supply path. No new dependencies were added, but existing APT inputs are not
-   fully version-pinned.
+3. Complete image supply-path qualification. The exact offline source export and
+   immutable-base overlay path are verified, but the public compositor ref remains
+   unavailable and clean Dockerfile APT/base inputs are not fully version-pinned.
+   No production dependency was added.
 4. Requalify production source/launch/retention evidence for the changed modules.
    Public anonymized configuration and live overrides are not interchangeable.
 5. After the access restriction is legitimately resolved, run authorized real-content
@@ -179,4 +227,6 @@ Implementation commits: `5a9e396` (audit), `41c26b9` (scope/locks), `4d47fd8`
 (container), `b11fb1e` (lease/receipt/recovery), `23681d0` (resource/rollback tests
 and deployment gate), `e7c3101` (health connection cleanup), `10434ff` (legacy
 Compose assertion), `b09d1c0` (boot-specific health identity). These are local
-commits; this task has not pushed them.
+commits; this task has not pushed them. Continuation: `08eeae0` (fixture corrections,
+read-only preflight and locked source export), `98f62b0` (explicit oversized-image
+error compatibility). Documentation commits record evidence separately.
