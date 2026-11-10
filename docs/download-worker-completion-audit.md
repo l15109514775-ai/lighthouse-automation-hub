@@ -86,7 +86,14 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    `publish_unknown` until full public owner/source/player verification; its
    read-only lookup completed and scheduled another check. No resend occurred.
    See [submission evidence](releases/chise-submission-20261111.json).
-   Public availability and the first source's upload recovery remain open.
+   **Public verification subsequently passed:** bounded lookup recorded
+   `BV12iWG6zEP7` as publicly accessible and completed the child, group and FIFO
+   automatically at the unchanged upload attempt count of one. The hash-referenced
+   local evidence references (manager inventory, public inventory and screenshot)
+   were read and rehashed. Lookup recorded zero file selections and submit clicks,
+   and one player seek. This is public UI/player verification, not a remote
+   Bilibili file checksum. See [public verification](releases/chise-public-verification-20261111.json).
+   The first source's upload recovery remains open.
    The independent publisher's owner-display bridge compatibility was repaired
    and installed without restart. Both exact legacy/new runtime pairs are
    supported, concurrent publishers rejected, and 17 offline tests passed

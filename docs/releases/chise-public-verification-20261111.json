@@ -1,0 +1,105 @@
+{
+  "version": "chise-public-verification-20261111",
+  "at": 1794335524.1135795,
+  "job_id": "d8274e7f-38a8-4e4e-b9ea-2bc8a9159658",
+  "source_id": "_nadmR0WzqI",
+  "state": "completed",
+  "attempts": 1,
+  "publication": [
+    {
+      "state": "completed",
+      "external_id": "BV12iWG6zEP7",
+      "external_url": "https://www.bilibili.com/video/BV12iWG6zEP7"
+    }
+  ],
+  "parents": [
+    {
+      "job_id": "37a18be9-fb4e-46a1-b76e-36a6dac7b752",
+      "state": "completed",
+      "stage": "replay_parts_completed",
+      "error_code": null,
+      "external_publish_id": null
+    }
+  ],
+  "verified_receipt_sha256": "9573b8d1fcce1dd721f51567d3ab17ffd4c95050feba9ca02e26d568d2db2e27",
+  "checked_references": [
+    {
+      "kind": "manager_observation",
+      "bytes": 18956,
+      "sha256": "94b5a3f7bd7abea3638f191270f7de5d381e191a6a71102b2d82f1424fa94da2"
+    },
+    {
+      "kind": "public_observation",
+      "bytes": 4205,
+      "sha256": "5e15b4d80c811b702aa9416f1843ac7724ebd00c9a8c8a53f4284a6306291b8d"
+    },
+    {
+      "kind": "public_screenshot",
+      "bytes": 1037455,
+      "sha256": "b70a14ab34abd2e3c76432d11e02c0ba8b444573fdb673647ef4a8710c32ec2d"
+    }
+  ],
+  "public_accessible": true,
+  "platform_file_hash_verified": false,
+  "lookup_file_selections": 0,
+  "lookup_submit_clicks": 0,
+  "lookup_player_seeks": 1,
+  "receipt_keys": [
+    "version",
+    "job_id",
+    "attempt_id",
+    "site_uid",
+    "source_id",
+    "source_url",
+    "metadata_sha256",
+    "binding_sha256",
+    "parent_job_id",
+    "part_index",
+    "part_count",
+    "part_idempotency_key",
+    "whole_plan_sha256",
+    "parts_manifest_sha256",
+    "artifact_sha256",
+    "file_bytes",
+    "policy_sha256",
+    "file_selections",
+    "save_clicks",
+    "submit_clicks",
+    "player_seeks",
+    "source_or_media_modified",
+    "external_id",
+    "observed_at",
+    "manager_observation",
+    "public_observation",
+    "public_screenshot"
+  ],
+  "observation_keys": [
+    "artifact_sha256",
+    "attempt_id",
+    "binding_sha256",
+    "external_id",
+    "file_bytes",
+    "human_review",
+    "job_id",
+    "metadata_sha256",
+    "native_result_evidence",
+    "origin",
+    "parent_job_id",
+    "part_count",
+    "part_idempotency_key",
+    "part_index",
+    "parts_manifest_sha256",
+    "policy_sha256",
+    "public_accessible",
+    "public_lookup_observed_at",
+    "same_submit_attempt_observed",
+    "server_file_hash_verified",
+    "site_uid",
+    "source_id",
+    "source_url",
+    "state",
+    "url",
+    "version",
+    "whole_plan_sha256"
+  ]
+}

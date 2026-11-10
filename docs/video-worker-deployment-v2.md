@@ -353,3 +353,16 @@ The older hash-pinned qualification script remains historical evidence and
 must not be reused as an installer for this new helper. Tunnel invocation must
 use the current installed hash. Production rollback and a live relay remain
 unexecuted, explicitly separate from the file/hash and runtime checks.
+
+### First migrated download-to-publication acceptance
+
+The bounded follow-up lookup subsequently confirmed `BV12iWG6zEP7` publicly
+accessible and completed its child, group and FIFO records automatically.
+The upload attempt count remains one. The saved manager/public inventories and
+public screenshot were re-read and their byte counts and SHA-256 references
+matched the reconciliation receipt. Lookup selected no files, clicked no submit
+button and performed one player seek. This proves the existing UI/player check,
+not byte-for-byte equality with a Bilibili-side file (that flag remains false).
+See `releases/chise-public-verification-20261111.json`. The separate 11.2 GB
+failed upload and the full new-host CloudBase backup/restore are still pending;
+this acceptance is not completion of the entire migration goal.
