@@ -1,0 +1,43 @@
+{
+  "at": 1794331168.5893862,
+  "owner_authorization": "Remove the reviewed disposables after acceptance",
+  "acceptance_report_sha256": "269b1f6be5f667b1594de7c4946719914af1a0255c66e4c21fe3a95cf9c5e58c",
+  "files": [
+    {
+      "path": "/var/lib/lighthouse-migration/real-acquisition-once-v2/media/1ec0999d-6aed-4255-86f1-270b9cf8ac5a/youtube-whole-v4/original.mp4",
+      "bytes": 2485497021,
+      "allocated_bytes": 2485501952,
+      "device": 64769,
+      "inode": 2393702,
+      "mtime_ns": 1794310676433737257
+    },
+    {
+      "path": "/var/lib/lighthouse-migration/images.tar.gz.part",
+      "bytes": 15499264,
+      "allocated_bytes": 15499264,
+      "device": 64769,
+      "inode": 258629,
+      "mtime_ns": 1794302583434645572
+    }
+  ],
+  "deleted_files": [
+    "/var/lib/lighthouse-migration/real-acquisition-once-v2/media/1ec0999d-6aed-4255-86f1-270b9cf8ac5a/youtube-whole-v4/original.mp4",
+    "/var/lib/lighthouse-migration/images.tar.gz.part"
+  ],
+  "cache_before_allocated_bytes": 1131909120,
+  "free_before_bytes": 51139698688,
+  "migration_complete_archives_retained": true,
+  "retention_policy_changed": false,
+  "global_docker_prune": false,
+  "cache_after_allocated_bytes": 61440,
+  "build_cache_prune_exit": 0,
+  "build_cache_summary": [
+    "Total:\t18.71MB"
+  ],
+  "completed_at": 1794331173.9539413,
+  "free_after_bytes": 54900301824,
+  "known_file_and_package_allocated_bytes_reclaimed": 3632848896,
+  "images_preserved": true,
+  "running_container_ids_preserved": true,
+  "test_db_and_receipts_preserved": true
+}

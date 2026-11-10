@@ -1,0 +1,75 @@
+{
+  "version": "natural-production-delivery-acceptance-v1",
+  "at": 1794330926.3962932,
+  "job_id": "7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9",
+  "state": "completed",
+  "stage": "done",
+  "attempts": 1,
+  "error_code": null,
+  "accepted": true,
+  "fifo": [
+    {
+      "source_id": "_nadmR0WzqI",
+      "state": "download_queued",
+      "reason": null,
+      "download_job_id": "4c783108-6065-4197-aab8-980a63e0e60a"
+    },
+    {
+      "source_id": "lWzXr6h0SyM",
+      "state": "download_completed",
+      "reason": null,
+      "download_job_id": "7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9"
+    }
+  ],
+  "next_jobs": [
+    {
+      "job_id": "4c783108-6065-4197-aab8-980a63e0e60a",
+      "job_type": "youtube_replay_download_v4",
+      "state": "processing",
+      "stage": "youtube_whole_acquiring",
+      "attempts": 1,
+      "error_code": null
+    }
+  ],
+  "media_verified": true,
+  "actual_media": {
+    "sha256": "ecc68874452d9b6e7c2fe0028fb2f6f312d6679b2d0d1d7f30f80c9c772bd420",
+    "ffprobe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1920,
+          "height": 1080,
+          "r_frame_rate": "60/1"
+        },
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "44100",
+          "channels": 2,
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "30595.401723",
+        "size": "11214658526"
+      }
+    }
+  },
+  "verified_receipt_sha256": "a60f3e744669097bdc4c08ea4d0932678935fff5827600e4ff71085a6527a4ba",
+  "manifest_sha256": "4b4fa0fdd4ed4adf458fbe86912f3ad081a4f66c8a8bffb17c016842dbdfca86",
+  "packet_evidence": {
+    "audio": {
+      "chain": "640c502d8f3f3c0d42a0e6b592b737cebca85882bda0e1f42583107cfb52a08f",
+      "packets": 1317634
+    },
+    "video": {
+      "chain": "b9acaafdcd80de7440f6c55c2bb23b71f4728de2bece6c1d25a33c731c38e98a",
+      "packets": 1835720
+    }
+  },
+  "next_task_started": true,
+  "fifo_projected": true
+}

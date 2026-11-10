@@ -44,15 +44,23 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
 
 ## Outstanding operational acceptance
 
-1. **Natural production queue delivery.** Earlier Chise source `lWzXr6h0SyM`
-   owns download job `7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9`, processing at attempt 1.
-   Its plan describes 30,596 seconds and an approximately 11.19 GB source-byte
-   budget; that budget is not a downloaded percentage or exact final file size.
-   The reported `_nadmR0WzqI` has a completed plan and waits behind it. Require the
-   first job's terminal outcome, bound media verification/delivery receipt and
-   correct FIFO projection, then observe the next task receiving the slot. Do not
-   reorder/reset/duplicate either job to accelerate acceptance. On access denial,
-   preserve the stop and report the actual code.
+1. **Natural production download delivery passed; publication remains open.**
+   Chise source `lWzXr6h0SyM`, job `7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9`,
+   completed at attempt 1. Independent SHA-256 and FFprobe checks verified the
+   11,214,658,526-byte, 30,595.402-second 1080p60 H264/AAC deliverable and bound
+   receipt/manifest/ledger. FIFO projected `download_completed`; `_nadmR0WzqI`
+   naturally started job `4c783108-6065-4197-aab8-980a63e0e60a` at attempt 1.
+   See [actual download delivery](releases/natural-production-delivery-20261111.json).
+   **This is not Bilibili upload acceptance.** The owner explicitly reiterated
+   that the workflow must continue through upload, result reconciliation and
+   saved links. No publication exists for either source at this checkpoint.
+   The migrated legacy video service remains disabled. Reuse the existing
+   publication-only V5 entry after qualifying its effective runtime, policy,
+   launch evidence and Bilibili session; do not restart the broad legacy queue.
+   A read-only check found the live publication policy hash differs from its
+   root launch marker. Investigate their provenance before changing bindings;
+   do not fabricate historical acceptance or bypass the gate. Preserve current
+   completed media, unknown-result safeguards, source pauses and shared locks.
 2. **New-host full external backup and restore.** The daily budget refusal had
    zero dispatched requests and has an exact guarded recovery proof. The actual
    safe-deferral entry passed. After the real Asia/Shanghai day rollover, the
@@ -87,6 +95,12 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    verification receipts, databases, sessions and necessary rollback artifacts.
    No global Docker prune or retention-policy change is authorized by this item.
    The private dated disk review holds the exact candidate paths and sizes.
+   The authorized disposable subset has now been removed after download
+   acceptance: the isolated test MP4, abandoned `.part`, package cache and unused
+   build cache. Known file/package allocation reclaimed was 3,632,848,896 bytes,
+   plus 18.71 MB of build cache. Production images and running container IDs
+   remained unchanged. See [cleanup evidence](releases/accepted-disposable-cleanup-20261111.json).
+   Current production media and the full migration archives remain preserved.
 
 These acceptance and conditional cleanup items remain open; none is a reason to disable the already
 qualified service or to repeat a healthy in-flight download. Fresh public-source
