@@ -163,3 +163,35 @@ archive runtime and one-off audit selection passed 180 tests. The production
 backup unit and its qualified private files were untouched. These checks use
 local fixtures and provide no CloudBase remote-read evidence.
 [Recorded JUnit hashes and run boundaries](releases/source-regression-preconditions-20261111.json).
+
+### Running the same public suite on another host
+
+From a reviewed checkout on a Linux Docker host, pass a locally built image ID,
+the absolute directory holding the four registered archives, and an existing
+private results directory. Run as UID/GID 10001 with Docker access or as a host
+operator who can set the scratch directory's ownership. Use the checkout's
+example configuration and browser seccomp profile.
+
+```sh
+python3 scripts/run_public_regression.py --image "$image_id" \
+  --archives "$archive_dir" --results-parent "$results_dir"
+```
+
+The command prints its private output directory immediately. Read `suite.log`
+for progress, `run.json` for the terminal exit status and `work/full.xml` for
+individual test outcomes. An interrupted or timed-out process can leave a
+partial log. Retain it with the corresponding image ID. Production SQLite,
+browser profiles, keys and Docker sockets are outside the test container.
+
+Add `--collect-only` to verify the image's fixture pins, sandbox startup and
+collection before executing the suite. On the migrated host the launcher
+collected 4,732 cases in the unmodified source-built image. A changed archive
+was rejected before starting Docker. The separate full regression uses three
+reviewed source/test corrections mounted on that image; to reproduce those
+corrections with this launcher, build the tested checkout into the image first.
+Use one `--test tests/path/test_module.py` argument per file or pytest node
+to isolate failures. On this host 22 selected rollback, type isolation and
+browser upload tests passed. Running the retired two-source capture module
+through the same launcher returned exit code 1. Six tests passed and the
+two documented one-off cases failed with `SOURCE_REQUEST_NOT_SUPPORTED`.
+[Launcher qualification](releases/public-regression-launcher-20261111.json).

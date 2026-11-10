@@ -134,3 +134,14 @@ hashes matched the registered manifests. Those objects still need remote
 retrieval to prove a full historical restore. Preserve the migration archives
 until the new-host external recovery is verified. Use the captured GET from
 a budget-permitted run for acceptance.
+
+An offline dry run of the deployed source-cleanup helper on November 11 stopped
+at `ARCHIVE_RETENTION_RESOLVER_NOT_READY`. It used SQLite copies and a read-only
+media mount. Both the mirrored attestation and its JUnit file matched their
+recorded hashes. Of the three protected executable sources, only
+`prune_cloudbase_verified_clones_v1.py` differed from the approved release.
+The daily wrapper records this condition as deferred and preserves the local
+source files. Verified backup registration and clone cleanup have separate
+checks. The last locally restored pack had 2,197,478 bytes of headroom.
+Capacity planning must count **zero** reclaimed source bytes until the deployed
+source set passes fresh qualification and an eligible retirement is verified.

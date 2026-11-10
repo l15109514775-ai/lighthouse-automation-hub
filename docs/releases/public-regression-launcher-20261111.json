@@ -1,0 +1,39 @@
+{
+  "corrupt_fixture_rejected_before_docker": true,
+  "collect_mode": {
+    "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "mode": "collect",
+    "selection": [
+      "tests"
+    ],
+    "exit_code": 0,
+    "junit_present": false
+  },
+  "tests_collected": 4732,
+  "collect_log_sha256": "803790cceccc13c8fc869ee25ff133fe37fcf24e107acd1a2da2892c1492dee2",
+  "run_mode": {
+    "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "mode": "run",
+    "selection": [
+      "tests/test_acquisition_rollback.py",
+      "tests/test_worker_type_isolation.py",
+      "tests/test_browser_short_video.py::test_upload_only_bridge_preserves_native_causality_and_never_submits[normal]"
+    ],
+    "exit_code": 0,
+    "junit_present": true
+  },
+  "selected_tests_passed": 22,
+  "selected_junit_sha256": "3cb047a4a98da47ac85244691020d4f6241766f1f465955a711acabf56be1ad8",
+  "launcher_sha256": "89211528401eda12dfff4f07bc527b4253022f1bf5fcabec734bedb52dbbb2ec",
+  "production_worker_replaced": false,
+  "historical_module": {
+    "exit_code": 1,
+    "junit_sha256": "9b7cf547f56f02642c66bc4ef921761c4798f0bed3df7f6a197e2678699ac581",
+    "passed": 6,
+    "failed": {
+      "tests.ops.test_capture_two_reference_sources_v2::test_real_recorded_capture_has_same_owner_receipts_original_time_and_no_models_or_publish": "SOURCE_REQUEST_NOT_SUPPORTED",
+      "tests.ops.test_capture_two_reference_sources_v2::test_tampered_descriptor_raw_hash_cannot_qualify": "SOURCE_REQUEST_NOT_SUPPORTED"
+    },
+    "scope": "closed_one_off_operators"
+  }
+}
