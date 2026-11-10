@@ -268,3 +268,8 @@ image on the same synthetic database. The unmodified source image rejected the
 production identity policy as expected. The prepared seven-file override is
 versioned and has been rendered against the private deployment. Production
 keeps its qualified image. [Rebuilt candidate evidence](releases/rebuilt-acquisition-compatibility-20261111.json).
+
+A second rollback drill booted both builds on a private copy of the actual
+production database, observing two producer cycles on each. All 60 compared
+tables and the full schema were unchanged. The heartbeat table alone was
+excluded from the data comparison. [Production-history drill](releases/acquisition-history-rollback-20261111.json).

@@ -208,6 +208,32 @@ as well or a host reboot could reactivate acquisition. A previous image can only
 be restored after compatibility with the current additive schema and payloads
 has been qualified. Keep unknown publications held.
 
+On November 11 the source-built acquisition candidate and the previous
+production release each booted on the same private copy of the idle production
+database. Both ran two producer cycles. All columns and row multiplicities
+matched the initial snapshot after each boot across 60 tables, including
+22,138 jobs, 95 publications and 477 FIFO entries. The heartbeat table was
+allowed to record each boot. The entire schema, SQLite integrity and foreign
+keys were checked. The private fixture and both test containers were removed.
+[Production-history rollback receipt](releases/acquisition-history-rollback-20261111.json).
+
+To repeat this on the Linux Docker host with the qualified images present,
+run from the reviewed checkout with root access. Supply the absolute path to
+the private seven-module archive. The script copies five configuration files
+and the SQLite database into a temporary root-owned area, gives the isolated
+worker its own writable fixture directories, and mounts a synthetic key.
+It refuses a snapshot with runnable acquisition jobs or active FIFO work.
+
+```sh
+python3 scripts/test_acquisition_snapshot_rollback.py \
+  --manifest "$PWD/docs/releases/rebuilt-acquisition-bindings-20261111.json" \
+  --archive "$private_archive"
+```
+
+This exercises actual worker startup and backward compatibility on existing
+history. Live media transfer, publisher execution and production traffic
+cutover remain distinct acceptance steps.
+
 `restore_fenced_source.py` is only a **preactivation** rollback. It now correctly
 refuses because the target has been activated. Returning production to another
 host requires [reverse migration using current target data](video-worker-reverse-migration.md).
