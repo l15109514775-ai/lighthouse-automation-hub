@@ -4,7 +4,7 @@
   "baseline_commit": "1272f86",
   "full_suite_source": "b11fb1e plus initial Linux resource-fault test fixture",
   "final_runtime_commit": "b09d1c0",
-  "production_activation": "blocked",
+  "production_activation": "active_on_new_host_2026-11-10",
   "initial_counts": {
     "passed": 3971,
     "error": 184,
@@ -29,205 +29,273 @@
       "test": "tests.ops.test_capture_two_reference_sources_v2::test_real_recorded_capture_has_same_owner_receipts_original_time_and_no_models_or_publish",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
+      "triage_category": "requires_individual_review",
+      "current_scope_disposition": "closed_one_off_operators",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.ops.test_capture_two_reference_sources_v2::test_tampered_descriptor_raw_hash_cannot_qualify",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
+      "triage_category": "requires_individual_review",
+      "current_scope_disposition": "closed_one_off_operators",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.ops.test_inventory_today_x_gap_v1::test_two_handle_complete_raw_inventory_no_details_no_cursor_or_publication_changes",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
+      "triage_category": "requires_individual_review",
+      "current_scope_disposition": "closed_one_off_operators",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.ops.test_inventory_today_x_gap_v1::test_two_pages_each_cap_stays_partial_and_preserves_real_continuation",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
+      "triage_category": "requires_individual_review",
+      "current_scope_disposition": "closed_one_off_operators",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.ops.test_inventory_today_x_gap_v1::test_budget_reservation_stops_before_timeline_and_partial_does_not_claim_missing_scan_complete",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
+      "triage_category": "requires_individual_review",
+      "current_scope_disposition": "closed_one_off_operators",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.ops.test_inventory_today_x_gap_v1::test_existing_jobs_and_publications_are_classified_without_new_import_or_send",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
+      "triage_category": "requires_individual_review",
+      "current_scope_disposition": "closed_one_off_operators",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[complete]",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "disabled_legacy_native_multipart",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[wrong_ticket]",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "disabled_legacy_native_multipart",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[changed_file]",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "disabled_legacy_native_multipart",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[missing_part]",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "disabled_legacy_native_multipart",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[duplicate_playlist]",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "disabled_legacy_native_multipart",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_multipart_native_v4::test_native_multipart_owned_ui_and_full_public_part_coverage[expired_ticket]",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "disabled_legacy_native_multipart",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_browser::test_browser_collects_its_own_evidence_and_verifier_records_the_complete_pair",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_real_browser_fixture_and_service_accept_source_only_rule_with_precise_time_attribution",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_v1_label_rule_is_not_relaxed_by_v2_without_label",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>0]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>1]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>2]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>3]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>4]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>5]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>6]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>7]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>8]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>9]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>10]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>11]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>12]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_line_multiple_parents_and_obscured_or_contradictory_relation_fail[<lambda>13]",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_full_parent_clock_cannot_be_written_back_into_thread_day_observation",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_wrong_parent_day_is_checked_against_independent_permalink_full_time",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_changed_full_parent_text_or_timestamp_does_not_match_thread_source",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_reply_machine_v2::test_extended_reply_record_binds_two_exact_model_sources_with_raw_day_provenance",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     },
     {
       "test": "tests.test_source_positioning::test_native_source_positioning_keeps_strict_visibility_semantic_and_reply_boundaries",
       "state": "failed",
       "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
+      "triage_category": "browser_or_compositor_fixture_contract",
+      "current_scope_disposition": "retired_x_visual_browser_fixtures",
+      "repair_deferred_by_owner": true
     }
   ],
   "evidence_sha256": {
@@ -2547,5 +2615,28 @@
       "rollback_stops_only_acquisition_and_preserves_job": true
     },
     "passed": true
+  },
+  "production_activation_at_original_regression_run": "blocked",
+  "latest_qualified_acquisition_runtime_commit": "463675e",
+  "postmigration_scope_audit": {
+    "at": 1794318225.2786229,
+    "groups": {
+      "closed_one_off_operators": 6,
+      "disabled_legacy_native_multipart": 6,
+      "retired_x_visual_browser_fixtures": 22
+    },
+    "one_off_named_references_in_runtime_trees": [],
+    "static_reference_search_only": true,
+    "disabled_native_mutation_gate_present": true,
+    "actual_tweet_container": {
+      "x_api_enabled": true,
+      "x_web_enabled": false,
+      "retirement_validated": true
+    },
+    "test_counts_unchanged": true,
+    "failed_cases_not_claimed_passing": true,
+    "new_full_suite_run": false,
+    "no_production_records_changed": true,
+    "current_shared_component_checks_remain_required": true
   }
 }

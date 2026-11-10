@@ -17,6 +17,8 @@ import sys
 OPS = Path('/usr/local/lib/lighthouse-backup-ops')
 DAILY_STATE = Path('/var/lib/lighthouse-backup-ops/retention-v2b/daily-state')
 SOURCES = {
+    'cloudbase_backup_budget_recovery.py':
+        '3e4bac49187929e784b4c11171286fb55b37271a45aed776dc67f443f85261f9',
     'cloudbase_backup_daily_retention_v2c.py':
         'fe6642eea6ddeeb1a829a0bf75e62a012712a827f2174b9d118c4908d321587f',
     'recover_cloudbase_remote_absent_v1.py':
@@ -177,8 +179,15 @@ def main():
     pins['run_cloudbase_backup_retention_v2c.py'] = RETENTION_SHA256
     pins['accept_cloudbase_backup_capture_v1.py'] = ACCEPT_SHA256
     daily.PINS = pins
-    bind_transfer_timeout()
+    core = bind_transfer_timeout()
+    budget = load_module('cloudbase_backup_budget_recovery.py')
+    budget.bind(core)
     verify = bind_recovery_gap(daily, recovery, current)
+    if sys.argv[1:] == ['--verify-budget']:
+        previous, _ = core.read_record(DAILY_STATE / 'latest.json', DAILY_STATE, root_owned=True)
+        daily.validate_previous(previous)
+        print(json.dumps(budget.inspect(core, core.ROOT, DAILY_STATE, previous)))
+        return 0
     if sys.argv[1:] == ['--verify-recovery']:
         value = verify(SimpleNamespace(STATE=DAILY_STATE))
         print(json.dumps({
@@ -192,7 +201,11 @@ def main():
             'budget_refunded': False,
         }))
         return 0
-    return daily.main()
+    try:
+        return daily.main()
+    except budget.BudgetDeferred as exc:
+        print(json.dumps(exc.report))
+        return 0
 
 
 if __name__ == '__main__':

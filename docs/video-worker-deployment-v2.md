@@ -14,8 +14,10 @@ observed completing through the new production queue. No test publication was
 performed. Full new-host external backup/restore is still outstanding: the one
 post-cutover attempt stopped before any external request because the retained
 daily network budget had insufficient headroom after the earlier source backup.
-The failed daily record needs guarded recovery before normal backup can resume;
-an enabled timer alone is not proof of functioning backups.
+The [guarded budget recovery](backup-budget-recovery.md) is now deployed and its
+real systemd deferral path passed. It preserves the failed record and all usage;
+the next within-budget timer run still needs full restore acceptance. An enabled
+timer alone is not proof of functioning backups.
 
 Earlier statements that this image had not been transferred or acquisition was
 still staged disabled describe the pre-cutover phase. They are superseded by

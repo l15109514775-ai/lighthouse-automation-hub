@@ -634,3 +634,40 @@ audit. Keep the archive private. Base/APT pinning and complete source provenance
 remain separately tracked. Manifest and load evidence are in `manifest.json` and
 `load-report.json` alongside the archive; local private evidence copies are kept
 in the migration workspace.
+
+### Guarded backup deferral deployed (2026-11-10)
+
+The zero-request budget failure now has an exact root-owned recovery attestation.
+The existing daily entry validates its unchanged daily/operation records, no
+requests/plans and no unresolved operation before allowing a future successor.
+Insufficient headroom defers before creating another operation. Historical failures
+and usage are retained; unknown-upload reconciliation and cleanup are unchanged.
+See [the recovery specification and rollback](backup-budget-recovery.md).
+
+The related selection passed 36 local and 36 real Linux Docker tests. The older
+remote-absent reconciliation tests passed another 50 locally. Actual systemd
+invocation `285f578d4aa5437d8a2b7ebe15b92d3a` returned safe `budget_deferred`, exit 0,
+with identical full-row fingerprints for operations/requests/plans and unchanged
+failed latest bytes. No operation, request or refund occurred. The next 03:30
+timer can now proceed when its existing budget permits; actual remote restore
+acceptance remains outstanding. The earlier unreconciled-pointer blocker is
+resolved, while the daily budget is deliberately unchanged.
+
+### Remaining regression cases reclassified against the active scope
+
+All 34 original unresolved case IDs retain their original failed/error results.
+Current scope classification is six closed one-off capture/inventory cases,
+22 retired X visual/browser fixture cases and six disabled native multipart UI
+cases. Named-reference inspection found no use of the two one-off operators in
+services/adapters/scheduler. The original multipart mutation gate remains false.
+These static observations supplement the owner's explicit closed-history scope;
+they are not proof that every dynamic import was analyzed again.
+
+An actual read-only probe of the migrated tweet container confirmed
+`x_api_enabled=true`, `x_web_enabled=false` and successful validation of the image's
+visual-retirement marker and protected files. No retired route was re-enabled.
+`video-worker-regression-v2.json` now records per-case disposition and current
+activation separately from the historical regression snapshot. No failure was
+changed to passed or skipped, and no new clean full-suite run is claimed. Current
+Store/lock/lease, acquisition/delivery, tweet/backup sharing and unknown-publication
+safety remain release requirements.

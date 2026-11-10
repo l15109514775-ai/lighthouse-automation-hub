@@ -39,9 +39,10 @@ is a full source archive, **not** a qualified reduced runtime package.
 ## New server release gates
 
 The subsequent [download access protection](youtube-download-access-policy.md)
-adds migration 018 and durable request pacing / manual stops. Build a new image
-with these changes; the older candidate's acceptance does not cover them. Keep
-the current download service disabled until the new-host gates below pass.
+adds migration 018 and durable request pacing / manual stops. The current new-host
+image includes these changes and passed the gates below before activation. For
+any subsequent host migration, keep its acquisition service disabled until its
+own gates pass; qualification of an older candidate does not cover a changed image.
 
 1. Record the new server's OS, disk capacity, application UID, image digest and
    runtime versions. Transfer secrets separately; do not use public example
@@ -65,7 +66,7 @@ the current download service disabled until the new-host gates below pass.
 
 The four previously staged policy files are now preserved in a private, versioned
 transfer bundle, alongside their exact pre-migration versions and a manifest.
-See the deployment document's **Private policy transfer checkpoint**. This removes
+See the migration document's private policy transfer history. This removes
 dependence on the old server's temporary staging directory; it is not a complete
 configuration backup, a lean runtime image or permission to start a download.
 
@@ -74,10 +75,11 @@ and the 15-case type-isolation selection, including a newer job behind old rows.
 See [the acceptance report](video-worker-acceptance-v2.md) for exact evidence.
 No test in this scope update changes those results or adds a real-download pass.
 
-The migration host is now provisioned and has passed reboot, isolated container
-and SQLite tests. Its effective policy copies pass preflight; migration 018 on a
-snapshot preserved every existing table. See the migration and acceptance records
-for exact image digests and scope. These checks do not activate production.
+The migration host has passed actual production reboot, isolated container and
+SQLite tests. Its effective policies pass preflight; additive migration 018
+preserved every original table. The final stopped-source snapshot and target
+matched before activation; all 1,324 historical video rows remained unchanged
+after activation. See the migration/acceptance records for exact evidence.
 
 The authorized real acquisition and same-job SIGKILL recovery test has passed on
 the new host: 1080p60, 6476.068571 seconds, 2,485,497,021 bytes, verified media and
@@ -85,11 +87,21 @@ delivery hashes, no publication, and the isolated container stopped. The origina
 host's restricted source attempt was not repeated there. The helper HUB_CONFIG
 propagation bug found during qualification is fixed and separately tested.
 
-Still required: final single-owner production cutover. The target's explicit
-seven-service startup list excludes the stopped legacy video/subtitle workers;
-acquisition has a separate unit and owner gate. Compose resolution preserved all
-nine captured services' environment values and immutable image references. These
-are configuration/static checks, not a claim that the installed production units
-have run. The new owner-authenticated Bilibili profile must survive the final
-source delta; the Shanghai ingest caller still needs its coordinated endpoint
-update. No live task, publication or secret has been removed.
+Single-owner production cutover is complete. The seven-service core excludes the
+stopped legacy video/subtitle workers; acquisition has its own unit/owner gate.
+Eight containers actually restarted after the controlled host reboot. The new
+Bilibili profile survived the final source delta, Shanghai ingestion moved to
+the new host, and a real dot query passed. The old source remains fenced.
+
+The qualified immutable image now has a private portable archive with validated
+OCI/layer hashes and a real same-daemon load/offline probe. The current
+[deployment guide](video-worker-deployment-v2.md) lists its hash and limitations.
+Do not mistake that for a fresh public-source build or clean-daemon import.
+
+Remaining acceptance includes full new-host remote backup/restore after budget
+headroom returns, final goal-wide evidence/provenance review, and observing a
+naturally arriving production replay. The exact zero-request budget failure is
+now reconciled by a guarded root proof; actual systemd safe deferral passed with
+no new requests, operations or refunds. The next scheduled full backup has not
+yet run. [Reverse migration](video-worker-reverse-migration.md) must carry current
+target data; the stale old host cannot simply be restarted.
