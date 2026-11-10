@@ -14,6 +14,26 @@ Its existence does not prove that reverse migration or a full image downgrade
 has passed acceptance. If only acquisition is broken, prefer stopping that
 service while leaving healthy tweet/status services running.
 
+On November 11 the fenced former production host received and restored two
+current SQLite snapshots in a private temporary directory. The source used
+the SQLite backup API under one read transaction per database. Schema, row
+identities, typed values, integrity and foreign keys matched for all 61 Hub
+tables (85,224 rows) and both retention tables (29 rows). Both completed
+publications retained their URLs, attempts and deletion receipts. Eight files
+referenced by the native publication observations matched their stored hashes.
+The receiver checked its original database and WAL before and after, and the
+source and receiver removed their temporary transfer material.
+[Drill results](releases/fenced-standby-restore-20261111.json).
+
+To compare two private SQLite copies locally, run
+`python3 scripts/verify_recovery_database.py reference.sqlite3 restored.sqlite3`.
+The verifier compares table fingerprints and also includes views, triggers and
+indexes in its schema comparison. It exits with an error for an unsupported
+virtual table or an inaccessible row ID. This drill used separate snapshot
+times for the two databases and checked their common publication receipts.
+A production takeover still requires writer fencing, consistent final media
+and configuration, and the activation checks below.
+
 ## 1. Prepare a destination without enabling writers
 
 - Record immutable image IDs, effective private Compose manifests, overlays,

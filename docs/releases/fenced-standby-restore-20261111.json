@@ -1,0 +1,45 @@
+{
+  "completed_at": 1794345686.0988514,
+  "restored_databases": {
+    "hub": {
+      "snapshot_at": 1794345663.040439,
+      "logical_hash": "fd215e38e89baad66463506cdc38bd3e04b2807cb32546dd0d4569b81c3c0fb1",
+      "tables": 61,
+      "rows": 85224,
+      "schema_hash": "8e54ff86ed13b75ac33383bfeeccecee2fb12d3b91a4f54b36506929bf1ca036"
+    },
+    "retention": {
+      "snapshot_at": 1794345667.75194,
+      "logical_hash": "9ceeda70fe3b1e8ad61a607f13d0902848650eec456058530cda20d050d47ffe",
+      "tables": 2,
+      "rows": 29,
+      "schema_hash": "efaae4a18874bd6d137809f40275e59b1dc67109f47a817f47b80f896f56f5d9"
+    }
+  },
+  "publications": [
+    {
+      "source": "lWzXr6h0SyM",
+      "public_url": "https://www.bilibili.com/video/BV1eNWL6tEh8",
+      "attempts": 5,
+      "retention_bytes": 11214658526
+    },
+    {
+      "source": "_nadmR0WzqI",
+      "public_url": "https://www.bilibili.com/video/BV12iWG6zEP7",
+      "attempts": 1,
+      "retention_bytes": 3413212368
+    }
+  ],
+  "native_files_verified": 8,
+  "archive_sha256": "ff69c713d82c241cab6d85037191b3987220dc728613ed5f4695ed89ced8e529",
+  "transfer_bytes": 12783540,
+  "standby_original_sha256": "301b98a91da39dc784885f78e3571926b3436b1e4689bf34a37711724f4f68fc",
+  "scratch_removed": true,
+  "provider_requests": 0,
+  "version": "fenced-standby-sqlite-restore-v1",
+  "standby_fence_verified_before_after": true,
+  "source_archive_removed": true,
+  "separate_snapshot_per_database": true,
+  "production_cutover_performed": false,
+  "verifier_sha256": "76be8026200b018b572a56807c006c2408abfb5b4981a2da822bb776f7b88764"
+}

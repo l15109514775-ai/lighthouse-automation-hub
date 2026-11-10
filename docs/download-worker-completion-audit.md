@@ -241,3 +241,9 @@ qualified service or to repeat a healthy in-flight download. Redistribution
 review, exact future build reproducibility and actual reverse-host execution
 remain unverified. Before final closure re-read current
 states and compare them against this full scope, including any newly found defect.
+
+The former production host has now restored the two current SQLite snapshots
+in isolation and verified all tables and both new publication receipts. The old
+production files remained in place throughout. Full writer cutover and external
+CloudBase restoration remain separate open items.
+[Fenced standby restoration](releases/fenced-standby-restore-20261111.json).
