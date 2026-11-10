@@ -323,3 +323,33 @@ The existing reconciliation policy requires public owner/source/player evidence,
 so the job remains conservatively unknown while bounded read-only lookup runs.
 Do not re-upload or reset it on that basis. Submission is now observed; public
 availability is not yet accepted. Evidence: `releases/chise-submission-20261111.json`.
+
+### Owner verification bridge compatibility
+
+The root-owned display bridge previously accepted only the combined
+`video-worker --publish` runtime. It now accepts either that exact pair or
+`replay-publication-worker --publication-only`. Command/service cross-pairings
+and acquisition services remain rejected. Its current-worker check considers
+both service generations together and refuses concurrent publishers. Existing
+image/container identity, application UID, mounts, no exposed ports, live lease,
+challenge evidence, expiry and fixed loopback relay checks are unchanged.
+
+Seventeen offline tests passed locally and in the actual qualified Docker image
+with networking disabled and no credentials mounted. The candidate also
+validated the real publisher identity before installation. No container restart,
+credential read, relay opening, CAPTCHA interaction or job update occurred.
+Actual future CAPTCHA handoff is not claimed tested. The installed hash and
+off-server copy verification are recorded in
+`releases/publication-owner-bridge-20261111.json`.
+
+The prior bridge is retained as
+`/var/lib/lighthouse-migration/publication-owner-bridge-v1/before.py`; the new
+candidate and report are in the same protected directory and copied to D:.
+To roll back only this helper, first ensure no owner handoff is active, verify
+the installed file against `new_sha256` and the retained file against
+`old_sha256` in that report, then atomically restore the retained bytes as
+root with the existing file mode. Do not roll back SQLite or restart workers.
+The older hash-pinned qualification script remains historical evidence and
+must not be reused as an installer for this new helper. Tunnel invocation must
+use the current installed hash. Production rollback and a live relay remain
+unexecuted, explicitly separate from the file/hash and runtime checks.

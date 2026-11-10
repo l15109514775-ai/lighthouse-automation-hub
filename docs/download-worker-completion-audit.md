@@ -87,6 +87,12 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    read-only lookup completed and scheduled another check. No resend occurred.
    See [submission evidence](releases/chise-submission-20261111.json).
    Public availability and the first source's upload recovery remain open.
+   The independent publisher's owner-display bridge compatibility was repaired
+   and installed without restart. Both exact legacy/new runtime pairs are
+   supported, concurrent publishers rejected, and 17 offline tests passed
+   locally and in Docker. Actual runtime identity validation passed; no real
+   CAPTCHA or relay was exercised. Evidence:
+   [bridge compatibility](releases/publication-owner-bridge-20261111.json).
    Preserve completed media until the existing publication and
    retention gates succeed; do not treat a healthy publisher as upload acceptance.
 2. **New-host full external backup and restore.** The daily budget refusal had

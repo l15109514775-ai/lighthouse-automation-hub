@@ -12,6 +12,7 @@ ROOT=Path('/opt/lighthouse-hub')
 INSTALL=Path('/usr/local/lib/lighthouse-owner-handoff-v5/owner_handoff_bridge_v5.py')
 DOCKER='/usr/bin/docker'
 ENTRY='services.hub.replay_parts_worker_runtime_v5'
+RUNTIME_ROLES={'video-worker':'--publish','replay-publication-worker':'--publication-only'}
 def fail(code='OWNER_HANDOFF_BRIDGE_REFUSED'):raise RuntimeError(code)
 def parse_scope(cid,image,job,attempt,nonce):
  import uuid
@@ -26,7 +27,8 @@ def validate_runtime(info,scope):
   if (info['Id']!=scope['cid'] or info['Image']!=scope['image'] or s['Running'] is not True or
    s.get('Paused',False) is not False or s.get('Restarting',False) is not False or s.get('Dead',False) is not False or
    c['User']!='10001:10001' or c.get('Entrypoint') not in (None,[]) or c['WorkingDir']!=str(ROOT) or
-   c['Cmd']!=['python','-m',ENTRY,'--publish'] or labels.get('com.docker.compose.service')!='video-worker' or
+   labels.get('com.docker.compose.service') not in RUNTIME_ROLES or
+   c['Cmd']!=['python','-m',ENTRY,RUNTIME_ROLES.get(labels.get('com.docker.compose.service'))] or
    labels.get('com.docker.compose.project.working_dir')!=str(ROOT) or
    h.get('Privileged') is not False or h.get('ReadonlyRootfs') is not True or h.get('PublishAllPorts',False) is not False or
    h.get('PortBindings') not in (None,{}) or any(info.get('NetworkSettings',{}).get('Ports',{}).values()) or
@@ -243,7 +245,9 @@ def runtime(scope):
  info=json.loads(_run([DOCKER,'inspect',scope['cid']]))
  if len(info)!=1:fail()
  validate_runtime(info[0],scope)
- current=_run([DOCKER,'ps','--no-trunc','--filter','label=com.docker.compose.service=video-worker','--filter','status=running','--format','{{.ID}}']).decode().splitlines()
+ current=[]
+ for service in RUNTIME_ROLES:
+  current.extend(_run([DOCKER,'ps','--no-trunc','--filter','label=com.docker.compose.service='+service,'--filter','status=running','--format','{{.ID}}']).decode().splitlines())
  if current!=[scope['cid']]:fail('OWNER_HANDOFF_BRIDGE_CURRENT_WORKER_CHANGED')
 def protected_self(checksum):
  if os.name!='posix' or os.geteuid()!=0 or not re.fullmatch('[a-f0-9]{64}',checksum or ''):fail()

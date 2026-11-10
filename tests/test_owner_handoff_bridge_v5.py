@@ -51,12 +51,19 @@ def owned_documents():
 
 def check(documents):return app['validate_documents'](*documents,NOW)
 
-def test_running_runtime_rejects_foreign_scope_publish_ports_and_wrong_role():
+def runtime_fixture(service='video-worker',mode='--publish'):
     info={'Id':SCOPE['cid'],'Image':SCOPE['image'],'State':{'Running':True},'Config':{'User':'10001:10001','Entrypoint':None,
         'WorkingDir':str(bridge.ROOT),'Cmd':['python','-m',bridge.ENTRY,'--publish'],
         'Labels':{'com.docker.compose.service':'video-worker','com.docker.compose.project.working_dir':str(bridge.ROOT)}},
         'HostConfig':{'Privileged':False,'ReadonlyRootfs':True,'PublishAllPorts':False,'PortBindings':{},'NetworkMode':'owned-net'},
         'NetworkSettings':{'Ports':{}},'Mounts':[{'Destination':str(bridge.ROOT/n),'Source':str(bridge.ROOT/n),'Type':'bind','RW':True} for n in ('data','media')]}
+    info['Config']['Labels']['com.docker.compose.service']=service
+    info['Config']['Cmd'][-1]=mode
+    return info
+
+@pytest.mark.parametrize('service,mode',[('video-worker','--publish'),('replay-publication-worker','--publication-only')])
+def test_running_runtime_rejects_foreign_scope_publish_ports_and_wrong_role(service,mode):
+    info=runtime_fixture(service,mode)
     assert bridge.validate_runtime(info,SCOPE) is True
     for mutate in (lambda v:v.update(Image='sha256:'+'c'*64),lambda v:v['Config'].update(User='0'),
                    lambda v:v['Config'].update(Cmd=['python','-m',bridge.ENTRY,'--register-only']),
@@ -65,6 +72,28 @@ def test_running_runtime_rejects_foreign_scope_publish_ports_and_wrong_role():
                    lambda v:v['Mounts'].append({'Destination':'/var/run/docker.sock'})):
         bad=deepcopy(info);mutate(bad)
         with pytest.raises(RuntimeError):bridge.validate_runtime(bad,SCOPE)
+
+@pytest.mark.parametrize('service,mode',[
+    ('video-worker','--publication-only'),('replay-publication-worker','--publish'),
+    ('replay-acquisition-worker','--acquisition-only'),('unknown','--publication-only')])
+def test_bridge_requires_exact_service_command_pair(service,mode):
+    with pytest.raises(RuntimeError,match='RUNTIME_INVALID'):
+        bridge.validate_runtime(runtime_fixture(service,mode),SCOPE)
+
+@pytest.mark.parametrize('service,mode',[('video-worker','--publish'),('replay-publication-worker','--publication-only')])
+@pytest.mark.parametrize('extra',[False,True])
+def test_bridge_requires_one_publisher_across_both_generations(monkeypatch,service,mode,extra):
+    calls=[]
+    def run(argv):
+        calls.append(argv)
+        if argv[1]=='inspect':return json.dumps([runtime_fixture(service,mode)]).encode()
+        name=next(x.split('=',2)[-1] for x in argv if x.startswith('label='))
+        return ((SCOPE['cid']+'\n') if name==service else ('c'*64+'\n' if extra else '')).encode()
+    monkeypatch.setattr(bridge,'_run',run)
+    if extra:
+        with pytest.raises(RuntimeError,match='CURRENT_WORKER_CHANGED'):bridge.runtime(SCOPE)
+    else:bridge.runtime(SCOPE)
+    assert len(calls)==3
 
 def test_fixed_remote_command_cannot_supply_a_shell_path_endpoint_or_extra_operation():
     args=bridge.docker_argv(SCOPE,'relay')

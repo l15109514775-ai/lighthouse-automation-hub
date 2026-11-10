@@ -1,0 +1,16 @@
+{
+  "at": 1794335341.9086075,
+  "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+  "docker_test_exit": 0,
+  "docker_test_summary": "17 passed in 0.10s",
+  "network": "none",
+  "credentials_mounted": false,
+  "installed": true,
+  "old_sha256": "afb80deb5f4651802d955ad2ad85685e467dc499f287707c5af82faf4b732ae8",
+  "actual_runtime_identity_validated": true,
+  "new_sha256": "f2f0ed43ba62edf0c472a8ab18cdf4a36516bac2852c67b4dbebb641583297ac",
+  "container_restarted": false,
+  "credentials_read": false,
+  "relay_opened": false,
+  "off_server_files_hashed": true
+}
