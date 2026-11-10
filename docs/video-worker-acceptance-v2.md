@@ -11,6 +11,12 @@ now been corrected; the normal official monitor registered two new replays, the
 earlier replay is downloading and the reported replay has a completed plan waiting
 for its download slot. Neither is claimed delivered by this checkpoint.
 
+Maintenance now persists independent official-discovery health and alerts on a
+disabled/stale/erroring upstream, excluding intentionally paused sources. Nine
+focused tests passed in the production System Worker image, and a normal
+scheduled maintenance result verified the deployed Chise-only check. This closes
+the missing upstream-health signal, not full replay delivery or backup acceptance.
+
 See [discovery recovery](youtube-discovery-recovery.md), current release JSON and
 the dated sections below. Full goal completion remains unproven, including the
 new-host full external-backup restore. The original decision immediately below

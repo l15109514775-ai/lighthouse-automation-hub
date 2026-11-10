@@ -47,6 +47,12 @@ class Maintenance:
         except HubError:
             pass
         now = time.time()
+        from .discovery_health import youtube_discovery_health
+        discovery = youtube_discovery_health(self.settings, self.store, now=now)
+        if discovery['attention_required']:
+            self.store.event('pipeline.stalled', {'queue': 'system',
+                'component': 'youtube_discovery', 'code': discovery['code']},
+                dedup_key='youtube-discovery:' + discovery['code'])
         from .monitoring import host_snapshot
         snapshot=host_snapshot(self.settings)
         if snapshot.get('available'):
@@ -59,7 +65,8 @@ class Maintenance:
             if now - row['oldest'] > 7200:
                 self.store.event('pipeline.stalled', {'queue': row['queue']}, dedup_key='stalled:' + row['queue'])
         from .events import Events
-        return {'monitor': 'checked', 'events':Events(self.settings, self.store).dispatch()}
+        return {'monitor': 'checked', 'youtube_discovery': discovery,
+                'events':Events(self.settings, self.store).dispatch()}
 
     def backup_job(self, job):
         name = datetime.now(timezone.utc).strftime('hub-%Y%m%dT%H%M%S-') + job['job_id'][:8] + '.sqlite3'

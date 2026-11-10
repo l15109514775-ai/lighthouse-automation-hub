@@ -60,3 +60,62 @@ Future migration acceptance must cover the complete path:
 Rollback of this specific enablement must not silently disable discovery while
 advertising an operational automatic pipeline. Preserve current tasks and the
 owner's pause; record an explicit discovery stop if the configuration is reverted.
+
+## Persistent discovery health (deployed 2026-11-10)
+
+`services/hub/discovery_health.py` reads the system worker's actual settings,
+source pause policy, acquisition heartbeat and official per-channel `source_polls`.
+It does not call YouTube, download media, reset jobs or change source controls.
+The existing minute-based maintenance handler includes this evidence in its
+persisted result and emits deduplicated `pipeline.stalled` events when attention
+is required. This is an addition to maintenance, not a change to `/health`.
+
+| Observation | Result |
+|---|---|
+| Acquisition heartbeat is fresh but official discovery is disabled | `YOUTUBE_DISCOVERY_DISABLED` |
+| Active channel has no success within two configured intervals plus 60 seconds, or a future/invalid timestamp | `YOUTUBE_DISCOVERY_OBSERVATION_STALE` |
+| Active channel records a provider error | `YOUTUBE_DISCOVERY_PROVIDER_ERROR` |
+| Invalid source/configuration or unreadable pause policy | Stable configuration error; attention required |
+| All channels intentionally paused | `owner_paused`; neither ready nor an outage |
+| Every active channel has recent error-free observations | `ready` |
+
+With the current five-minute poll interval, freshness expires after 660 seconds.
+Paused Yuuhi is excluded; Chise must independently have fresh evidence. Arbitrary
+stored error text is replaced with a fixed code, and invalid timestamps cannot
+leak non-finite JSON values. A database failure is not converted into readiness.
+This does not infer that queued downloads or publications have completed.
+
+Production `maintenance.py` was first compared byte-for-byte with the pre-change
+repository implementation. Only that module and the new helper were mounted
+read-only into System Worker, using the existing pinned `a1337d4d…` image and
+preserving every other service/configuration field. Snapshot and mirror live in
+the private migration directory. Acquisition and all other running containers
+kept their IDs. No database migration or historical task mutation was performed.
+
+Validation: 19 local tests passed (9 discovery tests plus 10 existing MCP/event
+tests). The 9 discovery tests also passed in a real isolated Linux container
+using the production System Worker image and effective config/source-control
+modules, network disabled, synthetic temporary SQLite, no production data or
+credentials mounted. After deployment, normal scheduled maintenance job
+`ddb1f1e6-3ebd-4fb3-860b-53a65c6f3bd6` completed and persisted Chise `ready` with
+Yuuhi excluded. The concurrent download remained processing at attempt 1.
+See [scoped evidence](releases/discovery-health-20261110.json).
+
+### Patch-specific rollback
+
+The private directory `/var/lib/lighthouse-migration/discovery-health-v1` retains
+`compose.before.json`, candidate manifest, original module, test/deployment reports
+and logs. These manifests contain runtime environment values: never publish them.
+
+Before restoring a manifest, compare the current and mirrored manifest SHA-256
+with `after_manifest_sha256` in `deployment.json`; also verify the snapshot hash
+against `before_manifest_sha256`. If either differs, do not restore a stale whole
+manifest: review intervening changes and remove only these two module mounts.
+Wait for System Worker to be idle, stop only that service, atomically restore both
+manifests with their original owner/mode, validate Compose, then recreate only
+`system-worker` with `up -d --no-build --no-deps system-worker`. Verify running
+state and unchanged acquisition container ID/lease. The original monitor-enabled
+configuration and Yuuhi pause must remain in force. No rollback command may reset
+jobs or stop acquisition. Automatic deployment-error rollback was prepared but
+was not exercised against the live service because this deployment succeeded;
+do not label this patch's rollback as a production rollback drill.

@@ -1,0 +1,98 @@
+{
+  "scope": "Official discovery monitoring; no downloader or publisher changes",
+  "runtime_tests": {
+    "at": 1794323532.6922898,
+    "image": "sha256:a1337d4d7e3016d28e934135b1d428d0b6dc39a9d8bc2d71ead20307034314ce",
+    "test_summary": "9 passed in 0.24s",
+    "network": "none",
+    "production_data_mounted": false,
+    "production_container_ids_unchanged": true,
+    "sha256": {
+      "tests/conftest.py": "d5073b16a642a6f6b9468ece57a1c32895107225fae8ae31d055b507b1eacec5",
+      "tests/test_discovery_health.py": "e65b0590db2047cd5b2e6ebeaaae54f533b44a1137a46dc1230d243b8679c861",
+      "config/hub.toml": "491c4c211d649cb6947a3fa973e12973ad7bbe384bc8491eeb06d6d2f86bc8b7",
+      "services/hub/maintenance.py": "e7a4056c522a4a35b0e89f3fd541efe4c185fd9e16ae505b279881849009c8b8",
+      "services/hub/discovery_health.py": "1cca91994cf89b66506d2f069a4052d7aab32c3b89cccb42b0069b98f58c5b72"
+    }
+  },
+  "deployment": {
+    "at": 1794323633.2052617,
+    "image": "sha256:a1337d4d7e3016d28e934135b1d428d0b6dc39a9d8bc2d71ead20307034314ce",
+    "system_worker_recreated": true,
+    "other_containers_unchanged": true,
+    "jobs_reset": false,
+    "source_pause_unchanged": true,
+    "manifest_mirror_equal": true,
+    "discovery_health": {
+      "version": "youtube-discovery-health-v1",
+      "ready": true,
+      "attention_required": false,
+      "channels": [
+        {
+          "channel_id": "UCoW8qQy80mKH0RJTKAK-nNA",
+          "state": "fresh",
+          "last_success_at": 1794323417.8838224,
+          "error_code": null
+        }
+      ],
+      "paused_channel_ids": [
+        "UCuDY3ibSP2MFRgf7eo3cojg"
+      ],
+      "freshness_window_seconds": 660,
+      "state": "ready",
+      "code": null
+    },
+    "before_manifest_sha256": "2b97cd07bbe8bd5f4afd6780967d417de15370c503d8841f832c19dbbc34efa4",
+    "after_manifest_sha256": "c41074ce90b0c0687fc9089e77a644531e92e2abb818cc97f2801b6347af04c1"
+  },
+  "scheduled_observation": {
+    "at": 1794323724.9567833,
+    "scheduled_monitor_results": [
+      {
+        "job_id": "ddb1f1e6-3ebd-4fb3-860b-53a65c6f3bd6",
+        "job_type": "maintenance",
+        "state": "completed",
+        "error_code": null,
+        "updated_at": 1794323695.2297676,
+        "youtube_discovery": {
+          "attention_required": false,
+          "channels": [
+            {
+              "channel_id": "UCoW8qQy80mKH0RJTKAK-nNA",
+              "error_code": null,
+              "last_success_at": 1794323417.8838224,
+              "state": "fresh"
+            }
+          ],
+          "code": null,
+          "freshness_window_seconds": 660,
+          "paused_channel_ids": [
+            "UCuDY3ibSP2MFRgf7eo3cojg"
+          ],
+          "ready": true,
+          "state": "ready",
+          "version": "youtube-discovery-health-v1"
+        }
+      }
+    ],
+    "system_worker_running": true,
+    "system_worker_restart_count": 0,
+    "current_download": [
+      {
+        "job_id": "7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9",
+        "source_id": "lWzXr6h0SyM",
+        "state": "processing",
+        "stage": "youtube_whole_acquiring",
+        "error_code": null,
+        "attempts": 1,
+        "lease_until": 1794323877.0568593,
+        "updated_at": 1794323697.0568593
+      }
+    ]
+  },
+  "limits": [
+    "Not a completed replay download or Bilibili publication test",
+    "No provider requests issued by the health checker",
+    "Runtime observation reads existing official polling evidence"
+  ]
+}
