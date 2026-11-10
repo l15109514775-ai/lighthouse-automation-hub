@@ -218,6 +218,11 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    The next actual timer is November 12 at 03:30 CST. This proves the scheduled
    deferral path, not a successful remote backup. See
    [scheduled deferral evidence](releases/backup-scheduled-deferral-20261111.json).
+   A subsequent local pack and restore verified 1,608 entries, SQLite integrity,
+   both public links and their local cleanup receipts. The 189,802,522-byte
+   archive left 2,197,478 bytes of headroom. The new-host external GET and
+   restoration of referenced historical objects still need verification.
+   [Offline restore and historical dependencies](releases/backup-local-pack-restore-20261111.json).
 
 3. **Owner-authorized cleanup after acceptance.** The subsequent owner instruction
    permits removing the inspected package cache, completed isolated test video,

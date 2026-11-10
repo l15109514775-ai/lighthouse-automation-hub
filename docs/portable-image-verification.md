@@ -126,6 +126,13 @@ records the base digest, image manifest, image config and test results. The
 lists the versions of 366 OS packages and 47 Python distributions installed
 in this build. Future builds against changing package repositories can differ.
 
+The Dockerfile now pins the Ubuntu manifest digest from that source build.
+A standalone Linux amd64 BuildKit check resolved that exact digest and ran the
+Ubuntu release and architecture assertions. All nine running containers retained
+their original IDs. The check covers the base instruction; other build inputs
+include the package repositories and browser downloads.
+[Base image receipt](releases/ubuntu-base-pin-20261111.json).
+
 The initial build passed the upstream integrity check as root. The app UID
 could not traverse a submodule directory extracted with mode 0700. A repeat
 build with corrected staging directory modes reused the affected cached COPY

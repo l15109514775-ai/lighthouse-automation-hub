@@ -1,0 +1,10 @@
+{
+  "from_instruction": "FROM ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852",
+  "fixture": "FROM ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852\nRUN test \"$(dpkg --print-architecture)\" = amd64 && . /etc/os-release && test \"$VERSION_ID\" = 24.04\n",
+  "build_exit": 0,
+  "platform": "linux/amd64",
+  "build_log_sha256": "ec6c24b885adc1ef1e038f5fdf20b3dbad308b306a01927e58d093be332e2095",
+  "running_containers_unchanged": 9,
+  "tested_at": 1794346819.260461,
+  "full_application_rebuilt": false
+}

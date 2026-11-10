@@ -1,0 +1,65 @@
+{
+  "local_pack_restore": {
+    "state": "local_restore_verified",
+    "archive_bytes": 189802522,
+    "archive_sha256": "cc8bd63cdcf64419dd633c0362dae3021257dc6abab9c484fdb22d9f9c9d6eda",
+    "max_archive_bytes": 192000000,
+    "remaining_archive_headroom_bytes": 2197478,
+    "members_verified": 1608,
+    "tweet_jobs": 75,
+    "frozen_log_records": 4230,
+    "prior_archives_required": true,
+    "foreign_key_violations": 0,
+    "sqlite_integrity": "ok",
+    "replay_publications": [
+      {
+        "bv": "BV1eNWL6tEh8",
+        "attempts": 5,
+        "saved_url": "https://www.bilibili.com/video/BV1eNWL6tEh8",
+        "retention_receipt_matches": true
+      },
+      {
+        "bv": "BV12iWG6zEP7",
+        "attempts": 1,
+        "saved_url": "https://www.bilibili.com/video/BV12iWG6zEP7",
+        "retention_receipt_matches": true
+      }
+    ],
+    "external_requests": 0,
+    "config_directory_included": false,
+    "authenticated_profiles_included": false,
+    "original_media_included": false,
+    "image": "sha256:6592ebce93025293ac37e8c990f0f09daa639a0ed95354120a22371d2e9b6d55",
+    "runner_sha256": "620ed6e8c2b3b94d19bca0e458d9aa6ea075f7c8b21f98c5a229e4e4affd2cfd",
+    "operation_id": "b749f4c6-b64e-430b-b5c5-0922ec75fc4a",
+    "finished_at": 1794346362.0910897,
+    "cloudbase_ledger_unchanged": true,
+    "private_scratch_removed": true,
+    "real_cloud_get": false
+  },
+  "retained_earlier_archive_analysis": {
+    "version": "local-archive-capacity-and-lineage-v1",
+    "at": 1794346743.8723235,
+    "source": "retained 00:00 local pack for resolved-remote-absent operation",
+    "stored_archive_bytes": 188336659,
+    "estimated_independent_deflate_bytes": {
+      "database": 8989978,
+      "tweets": 2755901,
+      "tweet_images": 176422390,
+      "audit": 10214,
+      "logs": 303084,
+      "archives": 123439,
+      "MANIFEST.json": 107967
+    },
+    "duplicate_byte_identical_members_estimated_deflate_bytes": {
+      "tweets": 248364,
+      "tweet_images": 5186535
+    },
+    "prior_verified_archives": 3,
+    "referenced_member_locations": 153,
+    "distinct_source_path_hash_pairs": 153,
+    "all_reference_hashes_and_sizes_match_prior_manifests": true,
+    "all_referenced_operations_verified_in_local_ledger": true,
+    "remote_gets": 0
+  }
+}
