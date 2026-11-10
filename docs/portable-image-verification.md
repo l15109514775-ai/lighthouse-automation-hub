@@ -133,6 +133,33 @@ their original IDs. The check covers the base instruction; other build inputs
 include the package repositories and browser downloads.
 [Base image receipt](releases/ubuntu-base-pin-20261111.json).
 
+To check the installed package versions in a rebuilt candidate, run from the
+reviewed checkout using the candidate image ID obtained from `docker build
+--iidfile`. The comparison uses the operator's copy of the accepted baseline
+and checker, so it also works on older images which lack the script.
+
+```sh
+docker run --rm --pull never --network none --read-only --user 10001:10001 \
+  --cap-drop ALL --security-opt no-new-privileges:true \
+  --mount "type=bind,src=$PWD/scripts/compare_source_image_packages.py,dst=/tmp/compare.py,readonly" \
+  --mount "type=bind,src=$PWD/docs/releases/source-image-dependencies-20261111.json,dst=/tmp/qualified.json,readonly" \
+  "$candidate_image_id" python /tmp/compare.py /tmp/qualified.json
+```
+
+Exit 1 with a differences report identifies added, missing or changed packages.
+Review the specific differences before promotion. The baseline covers dpkg and
+Python distribution versions. Browser, Node, file-integrity and worker checks
+are recorded separately.
+
+The complete pinned build at `35e695e` also ran on the migrated host. Only the
+base image was cached. Every application instruction ran again. All 366 OS and
+47 Python versions matched the earlier source build. An altered test inventory
+produced the expected nonzero exit and identified a changed FFmpeg version,
+a missing package and an extra package. Chromium rendered the offline test
+page, 281 upstream files matched and all 61 offline Worker tests passed.
+The candidate was kept separate from the nine running services. The two builds
+use different commits and image hashes. [Full build and comparison](releases/pinned-source-build-20261111.json).
+
 The initial build passed the upstream integrity check as root. The app UID
 could not traverse a submodule directory extracted with mode 0700. A repeat
 build with corrected staging directory modes reused the affected cached COPY

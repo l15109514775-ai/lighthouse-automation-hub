@@ -45,6 +45,12 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
 ## Outstanding operational acceptance
 
 1. **Two natural download deliveries and their Bilibili publications passed.**
+   Final publication receipts map `lWzXr6h0SyM` to
+   [BV1eNWL6tEh8](https://www.bilibili.com/video/BV1eNWL6tEh8) and
+   `_nadmR0WzqI` to [BV12iWG6zEP7](https://www.bilibili.com/video/BV12iWG6zEP7).
+   Both public pages were verified before the local originals were released.
+   The following checkpoints trace each transfer from discovery through
+   publication and include the holds encountered during that process.
    Chise source `lWzXr6h0SyM`, job `7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9`,
    completed at attempt 1. Independent SHA-256 and FFprobe checks verified the
    11,214,658,526-byte, 30,595.402-second 1080p60 H264/AAC deliverable and bound
@@ -65,10 +71,10 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    instances and SQLite integrity passed. All four new deployed Python file
    hashes match the worktree. The 29-file release bundle passed isolated file
    restoration. See [publication restoration](releases/publication-restoration-20261111.json).
-   **Upload completion remains pending:** the first source automatically created
+   **First upload checkpoint.** The first source automatically created
    parent `bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e` and child
    `82a818a5-6ac2-44e6-adbd-88a3a279e0f8`. That attempt subsequently hit the
-   publisher's 1400 MiB memory limit (cgroup `oom_kill=1`). It is now held for
+   publisher's 1400 MiB memory limit (cgroup `oom_kill=1`). It was held for
    reconciliation; its selection intent and attempt count are preserved. The
    parent was projected to the same review condition using the existing method.
    The new 8 GiB host had sufficient free memory to raise only this container's
@@ -117,7 +123,7 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    native attempt. This is not four uploads: the two intervening claims stopped
    before any browser/video selection. See
    [strict cover preflight and rollback](releases/publication-cover-rebind-20261111.json).
-   Current large-file upload/submission completion remains pending. Actual editor
+   Large-file upload/submission was still pending at this checkpoint. Actual editor
    frames at epochs 1794337770 and 1794337950 show the same native attempt moving
    from 7% to 14%, with 1547.3/10695.1 MB transferred in the latter observation.
    This confirms a live transfer, not submission or public acceptance. The

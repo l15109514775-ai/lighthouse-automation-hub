@@ -1,0 +1,82 @@
+{
+  "source_commit": "35e695e48bfbe656cb0ee434e3044b1880307fcf",
+  "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "context_sha256": "ac6ffbc97af7d7fb65154aac7461de56046b83be48403291e1f3c7c537b30843",
+  "fresh_build_exit": 0,
+  "cached_build_steps": true,
+  "checks": {
+    "upstream": "{\"upstream_files_verified\": 281}",
+    "pip": "No broken requirements found.",
+    "node": "v24.22.1",
+    "python": "Python 3.12.3",
+    "yt_dlp": "2026.10.26",
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "ffprobe": "ffprobe version 6.1.1-3ubuntu5 Copyright (c) 2007-2023 the FFmpeg developers",
+    "chromium": "156.0.8078.4",
+    "worker": "usage: replay_multipart_worker_runtime_v4.py [-h] [--once] [--check]",
+    "isolation": "61 passed in 22.57s"
+  },
+  "tests_passed": 61,
+  "junit_sha256": "be775152f92aa50e39e2993ea92e4f91b7d6b1537e35436929a83bd6788b3713",
+  "network_during_tests": "none",
+  "fixture": "tracked config/hub.example.toml mounted read-only as config/hub.toml",
+  "original_running_containers_preserved": 9,
+  "promoted": false,
+  "ubuntu_base_digests": [
+    "sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852"
+  ],
+  "image_config_digest": "sha256:eec747652790034f21f24794200b99905436892b92ca1aef85f69a3a714479f5",
+  "dependency_inventory_sha256": "c5e4d019c19601979914a71f1ab2d1031a5322fe35ba9963941009f8e8acf8f7",
+  "os_packages": 366,
+  "python_distributions": 47,
+  "prior_source_build": "ef5338650d09f362874faac7d58764efe50569f4",
+  "package_version_differences": {
+    "os": {},
+    "python": {}
+  },
+  "docker_build_no_cache_flag": true,
+  "real_download": false,
+  "cached_instructions": [
+    "[ 1/10] FROM docker.io/library/ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852"
+  ],
+  "package_checker": {
+    "candidate_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "checker_sha256": "344177e2bf373712c62fac6d053c4a2ccbbde954e6230b0e8b78d13a2407066a",
+    "comparison": {
+      "exit": 0,
+      "report": {
+        "differences": {
+          "os": {},
+          "python": {}
+        },
+        "os_packages": 366,
+        "python_distributions": 47
+      }
+    },
+    "altered_fixture": {
+      "exit": 1,
+      "report": {
+        "differences": {
+          "os": {
+            "ffmpeg": {
+              "expected": "7:6.1.1-3ubuntu5.test",
+              "installed": "7:6.1.1-3ubuntu5"
+            }
+          },
+          "python": {
+            "absent-test-package": {
+              "expected": "1",
+              "installed": null
+            },
+            "yt-dlp-ejs": {
+              "expected": null,
+              "installed": "0.8.0"
+            }
+          }
+        },
+        "os_packages": 366,
+        "python_distributions": 47
+      }
+    }
+  }
+}
