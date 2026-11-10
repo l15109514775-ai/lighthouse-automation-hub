@@ -574,3 +574,63 @@ Evidence: `backup-current-entry.json` is the applicable preflight result;
 the recovery diagnostic is retained with its inapplicability explained. This
 read-only check made zero external requests and did not create a new backup.
 Full new-host backup/restore acceptance remains outstanding.
+
+### Post-cutover full backup attempt — budget refusal (2026-11-10)
+
+One real normal-entry execution was started and then observed to terminate:
+systemd invocation `156ecadfcc064cbb8d5cd2d25e2a4e32`, exit status 2,
+operation `3284d90b-9844-4a01-85ba-37ac0eb4758f`, daily record
+`aed00779-ad1a-421d-8375-b4535a633ff6`. The ledger's authoritative error is
+`CLOUDBASE_BACKUP_BUDGET_EXCEEDED`. The outer wrapper's generic
+`DAILY_RECOVERY_SUCCESSOR_REFUSED` does not identify the underlying failure.
+
+Read-only ledger inspection confirmed **zero requests and no transfer plan** for
+this operation. No PUT or GET was dispatched. Existing daily reservations were
+354,548,122 bytes / 7 requests against limits of 512,000,000 bytes / 50 requests;
+monthly reservations were 2,241,894,688 bytes / 102 requests against limits of
+8,000,000,000 bytes / 250 requests. The retained source-host usage counts toward
+the same budget. Reservations are conservative network accounting, not an invoice.
+No quota, reservation, historical error or ledger row was reset/refunded.
+
+The daily pointer is now `accept_failed`. Its guard correctly prevents an
+unreconciled repeat, but also means the enabled 03:30 timer alone cannot restore
+normal operation. A narrowly qualified zero-request failure recovery and a later
+within-budget full restore acceptance remain outstanding. Do not start another
+backup until that recovery is verified. The prior 13:09 preflight was valid then;
+it does not describe the subsequent failed pointer.
+
+Evidence: `postmigration-backup-start.json`, `postmigration-backup-observation.json`,
+`postmigration-backup-budget.json` and private invocation journal under
+`/var/lib/lighthouse-migration`. At 13:20 UTC all eight production containers
+still ran with zero restarts; acquisition and API were healthy, the DB integrity
+check was `ok`, and no processing job was present at that observation.
+
+### Portable qualified runtime artifact (2026-11-10)
+
+The exact acquisition image was exported without changing production containers:
+
+- Archive: private `/var/lib/lighthouse-migration/portable-acquisition-0722/image.tar`.
+- Bytes: **838,561,280**.
+- SHA-256: `69bf7bd9dd7201b049cf89692e794a7f52275003cfcd94e6848bab2eae5f9f9d`.
+- Platform: Linux amd64; immutable image identity remains
+  `sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414`.
+- The OCI index-to-platform-manifest-to-config chain was validated against that
+  identity; all 20 uncompressed layer hashes matched the running image's rootfs,
+  and all 26 descriptor-addressed OCI blobs matched their stored content hashes.
+- Actual `docker image load` succeeded on the existing daemon. A new network-none,
+  read-only, UID 10001 container found all three selected acquisition/DB/adapter
+  modules without mounting live data or secrets. Production container IDs stayed
+  unchanged. No download, publication or provider call was made.
+
+The initial local verifier assumed Docker image identity always equals the config
+digest and correctly stopped on `CONFIG_ID_MISMATCH`. This daemon uses an OCI
+index identity. The corrected verifier followed and checked the descriptor chain;
+it reused the already exported archive rather than exporting or rebuilding again.
+The config and index hashes were not rewritten to satisfy a check.
+
+This proves a portable, integrity-checked captured runtime and same-daemon load,
+**not** a clean-daemon import, fresh public-source rebuild or public redistribution
+audit. Keep the archive private. Base/APT pinning and complete source provenance
+remain separately tracked. Manifest and load evidence are in `manifest.json` and
+`load-report.json` alongside the archive; local private evidence copies are kept
+in the migration workspace.
