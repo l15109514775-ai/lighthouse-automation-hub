@@ -135,7 +135,10 @@ services:
     security_opt:
       - no-new-privileges:true
       - seccomp=/opt/lighthouse-hub/config/browser-seccomp.json
-    mem_limit: 1400m
+    # Long-file browser upload exceeded 1400 MiB in the migrated 8 GiB host.
+    # Account for other services before choosing this optional profile's limit.
+    mem_limit: ${LIGHTHOUSE_PUBLICATION_MEMORY_LIMIT:-3g}
+    memswap_limit: ${LIGHTHOUSE_PUBLICATION_MEMORY_LIMIT:-3g}
     cpus: 1.5
     pids_limit: 256
     shm_size: 256m

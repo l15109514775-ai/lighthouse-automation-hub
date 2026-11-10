@@ -1,0 +1,226 @@
+{
+  "version": "publication-oom-observation-20261111",
+  "evidence": {
+    "failure-resource-report.json": {
+      "at": 1794333805.625223,
+      "container_oom_killed": true,
+      "container_memory_limit": 1468006400,
+      "diagnostics": [
+        {
+          "file": "last-error.json",
+          "value": {
+            "action": "upload",
+            "error_code": "REPLAY_BROWSER_NATIVE_OPERATION_FAILED",
+            "publication_result_unknown": false,
+            "video_selection_attempted_in_session": true
+          }
+        },
+        {
+          "file": "owned-process-cleanup-e7338a9e-2ba6-4bc7-b9d7-ba1b12279256.json",
+          "value": {
+            "attempt_id": "331caf2c-6ba0-441f-80aa-3f7fa985a6d2",
+            "broad_profile_or_worker_kill": false,
+            "captured_processes": 21,
+            "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+            "recorded_at": 1794333645.6412637,
+            "remaining_owned_live_processes": 0,
+            "temporary_credentials_deleted": 0,
+            "version": "replay-part-owned-process-cleanup-v5"
+          }
+        }
+      ],
+      "memory.events": "low 0\nhigh 0\nmax 174554\noom 1\noom_kill 1\noom_group_kill 0",
+      "memory.peak": "1468243968",
+      "memory.current": "194195456",
+      "pids.events": "max 0"
+    },
+    "memory-adjustment.json": {
+      "at": 1794333955.7162938,
+      "container_id": "e7545147f20e2d18a0966befbfd33984a50cc27f20a759278d40ffd1db6da571",
+      "before_limit_bytes": 1468006400,
+      "after_limit_bytes": 3221225472,
+      "host_available_bytes_before": 7224389632,
+      "container_restarted": false,
+      "job_requeued": false,
+      "original_error_preserved": true,
+      "compose_sha256": "cf13221734ef3f779dc2bc15ef5513c30ec00f79e126335a94a2909fc73f1466"
+    },
+    "parent-review-projection.json": {
+      "at": 1794334328.7810545,
+      "parent_job_id": "bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e",
+      "previous_state": "upload_pending",
+      "state": "awaiting_review",
+      "error_code": "REPLAY_BROWSER_NATIVE_OPERATION_FAILED",
+      "child_unchanged": true,
+      "publication_retried": false,
+      "attempts_reset": false
+    },
+    "release-restore-memory-3g-report.json": {
+      "at": 1794334396.1530588,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "files": 29,
+      "archive_bytes": 542720,
+      "archive_sha256": "66382d01a9e711016a252a16608a0d331328c0ef4d7e065b2ba6b70ab6098e7b",
+      "all_files_restored_and_hashed": true,
+      "isolated_file_restore_only": true,
+      "production_rollback_executed": false
+    },
+    "live-report.json": {
+      "at": 1794334486.911243,
+      "containers": [
+        {
+          "id": "e7545147f20e2d18a0966befbfd33984a50cc27f20a759278d40ffd1db6da571",
+          "running": true,
+          "started_at": "2026-11-10T17:50:17.665564542Z",
+          "health": "healthy",
+          "restart_count": 0,
+          "command": [
+            "python",
+            "-m",
+            "services.hub.replay_parts_worker_runtime_v5",
+            "--publication-only"
+          ]
+        }
+      ],
+      "publication_processes": [
+        "PID                 COMMAND",
+        "92547               docker-init",
+        "92579               python",
+        "98299               MainThread",
+        "98315               Xvfb",
+        "98318               chrome",
+        "98320               chrome_crashpad",
+        "98322               chrome_crashpad",
+        "98326               chrome",
+        "98327               chrome",
+        "98329               chrome",
+        "98353               chrome",
+        "98366               chrome",
+        "98386               chrome",
+        "98394               chrome",
+        "98395               chrome",
+        "98438               chrome",
+        "98643               chrome"
+      ],
+      "log_codes": [],
+      "heartbeats": [
+        {
+          "name": "worker:replay-publication:f7844ca070ac460d9ff635204cb7dedb",
+          "at": 1794334463.1712346
+        },
+        {
+          "name": "worker:replay-publication-producer:f7844ca070ac460d9ff635204cb7dedb",
+          "at": 1794334461.9548993
+        }
+      ],
+      "jobs": [
+        {
+          "job_id": "7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9",
+          "source_id": "lWzXr6h0SyM",
+          "job_type": "youtube_replay_download_v4",
+          "state": "completed",
+          "stage": "done",
+          "attempts": 1,
+          "error_code": null
+        },
+        {
+          "job_id": "4c783108-6065-4197-aab8-980a63e0e60a",
+          "source_id": "_nadmR0WzqI",
+          "job_type": "youtube_replay_download_v4",
+          "state": "completed",
+          "stage": "done",
+          "attempts": 1,
+          "error_code": null
+        },
+        {
+          "job_id": "bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e",
+          "source_id": "lWzXr6h0SyM",
+          "job_type": "replay_parts_publish_parent_v5",
+          "state": "awaiting_review",
+          "stage": "replay_parts_child_reconciliation_pending",
+          "attempts": 0,
+          "error_code": "REPLAY_BROWSER_NATIVE_OPERATION_FAILED"
+        },
+        {
+          "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+          "source_id": "lWzXr6h0SyM",
+          "job_type": "replay_part_publish_v5_p01",
+          "state": "awaiting_review",
+          "stage": "short_video_reconcile_required",
+          "attempts": 1,
+          "error_code": "REPLAY_BROWSER_NATIVE_OPERATION_FAILED"
+        },
+        {
+          "job_id": "37a18be9-fb4e-46a1-b76e-36a6dac7b752",
+          "source_id": "_nadmR0WzqI",
+          "job_type": "replay_parts_publish_parent_v5",
+          "state": "upload_pending",
+          "stage": "replay_parts_children_queued",
+          "attempts": 0,
+          "error_code": null
+        },
+        {
+          "job_id": "d8274e7f-38a8-4e4e-b9ea-2bc8a9159658",
+          "source_id": "_nadmR0WzqI",
+          "job_type": "replay_part_publish_v5_p01",
+          "state": "processing",
+          "stage": "replay_part_uploading",
+          "attempts": 1,
+          "error_code": null
+        }
+      ],
+      "publications": [],
+      "publication_phases": [
+        {
+          "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+          "state": "upload_unknown",
+          "attempt_id": "331caf2c-6ba0-441f-80aa-3f7fa985a6d2",
+          "upload_observation_saved": false
+        },
+        {
+          "job_id": "d8274e7f-38a8-4e4e-b9ea-2bc8a9159658",
+          "state": "uploading",
+          "attempt_id": "0ca06d74-e0a7-4b59-a21d-57560eb49290",
+          "upload_observation_saved": false
+        }
+      ],
+      "fifo": [
+        {
+          "source_id": "_nadmR0WzqI",
+          "state": "publication_queued",
+          "reason": null,
+          "publication_job_id": "37a18be9-fb4e-46a1-b76e-36a6dac7b752"
+        },
+        {
+          "source_id": "lWzXr6h0SyM",
+          "state": "hold",
+          "reason": "REPLAY_PART_PUBLIC_VERIFICATION_PENDING",
+          "publication_job_id": "bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e"
+        }
+      ],
+      "acquisition_processes": [
+        "PID                 COMMAND",
+        "20581               docker-init",
+        "20607               python"
+      ]
+    }
+  },
+  "native_screenshot_observation": {
+    "source_id": "_nadmR0WzqI",
+    "job_id": "d8274e7f-38a8-4e4e-b9ea-2bc8a9159658",
+    "captured_at_epoch": 1794334397,
+    "sha256": "b7c936f2dd295ab6fde6b15812794cf06999b246a4ea23559938957fc8952e50",
+    "visible_progress_percent": 48,
+    "visible_uploaded_mib": 1564.8,
+    "visible_total_mib": 3255.1,
+    "observation_method": "read-only framebuffer screenshot inspected by assistant",
+    "ui_input": false,
+    "publication_confirmed": false
+  },
+  "original_large_upload_revalidated": false,
+  "original_unknown_job_retried": false,
+  "memory_adjusted_without_restart": true,
+  "updated_private_bundle_copied_to_local_D_and_hash_verified": true,
+  "full_cloudbase_backup_verified": false,
+  "read_only_reconciliation": "Profile snapshot deferred because the next legitimate upload owns the profile lock; no conflicting browser was opened."
+}

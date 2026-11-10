@@ -291,3 +291,28 @@ lock. Both publication links and the completed upload observation remain absent.
 Upload completion, moderation and final links remain required acceptance. See
 `releases/publication-restoration-20261111.json` for exact evidence and the earlier
 test-capacity/observation-timeout limitations; no clean full-project suite is claimed.
+
+### Follow-up: native upload memory limit
+
+The first 11.2 GB upload exceeded the inherited 1400 MiB container ceiling.
+Cgroup evidence recorded one OOM kill; its unknown-upload state and selection
+intent remain intact. No blind retry or attempt reset was performed. Only the
+publisher was raised to 3 GiB memory and memory+swap, in place without restart,
+after checking the migrated 8 GiB host's available memory. The optional public
+profile now exposes `LIGHTHOUSE_PUBLICATION_MEMORY_LIMIT` with that default.
+Validate host capacity before enabling it on a smaller server. Actual Docker
+Compose parsing verifies both limits; no extra production service was started
+by that check.
+
+A different, newly completed download then uploaded normally in the existing
+queue. At epoch 1794334768 the official editor showed 3255.1/3255.1 MB (100%)
+while still finalizing the upload. Neither this percentage nor the healthy
+container proves submission, moderation or public availability. The original
+large attempt still requires reconciliation before recovery.
+
+The revised 29-file `publication-runtime-memory-3g.tar` bundle passed isolated
+file restoration and hash checks, and an identical copy is stored off-server
+on D:. It is not the pending full CloudBase backup/restore. See
+`releases/publication-oom-20261111.json` for the preserved failure, limit change
+and bundle hash. Existing test results remain applicable to the code; they do
+not prove large-file browser upload success under the revised memory ceiling.

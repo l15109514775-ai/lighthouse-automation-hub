@@ -67,11 +67,18 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    restoration. See [publication restoration](releases/publication-restoration-20261111.json).
    **Upload completion remains pending:** the first source automatically created
    parent `bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e` and child
-   `82a818a5-6ac2-44e6-adbd-88a3a279e0f8`. The child is processing at attempt 1,
-   stage `replay_part_uploading`, with the server browser process live. The next
-   acquisition has reached `youtube_whole_verified` and deferred on
-   `HEAVY_RESOURCE_BUSY` through the existing resource-wait path. No publication
-   link or completed native upload observation exists at this checkpoint.
+   `82a818a5-6ac2-44e6-adbd-88a3a279e0f8`. That attempt subsequently hit the
+   publisher's 1400 MiB memory limit (cgroup `oom_kill=1`). It is now held for
+   reconciliation; its selection intent and attempt count are preserved. The
+   parent was projected to the same review condition using the existing method.
+   The new 8 GiB host had sufficient free memory to raise only this container's
+   memory/swap ceiling to 3 GiB without restart. This does not establish that
+   the original 11.2 GB upload is repaired; it has not been retried.
+   The next acquisition completed, and its child
+   `d8274e7f-38a8-4e4e-b9ea-2bc8a9159658` is performing a real native upload.
+   At epoch 1794334768 the official editor displayed 100% of 3255.1 MB, but still
+   showed the uploading state. This is not a completed submission or a BV link.
+   See [OOM and resource evidence](releases/publication-oom-20261111.json).
    Preserve completed media until the existing publication and
    retention gates succeed; do not treat a healthy publisher as upload acceptance.
 2. **New-host full external backup and restore.** The daily budget refusal had
