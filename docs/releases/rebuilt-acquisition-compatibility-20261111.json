@@ -1,0 +1,204 @@
+{
+  "regression": {
+    "scope": [
+      "tests/test_budget_http.py",
+      "tests/test_worker_type_isolation.py",
+      "tests/test_acquisition_recovery_faults.py",
+      "tests/test_download_crash_boundaries.py",
+      "tests/test_source_controls.py",
+      "tests/test_acquisition_health.py",
+      "tests/test_acquisition_rollback.py",
+      "tests/test_replay_multipart_worker_runtime_v4.py"
+    ],
+    "passed": 84,
+    "junit_sha256": "88e497cafc68daf806541c1866a5e8a173376dd4a31081b4f48007fc59ec1c9f",
+    "network": "none",
+    "live_mounts": false,
+    "fixture": "Synthetic example with two channel ID literals mapped; validators and policy code unchanged",
+    "first_run": {
+      "suites": 7,
+      "passed": 63,
+      "setup_errors": 2,
+      "reason": "example fixture channel IDs rejected by production FIFO policy"
+    }
+  },
+  "compose": {
+    "synthetic": true,
+    "real_youtube_download": false,
+    "published": false,
+    "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "checks": {
+      "compose_isolation": true,
+      "runtime_hardening_and_limits": true,
+      "secret_permissions_wal": true,
+      "two_containers_shared_database_and_video_lock": true,
+      "boot_identity_changed_on_restart": true,
+      "sigkill_restart_and_foreign_job_preserved": true,
+      "rollback_stops_only_acquisition_and_preserves_job": true
+    },
+    "executable_overlays_verified": true,
+    "source_control_policy": "synthetic_fixture_no_owner_pause",
+    "overlay_archive_sha256": "eb9f88a43d7167ed3b1263c3a490d18b7bb502bbe022979af28d6143f0e5f9c4",
+    "passed": true
+  },
+  "prepared": {
+    "prepared_files": 7,
+    "repeated_prepare_refused": true,
+    "read_only_existing_mounts_preserved": true,
+    "other_service_definitions_unchanged": 9,
+    "changed_fields": [
+      "image",
+      "volumes"
+    ],
+    "base_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "candidate_started_in_production": false
+  },
+  "rollback": {
+    "old_image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "candidate": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "actual_previous_worker_healthy": true,
+    "previous_worker_stopped_after_test": true,
+    "sqlite_integrity": "ok",
+    "foreign_key_violations": 0,
+    "identical_full_rows_before_and_after": {
+      "jobs": 3,
+      "publications": 0,
+      "replay_fifo_v4": 0,
+      "api_calls": 0
+    },
+    "production_containers_preserved": 9,
+    "synthetic_db": true,
+    "network": "none",
+    "production_cutover": false,
+    "external_requests": 0
+  },
+  "configuration": {
+    "test_version": "rebuilt-production-bindings-v1",
+    "tested_at": 1794347535.27178,
+    "candidate": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "control": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "config_hashes": {
+      "video-runtime-v5.toml": "dec21095ceeb189c5446dc310cc07af58c7d5b7d7c70eb6630ff582bd845043c",
+      "source-controls.json": "608209d67a559c30bdea3f5a41e6593e8b0bbd43e75c48b9ff74159fcbc20474",
+      "replay-fifo-policy-v4.json": "36e8f87ab0a20f365292a47c75a3408a8d2fe4b2e4f502f698886e4a1d3eafd6",
+      "whole-replay-planning-policy-v4.toml": "47a225bd14a34ac0c97112d57c30af9cc4b8f5376b5aef4dd5080c9dd78a146d",
+      "youtube-whole-replay-download-policy-v4.toml": "3712b7fce9f7278ce9d262ad177a3c40cef77d39a93597bb3a283382b90496ae"
+    },
+    "probes": {
+      "production_control": {
+        "blockers": [],
+        "configuration_consistent": true,
+        "terminal_fifo": 476,
+        "database_mode": "wal",
+        "handlers": [
+          "youtube_replay_download_v4",
+          "youtube_replay_plan_v4",
+          "youtube_replay_readiness_v4",
+          "youtube_replay_refresh_v4"
+        ],
+        "publisher_registered": false,
+        "source_guard": {
+          "UCuDY3ibSP2MFRgf7eo3cojg": "SOURCE_FORWARDING_PAUSED",
+          "UCoW8qQy80mKH0RJTKAK-nNA": "allowed"
+        }
+      },
+      "unbound_candidate": {
+        "blockers": [
+          "CHANNEL_SCOPE_MISMATCH:replay-fifo-policy-v4.json",
+          "CHANNEL_SCOPE_MISMATCH:youtube-whole-replay-download-policy-v4.toml",
+          "PLANNING_OR_RUNTIME_CONFIG_INVALID",
+          "REPLAY_FIFO_V4_POLICY_INVALID",
+          "REPLAY_WHOLE_POLICY_INVALID",
+          "RUNTIME_CHANNEL_SCOPE_MISMATCH"
+        ],
+        "configuration_consistent": false,
+        "terminal_fifo": 476,
+        "database_mode": "wal",
+        "constructor_error": "REPLAY_FIFO_V4_POLICY_INVALID",
+        "source_guard": {
+          "UCuDY3ibSP2MFRgf7eo3cojg": "SOURCE_FORWARDING_PAUSED",
+          "UCoW8qQy80mKH0RJTKAK-nNA": "allowed"
+        }
+      },
+      "bound_candidate": {
+        "blockers": [],
+        "configuration_consistent": true,
+        "terminal_fifo": 476,
+        "database_mode": "wal",
+        "handlers": [
+          "youtube_replay_download_v4",
+          "youtube_replay_plan_v4",
+          "youtube_replay_readiness_v4",
+          "youtube_replay_refresh_v4"
+        ],
+        "publisher_registered": false,
+        "source_guard": {
+          "UCuDY3ibSP2MFRgf7eo3cojg": "SOURCE_FORWARDING_PAUSED",
+          "UCoW8qQy80mKH0RJTKAK-nNA": "allowed"
+        }
+      }
+    },
+    "scratch_removed": true,
+    "running_containers_preserved": true,
+    "network": "none",
+    "live_database_mounted": false,
+    "credential_or_browser_mount": false
+  },
+  "source_inventory": {
+    "compared": "services/adapters/scheduler Python and SQL plus two project metadata files, normalized line endings",
+    "production_files": 160,
+    "source_candidate_files": 178,
+    "candidate_only": [
+      "adapters/x_web.py",
+      "scheduler/migrations/017_x_utc_cost_ledger.sql",
+      "services/hub/cloudbase_incremental_accept_v1.py",
+      "services/hub/cloudbase_incremental_runner_v1.py",
+      "services/hub/cloudbase_incremental_v1.py",
+      "services/hub/discovery_health.py",
+      "services/hub/observer_collector_daemon_v1.py",
+      "services/hub/observer_mcp_v1.py",
+      "services/hub/observer_snapshot_v1.py",
+      "services/hub/publication_health.py",
+      "services/hub/replay_multipart_public_evidence_v4.py",
+      "services/hub/replay_multipart_publish_worker_v4.py",
+      "services/hub/tweet_repost_check_v1.py",
+      "services/hub/worker_handlers.py",
+      "services/hub/x_cost_ledger.py",
+      "services/hub/x_official_capture_queue_v1.py",
+      "services/hub/x_official_reparse_v1.py",
+      "services/hub/x_web_discovery.py"
+    ],
+    "production_only": [],
+    "changed_common": [
+      "adapters/cloudbase_cos_backup.py",
+      "adapters/http.py",
+      "adapters/safe_https.py",
+      "adapters/x.py",
+      "services/hub/acquisition_health.py",
+      "services/hub/budget.py",
+      "services/hub/cli.py",
+      "services/hub/cloudbase_backup_runtime.py",
+      "services/hub/machine_tweets.py",
+      "services/hub/machine_tweets_api.py",
+      "services/hub/machine_tweets_v2.py",
+      "services/hub/maintenance.py",
+      "services/hub/replay_fifo_v4.py",
+      "services/hub/replay_multipart_private_v4.py",
+      "services/hub/replay_multipart_v4.py",
+      "services/hub/replay_multipart_worker_runtime_v4.py",
+      "services/hub/replay_part_publish_worker_v5.py",
+      "services/hub/replay_parts_worker_runtime_v5.py",
+      "services/hub/replay_worker_runtime.py",
+      "services/hub/source_receipts.py",
+      "services/hub/web_publish.py",
+      "services/hub/x_api_discovery.py",
+      "services/hub/youtube_download.py",
+      "services/hub/youtube_monitor.py"
+    ]
+  },
+  "private_archive_manifest": "rebuilt-acquisition-bindings-20261111.json",
+  "archived_files_restored_on_windows_and_linux": 7,
+  "release_unit_tests_passed": 8,
+  "production_image_replaced": false,
+  "real_download_in_this_test": false
+}

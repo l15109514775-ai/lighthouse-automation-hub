@@ -1,0 +1,37 @@
+{
+  "version": "acquisition-source-bindings-v1",
+  "base_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "source_image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+  "overlay_archive_sha256": "eb9f88a43d7167ed3b1263c3a490d18b7bb502bbe022979af28d6143f0e5f9c4",
+  "overlay_archive_bytes": 163840,
+  "files": {
+    "adapters/http.py": {
+      "bytes": 13272,
+      "sha256": "28e68b1ed5017e1c51dee2d77a6edaf8d1ca7833d2b60b82a628c7fa5e5a8250"
+    },
+    "adapters/safe_https.py": {
+      "bytes": 2446,
+      "sha256": "8d393985e41f2409e9a1fa738e3ed2d2842d7dc4bd02ebe9c79a25bb9b01149f"
+    },
+    "services/hub/budget.py": {
+      "bytes": 10645,
+      "sha256": "1de68d1a9937e229be76fc5fe2de21ae1814a9cfc0158096f86bc67bd87f827e"
+    },
+    "services/hub/replay_fifo_v4.py": {
+      "bytes": 67528,
+      "sha256": "279600d746528fe5de12dcef6d642c4028f2ef104ceebe4867186b7ccc354b50"
+    },
+    "services/hub/replay_multipart_private_v4.py": {
+      "bytes": 29607,
+      "sha256": "db5de80b750fd808715c84e2d13941ffafb68454141f7f65ca5abed233ed5f2e"
+    },
+    "services/hub/replay_multipart_v4.py": {
+      "bytes": 18591,
+      "sha256": "3b196519cdda068d7e1b780deb6540318a9b5a624861b96551c643290e723399"
+    },
+    "services/hub/youtube_download.py": {
+      "bytes": 16121,
+      "sha256": "bf23f72e176e80a44219f6ed02f70db4bec77583b95e987497d29007a2d3a7ae"
+    }
+  }
+}

@@ -5,15 +5,22 @@ Requires Linux root, an already loaded immutable image, and synthetic test fixtu
 """
 import argparse
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
 import re
+import stat
 import subprocess
 import tarfile
 
 FILES = {'services/hub/worker.py', 'services/hub/source_controls.py',
          'config/source-controls.json'}
+SOURCE_BINDINGS = {
+    'services/hub/replay_fifo_v4.py', 'services/hub/replay_multipart_v4.py',
+    'services/hub/replay_multipart_private_v4.py', 'services/hub/youtube_download.py',
+    'services/hub/budget.py', 'adapters/http.py', 'adapters/safe_https.py',
+}
 
 
 def safe_path(path):
@@ -24,18 +31,22 @@ def safe_path(path):
 
 
 def read_bundle(manifest, archive):
-    if (manifest['version'] != 'acquisition-effective-release-v1' or
+    allowed = {'acquisition-effective-release-v1': FILES,
+               'acquisition-source-bindings-v1': SOURCE_BINDINGS}.get(manifest['version'])
+    file_info = archive.lstat()
+    if (allowed is None or not stat.S_ISREG(file_info.st_mode) or
             not re.fullmatch(r'sha256:[0-9a-f]{64}', manifest['base_image']) or
-            set(manifest['files']) != FILES or archive.stat().st_size > 1_000_000):
+            set(manifest['files']) != allowed or file_info.st_size > 1_000_000):
         raise ValueError('OVERLAY_MANIFEST_INVALID')
-    raw = archive.read_bytes()
-    if (len(raw) != manifest['overlay_archive_bytes'] or
+    with archive.open('rb') as stream:
+        raw = stream.read(1_000_001)
+    if (len(raw) > 1_000_000 or len(raw) != manifest['overlay_archive_bytes'] or
             hashlib.sha256(raw).hexdigest() != manifest['overlay_archive_sha256']):
         raise ValueError('OVERLAY_ARCHIVE_CHANGED')
     result = {}
-    with tarfile.open(archive, 'r:') as tar:
+    with tarfile.open(fileobj=io.BytesIO(raw), mode='r:') as tar:
         entries = tar.getmembers()
-        if len(entries) != len(FILES) or {x.name for x in entries} != FILES:
+        if len(entries) != len(allowed) or {x.name for x in entries} != allowed:
             raise ValueError('OVERLAY_MEMBER_SET_INVALID')
         for entry in entries:
             expected = manifest['files'][entry.name]
@@ -58,6 +69,8 @@ def main():
     for value in vars(args).values(): safe_path(value)
     if args.output.exists(): raise SystemExit('OVERLAY_TEST_OUTPUT_EXISTS')
     manifest = json.loads(args.manifest.read_text())
+    if manifest['version'] != 'acquisition-effective-release-v1':
+        parser.error('Use test_acquisition_container.py for a source-binding release')
     blobs = read_bundle(manifest, args.archive)
     image = manifest['base_image']
     inspect = json.loads(subprocess.check_output(['docker', 'image', 'inspect', image]))[0]

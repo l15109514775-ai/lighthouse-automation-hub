@@ -261,3 +261,10 @@ CloudBase restoration remain separate open items.
 The same host also passed a clean import, offline startup and synthetic
 source-control tests with the qualified acquisition image and its overlays.
 [Standby runtime verification](releases/fenced-standby-image-20261111.json).
+
+The source-built candidate also passed an acquisition-specific private binding
+comparison, 84 offline regressions and an isolated actual return to the previous
+image on the same synthetic database. The unmodified source image rejected the
+production identity policy as expected. The prepared seven-file override is
+versioned and has been rendered against the private deployment. Production
+keeps its qualified image. [Rebuilt candidate evidence](releases/rebuilt-acquisition-compatibility-20261111.json).

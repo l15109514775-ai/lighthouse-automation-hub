@@ -107,7 +107,7 @@ def main():
         # Real source-control settings are qualified by the separate restore test;
         # do not import owner identities into this generic lock/recovery fixture.
         override['volumes'] = []
-        for name in ('services/hub/worker.py', 'services/hub/source_controls.py'):
+        for name in sorted(n for n in overlay_blobs if n.endswith('.py')):
             path = root / 'runtime-overlays' / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(overlay_blobs[name]); path.chmod(0o444)

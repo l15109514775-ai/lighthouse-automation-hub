@@ -160,6 +160,43 @@ page, 281 upstream files matched and all 61 offline Worker tests passed.
 The candidate was kept separate from the nine running services. The two builds
 use different commits and image hashes. [Full build and comparison](releases/pinned-source-build-20261111.json).
 
+### Preparing the production-bound acquisition candidate
+
+On a Linux Docker host with the exact candidate image already present, use the
+reviewed checkout, a private copy of the 163,840-byte tar, and a new directory
+under a root-controlled release path. Supply absolute paths.
+
+```sh
+python3 scripts/prepare_acquisition_source_bindings.py \
+  --manifest "$PWD/docs/releases/rebuilt-acquisition-bindings-20261111.json" \
+  --archive "$private_archive" --directory "$new_release_dir"
+```
+
+The tool checks the local image ID, verifies the archive and every member and
+emits `candidate.compose.json` in the new directory. Keep the declaration with
+its seven files. Append it as the final `-f` input to the existing private
+Compose arguments for `config --format json`. The accepted render changed only
+the acquisition image and its seven read-only file mounts. Nine other service
+definitions matched; the existing data, config, browser and Secret declarations
+matched too. Rendering is sufficient for checking the prepared declaration.
+
+To reproduce the disconnected container, restart and stop-only rollback checks
+using synthetic data on a Linux test host, run:
+
+```sh
+python3 scripts/test_acquisition_container.py --compose "$PWD/compose.yaml" \
+  --image "$qualified_image_id" \
+  --overlay-manifest "$PWD/docs/releases/rebuilt-acquisition-bindings-20261111.json" \
+  --overlay-archive "$private_archive"
+```
+
+For an actual future promotion, retain the previous private Compose arguments,
+image and source-control files. Follow the existing acquisition deployment
+and rollback procedure at a quiescent task boundary. Omitting the candidate
+override selects the previous declaration. The published production image
+remains active. No real content was downloaded or published by this candidate
+qualification. [Deployment and rollback](video-worker-deployment-v2.md).
+
 The initial build passed the upstream integrity check as root. The app UID
 could not traverse a submodule directory extracted with mode 0700. A repeat
 build with corrected staging directory modes reused the affected cached COPY

@@ -98,3 +98,42 @@ host source files), including discovery-health added after this acquisition sour
 checkpoint. No production service was changed. This closes the selected-field
 manifest/overlay drift check; it is not full cross-service source provenance or
 an archive/restore test of every service.
+
+## Rebuilt source image on November 11
+
+The production worker has since delivered two Chise recordings with confirmed
+public links. The new source-built candidate at `35e695e` was tested separately
+from that running worker. Its unmodified public identity constants caused the
+actual acquisition constructor to return `REPLAY_FIFO_V4_POLICY_INVALID`
+against the production policy. Keep the signed-off production policies intact.
+
+The private source-binding tar contains seven hash-pinned modules from the
+qualified release. Four carry channel, account and display identities. Three
+preserve the acquisition service's existing budget and HTTP semantics. The
+ordinary worker and source-control modules remain supplied by the existing
+Compose release. The tar is 163,840 bytes and contains code only. Use the
+[binding manifest](releases/rebuilt-acquisition-bindings-20261111.json)
+to identify the exact candidate, per-file hashes and required archive.
+
+With these bindings the candidate and production control returned the same
+preflight and handler results on a consistent read-only operational database
+copy. All 476 terminal FIFO entries were visible. An actual metadata row for
+each channel exercised the source guard. It held Yuuhi and allowed Chise.
+Both constructors registered just the four acquisition handlers.
+
+An isolated Compose start used the restored tar, an empty synthetic work area
+and a fake key. It passed worker lock contention, SIGKILL, restart, health and
+stop-only rollback. The prior production image and its two current code mounts
+then started against that same synthetic database and became healthy. All three
+job rows matched in every column before and after. That database contained
+zero publications, FIFO rows and API calls. The operational copy used by the
+separate constructor test contained real history. The tests were offline.
+
+The first seven-suite run passed 63 cases and recorded two fixture setup errors.
+The crash tests used public example channel IDs with the real FIFO validator.
+Mapping those two IDs in the private copy of the synthetic example allowed
+eight suites, including the normal multipart worker runtime, to pass all
+84 cases. No validation rule was changed. The formal source inventory found
+24 changed common files and 18 candidate-only files. These tests establish
+acquisition compatibility for the exercised paths. Other services still use
+their own releases. [Test evidence](releases/rebuilt-acquisition-compatibility-20261111.json).
