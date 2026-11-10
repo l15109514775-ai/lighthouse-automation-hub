@@ -39,6 +39,7 @@ class QueueView:
             raise ValueError('REPLAY_MULTIPART_QUEUE_MODE_INVALID')
         self.store, self.acquisition_enabled = store, acquisition_enabled
         self.heartbeat_name = heartbeat_name
+        self.heartbeat_instance = None
 
     def __getattr__(self, name):
         return getattr(self.store, name)
@@ -61,6 +62,8 @@ class QueueView:
         self.store.beat('worker:video-main-v4')
         if self.heartbeat_name:
             self.store.beat(self.heartbeat_name)
+        if self.heartbeat_instance:
+            self.store.beat(self.heartbeat_instance)
 
     def claim(self, queue, lease_seconds, max_attempts, *, job_types=None):
         self._queue(queue)
@@ -118,6 +121,7 @@ class Coordinator:
             raise ValueError('REPLAY_MULTIPART_MODE_INVALID')
         self.mode = mode
         self.settings, self.store = settings, store
+        self.producer_heartbeat = None
         self.fifo = ReplayFIFOV4(settings, store)
         self.prepare = YouTubeWholeReplayPrepare(settings, store)
         self.readiness = WholeReadinessCoordinatorV4(settings, store)
@@ -179,6 +183,8 @@ class Coordinator:
                 result['dispatch_state'] = 'acquisition_only'
             self.store.beat('worker:video-producer-v4')
             self.store.beat('worker:replay-acquisition-producer')
+            if self.producer_heartbeat:
+                self.store.beat(self.producer_heartbeat)
             if self.mode == 'register_only':
                 # Like an idle ordinary Worker, this is the real live service,
                 # not a fabricated processing-job lease or download heartbeat.
@@ -195,9 +201,19 @@ class Coordinator:
             return self.fifo.sync_states(publication_projection=projection)
         return self.fifo.sync_states()
 
+    def bind_health(self, instance):
+        from .acquisition_health import instance_names
+        if self.producer_heartbeat is not None:
+            raise ValueError('ACQUISITION_HEALTH_ALREADY_BOUND')
+        main, producer = instance_names(instance)
+        self.worker.store.heartbeat_instance = main
+        self.producer_heartbeat = producer
+
     def idle_heartbeat(self):
         # Waiting behind another heavy worker is healthy; it grants no task lease.
         self.store.beat('worker:replay-acquisition')
+        if self.worker.store.heartbeat_instance:
+            self.store.beat(self.worker.store.heartbeat_instance)
 
 
 def build_worker(settings, store, *, mode='register_only'):
@@ -278,7 +294,7 @@ def main():
             raise HubError('REPLAY_MULTIPART_KEY_FILE_REQUIRED', review=True)
         load_youtube_key('/run/secrets/youtube-api-key')
         from .acquisition_health import start_epoch
-        start_epoch()
+        coordinator.bind_health(start_epoch())
     run_loop(worker, coordinator, once=args.once)
 
 

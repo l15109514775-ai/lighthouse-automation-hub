@@ -172,9 +172,14 @@ print('permissions-secret-wal-no-external-work: PASS')
         report['checks']['secret_permissions_wal'] = True
         check_concurrent_workers(args.image, root)
         report['checks']['two_containers_shared_database_and_video_lock'] = True
+        epoch_cmd = ['docker', 'exec', ident, 'python', '-c',
+            "from pathlib import Path;print(Path('/tmp/replay-acquisition-epoch.json').read_text())"]
+        boot_before = json.loads(subprocess.check_output(epoch_cmd))['instance']
         subprocess.run(['docker', 'kill', '--signal', 'KILL', ident], check=True, stdout=subprocess.DEVNULL)
         subprocess.run(['docker', 'start', ident], check=True, stdout=subprocess.DEVNULL)
         wait_healthy(ident, allow_restart=True)
+        assert json.loads(subprocess.check_output(epoch_cmd))['instance'] != boot_before
+        report['checks']['boot_identity_changed_on_restart'] = True
         import sqlite3
         with sqlite3.connect('file:' + str(root / 'data/hub.sqlite3') + '?mode=ro', uri=True) as db:
             db.row_factory = sqlite3.Row

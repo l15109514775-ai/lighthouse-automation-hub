@@ -68,10 +68,12 @@ alone pins every OS package.
 
 ## Health, faults and delivery
 
-The private tmpfs boot marker binds readiness to this container start. Health
-requires recent `worker:replay-acquisition` and
-`worker:replay-acquisition-producer` database timestamps, both newer than the boot
-marker. Main-loop contention is healthy waiting; it does not grant a lease.
+The private tmpfs boot marker carries a fresh random instance identifier. Health
+requires recent `worker:replay-acquisition:<instance>` and
+`worker:replay-acquisition-producer:<instance>` database timestamps, both newer
+than the boot marker. Global heartbeat names remain for existing observers but
+cannot satisfy the probe: another worker's pulses cannot mask this producer.
+Main-loop contention is healthy waiting; it does not grant a lease.
 V4's existing producer fatal path terminates the process rather than continuing
 to advertise a healthy downloader when the producer has died.
 

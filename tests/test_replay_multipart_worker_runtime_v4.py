@@ -41,6 +41,24 @@ def test_only_four_v4_handlers_and_explicit_wait_callbacks_are_registered(config
     assert not f.db.query('SELECT * FROM jobs')
 
 
+def test_runtime_binds_both_heartbeat_paths_to_its_own_boot(configured):
+    from services.hub.acquisition_health import instance_names
+    f = configured
+    worker, coordinator = rt.build_worker(f.s, f.db, mode='acquisition_only')
+    coordinator.bind_health('a' * 32)
+    coordinator.tick()
+    coordinator.idle_heartbeat()
+    names = instance_names('a' * 32)
+    rows = dict((r['name'], r['at']) for r in f.db.query('SELECT * FROM heartbeats'))
+    assert all(name in rows for name in names)
+    before = rows[names[0]]
+    worker.store.beat('worker:video')
+    assert f.db.query('SELECT at FROM heartbeats WHERE name=?', (names[0],))[0]['at'] >= before
+    with pytest.raises(ValueError, match='ALREADY_BOUND'):
+        coordinator.bind_health('b' * 32)
+    assert not f.db.query('SELECT * FROM publications')
+
+
 @pytest.mark.parametrize('kind', [PLAN_JOB, DOWNLOAD_JOB, READINESS_JOB, REFRESH_JOB])
 def test_claim_accepts_real_v4_platform_policy_only_and_does_not_consume_legacy(configured, kind):
     f = configured
