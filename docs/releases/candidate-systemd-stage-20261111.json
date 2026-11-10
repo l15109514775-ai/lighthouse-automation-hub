@@ -1,0 +1,12 @@
+{
+  "time": 1794353271.6644666,
+  "new_declaration_sha256": "9337909dc7c782c3096ef39f5399863dd15babb76f8002f7f57229f06e713de7",
+  "previous_declaration_sha256": "dcf36ad016be9d38d943112133aec99731756e793b54178a8fad21a8a43dcaa9",
+  "services_rendered": 10,
+  "production_containers_unchanged": 9,
+  "code_bindings_verified": 9,
+  "rollback_byte_identical": true,
+  "two_file_candidate_matches_three_file_reference": true,
+  "owner_marker_unchanged": true,
+  "activated": false
+}

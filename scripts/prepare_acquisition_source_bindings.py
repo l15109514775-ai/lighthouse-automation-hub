@@ -42,10 +42,47 @@ def prepare(manifest, archive, directory):
     return path
 
 
+def stage_installed_override(previous, candidate, source_image):
+    """Build the two-file systemd deployment's replacement and exact fallback."""
+    original_bytes = safe_path(previous).read_bytes()
+    document = json.loads(original_bytes)
+    service = document['services']['replay-acquisition-worker']
+    if service['image'] != source_image or service['command'] != [
+        'python', '-m', 'services.hub.replay_multipart_worker_runtime_v4', '--acquisition-only'
+    ]:
+        raise ValueError('INSTALLED_ACQUISITION_RELEASE_MISMATCH')
+    addition = json.loads(candidate.read_bytes())['services']['replay-acquisition-worker']
+    pending = {v['target']: v for v in addition['volumes']}
+    volumes = []
+    seen = set()
+    for mount in service['volumes']:
+        if not isinstance(mount, dict) or not isinstance(mount.get('target'), str) or mount['target'] in seen:
+            raise ValueError('INSTALLED_ACQUISITION_MOUNT_AMBIGUOUS')
+        target = mount['target']
+        seen.add(target)
+        if target in pending:
+            if mount['type'] != 'bind' or mount.get('read_only') is not True:
+                raise ValueError('INSTALLED_ACQUISITION_CODE_MOUNT_INVALID')
+            volumes.append(pending.pop(target))
+        else:
+            volumes.append(mount)
+    service.update(image=addition['image'], pull_policy=addition['pull_policy'], volumes=volumes + list(pending.values()))
+    folder = candidate.parent
+    with (folder / 'installed-previous.compose.json').open('xb') as fallback:
+        fallback.write(original_bytes)
+    replacement = folder / 'installed-candidate.compose.json'
+    with replacement.open('x', encoding='utf-8') as output:
+        json.dump(document, output, indent=2)
+        output.write('\n')
+    return replacement
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for option in ('manifest', 'archive', 'directory'):
         parser.add_argument('--' + option, required=True, type=Path)
+    parser.add_argument('--installed-override', type=Path,
+                        help='Stage a replacement and exact fallback for a private acquisition JSON declaration')
     args = parser.parse_args()
     manifest = json.loads(safe_path(args.manifest).read_bytes())
     if manifest['version'] not in SOURCE_BINDING_VERSIONS:
@@ -57,7 +94,10 @@ def main():
                                      text=True, timeout=30).strip()
     if actual != image:
         parser.error('Local image differs from the qualified base image')
-    print(prepare(manifest, args.archive, args.directory))
+    candidate = prepare(manifest, args.archive, args.directory)
+    if args.installed_override:
+        candidate = stage_installed_override(args.installed_override, candidate, manifest['source_image'])
+    print(candidate)
 
 
 if __name__ == '__main__':

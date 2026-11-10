@@ -190,6 +190,18 @@ the acquisition image and its code mounts. Nine other service
 definitions matched; the existing data, config, browser and Secret declarations
 matched too. Rendering is sufficient for checking the prepared declaration.
 
+The migrated host's systemd unit explicitly names two Compose files. To stage
+a declaration for that unit, append
+`--installed-override /opt/lighthouse-hub/compose.acquisition.json` to the
+preparation command. The private release directory then contains
+`installed-candidate.compose.json` and a byte-for-byte
+`installed-previous.compose.json`. Keep the directory at its final location
+because the code mounts use absolute paths. On the migrated host the candidate
+render matched the three-file reference across all ten service definitions.
+The rollback render matched the currently installed pair. All nine running
+containers kept their IDs. Staging leaves the unit, marker and both live
+declarations in place. [Systemd deployment staging](releases/candidate-systemd-stage-20261111.json).
+
 To reproduce the disconnected container, restart and stop-only rollback checks
 using synthetic data on a Linux test host, run:
 
@@ -228,13 +240,23 @@ The source-built base used by this archive has a separate Docker export of
 were verified. Its SHA-256 is
 `a817bf338dc1fa5953ce1db124273bdbe659f0396bbac4a80af7a7f0d9a7fc57`.
 Keep the image export, private code archive and public binding manifest
-together for migration. Clean-store import of this specific base remains a
-separate check. [Candidate image export](releases/candidate-source-image-export-20261111.json).
+together for migration. A verified copy of the image export was imported into
+empty, isolated Docker and containerd stores on the former Tencent host.
+The probe matched all ten layer hashes, 366 OS package versions, 47 distinct
+Python package versions and ten source files from the build commit. It ran as
+UID 10001 with loopback only. Both test daemons stopped, and the temporary
+image archive and stores on that host were removed. The independent off-host
+copy remains on the operator's D: drive. No ongoing service on that host is
+required. [Candidate image export](releases/candidate-source-image-export-20261111.json)
+and [independent import receipt](releases/candidate-independent-import-20261111.json).
 
 For an actual future promotion, retain the previous private Compose arguments,
 image and source-control files. Follow the existing acquisition deployment
-and rollback procedure at a quiescent task boundary. Omitting the candidate
-override selects the previous declaration. The published production image
+and rollback procedure at a quiescent task boundary. With an additional
+Compose argument, omitting it selects the previous declaration. With the
+installed two-file unit, restore `installed-previous.compose.json` to the
+live acquisition declaration and its migration mirror, and restore the matching
+acquisition marker from the prior release. The published production image
 remains active. No real content was downloaded or published by this candidate
 qualification. [Deployment and rollback](video-worker-deployment-v2.md).
 

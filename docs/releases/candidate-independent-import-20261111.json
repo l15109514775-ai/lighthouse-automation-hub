@@ -1,0 +1,33 @@
+{
+  "state": "clean_import_and_offline_container_passed",
+  "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "archive_sha256": "a817bf338dc1fa5953ce1db124273bdbe659f0396bbac4a80af7a7f0d9a7fc57",
+  "started_at": 1794353262.3692634,
+  "finished_at": 1794353304.5049803,
+  "layers_verified": 10,
+  "separate_network_namespace": true,
+  "separate_mount_namespace": true,
+  "probe_uid": 10001,
+  "network_interfaces": [
+    "lo"
+  ],
+  "provider_requests": 0,
+  "live_mounts": false,
+  "daemon_stopped": true,
+  "containerd_stopped": true,
+  "fence_verified_after": true,
+  "initial_images": 0,
+  "initial_containers": 0,
+  "initial_blobs": 0,
+  "archive_bytes": 821625344,
+  "os_package_versions_matched": 366,
+  "python_package_versions_matched": 47,
+  "python_metadata_records": 48,
+  "repeated_python_metadata": {
+    "lighthouse-automation-hub": 2
+  },
+  "source_commit": "35e695e48bfbe656cb0ee434e3044b1880307fcf",
+  "source_file_hashes_matched": 10,
+  "former_host_temporary_archive_and_stores_removed": true,
+  "real_provider_download": false
+}

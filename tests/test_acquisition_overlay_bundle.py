@@ -6,7 +6,7 @@ import tarfile
 import pytest
 
 from scripts.test_acquisition_overlay_bundle import FILES, SOURCE_BINDINGS, SOURCE_BINDING_VERSIONS, read_bundle
-from scripts.prepare_acquisition_source_bindings import prepare
+from scripts.prepare_acquisition_source_bindings import prepare, stage_installed_override
 
 
 def bundle(tmp_path, mutation=None, *, files=FILES, version='acquisition-effective-release-v1'):
@@ -67,6 +67,32 @@ def test_new_release_requires_both_dispatcher_and_source_guard(tmp_path):
     archive, manifest, _ = bundle(tmp_path, files=SOURCE_BINDINGS, version='acquisition-source-bindings-v2')
     with pytest.raises(ValueError, match='OVERLAY_MANIFEST_INVALID'):
         read_bundle(manifest, archive)
+
+
+def test_installed_override_preserves_private_settings_and_exact_previous_bytes(tmp_path):
+    version = 'acquisition-source-bindings-v2'
+    archive, manifest, files = bundle(tmp_path, files=SOURCE_BINDING_VERSIONS[version], version=version)
+    candidate = prepare(manifest, archive, tmp_path / 'release')
+    role = 'replay-acquisition-worker'
+    program = ['python', '-m', 'services.hub.replay_multipart_worker_runtime_v4', '--acquisition-only']
+    data = {'type': 'bind', 'source': '/private/data', 'target': '/opt/lighthouse-hub/data'}
+    code = {'type': 'bind', 'source': '/previous/worker.py', 'read_only': True,
+            'target': '/opt/lighthouse-hub/services/hub/worker.py'}
+    installed = {'services': {role: {'image': 'previous', 'command': program, 'volumes': [data, code],
+                                     'secrets': ['youtube']}}, 'secrets': {'youtube': {'file': '/private/key'}}}
+    previous = tmp_path / 'installed.json'
+    original = (json.dumps(installed) + '\r\n').encode()
+    previous.write_bytes(original)
+    replacement = stage_installed_override(previous, candidate, 'previous')
+    assert (candidate.parent / 'installed-previous.compose.json').read_bytes() == previous.read_bytes() == original
+    result = json.loads(replacement.read_bytes())
+    service = result['services'][role]
+    assert result['secrets'] == installed['secrets'] and service['secrets'] == ['youtube']
+    assert service['command'] == program and service['image'] == manifest['base_image']
+    assert service['volumes'][0] == data and len(service['volumes']) == len(files) + 1
+    assert service['volumes'][1]['source'] == str(candidate.parent / 'services/hub/worker.py')
+    with pytest.raises(ValueError, match='INSTALLED_ACQUISITION_RELEASE_MISMATCH'):
+        stage_installed_override(previous, candidate, 'other')
 
 
 @pytest.mark.parametrize('mutation', ['traversal', 'symlink', 'duplicate'])
