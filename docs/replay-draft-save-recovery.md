@@ -30,16 +30,23 @@ retry limits, publication reservation expiry, task attempts and authorization
 semantics are unchanged. Reaching the preparation deadline still stops the
 operation; it never permits another upload or public click.
 
-## Current held task
+## Real large-file acceptance
 
 The November 11 large-file acceptance retains native attempt
 `341aec7a-8f2e-484e-8e4a-d8b49f824ff7` and job
 `82a818a5-6ac2-44e6-adbd-88a3a279e0f8`. Its observed saved draft is `4104806`.
-All three private intents remain consumed. There is no public-send intent or
-publication row at the last inspection. The job's four attempts must remain in
-history; deploying this fix alone does not silently retry an exhausted task.
-Any bounded maintenance continuation must use that same uploaded draft and the
-existing machine QA, source controls, grant and single-submit reservation.
+All three private intents remain consumed. A real prepare-only run re-opened
+the draft and validated its metadata, cover and native upload completion. The
+new receipt and screenshot hashes were preserved independently. No file was
+selected and no save or submit occurred; the held job stayed byte-for-byte
+unchanged during this run. The original four attempts remain in history.
+
+A narrowly scoped maintenance run subsequently claimed this one job through
+the ordinary publication Worker (attempt five, same native attempt). Unrelated
+jobs still use the global maximum of four. The standard video lock, renewable
+lease, source controls, source/cover QA, workflow grant and single public-submit
+reservation are unchanged. The live claim observation is not a publication
+receipt. Only a platform result and later public verification complete the job.
 
 ## Qualification and rollback
 
@@ -58,8 +65,8 @@ checks respectively, with overlap (not 70 unique tests). The final three source
 files are deployed in the healthy independent publisher; all other container
 IDs and the held job stayed unchanged. See
 [dated qualification/deployment evidence](releases/draft-save-ack-release-20261111.json).
-Real preparation, bounded continuation and final publication are separate
-acceptance steps and must be recorded from their own results.
+The final real prepare receipt passed, and the bounded continuation was seen
+running. Final publication is a separate acceptance step.
 
 Promote only the three qualified runtime files in a versioned, read-only source
 overlay for the independent publication service. Save the prior Compose and

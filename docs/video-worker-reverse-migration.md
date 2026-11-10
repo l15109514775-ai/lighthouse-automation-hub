@@ -46,6 +46,11 @@ service while leaving healthy tweet/status services running.
   `releases/draft-save-ack-release-20261111.json`; the earlier memory-3g runtime
   archive alone predates this fix. Preserve preparation histories and consumed
   native intents. They are not disposable upload cache.
+  The current private `publication-runtime-draft-save-ack-v3.tar` contains 31
+  runtime/configuration files (SHA-256 `6185d92f1d1393a4452942009cf0dc37976ccde6d4499b2e1cef4923ced5e0b2`).
+  All entries were restored and hashed in isolation, and the local private copy
+  matched. This is a source/configuration bundle, not an image, DB/media backup
+  or an executed reverse-host migration.
 - Preserve the root-owned host-monitor library and its fixed systemd override
   from `releases/publication-host-monitor-20261111.json`. The application-tree
   copy is not the effective privileged entry. Verify ownership, parent-directory

@@ -165,9 +165,12 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    regression checks passed; real startup observations required blank-tab and
    title-rendering corrections, qualified by subsequent 12- and 18-check runs
    (overlapping cases). The current three-file overlay is deployed and healthy.
-   No other container ID or held job changed. Actual prepare-only confirmation
-   and the bounded standard-Worker continuation remain required; the real task
-   is still held until that continuation is verified. See
+   No other container ID or held job changed during promotion. Actual prepare-only
+   confirmation then passed on draft `4104806`, producing a new bound receipt
+   without file selection, save or submit. The standard Worker subsequently
+   claimed this one continuation with a renewable lease (attempt five, same
+   native attempt, global cap unchanged). This observation does not yet prove
+   public submission, moderation or a saved BV. See
    [draft recovery qualification](releases/draft-save-ack-release-20261111.json) and
    [the preserved real failure](releases/large-draft-save-checkpoint-20261111.json).
 2. **New-host full external backup and restore.** The daily budget refusal had

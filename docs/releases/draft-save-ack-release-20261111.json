@@ -144,10 +144,10 @@
         "sha256": "1731169097e8fd1766863b8f463b668e2aaa72ddf71f1babc40ec6e0af95af0b"
       }
     },
-    "prepare_confirmation_pending": true,
+    "prepare_confirmation_pending": false,
     "one_scoped_continuation_qualified": {
       "exit_code": 0,
-      "source_sha256": "92a66fb0ee8e2c4316f17bafce10e23133c7f2d1ff1a3e79349fc3cdeec49790",
+      "source_sha256": "87f1980bf77fbd1b5eea0dec0700e77e56ac09a606bcbcdcdf8b278c9e5265fc",
       "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
       "network": "none",
       "live_data_mounted": false,
@@ -162,7 +162,81 @@
         "network_used": false
       }
     },
-    "public_submission_completed": false
+    "public_submission_completed": false,
+    "real_prepare_only": {
+      "at": 1794343365.2163131,
+      "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+      "native_attempt": "341aec7a-8f2e-484e-8e4a-d8b49f824ff7",
+      "state": "prepared",
+      "actual_saved_draft_verified": true,
+      "job_unchanged": true,
+      "original_private_intents_unchanged": true,
+      "new_file_selections": 0,
+      "save_clicks": 0,
+      "public_submissions": 0,
+      "native_preparation_sha256": "a73cd3e21f5c1dec142813c65d944cf9704bb7be234a6bbdcefd6d1276946cfc",
+      "acknowledgement_sha256": "84216551c726d50609d3ef1069e5b62f140f507da382f142159cf701a16bc9f8"
+    },
+    "private_portable_delta": {
+      "version": "publication-draft-save-overlay-delta-v1",
+      "at": 1794343591.470405,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "compose_sha256": "2be8a3a26277dc00a8fc2f7c8c42c5455a4b0ec5586d48b1dc2cb9d5a2380b40",
+      "archive_bytes": 122880,
+      "archive_sha256": "dc60fb1a82a1404502d9b5884173d3b8eacff1bd05d32a6507d4abd7d4152dbd",
+      "files": {
+        "usr/local/lib/lighthouse-publication/draft-save-ack-v3/adapters/replay_native_driver.mjs": {
+          "bytes": 69455,
+          "sha256": "659aca8d53067d902642184085165a3893c58c70a6abd4ec6980ee9ddd9ed7d6"
+        },
+        "usr/local/lib/lighthouse-publication/draft-save-ack-v3/adapters/short_video_saved_draft_navigation_control.mjs": {
+          "bytes": 11346,
+          "sha256": "c1a9b75428c192584a698cbbf460abc7335e88b1bdd66c183ef5b34676e0496f"
+        },
+        "usr/local/lib/lighthouse-publication/draft-save-ack-v3/services/hub/replay_part_publish_worker_v5.py": {
+          "bytes": 12419,
+          "sha256": "54bc8b71daf639232db5d32df82018320fdcfd49bbd496f8386c3d19f10b7c3a"
+        },
+        "opt/lighthouse-hub/compose.publication.json": {
+          "bytes": 12354,
+          "sha256": "2be8a3a26277dc00a8fc2f7c8c42c5455a4b0ec5586d48b1dc2cb9d5a2380b40"
+        },
+        "etc/lighthouse-hub/publication-enabled.json": {
+          "bytes": 3837,
+          "sha256": "4b1ce06e5de54a6458c1adf0d365aec6c3197958c407f08976b99c5136c32244"
+        }
+      },
+      "isolated_all_entry_roundtrip_verified": true,
+      "requires_prior_complete_publication_runtime_bundle": true,
+      "full_container_restore_tested": false,
+      "external_backup": false,
+      "database_profiles_media_or_secret_files_included": false
+    },
+    "continuation_observation": {
+      "at": 1794343762.7590184,
+      "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+      "attempts": 5,
+      "state": "processing",
+      "stage": "replay_part_saved_draft_continuation_ready",
+      "phase": "uploaded",
+      "original_native_attempt": true,
+      "public_submit_intent": false,
+      "publications": [],
+      "external_publish_id": null,
+      "lease_until": 1794343930.930894
+    },
+    "complete_publication_source_bundle": {
+      "at": 1794343730.9298363,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "files": 31,
+      "archive_bytes": 573440,
+      "archive_sha256": "6185d92f1d1393a4452942009cf0dc37976ccde6d4499b2e1cef4923ced5e0b2",
+      "all_files_restored_and_hashed": true,
+      "isolated_file_restore_only": true,
+      "production_rollback_executed": false,
+      "private_local_copy_hash_verified": true,
+      "external_backup": false
+    }
   },
   "intermediate_v2": {
     "qualification": {
