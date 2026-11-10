@@ -70,7 +70,10 @@ class PartReplaySession(PrivateSession):
                 operation=='lookup' and set(arguments)-{'external_id'} or operation in ('upload','prepare') and arguments):
             raise HubError('REPLAY_PART_BROWSER_OPERATION_INVALID',review=True)
         began=time.monotonic()
-        budget=submit_rpc_budget(arguments['reservation']) if operation=='submit' else {'upload':12*3600+120,'prepare':300,'lookup':300}[operation]
+        # Preparation rehashes up to 14 GB and may read back a saved draft.
+        # This bounded IPC wait grants no additional upload or submit attempt;
+        # the independent public-submit reservation deadline stays unchanged.
+        budget=submit_rpc_budget(arguments['reservation']) if operation=='submit' else {'upload':12*3600+120,'prepare':900,'lookup':300}[operation]
         ident=str(uuid.uuid4());self._send({'version':'replay-native-browser-request-v1','request_id':ident,'operation':operation,'arguments':arguments})
         if operation=='submit':budget-=time.monotonic()-began
         if budget<=0:raise HubError('REPLAY_BROWSER_RESPONSE_UNKNOWN',review=True)

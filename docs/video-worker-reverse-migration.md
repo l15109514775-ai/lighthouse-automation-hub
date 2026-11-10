@@ -39,6 +39,13 @@ service while leaving healthy tweet/status services running.
   with their task directories. Those records prevent a copied task from being
   mistaken for an unused upload attempt. See
   [the qualified recovery](private-upload-recovery.md).
+- The current publication service also mounts the three qualified draft-save
+  acknowledgement sources under
+  `/usr/local/lib/lighthouse-publication/draft-save-ack-v3`. Preserve their exact
+  hashes and the current Compose/enable-marker pair from
+  `releases/draft-save-ack-release-20261111.json`; the earlier memory-3g runtime
+  archive alone predates this fix. Preserve preparation histories and consumed
+  native intents. They are not disposable upload cache.
 - Preserve the root-owned host-monitor library and its fixed systemd override
   from `releases/publication-host-monitor-20261111.json`. The application-tree
   copy is not the effective privileged entry. Verify ownership, parent-directory

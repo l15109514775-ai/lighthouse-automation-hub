@@ -1,0 +1,40 @@
+{
+  "version": "lighthouse-native-saved-draft-proof-v1",
+  "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+  "observed_at": "2026-11-10T20:02:51.810Z",
+  "site_uid": "3747574504754572",
+  "draft_url": "https://member.bilibili.com/platform/upload/video/frame?type=draft&draftId=4104806",
+  "source": "https://www.youtube.com/watch?v=lWzXr6h0SyM",
+  "native_status": [
+    "\u4e0a\u4f20\u5b8c\u6210"
+  ],
+  "draft_pages": 2,
+  "file_selections": 0,
+  "save_clicks": 0,
+  "submit_clicks": 0,
+  "exact_source_verified": true,
+  "publication_complete": false,
+  "server_file_hash_verified": false,
+  "cover_image_element_found": false,
+  "cover_visual_acceptance_pending": false,
+  "evidence": {
+    "report.json": {
+      "bytes": 11353,
+      "sha256": "d34ae87cca31ceff2b681f919ff3634bd87998973c4ca8568b6a699a896a9282"
+    },
+    "draft-editor.png": {
+      "bytes": 240939,
+      "sha256": "fb4c4815a77348fadff5d55d9fb4865705ff1672c820198ec54f3dccc3ad82e0"
+    },
+    "drafts-1.png": {
+      "bytes": 182989,
+      "sha256": "8241595ac5ae61d5df3ac8933b52dc5209fa6fbc48844944dfaa145768a72833"
+    },
+    "drafts-2.png": {
+      "bytes": 143703,
+      "sha256": "17419d5f0bb855d4cdf645e15b94d7c2eb5c5a701a2bf2be4fdeade29c9cd8c3"
+    }
+  },
+  "cover_visible_in_screenshot": true,
+  "cover_rendering": "background image; separate native surface observation confirmed .cover-main .cover-module-main .cover-img"
+}

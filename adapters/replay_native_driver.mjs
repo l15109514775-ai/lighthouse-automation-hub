@@ -372,8 +372,57 @@ export async function createReplayNativeDriver({page,context,spec,root,uploadTim
    return {native:await metadataReadback(),repaired:true};
   }
  }
+ async function unacknowledgedDraftSave(){
+  try{await readJSON(path.join(output,'native-preparation.json'));return null;}catch(e){if(e.code!=='ENOENT')throw e;}
+  let saved;try{saved=await readJSON(path.join(intents,'private-draft-save.json'));}catch(e){if(e.code==='ENOENT')return null;throw e;}
+  await rejectExistingIntent('public-submit');
+  for(const kind of ['video-selection','cover-completion','private-draft-save']){
+   const intent=kind==='private-draft-save'?saved:await readJSON(path.join(intents,kind+'.json'));
+   if(intent.version!==(route.intent||'replay-native-one-use-intent-v1')||intent.kind!==kind||
+    Object.entries(binding).some(([k,v])=>intent[k]!==v)||kind!=='video-selection'&&intent.cover_sha256!==spec.cover.sha256)
+    fail('REPLAY_BROWSER_PREPARATION_BINDING_CHANGED');
+  }
+  const observed=await readJSON(path.join(output,'native-preparation-observation.json'));
+  if(observed.version!==route.form||Object.entries(binding).some(([k,v])=>observed[k]!==v)||
+   observed.cover_sha256!==spec.cover.sha256||observed.cover_provenance_sha256!==spec.cover_derivation.provenance_sha256||
+   observed.metadata_verified!==true||observed.cover_applied!==true||!SHA.test(observed.upload_reference_sha256||''))
+   fail('REPLAY_BROWSER_PREPARATION_BINDING_CHANGED');
+  if(route.standalone)await checkedUploadedFingerprint(observed.upload_reference_sha256);
+  return {observation:observed,save_intent:await fileEvidence(path.join(intents,'private-draft-save.json'))};
+ }
+ async function confirmSavedPreparation(pending){
+  // A restarted persistent browser may begin on its untouched about:blank tab.
+  // Enter only the fixed native manager before applying the usual origin/UID
+  // guards. An unexpected external page is never redirected past its guard.
+  if(page.url()==='about:blank')await page.goto(ORIGIN+'/platform/upload-manager/article',{waitUntil:'domcontentloaded',timeout:45000});
+  await verify();
+  const navigation=await navigateSavedDraft({page,spec:{...spec,recovery_id:spec.attempt_id,require_saved_draft:true},output,control_action:'lookup',helpers});
+  if(navigation.state!=='saved_draft_editor_opened')fail('REPLAY_BROWSER_DRAFT_LOOKUP_REQUIRED');
+  const actual=new URL(page.url());
+  if(actual.origin!==ORIGIN||actual.pathname!==EDITOR||actual.searchParams.get('type')!=='draft'||!/^\d+$/.test(actual.searchParams.get('draftId')||''))
+   fail('REPLAY_BROWSER_DRAFT_IDENTITY_CHANGED');
+  const native=await metadataReadback(),cover=page.locator('.cover-main .cover-module-main:visible');
+  if(await cover.count()!==1||await cover.getByText('添加封面',{exact:true}).count()||
+   !await cover.evaluate(e=>Boolean(e.querySelector('img,canvas')||[e,...e.querySelectorAll('*')].some(n=>getComputedStyle(n).backgroundImage!=='none'))))
+   fail('REPLAY_BROWSER_COVER_MISSING');
+  await verify();await checkedCover();await rejectExistingIntent('public-submit');
+  const archive=path.join(output,'preparation-history',cryptoRandomUUID());await fs.mkdir(archive,{recursive:true,mode:0o700});
+  for(const name of ['native-preparation-observation.json','pre-submit.png']){
+   const file=path.join(output,name);await noSymlinks(file);await fs.copyFile(file,path.join(archive,name));await fs.chmod(path.join(archive,name),0o600);await fileEvidence(path.join(archive,name));
+  }
+  const snapshot=await snapshotPreparation(native);
+  await write('native-draft-save-acknowledgement.json',{version:'replay-native-draft-save-acknowledgement-v1',...binding,
+   method:'native_saved_draft_readback',url:actual.href,save_intent:pending.save_intent,
+   metadata_verified:true,native_upload_complete:true,cover_visible:true,new_file_selections:0,save_clicks:0,submit_clicks:0});
+  // Preserve the strict preparation schema consumed by existing Python QA.
+  const receipt={...snapshot,version:route.prepare,private_draft_saved:true};
+  await write('native-preparation.json',receipt);
+  return {state:'prepared',native_preparation:receipt,recovered_without_modification:true};
+ }
  async function prepare(){
-  await highestSourceCheck();await openEditor();await checkedFile();await checkedCover();
+  await highestSourceCheck();await checkedFile();await checkedCover();
+  const pending=await unacknowledgedDraftSave();if(pending)return confirmSavedPreparation(pending);
+  await openEditor();
   try{
    const recorded=await readJSON(path.join(output,'native-preparation.json'));
    if(recorded.version!==route.prepare||Object.entries(binding).some(([key,value])=>recorded[key]!==value)||recorded.cover_sha256!==spec.cover.sha256||recorded.cover_provenance_sha256!==spec.cover_derivation.provenance_sha256||recorded.private_draft_saved!==true)fail('REPLAY_BROWSER_PREPARATION_BINDING_CHANGED');
@@ -413,7 +462,16 @@ export async function createReplayNativeDriver({page,context,spec,root,uploadTim
   const draft=await unique(page.locator('span.submit-draft:visible').filter({hasText:/^\s*存草稿\s*$/}));
   if(await page.getByText('已存入草稿箱',{exact:true}).filter({visible:true}).count())fail('REPLAY_BROWSER_STALE_DRAFT_TOAST');
   await verify();await reserve('private-draft-save',{cover_sha256:spec.cover.sha256});if(route.standalone)await guard();await draft.click({timeout:5000});
-  const saved=page.getByText('已存入草稿箱',{exact:true}).filter({visible:true});await saved.waitFor({state:'visible',timeout:15000});
+  const saved=page.getByText('已存入草稿箱',{exact:true}).filter({visible:true});
+  const end=Date.now()+15000;let acknowledged=false;
+  do{
+   const current=new URL(page.url());
+   if(current.origin!==ORIGIN)fail('REPLAY_BROWSER_DRAFT_IDENTITY_CHANGED');
+   if(current.pathname==='/platform/upload-manager/article')return confirmSavedPreparation(await unacknowledgedDraftSave());
+   await guard();if(await saved.count()===1){acknowledged=true;break;}
+   if(Date.now()>=end)break;await page.waitForTimeout(200);
+  }while(true);
+  if(!acknowledged)fail('REPLAY_BROWSER_DRAFT_SAVE_NOT_CONFIRMED');
   const receipt={...observation,version:route.prepare,pre_submit_screenshot,native_observation_file,private_draft_saved:true};
   await write('native-preparation.json',receipt);return {state:'prepared',native_preparation:receipt};
  }

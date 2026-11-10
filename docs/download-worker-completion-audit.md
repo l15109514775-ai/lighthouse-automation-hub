@@ -145,11 +145,31 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    was committed. The current phase is uploaded/awaiting_review, with the same
    native attempt and count four, no publication row or public-submit intent.
    Do not delete the three consumed private intents or retry upload. Exact draft
-   identity needs fresh read-only reconciliation before bounded continuation.
+   identity was subsequently confirmed by native read-only reconciliation:
+   all 16 draft cards across two pages were inspected and the unique matching
+   draft opened as `4104806`. Its account, exact title/source and native upload
+   completion match this attempt. The original job and browser profile were
+   unchanged; no save, selection, submit or delete occurred. The draft screenshot
+   shows the expected cover and metadata. The cover uses a background image,
+   not an `<img>`; a second read-only DOM observation confirmed the existing
+   cover and single-file selectors. This proves a saved draft, not publication.
+   See [native draft evidence](releases/large-native-draft-proof-20261111.json).
    The actual part session also has a 300-second prepare budget; account for the
    observed repeated full-file checks when qualifying the correction, rather than
-   assuming every long-file preparation fits. No timeout or receipt guard has been
-   relaxed. See [the preserved real failure](releases/large-draft-save-checkpoint-20261111.json).
+   assuming every long-file preparation fits. The candidate correction uses a
+   bounded 900-second preparation IPC wait while keeping the public-submit
+   reservation deadline, source/file checks and strict receipt schema unchanged.
+   Its acknowledgement path checks the existing one-use intents and fresh
+   saved-editor metadata/completion/cover without another save or file selection.
+   Qualification and production promotion are recorded separately: 40 initial
+   regression checks passed; real startup observations required blank-tab and
+   title-rendering corrections, qualified by subsequent 12- and 18-check runs
+   (overlapping cases). The current three-file overlay is deployed and healthy.
+   No other container ID or held job changed. Actual prepare-only confirmation
+   and the bounded standard-Worker continuation remain required; the real task
+   is still held until that continuation is verified. See
+   [draft recovery qualification](releases/draft-save-ack-release-20261111.json) and
+   [the preserved real failure](releases/large-draft-save-checkpoint-20261111.json).
 2. **New-host full external backup and restore.** The daily budget refusal had
    zero dispatched requests and has an exact guarded recovery proof. The actual
    safe-deferral entry passed. After the real Asia/Shanghai day rollover, the

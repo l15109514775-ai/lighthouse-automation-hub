@@ -1,0 +1,211 @@
+{
+  "version": "lighthouse-draft-save-ack-release-v1",
+  "qualification": {
+    "case": "/var/lib/lighthouse-migration/draft-save-ack-qualification-v1/1794341728378723529",
+    "exit_code": 0,
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "network": "none",
+    "live_data_mounted": false,
+    "tests": [
+      "tests/test_replay_draft_save_acknowledgement.py",
+      "tests/test_saved_draft_navigation_wait.py",
+      "tests/test_replay_native_driver.py",
+      "tests/test_replay_submit_deadline_v2.py",
+      "tests/test_replay_saved_draft_redirect_v10.py::test_saved_draft_navigation_during_identity_check[redirect]",
+      "tests/test_replay_saved_draft_redirect_v10.py::test_saved_draft_navigation_during_identity_check[wrong_source]"
+    ],
+    "sources": {
+      "adapters/replay_native_driver.mjs": "93ab0a0eabb2ccd203967be72a8ea3182aaab85dec49e9e6be902ddde9a3bdf4",
+      "adapters/short_video_saved_draft_navigation_control.mjs": "c007265c9e691a2212431a9ed2814127ae906abcd7f848f2ed5e93175f99d881",
+      "services/hub/replay_part_publish_worker_v5.py": "54bc8b71daf639232db5d32df82018320fdcfd49bbd496f8386c3d19f10b7c3a"
+    },
+    "summary": "40 passed in 321.69s (0:05:21)"
+  },
+  "deployment": {
+    "at": 1794342108.393826,
+    "deployed": true,
+    "healthy": true,
+    "container_id": "ee03e8811c85e6b0b9a453ae77ed35f5939d02a7d53547424ff10a5321c77994",
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "sources": {
+      "adapters/replay_native_driver.mjs": "93ab0a0eabb2ccd203967be72a8ea3182aaab85dec49e9e6be902ddde9a3bdf4",
+      "adapters/short_video_saved_draft_navigation_control.mjs": "c007265c9e691a2212431a9ed2814127ae906abcd7f848f2ed5e93175f99d881",
+      "services/hub/replay_part_publish_worker_v5.py": "54bc8b71daf639232db5d32df82018320fdcfd49bbd496f8386c3d19f10b7c3a"
+    },
+    "compose_sha256": "a78adc7bf6e02431007c2670cb3e47538a7ff49fcaa6d5128831de2e28791246",
+    "held_job_unchanged": true,
+    "other_container_ids_unchanged": true,
+    "upload_repeated": false,
+    "public_submit_performed": false,
+    "rollback_pair": "/var/lib/lighthouse-migration/draft-save-ack-deployment-v1",
+    "qualification": "/var/lib/lighthouse-migration/draft-save-ack-qualification-v1/1794341728378723529/report.json"
+  },
+  "native_surface_selector_counts": {
+    ".task-list-content-item": 0,
+    ".file-list .file-item": 1,
+    ".file-item-content-status-text": 1,
+    ".cover-main .cover-module-main": 1,
+    ".ql-editor": 1,
+    ".video-human-type .select-controller": 1,
+    ".label-item-v2-container p.label-item-v2-content": 4,
+    "span.submit-add": 1,
+    "span.submit-draft": 1
+  },
+  "cover_background_observed": true,
+  "evidence": {
+    "qualification.json": {
+      "bytes": 1121,
+      "sha256": "f7b921e2e7c78e306107fedb4c2a06a488abba3a823f8f38686e11cd65c58bcc"
+    },
+    "results.xml": {
+      "bytes": 6507,
+      "sha256": "adb0e021bb3ac748707630415e2c7edbf4a02e67a27a62a5d716f3d40e9d5fae"
+    },
+    "deployment.json": {
+      "bytes": 1040,
+      "sha256": "e760553ab5ae875dc6e6c19cb1c90b95de91cb08ebc3671f16cc50ae6e6ec32d"
+    },
+    "native-surface.json": {
+      "bytes": 15595,
+      "sha256": "69162da8b81e3a6fbc5ffeb7a793f5b57b65815165c0f1d326548dee85ad2b66"
+    }
+  },
+  "synthetic_tests_are_live_publication": false,
+  "real_prepare_confirmation_pending": false,
+  "public_submission_completed": false,
+  "real_prepare_v1": {
+    "state": "stopped",
+    "error_code": "REPLAY_BROWSER_ORIGIN_OR_CHOOSER_CHANGED",
+    "cause": "Fresh persistent browser started on about:blank before recovery navigation",
+    "upload_requested": false,
+    "submit_requested": false,
+    "job_unchanged": true
+  },
+  "current": {
+    "qualification": {
+      "case": "/var/lib/lighthouse-migration/draft-save-ack-qualification-v1/1794342853727335392",
+      "exit_code": 0,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "network": "none",
+      "live_data_mounted": false,
+      "tests": [
+        "tests/test_replay_draft_save_acknowledgement.py",
+        "tests/test_saved_draft_navigation_wait.py"
+      ],
+      "sources": {
+        "adapters/replay_native_driver.mjs": "659aca8d53067d902642184085165a3893c58c70a6abd4ec6980ee9ddd9ed7d6",
+        "adapters/short_video_saved_draft_navigation_control.mjs": "c1a9b75428c192584a698cbbf460abc7335e88b1bdd66c183ef5b34676e0496f",
+        "services/hub/replay_part_publish_worker_v5.py": "54bc8b71daf639232db5d32df82018320fdcfd49bbd496f8386c3d19f10b7c3a"
+      },
+      "summary": "18 passed in 224.45s (0:03:44)"
+    },
+    "deployment": {
+      "at": 1794343129.7618508,
+      "deployed": true,
+      "healthy": true,
+      "container_id": "487386ef23266efc6a42f478a4b1b706042101b013416e8259461a7614620996",
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "sources": {
+        "adapters/replay_native_driver.mjs": "659aca8d53067d902642184085165a3893c58c70a6abd4ec6980ee9ddd9ed7d6",
+        "adapters/short_video_saved_draft_navigation_control.mjs": "c1a9b75428c192584a698cbbf460abc7335e88b1bdd66c183ef5b34676e0496f",
+        "services/hub/replay_part_publish_worker_v5.py": "54bc8b71daf639232db5d32df82018320fdcfd49bbd496f8386c3d19f10b7c3a"
+      },
+      "compose_sha256": "2be8a3a26277dc00a8fc2f7c8c42c5455a4b0ec5586d48b1dc2cb9d5a2380b40",
+      "held_job_unchanged": true,
+      "other_container_ids_unchanged": true,
+      "upload_repeated": false,
+      "public_submit_performed": false,
+      "rollback_pair": "/var/lib/lighthouse-migration/draft-save-ack-deployment-v3",
+      "qualification": "/var/lib/lighthouse-migration/draft-save-ack-qualification-v1/1794342853727335392/report.json"
+    },
+    "evidence": {
+      "qualification.json": {
+        "bytes": 800,
+        "sha256": "d421ad2f18f6612bb330e33118a7a74b5eb1911c6abbb68ade7666f5b6ce0626"
+      },
+      "results.xml": {
+        "bytes": 3266,
+        "sha256": "50161a5e7e50fc255a016f13a6a3f801d2b50afe9a4d716df4284a77b83e922f"
+      },
+      "deployment.json": {
+        "bytes": 1041,
+        "sha256": "f6c3a70b14ddb0a9eb1004a031222665b0bc3a66ebd27df7d3afaa2b83aab417"
+      },
+      "qualification-v2.json": {
+        "bytes": 751,
+        "sha256": "f4349aeeebdeca9adc96552bb4787351b8e00369c8a3fecfe0d42699a62c9c8d"
+      },
+      "deployment-v2.json": {
+        "bytes": 1041,
+        "sha256": "1fd0d5f78de3d682b4ca70a5cff4634c318367ee855fd3b4bf492891dbc84cd6"
+      },
+      "continuation-qualification.json": {
+        "bytes": 521,
+        "sha256": "1731169097e8fd1766863b8f463b668e2aaa72ddf71f1babc40ec6e0af95af0b"
+      }
+    },
+    "prepare_confirmation_pending": true,
+    "one_scoped_continuation_qualified": {
+      "exit_code": 0,
+      "source_sha256": "92a66fb0ee8e2c4316f17bafce10e23133c7f2d1ff1a3e79349fc3cdeec49790",
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "network": "none",
+      "live_data_mounted": false,
+      "result": {
+        "self_test": "passed",
+        "sqlite_real": true,
+        "extra_claims": 0,
+        "other_jobs_unchanged": true,
+        "attempts_preserved_and_incremented": true,
+        "lease_owner_fenced": true,
+        "forced_recovery_requires_lock": true,
+        "network_used": false
+      }
+    },
+    "public_submission_completed": false
+  },
+  "intermediate_v2": {
+    "qualification": {
+      "case": "/var/lib/lighthouse-migration/draft-save-ack-qualification-v1/1794342389532952799",
+      "exit_code": 0,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "network": "none",
+      "live_data_mounted": false,
+      "tests": [
+        "tests/test_replay_draft_save_acknowledgement.py"
+      ],
+      "sources": {
+        "adapters/replay_native_driver.mjs": "659aca8d53067d902642184085165a3893c58c70a6abd4ec6980ee9ddd9ed7d6",
+        "adapters/short_video_saved_draft_navigation_control.mjs": "c007265c9e691a2212431a9ed2814127ae906abcd7f848f2ed5e93175f99d881",
+        "services/hub/replay_part_publish_worker_v5.py": "54bc8b71daf639232db5d32df82018320fdcfd49bbd496f8386c3d19f10b7c3a"
+      },
+      "summary": "12 passed in 181.52s (0:03:01)"
+    },
+    "deployment": {
+      "at": 1794342616.1979141,
+      "deployed": true,
+      "healthy": true,
+      "container_id": "4b2686b6eb1594e6491379653e3fbf12b202f0a32438f87f33b4659f97a0a68b",
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "sources": {
+        "adapters/replay_native_driver.mjs": "659aca8d53067d902642184085165a3893c58c70a6abd4ec6980ee9ddd9ed7d6",
+        "adapters/short_video_saved_draft_navigation_control.mjs": "c007265c9e691a2212431a9ed2814127ae906abcd7f848f2ed5e93175f99d881",
+        "services/hub/replay_part_publish_worker_v5.py": "54bc8b71daf639232db5d32df82018320fdcfd49bbd496f8386c3d19f10b7c3a"
+      },
+      "compose_sha256": "26476f9923c282b14bd99f767dbc05a411549a20f022c6afe4acf207c1d2b581",
+      "held_job_unchanged": true,
+      "other_container_ids_unchanged": true,
+      "upload_repeated": false,
+      "public_submit_performed": false,
+      "rollback_pair": "/var/lib/lighthouse-migration/draft-save-ack-deployment-v2",
+      "qualification": "/var/lib/lighthouse-migration/draft-save-ack-qualification-v1/1794342389532952799/report.json"
+    },
+    "real_prepare_error": "REPLAY_BROWSER_DRAFT_LOOKUP_REQUIRED",
+    "diagnosis": "Unrelated draft cards render repeated ASCII spaces as one; exact title attributes and final input checks remain required."
+  },
+  "v3_initial_prepare": {
+    "state": "stopped_before_browser",
+    "error_code": "HEAVY_RESOURCE_BUSY",
+    "followup": "A separate invocation waits at most 30 seconds for existing shared locks; no forced unlock or repeated upload."
+  }
+}
