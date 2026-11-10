@@ -78,6 +78,14 @@ modules and pause file are separately hash-bound to the base; see the
 
 ## Effective overlay restore test
 
+The portable-image command also accepts `--acquisition-overlay /absolute/bundle`.
+Use a bundle containing `manifest.json`, `overlays.tar` and the synthetic
+`fixtures/` directory described below. The verifier checks the release's
+base image and archive digest before starting the private daemon, then runs
+the overlay test on the private socket before shutting it down. The former
+production host passed this combined drill.
+[Standby run](releases/fenced-standby-image-20261111.json).
+
 The captured base alone predates the source-control change. To validate the
 effective release, `scripts/test_acquisition_overlay_bundle.py` restores only
 `services/hub/worker.py`, `services/hub/source_controls.py` and

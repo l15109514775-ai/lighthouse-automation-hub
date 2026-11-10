@@ -247,3 +247,6 @@ in isolation and verified all tables and both new publication receipts. The old
 production files remained in place throughout. Full writer cutover and external
 CloudBase restoration remain separate open items.
 [Fenced standby restoration](releases/fenced-standby-restore-20261111.json).
+The same host also passed a clean import, offline startup and synthetic
+source-control tests with the qualified acquisition image and its overlays.
+[Standby runtime verification](releases/fenced-standby-image-20261111.json).

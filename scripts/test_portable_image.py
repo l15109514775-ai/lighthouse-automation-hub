@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import time
 
 
@@ -56,6 +57,8 @@ def main():
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--work-dir', type=Path, required=True)
     parser.add_argument('--runtime-dir', type=Path, required=True)
+    parser.add_argument('--acquisition-overlay', type=Path,
+                        help='Directory containing manifest.json, overlays.tar and synthetic fixtures/')
     args = parser.parse_args()
     if os.name != 'posix' or os.geteuid() != 0:
         raise SystemExit('PORTABLE_TEST_REQUIRES_LINUX_ROOT')
@@ -75,6 +78,12 @@ def main():
         for chunk in iter(lambda: stream.read(1024**2), b''): digest.update(chunk)
     if digest.hexdigest() != manifest['archive_sha256'] or archive.stat().st_size != manifest['archive_bytes']:
         raise SystemExit('PORTABLE_TEST_ARCHIVE_CHANGED')
+    if args.acquisition_overlay:
+        bundle = safe_path(args.acquisition_overlay)
+        release_path = safe_path(bundle / 'manifest.json')
+        release = json.loads(release_path.read_text())
+        if release['base_image'] != image or release['base_archive_sha256'] != manifest['archive_sha256']:
+            raise SystemExit('OVERLAY_BASE_ARCHIVE_CHANGED')
     os.umask(0o077)
     args.work_dir.mkdir(mode=0o700); args.runtime_dir.mkdir(mode=0o700)
     work, runtime = args.work_dir, args.runtime_dir
@@ -170,6 +179,16 @@ def main():
                 for row in inventory['debian_packages'])
             assert all(len(x) == 64 for x in inventory['runtime_source_sha256'].values())
             (work / 'runtime-inventory.json').write_text(json.dumps(inventory, indent=2))
+            if args.acquisition_overlay:
+                overlay = subprocess.run([
+                    sys.executable, str(Path(__file__).with_name('test_acquisition_overlay_bundle.py')),
+                    '--manifest', str(release_path), '--archive', str(bundle / 'overlays.tar'),
+                    '--test-fixtures', str(bundle / 'fixtures'), '--output', str(work / 'overlay-check')
+                ], env={**env, 'DOCKER_HOST': config['hosts'][0]}, capture_output=True, text=True,
+                    timeout=180)
+                (work / 'overlay.private.log').write_text(overlay.stdout + overlay.stderr)
+                overlay.check_returncode()
+                report['overlay'] = json.loads((work / 'overlay-check/report.json').read_text())
             assert not subprocess.check_output(client + ['ps', '-aq'], env=env, text=True).strip()
             report.update(state='clean_import_and_offline_container_passed',
                           loaded_image=loaded['Id'], layers_verified=len(loaded['RootFS']['Layers']),

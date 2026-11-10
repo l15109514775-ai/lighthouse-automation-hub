@@ -34,6 +34,15 @@ times for the two databases and checked their common publication receipts.
 A production takeover still requires writer fencing, consistent final media
 and configuration, and the activation checks below.
 
+The same standby subsequently ran the qualified acquisition image in a fresh,
+private Docker/containerd store. Nineteen local content-addressed blobs supplied
+838,482,768 archive bytes. The drill transferred the remaining 78,512 archive
+bytes and verified the SHA-256 of the complete archive before import. All 20
+image layers matched. The restored source-control bundle and its synthetic
+tests ran in that store as UID 10001 with network access disabled. The old
+Compose services stayed fenced, and the temporary stores and archive were removed.
+[Standby image and configuration verification](releases/fenced-standby-image-20261111.json).
+
 ## 1. Prepare a destination without enabling writers
 
 - Record immutable image IDs, effective private Compose manifests, overlays,
