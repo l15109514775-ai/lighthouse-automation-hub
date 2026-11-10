@@ -392,7 +392,10 @@ def test_settings_load_rejects_invalid_source_generation(runtime,monkeypatch,lit
     from services.hub.config import Settings
     settings,store=runtime
     original=(Path(__file__).resolve().parents[1]/'config/hub.toml').read_text('utf-8')
-    original=original.replace('machine_source_generation = 1 #',f'machine_source_generation = {literal} #')
+    import re
+    original,count=re.subn(r'^machine_source_generation\s*=.*$',
+        f'machine_source_generation = {literal}',original,flags=re.M)
+    assert count == 1
     file=settings.root/'owned-invalid-generation.toml';file.write_text(original,'utf-8')
     monkeypatch.setenv('HUB_CONFIG',str(file));monkeypatch.setenv('HUB_ROOT',str(settings.root))
     with pytest.raises(ValueError,match='Invalid machine source generation'):Settings.load()

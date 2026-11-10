@@ -160,7 +160,9 @@ def test_official_monitor_checks_identity_and_tracks_old_live_ids(monkeypatch):
 
 def test_live_scheduler_requires_key_and_coalesces_without_dot(runtime,monkeypatch):
     settings,store=runtime
+    settings.config.update(youtube_live_monitor_enabled=True,youtube_feed_enabled=True)
     monkeypatch.delenv('YOUTUBE_API_KEY',raising=False)
+    monkeypatch.delenv('YOUTUBE_API_KEY_FILE',raising=False)
     scheduler=DurableScheduler(settings,store)
     scheduler.tick(1_793_404_000)
     assert not store.query("SELECT * FROM jobs WHERE job_type='youtube_live_monitor'")

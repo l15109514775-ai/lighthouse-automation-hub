@@ -1,5 +1,6 @@
 """Owned replay metadata only. Pilot gate never downloads or changes policy dates."""
 from pathlib import Path
+import re
 import pytest
 from test_youtube_download import replay,write_policy,VIDEO,unchanged_old_and_no_publish
 from services.hub.config import Settings
@@ -60,9 +61,20 @@ def test_default_or_false_preserves_existing_automatic_enqueuing(replay,mode):
     unchanged_old_and_no_publish(f)
 
 
+def config_without_download_mode_fields():
+    source=(Path(__file__).resolve().parents[1]/'config/hub.toml').read_text('utf-8-sig')
+    # Exercise missing-field defaults and explicit overrides, independently of
+    # the deployment example's selected mode. Do not generate duplicate TOML keys.
+    head,separator,tail=source.partition('[[sources]]')
+    assert separator
+    head=re.sub(r'^(?:youtube_download_acceptance_only|youtube_natural_download_enabled)\s*=.*\n?',
+                '',head,flags=re.M)
+    return head+separator+tail
+
+
 def load_config(tmp_path,monkeypatch,prefix=''):
-    source=Path(__file__).resolve().parents[1]/'config/hub.toml';target=tmp_path/'pilot-hub.toml'
-    target.write_text(prefix+source.read_text('utf-8-sig'),'utf-8')
+    target=tmp_path/'pilot-hub.toml'
+    target.write_text(prefix+config_without_download_mode_fields(),'utf-8')
     monkeypatch.setenv('HUB_ROOT',str(tmp_path));monkeypatch.setenv('HUB_CONFIG',str(target))
     return Settings.load()
 

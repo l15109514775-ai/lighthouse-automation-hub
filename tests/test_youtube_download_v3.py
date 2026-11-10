@@ -189,11 +189,11 @@ def test_settings_rejects_nonboolean_natural_switch(tmp_path,monkeypatch,value):
 
 
 def test_settings_default_off_and_rejects_simultaneous_legacy_automatic_download(tmp_path,monkeypatch):
-    from test_youtube_download_acceptance_only import load_config
+    from test_youtube_download_acceptance_only import load_config,config_without_download_mode_fields
     from services.hub.config import Settings
     from pathlib import Path
     assert load_config(tmp_path,monkeypatch).config['youtube_natural_download_enabled'] is False
-    source=(Path(__file__).resolve().parents[1]/'config/hub.toml').read_text('utf-8-sig')
+    source=config_without_download_mode_fields()
     source=re.sub(r'^youtube_download_enabled\s*=.*$', 'youtube_download_enabled = true',source,flags=re.M)
     target=tmp_path/'natural-config.toml';monkeypatch.setenv('HUB_CONFIG',str(target))
     target.write_text('youtube_natural_download_enabled = true\n'+source,encoding='utf-8')

@@ -46,6 +46,9 @@ def replay(runtime):
         db.execute("UPDATE jobs SET state='completed',result=? WHERE job_id=?",
                    (encode({'disposition': 'metadata_only', 'download_performed': False, 'publish_performed': False}), old))
     settings.config['youtube_download_enabled'] = True
+    # This suite exercises legacy automatic acquisition explicitly. The shipped
+    # example may safely opt into acceptance-only mode without changing the test.
+    settings.config['youtube_download_acceptance_only'] = False
     payload = {'video_id': VIDEO, 'channel_id': CHANNEL, 'title': raw['snippet']['title'],
         'published_at': raw['snippet']['publishedAt'], 'duration': 'PT1M',
         'url': 'https://www.youtube.com/watch?v=' + VIDEO, 'source_api': 'youtube-data-v3-official', 'raw': raw}
@@ -178,7 +181,8 @@ def test_official_ended_replay_binding_is_required(replay, change):
     f = replay
     payload = deepcopy(f.payload)
     if change == 'channel':
-        payload['channel_id'] = 'UC' + 'a' * 22
+        payload['channel_id'] = next(channel for channel in CHANNELS if channel != CHANNEL)
+        assert payload['channel_id'] != f.payload['channel_id']
     elif change == 'url':
         payload['url'] = 'https://owned.invalid/other'
     elif change == 'source_api':
