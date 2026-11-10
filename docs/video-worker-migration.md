@@ -306,3 +306,38 @@ ingest service and source-restricted ingress have been verified; retain the old
 endpoint until then. A local-only target binding is staging isolation, not a
 working replacement for the remote caller. None of these checks has yet switched
 production ownership or enabled legacy stopped workers.
+
+## Ingest routing rehearsal (2026-11-10)
+
+The target's 20 installed runtime roots passed a read-only checksum comparison
+against the private pre-copy. This is not the final stopped-writer delta. A fixed
+read-only rsync sender was added to the existing IP-restricted temporary export
+key: it accepts only two exact sender commands over the same root-owned path
+allowlist, rejects arbitrary commands, and does not enable deletion. Its successful
+dry run reported 126,572,557 changed bytes out of 7,461,889,983 total bytes. The
+initial protocol check failed because SSH `-n` discarded rsync's stdin; that flag
+was removed from this transport, with the failed evidence retained.
+
+For the existing Shanghai subtitle caller, the target ingest container remains
+bound to 127.0.0.1:18081. A systemd socket proxy exposes the target IPv4 endpoint
+through the host input firewall, limited to the existing Shanghai source IP.
+This avoids relying on UFW to protect a Docker port published on all interfaces.
+The socket units require UFW and are not enabled for boot during rehearsal.
+Existing application token authentication is unchanged. The inherited HTTP
+transport has not been represented as HTTPS.
+
+The real Shanghai check initially exposed a pre-existing missing-header bug:
+`HTTPMessage` returns None for a missing X-Claim, causing base64 decoding to raise
+TypeError outside the existing exception guard. The one-line fix returns the
+existing HTTP 400 response instead of dropping the connection. Five real HTTP
+boundary cases passed locally and in a network-isolated Linux container, with
+worker execution forbidden and no files generated. The target-only overlay has
+before/after hashes and must be reapplied after the final source sync; the old
+host has not been patched as part of this rehearsal.
+
+The unchanged Shanghai check then returned 403 without credentials and 400 with
+the existing valid token but missing parameters. The original host, which is not
+in the ingress source allowlist, could not connect. No subtitle job, model call
+or publication was submitted. The Shanghai poller remained active and its actual
+endpoint still points to the original host. Caller update, final synchronization
+and single-owner production activation remain outstanding.

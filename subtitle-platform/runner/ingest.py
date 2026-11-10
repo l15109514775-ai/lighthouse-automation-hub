@@ -53,7 +53,7 @@ class Handler(BaseHTTPRequestHandler):
             claim = json.loads(base64.b64decode(self.headers['X-Claim']).decode())
             source_sha = self.headers['X-Source-Sha256']
             audio_sha = self.headers['X-Audio-Sha256']
-        except (KeyError, ValueError):
+        except (KeyError, ValueError, TypeError):
             return self._reply(400, {'error': 'headers'})
         if claim.get('job_id') != job_id or claim.get('sha256') != source_sha:
             return self._reply(409, {'error': 'claim_mismatch'})
