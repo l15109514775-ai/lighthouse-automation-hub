@@ -62,7 +62,17 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    reservations and the unknown-upload guard. Do not raise budgets or create
    repeated speculative backup operations.
 
-These two observations remain open; neither is a reason to disable the already
+3. **Owner-authorized cleanup after acceptance.** The subsequent owner instruction
+   permits removing the inspected package cache, completed isolated test video,
+   abandoned migration transport fragment and actually reclaimable build cache
+   after acceptance. The three migration transport archives (about 7.3 GB) must
+   additionally wait for the new-host full remote restore above. Recheck exact
+   identities and live references immediately before removal; retain reports,
+   verification receipts, databases, sessions and necessary rollback artifacts.
+   No global Docker prune or retention-policy change is authorized by this item.
+   The private dated disk review holds the exact candidate paths and sizes.
+
+These acceptance and conditional cleanup items remain open; none is a reason to disable the already
 qualified service or to repeat a healthy in-flight download. Fresh public-source
 rebuild/redistribution and actual reverse-host execution remain explicitly
 unproven capabilities, not hidden passes. Before final closure re-read current
