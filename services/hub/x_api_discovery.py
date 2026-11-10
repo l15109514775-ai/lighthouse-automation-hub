@@ -44,6 +44,10 @@ class XAPIDiscovery:
         summaries=[];failures=[];created=0
         for configured in self.settings.config['sources']:
             handle=configured['x_handle']
+            from .source_controls import source_paused
+            if source_paused(self.settings.root, 'x', handle):
+                summaries.append({'handle':handle,'state':'owner_paused','new_jobs':0,'external_requests':0})
+                continue
             summary={'handle':handle,'source_authority':'x-v2-official','new_jobs':0,
                      'human_review':False,'browser_fallback':False,'catchup_complete':False}
             try:

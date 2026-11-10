@@ -106,6 +106,8 @@ class Worker:
                 try:
                     if job['job_type'] not in self.handlers:
                         raise HubError('JOB_TYPE_UNSUPPORTED', review=True)
+                    from .source_controls import guard_job
+                    guard_job(self.settings, self.store, job)
                     result = self.handlers[job['job_type']](job)
                     if lost.is_set():
                         raise LeaseLost()

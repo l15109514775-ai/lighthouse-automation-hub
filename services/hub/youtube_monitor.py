@@ -28,6 +28,9 @@ class YouTubeMonitor:
         folder.mkdir(parents=True, exist_ok=True)
         for source in self.settings.config['sources']:
             channel = source['youtube_channel_id']
+            from .source_controls import source_paused
+            if source_paused(self.settings.root, 'youtube', channel):
+                continue
             key = 'youtube-feed:' + channel
             poll = self.store.query('SELECT next_check_at FROM source_polls WHERE source_key=?', (key,))
             if poll and poll[0]['next_check_at'] > time.time():
@@ -141,6 +144,9 @@ class YouTubeMonitor:
         errors = []
         for source in self.settings.config['sources']:
             channel = source['youtube_channel_id']
+            from .source_controls import source_paused
+            if source_paused(self.settings.root, 'youtube', channel):
+                continue
             key = 'youtube-live:' + channel
             tracked = self.store.query('''SELECT video_id FROM youtube_videos WHERE channel_id=?
                 AND state IN ('unknown','upcoming','live','unavailable') ORDER BY first_seen_at DESC LIMIT 50''', (channel,))
