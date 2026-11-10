@@ -54,13 +54,26 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    **This is not Bilibili upload acceptance.** The owner explicitly reiterated
    that the workflow must continue through upload, result reconciliation and
    saved links. No publication exists for either source at this checkpoint.
-   The migrated legacy video service remains disabled. Reuse the existing
-   publication-only V5 entry after qualifying its effective runtime, policy,
-   launch evidence and Bilibili session; do not restart the broad legacy queue.
-   A read-only check found the live publication policy hash differs from its
-   root launch marker. Investigate their provenance before changing bindings;
-   do not fabricate historical acceptance or bypass the gate. Preserve current
-   completed media, unknown-result safeguards, source pauses and shared locks.
+   The migrated legacy video service remains disabled. A separate V5
+   publication-only service is now deployed and healthy, with zero restarts at
+   the recorded observation. The policy mismatch came from removing a channel
+   from the immutable policy; restoring the exact previously authorized bytes
+   made the unchanged launch evidence valid. The independent source-control
+   file still pauses Yuuhi. No old jobs or attempts were reset. The account
+   probe authenticated the intended Bilibili UID without sending content.
+   Actual Docker tests passed 67 checks; isolated start/restart, distinct health
+   instances and SQLite integrity passed. All four new deployed Python file
+   hashes match the worktree. The 29-file release bundle passed isolated file
+   restoration. See [publication restoration](releases/publication-restoration-20261111.json).
+   **Upload completion remains pending:** the first source automatically created
+   parent `bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e` and child
+   `82a818a5-6ac2-44e6-adbd-88a3a279e0f8`. The child is processing at attempt 1,
+   stage `replay_part_uploading`, with the server browser process live. The next
+   acquisition has reached `youtube_whole_verified` and deferred on
+   `HEAVY_RESOURCE_BUSY` through the existing resource-wait path. No publication
+   link or completed native upload observation exists at this checkpoint.
+   Preserve completed media until the existing publication and
+   retention gates succeed; do not treat a healthy publisher as upload acceptance.
 2. **New-host full external backup and restore.** The daily budget refusal had
    zero dispatched requests and has an exact guarded recovery proof. The actual
    safe-deferral entry passed. After the real Asia/Shanghai day rollover, the

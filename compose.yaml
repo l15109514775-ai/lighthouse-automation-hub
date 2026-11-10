@@ -107,6 +107,47 @@ services:
       timeout: 5s
       retries: 3
 
+  replay-publication-worker:
+    <<: *runtime
+    profiles: [replay-publication]
+    image: ${LIGHTHOUSE_PUBLICATION_IMAGE:-lighthouse-hub:0.1.0}
+    # Explicit sending entry: requires the existing policy and launch evidence.
+    # This profile is off by default and has no YouTube/API credential mount.
+    env_file: []
+    environment:
+      HUB_ROOT: /opt/lighthouse-hub
+      HUB_CONFIG: /opt/lighthouse-hub/config/video-runtime-v5.toml
+      HOME: /tmp/lighthouse-browser
+      DRY_RUN: "false"
+    volumes:
+      - ./data:/opt/lighthouse-hub/data
+      - ./media:/opt/lighthouse-hub/media
+      - ./logs:/opt/lighthouse-hub/logs
+      - ./backups:/opt/lighthouse-hub/backups
+      - ./config:/opt/lighthouse-hub/config:ro
+      - ./data/browser-profiles/youtube:/opt/lighthouse-hub/data/browser-profiles/youtube:ro
+      - type: bind
+        source: /etc/lighthouse-hub/replay-parts-workflow-launch-v5.json
+        target: /etc/lighthouse-hub/replay-parts-workflow-launch-v5.json
+        read_only: true
+        bind:
+          create_host_path: false
+    security_opt:
+      - no-new-privileges:true
+      - seccomp=/opt/lighthouse-hub/config/browser-seccomp.json
+    mem_limit: 1400m
+    cpus: 1.5
+    pids_limit: 256
+    shm_size: 256m
+    stop_grace_period: 30s
+    command: ["python","-m","services.hub.replay_parts_worker_runtime_v5","--publication-only"]
+    healthcheck:
+      test: ["CMD","python","-m","services.hub.publication_health"]
+      start_period: 120s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
 secrets:
   youtube_api_key:
     file: ${YOUTUBE_API_KEY_SECRET_FILE:-./secrets/youtube-api-key}

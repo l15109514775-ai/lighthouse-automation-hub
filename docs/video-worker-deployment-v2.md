@@ -231,3 +231,63 @@ scope decision, repair them only if a current execution path depends on them.
 Current acquisition, shared DB/lease/lock and unknown-publication safety remain
 mandatory. `Dockerfile.api-only` has static evidence only; it is not the qualified
 acquisition image. Full goal-wide regression/provenance audit remains open.
+
+## Independent publication restoration — 2026-11-11
+
+`replay-publication-worker` is an optional `replay-publication` Compose profile.
+It runs the existing V5 `--publication-only` entry and registers only the 32
+positive ordinal publication types. It uses the same SQLite database, media,
+source-control file and video/profile/resource locks. It has no YouTube secret,
+no listening port and no new scheduler/database. The old combined V5 `--publish`
+service must remain stopped during this split deployment.
+
+Enabling this profile is a real sending operation. It requires the existing
+`video-runtime-v5.toml`, publication policy, root-owned launch evidence and server
+Bilibili session. It does not load `.env` or provide a DRY_RUN preview. A completed
+download receipt alone cannot authorize a submission. For a qualified deployment,
+start only this service with `docker compose --profile replay-publication up -d
+--no-build --no-deps replay-publication-worker`; do not implicitly start unrelated
+services. Production uses the private pinned manifest described below.
+
+The migrated policy had only Chise in `allowed_channel_ids`, which broke both the
+two-channel historical contract and the hash in the original launch evidence.
+Only that field differed from the exact archived authorized policy. Restoring
+the archived bytes retained the existing launch marker and owner authorization.
+Yuuhi remains stopped by `source-controls.json` and the Worker guard; operational
+pauses must not rewrite immutable authorization policies.
+
+The shared startup loop now handles ordinary producer-lock contention without a
+restart loop. Publication admission reports a resource wait without claiming an
+acquisition task. Publisher health uses its own boot UUID and separate main and
+producer heartbeats; acquisition heartbeats cannot make it healthy. This code is
+currently overlaid only in the new publication service; the running acquisition
+container was not restarted or modified for this release.
+
+The actual private deployment is `/opt/lighthouse-hub/compose.publication.json`,
+managed by `lighthouse-publication.service` with the existing production-owner
+check. Its executable overlays are hash-recorded in the dated report. Four new
+files live under `/usr/local/lib/lighthouse-publication`; other publisher files
+reuse the previously captured private runtime. Local targeted tests passed 28;
+the actual isolated Docker combination passed 67 overlapping/expanded tests.
+The Docker tests used synthetic fixtures with explicit identity substitution,
+not live publication. Independent paused-database startup and container restart
+passed with new health identities and SQLite checks. Bilibili session validation
+used a protected copy of the video profile and confirmed the intended account.
+
+Rollback stops only the new service: `sudo systemctl disable --now
+lighthouse-publication.service`. The same command is saved in
+`/var/lib/lighthouse-migration/publication-restore-v1/stop-publication.sh` and its
+shell syntax was checked. Do not restore an old database, reset attempts, enable
+the combined publisher, or resend an unknown result. Production rollback has not
+been executed. The private `publication-runtime.tar` contains 29 code/config/unit
+files and passed an isolated file restore/hash comparison; it excludes browser
+credentials and does not replace the full remote backup acceptance.
+
+At the first healthy production observation, the existing download was still
+processing. A later observation confirmed automatic group/child creation and
+the first child entering `replay_part_uploading`, attempt 1, with the browser
+live. The next download deferred at its verified stage on the shared resource
+lock. Both publication links and the completed upload observation remain absent.
+Upload completion, moderation and final links remain required acceptance. See
+`releases/publication-restoration-20261111.json` for exact evidence and the earlier
+test-capacity/observation-timeout limitations; no clean full-project suite is claimed.

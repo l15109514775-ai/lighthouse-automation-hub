@@ -93,6 +93,7 @@ class Coordinator:
     def __init__(self,settings,store,*,mode='register_only'):
         if mode not in ('register_only','acquisition_only','publish','publication_only'):raise ValueError('REPLAY_PART_RUNTIME_MODE_INVALID')
         self.settings,self.store,self.mode=settings,store,mode
+        self.producer_heartbeat=None
         self.base=AcquisitionCoordinator(settings,store,mode='register_only' if mode=='register_only' else 'acquisition_only')
         self.fifo=self.base.fifo;self.groups=ReplayPartGroupsV5(settings,store);self._publish_policy_sha=None
         handlers={} if mode=='publication_only' else dict(self.base.worker.handlers)
@@ -111,6 +112,20 @@ class Coordinator:
         if planning.get('prefer_single_whole_passthrough_v5') is not True:raise HubError('REPLAY_PART_DELIVERY_POLICY_REQUIRED',review=True)
         return policy
 
+    def bind_health(self,instance):
+        from .acquisition_health import instance_names
+        from .publication_health import NAMES
+        if self.producer_heartbeat is not None:raise ValueError('PUBLICATION_HEALTH_ALREADY_BOUND')
+        main,producer=instance_names(instance,names=NAMES)
+        self.worker.store.heartbeat_instance=main
+        self.producer_heartbeat=producer
+
+    def idle_heartbeat(self):
+        # The acquisition worker may own the video lock for hours. Waiting
+        # must not claim its task or borrow its health identity.
+        if self.worker.store.heartbeat_instance:
+            self.store.beat(self.worker.store.heartbeat_instance)
+
     def tick(self):
         from .locks import resource_guard
         planning=self.base.require_policy();self.groups.initialize()
@@ -123,13 +138,17 @@ class Coordinator:
                 if self.mode in ('publish','publication_only'):
                     from .replay_part_moderation_v5 import schedule_tick
                     steps['lookups']=schedule_tick(self.settings,self.store)
-                    steps['publication']=self.groups.publication_tick(self.fifo)
+                    try:steps['publication']=self.groups.publication_tick(self.fifo)
+                    except HubError as exc:
+                        if exc.code!='HEAVY_RESOURCE_BUSY' or not exc.retryable or exc.review:raise
+                        steps['publication']={'state':'waiting_resource','created':[]}
                 if self.mode!='publication_only':
                     steps['readiness']=self.base.readiness.tick()
                     steps['resources']=self.fifo.resource_tick(self.base.validators)
                     steps['plan']=self.fifo.enqueue_plan_tick(self.worker.handlers)
                     steps['download']=self.fifo.enqueue_download_tick(self.worker.handlers,planning)
             self.store.beat('worker:video-producer-v4');self.store.beat('worker:video-producer-v5')
+            if self.producer_heartbeat:self.store.beat(self.producer_heartbeat)
             if self.mode=='register_only':self.worker.store.beat('worker:video')
             return {'version':VERSION,'mode':self.mode,'publisher_registered':self.mode in ('publish','publication_only'),'steps':steps,'external_requests':0}
 
@@ -229,6 +248,9 @@ def main():
         from .youtube_credentials import load_youtube_key
         if os.environ.get('YOUTUBE_API_KEY_FILE')!='/run/secrets/youtube-api-key':raise HubError('REPLAY_PART_KEY_FILE_REQUIRED',review=True)
         load_youtube_key('/run/secrets/youtube-api-key')
+    if mode in ('publish','publication_only'):
+        from .publication_health import start_epoch
+        coordinator.bind_health(start_epoch())
     stop=threading.Event();moderator=None;retention=None
     if mode in ('publish','publication_only') and not args.once:
         moderator=threading.Thread(target=moderation_loop,args=(s,store,stop),kwargs={'fatal':os._exit},name='replay-part-moderation-v5',daemon=True)

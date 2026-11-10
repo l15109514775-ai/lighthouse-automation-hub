@@ -12,10 +12,10 @@ MARKER = Path('/tmp/replay-acquisition-epoch.json')
 NAMES = ('worker:replay-acquisition', 'worker:replay-acquisition-producer')
 
 
-def instance_names(instance):
+def instance_names(instance, *, names=NAMES):
     if not isinstance(instance, str) or not re.fullmatch('[a-f0-9]{32}', instance):
         raise ValueError('ACQUISITION_HEALTH_INSTANCE_INVALID')
-    return tuple(name + ':' + instance for name in NAMES)
+    return tuple(name + ':' + instance for name in names)
 
 
 def start_epoch(path=MARKER):
@@ -27,13 +27,13 @@ def start_epoch(path=MARKER):
     return instance
 
 
-def healthy(database, marker=MARKER, *, now=None, max_age=150):
+def healthy(database, marker=MARKER, *, now=None, max_age=150, names=NAMES):
     now = time.time() if now is None else now
     try:
         if marker.is_symlink() or marker.stat().st_size > 1024:
             return False
         epoch = json.loads(marker.read_text('utf-8'))
-        started, names = epoch['started_at'], instance_names(epoch['instance'])
+        started, names = epoch['started_at'], instance_names(epoch['instance'], names=names)
         if not isinstance(started, (float, int)) or not 0 < started <= now:
             return False
         with closing(sqlite3.connect(Path(database).resolve().as_uri() + '?mode=ro', uri=True, timeout=2)) as db:

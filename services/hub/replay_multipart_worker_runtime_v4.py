@@ -248,7 +248,15 @@ def producer_loop(coordinator, stop, *, fatal=os._exit):
 
 def run_loop(worker, coordinator, *, once=False, stop=None):
     stop = stop or threading.Event()
-    coordinator.tick()
+    try:
+        coordinator.tick()
+    except HubError as exc:
+        if exc.code != 'HEAVY_RESOURCE_BUSY' or not exc.retryable or exc.review:
+            raise
+        # Another producer can own the shared lock at startup. A normal
+        # contention must not turn a separate worker into a restart loop.
+        if once:
+            return False
     if coordinator.mode == 'register_only':
         if once:
             return False

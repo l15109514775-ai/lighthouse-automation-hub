@@ -1,0 +1,247 @@
+{
+  "version": "publication-restoration-20261111",
+  "local_targeted_tests": "28 passed",
+  "actual_docker_tests": "67 passed",
+  "earlier_test_observations": [
+    "Initial 192 MiB tmpfs fixture storage triggered 31 capacity-gate setup errors; moved isolated fixtures to the host test workspace.",
+    "An earlier 150-second observation deadline expired while the test container continued; terminal results were not recovered and are not counted. The subsequent changed-code run completed within its 600-second deadline."
+  ],
+  "evidence": {
+    "policy-restore-report.json": {
+      "at": 1794332456.0351412,
+      "before_sha256": "e0f0feceabdaee80c9ebf0064dc8d9a6f41f1444f6749d61dae051e510da1c7b",
+      "restored_sha256": "1118403498c66bb3f21c0682ab86e801e91abcd740be759d170bc8415ef0f773",
+      "grant_unchanged": true,
+      "source_controls_unchanged": true,
+      "source_controls_sha256": "608209d67a559c30bdea3f5a41e6593e8b0bbd43e75c48b9ff74159fcbc20474",
+      "paused_youtube": [
+        "UCuDY3ibSP2MFRgf7eo3cojg"
+      ],
+      "historical_jobs_modified": 0,
+      "publication_started": false,
+      "restored_from_existing_grant": true
+    },
+    "candidate-check.json": {
+      "at": 1794332117.2269826,
+      "exit_code": 0,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "external_requests": 0,
+      "live_database_mounted": false,
+      "mode": "publication_only",
+      "constructor_passed": true,
+      "handler_count": 32,
+      "delivery_binding_valid": true,
+      "outputs": 1,
+      "paused_sources": {
+        "x": [
+          "yuuhi_sendo"
+        ],
+        "youtube": [
+          "UCuDY3ibSP2MFRgf7eo3cojg"
+        ]
+      }
+    },
+    "candidate-tests.json": {
+      "at": 1794332937.3774586,
+      "returncode": 0,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "network": "none",
+      "live_mounts": false,
+      "fixture_identity_mapping": {
+        "UCaaaaaaaaaaaaaaaaaaaaaa": "UCuDY3ibSP2MFRgf7eo3cojg",
+        "UCbbbbbbbbbbbbbbbbbbbbbb": "UCoW8qQy80mKH0RJTKAK-nNA",
+        "1000000000000000": "3747574504754572"
+      },
+      "summary": "67 passed in 265.83s (0:04:25)",
+      "failed_cases": []
+    },
+    "isolated-start-report.json": {
+      "at": 1794332904.1271322,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "live_database_mounted": false,
+      "network": "none",
+      "profiles_mounted": false,
+      "start_healthy": true,
+      "restart_healthy": true,
+      "health_instance_rotated": true,
+      "sqlite_integrity_ok": true
+    },
+    "session-check/report.json": {
+      "at": 1794332253.9687133,
+      "source_profile_modified": false,
+      "publish_action": false,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "browser_sandbox_disabled": false,
+      "exit_code": 0,
+      "probe": {
+        "state": "authenticated",
+        "error_code": null,
+        "http_status": 200,
+        "actual_site_uid": "3747574504754572",
+        "expected_site_uid": "3747574504754572",
+        "started_at": "2026-11-10T17:37:36.689Z",
+        "finished_at": "2026-11-10T17:37:48.787Z"
+      }
+    },
+    "deployment-report.json": {
+      "at": 1794333018.283148,
+      "service_started": true,
+      "existing_production_container_ids_unchanged": true,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "compose_sha256": "e0818845f4acccc0a3daefdb5c076009b3a1b42266b9d415a62d9c4b51b8edba",
+      "source_overlays": {
+        "adapters/replay_later_result_lookup_v2.mjs": "1bb080ac7ca2a7fe5b2784a09080f59ebc6828c597c8be6895fea56d8f15a177",
+        "adapters/replay_native_driver.mjs": "0cc901c9a6aa6a2b170a7369078af587b5db2ad54f1bb04e7939af73116f5716",
+        "adapters/replay_part_contract_v5.mjs": "591e871b19d52dc6a32e93321f2420223934b431cba852719084164595aed7ad",
+        "adapters/ytdlp_highest_v2.py": "f37156f0315217d7b909ea5af9daa07cf8d87c714623d8189c465df9b6cb9561",
+        "adapters/ytdlp_whole_v4.py": "3474439f4f8c92402eda80e0ee9f13705ca8a3f9bcb600958f1e239959be483c",
+        "services/hub/config.py": "f55248558e7582d3d6a38165512704886e4a3f7554ce8b3b8325edf65f80888c",
+        "services/hub/media_processing.py": "9de0e6b0cad29931ca9ac4a975f162405829903a5bc7e5527f1859b27580da8f",
+        "services/hub/replay_multipart_v4.py": "3b196519cdda068d7e1b780deb6540318a9b5a624861b96551c643290e723399",
+        "services/hub/replay_multipart_video_v4.py": "4e693a7382fbb3d749934fc05e206f31b6b11a06fc58da3cff84bb207bebd110",
+        "services/hub/replay_part_public_evidence_v5.py": "8f4dec12cb781f307e3b7822a3ad0f0de6b1b08a8bbbe1e34c3353620fae2178",
+        "services/hub/replay_parts_retention_v5.py": "414a193b955295893094d3d903c67c3289f6e35df84d1d2363b01fe5d72045f3",
+        "services/hub/replay_parts_v5.py": "c1b7da009a43a99fe79c4185a71494957018bf1b77dbc33cc548cc7a71ee4ee6",
+        "services/hub/replay_video_browser.py": "510a0649955f611279670761c9c9905d10bb4bb9584b5e7ab994753875b7776f",
+        "services/hub/youtube_download.py": "bf23f72e176e80a44219f6ed02f70db4bec77583b95e987497d29007a2d3a7ae",
+        "services/hub/youtube_natural_plan_v3.py": "b6fb2c72a0ef1634a46bb31ef3784a751b0655c42a91279c7edca9f9dcc164a5",
+        "scripts/ops/native_control_sources/short-video-native-metadata-v5.mjs": "7660a64a3a598baf81c1e31272f951578ca0d9f889e58d8b7f3afbaba05e8cc1",
+        "services/hub/worker.py": "5f9ae7942665a9fb5718af3894fdc1934c4c225be65f43c79c06fbd4a6d66190",
+        "services/hub/source_controls.py": "3ec8fca0cf158de20c438a65b9a88ef6b0011b1c7010869ab856990804b581ad",
+        "services/hub/acquisition_health.py": "4f4db64f97e0e44b2ce30773c9e8fbf5c2d66db76b6af7b599d655fcf6ec589b",
+        "services/hub/publication_health.py": "9c1c4705abce3f6a4e61c7630acd95997f0fd3362d8a1c8c3695656bdc434870",
+        "services/hub/replay_parts_worker_runtime_v5.py": "8266acb52584bcb577ce7248141270e403b72bac252812648c71ff7e187fa260",
+        "services/hub/replay_multipart_worker_runtime_v4.py": "faa126310143b542b4f8e4281fae14b7ca0414655e53871828f2d57fc63f3f91"
+      },
+      "old_video_worker_enabled": false,
+      "database_rows_reset": 0,
+      "rollback_script_syntax_checked": true,
+      "upload_completed": false
+    },
+    "release-restore-report.json": {
+      "at": 1794333123.8069594,
+      "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "files": 29,
+      "archive_bytes": 542720,
+      "archive_sha256": "e0995d395d8065ca35e419df62a9ce758339f8c51284c7a9cfd209c150d776c1",
+      "all_files_restored_and_hashed": true,
+      "isolated_file_restore_only": true,
+      "production_rollback_executed": false
+    },
+    "live-report.json": {
+      "at": 1794333367.0791204,
+      "containers": [
+        {
+          "id": "e7545147f20e2d18a0966befbfd33984a50cc27f20a759278d40ffd1db6da571",
+          "running": true,
+          "started_at": "2026-11-10T17:50:17.665564542Z",
+          "health": "healthy",
+          "restart_count": 0,
+          "command": [
+            "python",
+            "-m",
+            "services.hub.replay_parts_worker_runtime_v5",
+            "--publication-only"
+          ]
+        }
+      ],
+      "publication_processes": [
+        "PID                 COMMAND",
+        "92547               docker-init",
+        "92579               python",
+        "94282               MainThread",
+        "94298               Xvfb",
+        "94299               chrome",
+        "94303               chrome_crashpad",
+        "94305               chrome_crashpad",
+        "94309               chrome",
+        "94310               chrome",
+        "94312               chrome",
+        "94336               chrome",
+        "94347               chrome",
+        "94369               chrome",
+        "94377               chrome",
+        "94378               chrome",
+        "94422               chrome"
+      ],
+      "log_codes": [],
+      "heartbeats": [
+        {
+          "name": "worker:replay-publication-producer:f7844ca070ac460d9ff635204cb7dedb",
+          "at": 1794333366.8111835
+        },
+        {
+          "name": "worker:replay-publication:f7844ca070ac460d9ff635204cb7dedb",
+          "at": 1794333337.3624067
+        }
+      ],
+      "jobs": [
+        {
+          "job_id": "7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9",
+          "source_id": "lWzXr6h0SyM",
+          "job_type": "youtube_replay_download_v4",
+          "state": "completed",
+          "stage": "done",
+          "attempts": 1,
+          "error_code": null
+        },
+        {
+          "job_id": "4c783108-6065-4197-aab8-980a63e0e60a",
+          "source_id": "_nadmR0WzqI",
+          "job_type": "youtube_replay_download_v4",
+          "state": "retry_scheduled",
+          "stage": "youtube_whole_verified",
+          "attempts": 0,
+          "error_code": "HEAVY_RESOURCE_BUSY"
+        },
+        {
+          "job_id": "bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e",
+          "source_id": "lWzXr6h0SyM",
+          "job_type": "replay_parts_publish_parent_v5",
+          "state": "upload_pending",
+          "stage": "replay_parts_children_queued",
+          "attempts": 0,
+          "error_code": null
+        },
+        {
+          "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+          "source_id": "lWzXr6h0SyM",
+          "job_type": "replay_part_publish_v5_p01",
+          "state": "processing",
+          "stage": "replay_part_uploading",
+          "attempts": 1,
+          "error_code": null
+        }
+      ],
+      "publications": [],
+      "publication_phases": [
+        {
+          "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+          "state": "uploading",
+          "attempt_id": "331caf2c-6ba0-441f-80aa-3f7fa985a6d2",
+          "upload_observation_saved": false
+        }
+      ],
+      "fifo": [
+        {
+          "source_id": "_nadmR0WzqI",
+          "state": "download_queued",
+          "reason": null,
+          "publication_job_id": null
+        },
+        {
+          "source_id": "lWzXr6h0SyM",
+          "state": "publication_queued",
+          "reason": null,
+          "publication_job_id": "bf4f4c9c-3dee-4975-b663-c4d7d7b87c7e"
+        }
+      ],
+      "acquisition_processes": [
+        "PID                 COMMAND",
+        "20581               docker-init",
+        "20607               python"
+      ]
+    }
+  },
+  "actual_upload_accepted": false
+}
