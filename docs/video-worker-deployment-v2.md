@@ -253,6 +253,11 @@ restricted current server is part of this release plan.
 
 ## Current portable source checkpoint
 
+For the forthcoming host migration, follow the owner's updated
+[new-download-only acceptance scope](new-server-download-handoff.md). The full
+source checkpoint below is archival build input, not an instruction to install
+historical operators or retired workflows on the new host.
+
 Commit `399f43deadfed9ac7a2de109eeed82d7c166c504` was exported after the owner's
 closed-history scope clarification as
 `lighthouse-download-worker-399f43d-source.tar.gz` (46,043,389 bytes), SHA-256

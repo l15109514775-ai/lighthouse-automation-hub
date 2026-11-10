@@ -222,6 +222,15 @@ The fixed old builder checks every reviewed source digest. Current backup fixes
 were not reverted and a negative test confirms their old qualification is rejected.
 No archive, source sample or old unit was deployed to the live application.
 
+## New-server scope supersedes historical recovery compatibility
+
+The owner's subsequent 2026-11-10 direction targets new downloads on the upcoming
+server and explicitly removes the obligation to retain obsolete executable code.
+[New-server handoff](new-server-download-handoff.md) defines the release gates and
+the current dependencies that cannot safely be removed by filename alone.
+Historical restoration work below is retained as an audit record, not further
+work required before release. No obsolete-code deletion is claimed by this update.
+
 ## Closed historical work is not reset for this migration
 
 Owner clarification on 2026-11-10: leave closed historical tasks and one-off
