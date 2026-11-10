@@ -1,0 +1,54 @@
+{
+  "schema": "lighthouse-publication-transfer-observation-v1",
+  "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+  "source_id": "lWzXr6h0SyM",
+  "native_attempt_id": "341aec7a-8f2e-484e-8e4a-d8b49f824ff7",
+  "container_id": "f8b10e6306bc12af15507b2df3f2726ae5fc51ae58b49dc59f9ffdb9b4131ccc",
+  "observation_method": "read-only frame from the task-owned authenticated X display; no UI input",
+  "frames": [
+    {
+      "at": 1794337770,
+      "file": "native-display-1794337770.png",
+      "sha256": "1c14816ccf016d6fef0a50979489a8c9599c3a88c24c9b09879bca26094cef03",
+      "percent_displayed": 7,
+      "uploaded_mb_displayed": 725.4,
+      "total_mb_displayed": 10695.1,
+      "speed_mb_s_displayed": 5.0,
+      "remaining_minutes_displayed": 33.2
+    },
+    {
+      "at": 1794337950,
+      "file": "native-display-1794337950.png",
+      "sha256": "a649e8f783944f6c17f38e008841dfdbb17b54eac472518c97b98d3ef4ac0ca8",
+      "percent_displayed": 14,
+      "uploaded_mb_displayed": 1547.3,
+      "total_mb_displayed": 10695.1,
+      "speed_mb_s_displayed": 4.4,
+      "remaining_minutes_displayed": 34.8
+    }
+  ],
+  "private_evidence_directory": "work/zhiyin-migration-20261110/publication-runtime-release",
+  "upload_complete": false,
+  "submission_verified": false,
+  "public_result_verified": false,
+  "additional_upload_attempts_started_by_observation": 0,
+  "other_services_observed_at": 1794337811.8787048,
+  "running_containers": 9,
+  "container_restart_counts": "all zero",
+  "disk_free_bytes": 51207892992,
+  "yuuhi_tweets_and_replays_paused": true,
+  "source_control_configuration_errors": 0,
+  "backup_preflight": {
+    "at_shanghai": "2026-11-11T03:11:25.921460+08:00",
+    "reviewed_wrapper_sha256": "738486daa7fc28c60808ac40eb2da5805c57bdc2a57d72eda774740e84f0ee7d",
+    "state": "budget_deferred",
+    "external_requests": 0,
+    "unresolved_operations": 0,
+    "daily_reserved_bytes": 189853149,
+    "daily_limit_bytes": 512000000,
+    "required_network_bytes_upper": 386648864,
+    "backup_started": false,
+    "restore_verified": false,
+    "diagnostic_correction": "The first read-only diagnostic refused the older wrapper hash; its pin was updated only to the previously qualified timeout-repair release. Production code and budgets were unchanged."
+  }
+}

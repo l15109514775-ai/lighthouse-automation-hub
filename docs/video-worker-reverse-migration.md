@@ -30,6 +30,15 @@ service while leaving healthy tweet/status services running.
 - Transfer and verify the exact current images. Prefer the same qualified image
   over an old image with unknown current-schema compatibility. Keep the
   destination owner marker absent and all producers/consumers/timers fenced.
+- Include the separately enabled publication service, its paired
+  `compose.publication.json` and `/etc/lighthouse-hub/publication-enabled.json`,
+  `lighthouse-publication.service`, and the restricted owner-display bridge.
+  The current strict cover module is the image version; do not reapply the
+  superseded cover-cache overlay. Preserve private-upload recovery journals,
+  archived selection intents, prior cover assets and current-attempt provenance
+  with their task directories. Those records prevent a copied task from being
+  mistaken for an unused upload attempt. See
+  [the qualified recovery](private-upload-recovery.md).
 - Check source-IP restrictions for YouTube API and CloudBase, profile usability,
   peer ingress firewall rules and the status tunnel. A fresh hostname or loaded
   image does not establish these permissions. Request any additional account
@@ -46,7 +55,9 @@ service while leaving healthy tweet/status services running.
    dispatched but its result is unknown, retain that unknown state and require
    reconciliation; do not classify it as safe-to-retry to speed migration.
 3. Stop consumers and backup/maintenance executors, including the independent
-   acquisition unit. Fence Docker restart and host startup paths. Verify live
+   acquisition and publication units. Preserve a live upload's original task,
+   intent and uncertainty if it cannot safely drain; never convert it to a fresh
+   upload during migration. Fence Docker restart and host startup paths. Verify live
    process/container state, not just a marker file or old heartbeat.
 4. Create a consistent SQLite snapshot through SQLite's backup API. Preserve
    original DB/WAL/SHM as recovery evidence. Do not copy a lone live database file
@@ -86,6 +97,9 @@ must link both hosts to the same transfer generation.
 ## 4. Activate one owner and validate
 
 Start the reviewed core services and independently qualified acquisition unit.
+Restore the publication unit only if it was enabled in the frozen allowlist and
+its current authorization, private configuration pair, account and resources
+validate. Never start both publication-only and the legacy combined publisher.
 Check API readiness, worker and producer heartbeats, lock exclusivity, SQLite
 integrity, scoped job recovery and absence of duplicate publication intent.
 Switch external callers/tunnel only after the new endpoint is ready and then

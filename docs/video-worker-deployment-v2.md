@@ -1,9 +1,9 @@
 # Download Worker 2.0: deployment and rollback
 
-## Current release checkpoint — 2026-11-10
+## Current release checkpoint — 2026-11-11
 
 Production migrated to the new host and passed an actual whole-host reboot.
-Eight containers run there, including the independent acquisition worker. The
+Nine containers run there, including independent acquisition and publication workers. The
 old host is fenced. This is a production activation checkpoint, **not full goal
 completion**. See [acceptance evidence](video-worker-acceptance-v2.md) and the
 append-only [migration history](video-worker-migration.md).
@@ -15,15 +15,18 @@ acquisition boundary. Its 47 focused runtime tests supplement historical results
 they do not relabel the 34 deferred legacy failures as passing.
 
 The new host passed an isolated authorized real download, media verification and
-SIGKILL/resume with the same task. A naturally arriving replay has not yet been
-observed completing through the new production queue. No test publication was
-performed. Full new-host external backup/restore is still outstanding: the one
-post-cutover attempt stopped before any external request because the retained
-daily network budget had insufficient headroom after the earlier source backup.
-The [guarded budget recovery](backup-budget-recovery.md) is now deployed and its
-real systemd deferral path passed. It preserves the failed record and all usage;
-the next within-budget timer run still needs full restore acceptance. An enabled
-timer alone is not proof of functioning backups.
+SIGKILL/resume with the same task. Both naturally discovered Chise downloads
+completed; one also reached verified public publication as `BV12iWG6zEP7`.
+The 11.2 GB source's bounded upload recovery is still in progress. These are
+authorized real-content operations, not synthetic test publications.
+
+Full new-host external backup/restore remains outstanding. The later within-budget
+attempt hit an inherited 30-minute service timeout. The missing 75-minute drop-in
+was restored, an exact-object HEAD proved absence, and the original reservations
+and failed history were preserved. The [timeout repair record](releases/backup-timeout-repair-20261111.json)
+supersedes the earlier zero-request failure checkpoint. Current preflight safely
+defers under the unchanged daily budget; the next eligible period is November 12
+CST, subject to monthly headroom. An enabled timer is not restore acceptance.
 
 Earlier statements that this image had not been transferred or acquisition was
 still staged disabled describe the pre-cutover phase. They are superseded by
@@ -36,8 +39,12 @@ API/scheduler, tweet worker, system worker, subtitle ingest, observer MCP and
 observer tunnel form the seven-service core allowlist. The eighth service,
 `replay-acquisition-worker`, runs separately with `--acquisition-only`. The old
 ordinary video worker and subtitle runner remain stopped. Do not enable legacy
-V5 combined `--publish` as another acquisition owner. V5 publication-only support
-is a separate capability, not a statement that that daemon is currently running.
+V5 combined `--publish` as another acquisition owner. The ninth service is the
+separate `replay-publication-worker --publication-only`, enabled through its own
+qualified Compose/marker pair and `lighthouse-publication.service`. It uses a
+3 GiB memory ceiling after the preserved first large-upload OOM. It must not run
+alongside the combined publisher. See the later restoration and recovery sections
+for exact current artifacts and the executed configuration rollback.
 
 All local workers share `data/hub.sqlite3` and `data/locks/video`. Never share
 SQLite over a network filesystem or create per-worker DB replicas. Keep scoped

@@ -1,4 +1,4 @@
-# Download Worker 2.0 — acceptance record, 2026-11-10
+# Download Worker 2.0 — acceptance record, updated 2026-11-11
 
 ## Current checkpoint
 
@@ -8,12 +8,21 @@ sections below preserve historical failures as well as later corrections.
 
 The new-host acquisition service is active and has passed isolated real download,
 SIGKILL/resume, current-image Docker restart and stop-only rollback acceptance.
-The owner-requested Yuuhi pause remains active. On 2026-11-10 a user-reported
-missing Chise replay exposed disabled discovery in the **core** configuration,
-despite enabled discovery flags in the acquisition configuration. That gap has
-now been corrected; the normal official monitor registered two new replays, the
-earlier replay is downloading and the reported replay has a completed plan waiting
-for its download slot. Neither is claimed delivered by this checkpoint.
+Both naturally discovered Chise downloads have now completed. Source
+`_nadmR0WzqI` also completed upload, submission and public verification as
+[`BV12iWG6zEP7`](https://www.bilibili.com/video/BV12iWG6zEP7); its child, parent
+and FIFO records completed automatically. Source `lWzXr6h0SyM` is in a bounded
+large-file upload recovery, not completed publication. The actual Bilibili editor
+showed 725.4/10695.1 MB (7%) at epoch 1794337770. This is transfer evidence only.
+See the [public result](releases/chise-public-verification-20261111.json) and
+[recovery preflight](releases/publication-cover-rebind-20261111.json).
+
+Nine containers run, including the independent acquisition and publication
+workers. The owner-requested Yuuhi pause remains active. The earlier core discovery
+configuration gap was corrected and its normal official monitor produced these
+two tasks. The parent of the large upload still retains the earlier review/error
+projection while its child is processing; that parent display is not permission
+to create a replacement task or clear the historical error.
 
 Maintenance now persists independent official-discovery health and alerts on a
 disabled/stale/erroring upstream, excluding intentionally paused sources. Nine
@@ -23,7 +32,10 @@ the missing upstream-health signal, not full replay delivery or backup acceptanc
 
 See [discovery recovery](youtube-discovery-recovery.md), current release JSON and
 the dated sections below. Full goal completion remains unproven, including the
-new-host full external-backup restore. The original decision immediately below
+large upload's public result and new-host full external-backup restore. The
+2026-11-11 03:11 CST budget preflight returned `budget_deferred` with zero provider
+requests and zero unresolved backup operations; the unchanged budget next permits
+a full-plan attempt on November 12, subject to fresh checks. The original decision immediately below
 is historical and is retained as failure evidence, not current deployment status.
 
 ## Original pre-migration decision

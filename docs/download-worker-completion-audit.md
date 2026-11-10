@@ -1,6 +1,6 @@
 # Download Worker 2.0 — current completion audit
 
-Checkpoint: 2026-11-10, after commits `fb051f9` and `7a319b0`.
+Checkpoint: 2026-11-11, following qualified recovery commit `a925423`.
 **Overall goal remains active.** This index separates current evidence from the
 historical failed/blocked entries retained in the long acceptance log. It does
 not turn a successful probe, file restore or running container into an end-to-end
@@ -117,7 +117,15 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    native attempt. This is not four uploads: the two intervening claims stopped
    before any browser/video selection. See
    [strict cover preflight and rollback](releases/publication-cover-rebind-20261111.json).
-   Current large-file upload/submission completion remains pending.
+   Current large-file upload/submission completion remains pending. Actual editor
+   frames at epochs 1794337770 and 1794337950 show the same native attempt moving
+   from 7% to 14%, with 1547.3/10695.1 MB transferred in the latter observation.
+   This confirms a live transfer, not submission or public acceptance. The
+   parent still shows its earlier review projection while the child is uploading;
+   do not use that stale aggregate alone to requeue or clear error history.
+   Nine containers are running with zero restarts and the Yuuhi pauses intact.
+   [Current transfer and budget evidence](releases/publication-transfer-observation-20261111.json)
+   records the private screenshot hashes and read-only observation scope.
    The independent publisher's owner-display bridge compatibility was repaired
    and installed without restart. Both exact legacy/new runtime pairs are
    supported, concurrent publishers rejected, and 17 offline tests passed
