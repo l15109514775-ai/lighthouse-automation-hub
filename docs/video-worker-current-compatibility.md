@@ -137,3 +137,29 @@ eight suites, including the normal multipart worker runtime, to pass all
 24 changed common files and 18 candidate-only files. These tests establish
 acquisition compatibility for the exercised paths. Other services still use
 their own releases. [Test evidence](releases/rebuilt-acquisition-compatibility-20261111.json).
+
+## Full public-image regression on November 11
+
+The public candidate collected 4,732 cases. The first run was interrupted at
+45% after its test container omitted the four registered historical inputs
+and the browser seccomp profile. Its partial JUnit contains 1,955 passes, 84
+errors, 128 failures and one skip. A synthetic browser fixture independently
+reported a sandbox/namespace denial and passed with the qualified profile.
+Supply the four genuine hash-checked archives read-only through
+`LIGHTHOUSE_TEST_ARTIFACT_DIR`, the existing browser seccomp profile, a private
+display, a short temporary path and a container init when reproducing the run.
+
+One distinct failure was in the public CloudBase source. The backup probe
+constructs the CDN host from the storage bucket; the prune-plan verifier had
+instead constructed an unrelated example hostname from the environment ID.
+The verifier now requires the exact CDN host of the bound bucket, along with
+the existing COS host. A wrong-bucket observation with internally consistent
+fixture hashes is rejected. The CLI test also installs its disabled template
+with private permissions and separately checks rejection of a writable policy.
+
+Seven historical operator modules passed all 184 tests with the four genuine
+inputs. The pruning and retention selection passed 53 tests. The separate
+archive runtime and one-off audit selection passed 180 tests. The production
+backup unit and its qualified private files were untouched. These checks use
+local fixtures and provide no CloudBase remote-read evidence.
+[Recorded JUnit hashes and run boundaries](releases/source-regression-preconditions-20261111.json).

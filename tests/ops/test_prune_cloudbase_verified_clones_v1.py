@@ -29,7 +29,7 @@ def owned(tmp_path):
     receiptfile=put(root/'backups/cloudbase-receipts'/(remoteop+'.verified.json'),receipt)
     canaryfile=root/'data/cloudbase-backup-canary-checks'/(op+'.json')
     check={'version':'cloudbase-runtime-private-canary-v1','operation_id':op,'checked_at':now,'private_storage_verified':True,'canary':{'bytes':106,'sha256':'1'*64},
-        'signed_full_get':{'bytes':106,'sha256':'1'*64,'method':'full_remote_get'},'anonymous_observations':[{'host':h,'method':'GET','signed':False,'status':403} for h in (p.BUCKET+'.cos.ap-shanghai.myqcloud.com','example-'+p.ENV+'-1250000000.tcb.qcloud.la')]}
+        'signed_full_get':{'bytes':106,'sha256':'1'*64,'method':'full_remote_get'},'anonymous_observations':[{'host':h,'method':'GET','signed':False,'status':403} for h in (p.BUCKET+'.cos.ap-shanghai.myqcloud.com',p.BUCKET+'.tcb.qcloud.la')]}
     put(canaryfile,check);fresh={'file':str(canaryfile),'sha256':p.sha(canaryfile.read_bytes()),'private_storage_verified':True}
     remote={**receipt,'receipt_file':str(receiptfile)};runtime={'operation_id':op,'remote':remote,'bundle':{'archive':str(archive),'bytes':len(data),'sha256':archivehash,'manifest':manifest},'fresh_private_canary':fresh}
     put(area/'runtime-result.json',runtime);put(area/'remote-archive.tar.gz',data)
@@ -73,6 +73,20 @@ def test_completed_journal_retains_every_evidence_record_and_only_exact_candidat
     root,file,report,runtime,ledger=owned;plan=p.create_plan(file,root,lambda *_:ledger)
     plan['candidates'][0]['file']=str(root/'logs/production.log')
     with pytest.raises(AssertionError):p.revalidate_plan(plan,file,root,lambda *_:ledger)
+
+
+def test_canary_for_a_different_bucket_is_refused_even_when_receipts_match(owned):
+    root,file,report,runtime,ledger=owned
+    path=Path(report['fresh_private_canary']['file'])
+    check=json.loads(path.read_bytes())
+    check['anonymous_observations'][1]['host']='different-bucket.tcb.qcloud.la'
+    put(path,check)
+    report['fresh_private_canary']['sha256']=p.sha(path.read_bytes())
+    runtime['fresh_private_canary']=report['fresh_private_canary']
+    put(file.parent/'runtime-result.json',runtime)
+    put(file,report)
+    with pytest.raises(AssertionError):
+        p.create_plan(file,root,lambda *_:ledger)
 
 
 def test_interrupted_unlink_window_accepts_absence_only_after_durable_deleting_state(owned,monkeypatch):

@@ -1,0 +1,112 @@
+{
+  "version": "public-source-regression-preconditions-v1",
+  "original_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "original_source": "35e695e48bfbe656cb0ee434e3044b1880307fcf",
+  "full_collection": 4732,
+  "initial_interrupted_run": {
+    "pytest_progress_percent": 45,
+    "observed_counts": {
+      "passed": 1955,
+      "error": 84,
+      "failure": 128,
+      "skipped": 1
+    },
+    "xml_sha256": "9760edf8c961d92d17932bfaf8a259a12fa9123d940cf374f4df09d25d5bae43",
+    "reason": "Test-only container did not have the historical inputs, the approved Chromium seccomp profile or an orphan-reaping init. Stopped intentionally; not a full suite."
+  },
+  "targeted_runs": {
+    "historical-fixtures": {
+      "exit": 0,
+      "suites": [
+        "tests/ops/test_archive_retention_v2c.py",
+        "tests/ops/test_cloudbase_remote_absent_v1.py",
+        "tests/ops/test_video_natural_formats_host_v3.py",
+        "tests/ops/test_video_natural_formats_host_v3b.py",
+        "tests/ops/test_video_source_tracks_host_v2b.py",
+        "tests/ops/test_youtube_acceptance_pilot_deploy_v1.py",
+        "tests/ops/test_youtube_monitor_refresh_deploy_v1.py"
+      ],
+      "junit_sha256": "e2224ea857cadaba59ed1f1d6b2c8f54320534de0a28ff70f187c7660919e9d8",
+      "counts": {
+        "tests": "184",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0"
+      }
+    },
+    "canary-bucket-fix": {
+      "test_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+      "selected_tests": [
+        "tests/ops/test_prune_cloudbase_verified_clones_v1.py",
+        "tests/test_archive_source_retention_v2.py",
+        "tests/test_archive_source_autorun_v2.py"
+      ],
+      "versioned_overlay_sha256": {
+        "scripts/ops/prune_cloudbase_verified_clones_v1.py": "496cb518a7a0a4944eced6ec053f01c7c5deb2a3617cc3058ce4f6ba41283d33",
+        "tests/ops/test_prune_cloudbase_verified_clones_v1.py": "a78a01efdbf3a897caf2198b53f9800973ea760a902875326c6e1db0341b1b50"
+      },
+      "counts": {
+        "tests": 53,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "junit_sha256": "7aacbb9d6f9088e7cf02c65ba7773885f6133ab0fdcfce12feb3e142219a0f4b",
+      "network": "none"
+    },
+    "public-cloudbase-policy-fix": {
+      "test_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+      "selected_tests": [
+        "tests/test_cloudbase_backup_runtime.py",
+        "tests/test_cloudbase_backup_oneoff_audit_v1.py"
+      ],
+      "versioned_overlay_sha256": {
+        "scripts/ops/prune_cloudbase_verified_clones_v1.py": "496cb518a7a0a4944eced6ec053f01c7c5deb2a3617cc3058ce4f6ba41283d33",
+        "tests/test_cloudbase_backup_runtime.py": "775a9d8f33e7dc85bb3f6bf638f37b60a6ee9b3f84de808f5f3e9f00bdc6e2d4"
+      },
+      "counts": {
+        "tests": 180,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "junit_sha256": "0a4972e0c15d84c9477601bedda9af5537ed080edc1a7719040263d6cccebd9f",
+      "network": "none"
+    },
+    "scoped-browser-canary": {
+      "test_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+      "selected_tests": [
+        "tests/test_browser_short_video.py::test_upload_only_bridge_preserves_native_causality_and_never_submits[normal]"
+      ],
+      "versioned_overlay_sha256": {},
+      "counts": {
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      "exit": 0,
+      "junit_sha256": "69428be1ad2a9090f5e1e40824b58930610e5d010aad74227a03ec718dd5381c",
+      "network": "none"
+    }
+  },
+  "replacement_inputs": {
+    "sandbox_sha256": "6fbfe3f512f65445b8bbf468034a3bc0fee95dd1734916e0e3dcb1a75b101e3a",
+    "archives": {
+      "historical-deployment-source-inputs.tar": "7903c13bb927b3a03d6d3c5b3213365c298b871381ae35e8c9dc00b5795bc93d",
+      "historical-retention-v2c-source-inputs.tar": "070517adad0216df3eb9e2da5bf599bca41d0fe25b9a266f9c502044da898e13",
+      "video-natural-formats-v3-overlay.tar.gz": "d2cbbacb026f89f853c29e5bb3fc1d9a77ec58e4b69e06300abff146dc0a2994",
+      "video-source-tracks-v2-overlay.tar.gz": "51b6f980f25bfe18da248625939873dc33078125ecbe9c2cd49b7624aa9f15ff"
+    },
+    "overlay_sources": {
+      "scripts/ops/prune_cloudbase_verified_clones_v1.py": "d181d970fdd0704ccc7fe4cefe1dc145835b63e115f87e9f2bd86ead3c7719ab",
+      "tests/ops/test_prune_cloudbase_verified_clones_v1.py": "296a62556c305da08a026cab521dba47da4cb8a48db2bab3a8203c66cee4b528",
+      "tests/test_cloudbase_backup_runtime.py": "0fbe37e8374cd64cd2bd413749d4c27a19ac1a37e55690de25e6980f10e51ed5"
+    }
+  },
+  "external_requests": 0,
+  "production_change": false,
+  "all_suite_passed": false
+}

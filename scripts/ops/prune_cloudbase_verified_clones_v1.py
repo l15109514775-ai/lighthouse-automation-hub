@@ -88,7 +88,7 @@ def bindings(report_file,root,reader=ledger_rows):
     check,ci=read_json(checkfile,root,65536);assert ci['sha256']==freshref['sha256']
     assert check['version']=='cloudbase-runtime-private-canary-v1' and check['operation_id']==operation and check['private_storage_verified'] is True;fresh(check['checked_at'])
     assert check['signed_full_get']=={'bytes':check['canary']['bytes'],'sha256':check['canary']['sha256'],'method':'full_remote_get'}
-    obs=check['anonymous_observations'];assert len(obs)==2 and {x['host'] for x in obs}=={BUCKET+'.cos.ap-shanghai.myqcloud.com','example-'+ENV+'-1250000000.tcb.qcloud.la'}
+    obs=check['anonymous_observations'];assert len(obs)==2 and {x['host'] for x in obs}=={BUCKET+'.cos.ap-shanghai.myqcloud.com',BUCKET+'.tcb.qcloud.la'}
     assert all(x['method']=='GET' and x['signed'] is False and x['status'] in (401,403) for x in obs)
     assert set(report['keep_files'])=={str(area/'runtime-result.json'),str(report_file),str(receipt_file)}
     proof={'report':ri,'runtime':ui,'receipt':vi,'fresh_canary':ci,'ledger_operation':row}

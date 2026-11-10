@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import sqlite3
 import subprocess
@@ -412,8 +413,16 @@ def test_cli_missing_config_and_disabled_template_do_not_read_credentials(enviro
     result=subprocess.run([sys.executable,str(script),'--root',str(e.root),'--status'],capture_output=True,text=True,check=True)
     assert json.loads(result.stdout)['enabled'] is False
     template=Path(__file__).resolve().parents[1]/'config/cloudbase-backup-runtime.example.toml'
-    result=subprocess.run([sys.executable,str(script),'--root',str(e.root),'--config',str(template),'--run-once'],capture_output=True,text=True)
+    policy=e.root/'disabled-backup.toml'
+    policy.write_bytes(template.read_bytes())
+    policy.chmod(0o600)
+    command=[sys.executable,str(script),'--root',str(e.root),'--config',str(policy),'--run-once']
+    result=subprocess.run(command,capture_output=True,text=True)
     assert result.returncode==2 and json.loads(result.stdout)['error_code']=='CLOUDBASE_BACKUP_DISABLED'
+    if os.name=='posix':
+        policy.chmod(0o660)
+        result=subprocess.run(command,capture_output=True,text=True)
+        assert result.returncode==2 and json.loads(result.stdout)['error_code']=='CLOUDBASE_BACKUP_CONFIG_NOT_PRIVATE'
     assert not (e.root/LEDGER_RELATIVE).exists()
 
 
