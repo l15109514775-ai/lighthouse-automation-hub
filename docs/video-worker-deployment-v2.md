@@ -135,6 +135,10 @@ do not overwrite it merely to make it match an older public script.
 7. Check API readiness, both instance-bound acquisition heartbeats, locks, job
    types, attempts and actual media receipts. Reboot recovery needs an actual
    controlled reboot or container restart with evidence, not just restart policy.
+   Also verify the scheduler/system-worker's own discovery configuration and a
+   fresh completed official monitoring job. An enabled acquisition-local monitor
+   flag cannot compensate for disabled core discovery; see
+   [the recovered configuration mismatch](youtube-discovery-recovery.md).
 8. Keep the old host fenced. Never rerun the earlier source final-sync/promotion
    scripts after target production writes have begun.
 
@@ -177,6 +181,14 @@ credentials and networking disabled. It checks hardening, scoped recovery,
 two-container locking/WAL, SIGKILL/restart and stop-only rollback. Separate real
 content evidence verifies SHA-256, FFprobe, streams, duration, packet coverage
 and bound delivery receipts. Neither grants publication approval.
+
+For a captured release with source overlays, additionally pass
+`--overlay-manifest /absolute/private/overlay/manifest.json --overlay-archive
+/absolute/private/overlay/overlays.tar`. The archive and base binding are checked;
+only the two executable modules are used with synthetic fixture policy. Production
+pause restoration is tested independently. The actual 0722 image plus current
+overlays passed all seven checks, including SIGKILL/restart and stop-only rollback;
+see `releases/acquisition-current-compose-acceptance.json`.
 
 Preserve browser seccomp and sandboxing in GUI compatibility tests. Use private
 writable HOME/XDG tmpfs, 256 MiB shared memory and a short pytest basetemp to

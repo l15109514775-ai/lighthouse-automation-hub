@@ -15,7 +15,7 @@ import tempfile
 import time
 
 
-def check_concurrent_workers(image, root):
+def check_concurrent_workers(image, root, overlay_mounts=()):
     """Two real containers, one SQLite DB and one physical video lock."""
     setup = '''
 import sys,time,tomllib
@@ -56,7 +56,7 @@ else:assert worked and row['state']=='completed' and row['attempts']==1
     base = ['docker','run','--rm','--network','none','--read-only','--user','10001:10001',
         '--cap-drop','ALL','--security-opt','no-new-privileges','--memory','192m',
         '--cpus','0.25','--tmpfs','/tmp:size=32m','-v',str(root)+':/fixture',
-        '--entrypoint','python',image,'-c']
+        *overlay_mounts, '--entrypoint','python',image,'-c']
     process = subprocess.Popen([*base,left])
     try:
         until = time.monotonic() + 30
@@ -76,7 +76,21 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--image', required=True)
     parser.add_argument('--compose', type=Path, required=True)
+    parser.add_argument('--overlay-manifest', type=Path)
+    parser.add_argument('--overlay-archive', type=Path)
     args = parser.parse_args()
+    if bool(args.overlay_manifest) != bool(args.overlay_archive):
+        parser.error('Supply both overlay manifest and archive, or neither')
+    overlay_blobs = None
+    if args.overlay_manifest:
+        if __package__:
+            from .test_acquisition_overlay_bundle import read_bundle, safe_path
+        else:
+            from test_acquisition_overlay_bundle import read_bundle, safe_path
+        manifest = json.loads(safe_path(args.overlay_manifest).read_text())
+        overlay_blobs = read_bundle(manifest, safe_path(args.overlay_archive))
+        if args.image != manifest['base_image']:
+            raise ValueError('ACQUISITION_TEST_OVERLAY_BASE_MISMATCH')
     root = Path(tempfile.mkdtemp(prefix='lighthouse-acquisition-', dir='/var/tmp'))
     os.chown(root, 10001, 10001)
     project = root.name
@@ -86,7 +100,22 @@ def main():
     # the public sample beside the explicitly supplied source Compose file.
     shutil.copyfile(args.compose.resolve().parent / 'config/hub.example.toml', root / 'test-example.toml')
     (root / 'test-example.toml').chmod(0o444)
-    (root / 'test.yaml').write_text('services:\n  replay-acquisition-worker:\n    network_mode: none\n')
+    override = {'network_mode': 'none'}
+    overlay_mounts = []
+    if overlay_blobs:
+        # Test the current executable modules against synthetic fixture policy.
+        # Real source-control settings are qualified by the separate restore test;
+        # do not import owner identities into this generic lock/recovery fixture.
+        override['volumes'] = []
+        for name in ('services/hub/worker.py', 'services/hub/source_controls.py'):
+            path = root / 'runtime-overlays' / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(overlay_blobs[name]); path.chmod(0o444)
+            target = '/opt/lighthouse-hub/' + name
+            override['volumes'].append({'type': 'bind', 'source': str(path),
+                                         'target': target, 'read_only': True})
+            overlay_mounts += ['--mount', 'type=bind,src=' + str(path) + ',dst=' + target + ',readonly']
+    (root / 'test.yaml').write_text(json.dumps({'services': {'replay-acquisition-worker': override}}))
     env = {**os.environ, 'LIGHTHOUSE_ACQUISITION_IMAGE': args.image}
     compose = ['docker', 'compose', '-p', project, '-f', str(root / 'compose.yaml'),
                '-f', str(root / 'test.yaml'), '--profile', 'youtube-acquisition']
@@ -119,9 +148,12 @@ store.claim('video',3600,4,job_types=('unsupported_legacy',))
     subprocess.run(['docker', 'run', '--rm', '--network', 'none', '--read-only',
         '--user', '10001:10001', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
         '--memory', '256m', '--tmpfs', '/tmp:size=32m', '-v', str(root) + ':/fixture',
-        '--entrypoint', 'python', args.image, '-c', seed], check=True)
+        *overlay_mounts, '--entrypoint', 'python', args.image, '-c', seed], check=True)
     report = {'synthetic': True, 'real_youtube_download': False, 'published': False,
-              'root': str(root), 'image': args.image, 'checks': {}}
+              'root': str(root), 'image': args.image, 'checks': {},
+              'executable_overlays_verified': bool(overlay_blobs),
+              'source_control_policy': 'synthetic_fixture_no_owner_pause',
+              'overlay_archive_sha256': manifest['overlay_archive_sha256'] if overlay_blobs else None}
     def call(*parts):
         return subprocess.check_output([*compose, *parts], env=env, text=True)
     def wait_healthy(ident, *, allow_restart=False):
@@ -170,7 +202,7 @@ print('permissions-secret-wal-no-external-work: PASS')
 '''
         subprocess.run(['docker', 'exec', ident, 'python', '-c', probe], check=True)
         report['checks']['secret_permissions_wal'] = True
-        check_concurrent_workers(args.image, root)
+        check_concurrent_workers(args.image, root, overlay_mounts)
         report['checks']['two_containers_shared_database_and_video_lock'] = True
         epoch_cmd = ['docker', 'exec', ident, 'python', '-c',
             "from pathlib import Path;print(Path('/tmp/replay-acquisition-epoch.json').read_text())"]

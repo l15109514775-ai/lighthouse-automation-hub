@@ -1,0 +1,20 @@
+{
+  "synthetic": true,
+  "real_youtube_download": false,
+  "published": false,
+  "root": "/var/tmp/lighthouse-acquisition-q559327m",
+  "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+  "checks": {
+    "compose_isolation": true,
+    "runtime_hardening_and_limits": true,
+    "secret_permissions_wal": true,
+    "two_containers_shared_database_and_video_lock": true,
+    "boot_identity_changed_on_restart": true,
+    "sigkill_restart_and_foreign_job_preserved": true,
+    "rollback_stops_only_acquisition_and_preserves_job": true
+  },
+  "executable_overlays_verified": true,
+  "source_control_policy": "synthetic_fixture_no_owner_pause",
+  "overlay_archive_sha256": "6562b2db375231b9a677889279795814936877d8918dc2e3bc6f5b33e7794184",
+  "passed": true
+}

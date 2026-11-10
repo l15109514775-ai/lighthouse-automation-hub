@@ -1,6 +1,22 @@
 # Download Worker 2.0 — acceptance record, 2026-11-10
 
-## Decision
+## Current checkpoint
+
+The new-host acquisition service is active and has passed isolated real download,
+SIGKILL/resume, current-image Docker restart and stop-only rollback acceptance.
+The owner-requested Yuuhi pause remains active. On 2026-11-10 a user-reported
+missing Chise replay exposed disabled discovery in the **core** configuration,
+despite enabled discovery flags in the acquisition configuration. That gap has
+now been corrected; the normal official monitor registered two new replays, the
+earlier replay is downloading and the reported replay has a completed plan waiting
+for its download slot. Neither is claimed delivered by this checkpoint.
+
+See [discovery recovery](youtube-discovery-recovery.md), current release JSON and
+the dated sections below. Full goal completion remains unproven, including the
+new-host full external-backup restore. The original decision immediately below
+is historical and is retained as failure evidence, not current deployment status.
+
+## Original pre-migration decision
 
 **Candidate implemented; production activation is blocked. Refactor acceptance is
 not complete.** Do not describe the synthetic Docker tests as a real YouTube

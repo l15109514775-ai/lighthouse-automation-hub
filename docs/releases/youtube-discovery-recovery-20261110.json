@@ -1,0 +1,110 @@
+{
+  "version": "youtube-discovery-recovery-v1",
+  "root_cause": "Core scheduler/system config had youtube_live_monitor_enabled=false while acquisition runtime config had it enabled. Downloader only consumes observations; it does not own channel discovery.",
+  "video_id": "_nadmR0WzqI",
+  "enable": {
+    "at": 1794322508.2567413,
+    "enabled_official_discovery": true,
+    "poll_minutes": 5,
+    "rss_enabled": false,
+    "roles_restarted": [
+      "scheduler",
+      "system-worker"
+    ],
+    "same_authorized_key_previously_present": {
+      "scheduler": true,
+      "system-worker": true
+    },
+    "new_server_authorized_key_applied": true,
+    "api_budget_changed": false,
+    "pause_config_unchanged": true,
+    "jobs_reset": false,
+    "secret_values_logged": false,
+    "manifest_mirror_equal": true
+  },
+  "official_metadata": {
+    "official_api": true,
+    "videos": [
+      {
+        "video_id": "_nadmR0WzqI",
+        "channel_id": "UCoW8qQy80mKH0RJTKAK-nNA",
+        "title": "\u25e4Apex Legends \u25e2  \u30b5\u30a4\u30d5\u30a1\u30fc \u6226\u3044\u3092\u30cf\u30c3\u30af\u305b\u3088\uff01\u30a8\u30de\u5148\u8f29\u3068\u30b5\u30a4\u30cd\u3061\u3083\u3093\u3068\u3084\u3089\u305b\u3066\u3044\u305f\u3060\u304d\u307e\u3059\uff01 \u25e4\u3076\u3044\u3059\u307d\u3063\uff01 \u9f8d\u5dfb\u3061\u305b\u25e2",
+        "published_at": "2026-11-09T10:48:20Z",
+        "live_broadcast_content": "none",
+        "duration": "PT1H39M27S",
+        "live_streaming_details": {
+          "actualStartTime": "2026-11-09T09:00:06Z",
+          "actualEndTime": "2026-11-09T10:39:33Z",
+          "scheduledStartTime": "2026-11-09T09:00:00Z"
+        },
+        "privacy_status": "public"
+      }
+    ],
+    "calls": 1
+  },
+  "observed_queue": {
+    "at": 1794322770.4724293,
+    "video": [
+      {
+        "video_id": "_nadmR0WzqI",
+        "channel_id": "UCoW8qQy80mKH0RJTKAK-nNA",
+        "state": "ended",
+        "actual_end": "2026-11-09T10:39:33Z",
+        "last_seen_at": 1794322512.710897,
+        "last_api_check": 1794322512.710897
+      }
+    ],
+    "fifo": [
+      {
+        "candidate_id": "d58774d4-f3d5-45ef-9b4e-c1166ea76d77",
+        "source_id": "_nadmR0WzqI",
+        "channel_id": "UCoW8qQy80mKH0RJTKAK-nNA",
+        "state": "plan_queued",
+        "reason": null,
+        "plan_job_id": "01dc1b5c-2500-4b13-bf1c-c30b2330ddc2",
+        "download_job_id": null
+      }
+    ],
+    "jobs": [
+      {
+        "job_id": "b5e5d994-ab62-4044-bfa5-b87ad52e2692",
+        "job_type": "video_process",
+        "state": "pending",
+        "stage": "discovered",
+        "error_code": null,
+        "attempts": 0
+      },
+      {
+        "job_id": "01dc1b5c-2500-4b13-bf1c-c30b2330ddc2",
+        "job_type": "youtube_replay_plan_v4",
+        "state": "completed",
+        "stage": "done",
+        "error_code": null,
+        "attempts": 1
+      }
+    ],
+    "latest_monitor": [
+      {
+        "job_id": "32eb1457-c931-4192-ba25-2b06aa3f710c",
+        "state": "completed",
+        "error_code": null,
+        "created_at": 1794322509.5121152,
+        "updated_at": 1794322513.5850842,
+        "result": "{\"downloads_performed\":0,\"source_api\":\"youtube-data-v3-official\",\"states_observed\":{\"ended\":47,\"live\":1,\"ordinary\":2}}"
+      }
+    ],
+    "active_video": [
+      {
+        "job_id": "7f56a3ec-a69e-4a2d-9c42-f3250b04e0b9",
+        "source_id": "lWzXr6h0SyM",
+        "job_type": "youtube_replay_download_v4",
+        "state": "processing",
+        "stage": "youtube_whole_acquiring",
+        "error_code": null
+      }
+    ]
+  },
+  "production_jobs_reset": false,
+  "publication_performed": false,
+  "completion_claimed": false
+}
