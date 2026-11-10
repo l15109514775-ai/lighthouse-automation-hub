@@ -250,3 +250,15 @@ It does not qualify real downloads or authorize startup against live data.
 Continue to keep the private staged acquisition switch false until the remaining
 real-content and production-policy gates are satisfied. No repeat probe of the
 restricted current server is part of this release plan.
+
+## Current portable source checkpoint
+
+Commit `399f43deadfed9ac7a2de109eeed82d7c166c504` was exported after the owner's
+closed-history scope clarification as
+`lighthouse-download-worker-399f43d-source.tar.gz` (46,043,389 bytes), SHA-256
+`cbaffd35057e3bb645d41a895b9913da4dc84a75d5094993d539f8143d839c0d`.
+All manifest files and 281 locked upstream files were verified locally. The
+archive is retained in the private D: task evidence directory and contains no
+live configuration, credential files or Git history. It includes the final
+preflight/error-classifier implementation, unlike the earlier 08eeae0 checkpoint.
+This is a portable source artifact, not a fresh image build or real-download pass.
