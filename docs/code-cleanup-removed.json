@@ -1,0 +1,259 @@
+{
+  "version": "code-cleanup-removal-v1",
+  "restore_commit": "86e987c07ba12f18c30dbc8bb9d755adfc1eeba3",
+  "scope": "local tracked source only; no server, DB, credentials or media deletion",
+  "files": [
+    {
+      "path": "scripts/ops/backfill_drink_quote_20261102.py",
+      "git_blob_sha256": "0c53fea0bd87ba0843244a1fa248fc94d8c337eaabf0f84a4a9b87591ca3c55f",
+      "bytes": 17498,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "scripts/ops/backfill_today_cached_sources_v1.py",
+      "git_blob_sha256": "14b25f8ade2402c409a8be69080e39100b03aa2b51b3f25c1013d95c04dfbeca",
+      "bytes": 17615,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "scripts/ops/install_video_retention_fresh_natural_v1b.py",
+      "git_blob_sha256": "19acdc29b6ba8fc770b2bdf32499c2735054f50d504ef5d6c09c18768eef59cd",
+      "bytes": 26921,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "scripts/ops/install_video_retention_fresh_natural_v1c.py",
+      "git_blob_sha256": "a939aaa845db6735993ec97356592a37fdec6ab0edf714ac5f1f211929ab8551",
+      "bytes": 26921,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "scripts/ops/inventory_today_x_gap_v1.py",
+      "git_blob_sha256": "53c8d8483e4e8b701a819764e162995c0c46152731b998921c3b33aa78595931",
+      "bytes": 15843,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "scripts/ops/reconcile_cloudbase_upload_unknown_3bf9_v1.py",
+      "git_blob_sha256": "7ef2811bbdce4be239cb16b06c4e26247ba9b7c83051ccacd922f6bce46c0584",
+      "bytes": 36165,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "subtitle-platform/experiments/LAUNCH_READINESS.md",
+      "git_blob_sha256": "8b81080d94e29edcdaf41d9098243b70a52f86fb961a67f1d9d1baa8af24ce9c",
+      "bytes": 4029,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/dispatcher/dispatch.cjs",
+      "git_blob_sha256": "8a74215c2293be290575e5d480e2cf7053b795e546c8555c459e5ed0de88d5b3",
+      "bytes": 4753,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/dispatcher/http.cjs",
+      "git_blob_sha256": "ab2a2e6950f9ba9876541298cfe6e3bcefe5c2459d29a20bcbd7f918ebc1ded6",
+      "bytes": 2402,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/dispatcher/preflight.cjs",
+      "git_blob_sha256": "a525946534c6079b92aaa7aef4dd03a5a3df8bf879b2a29fb7898e951744df3e",
+      "bytes": 1484,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-docs/20MIN_ENVIRONMENT.md",
+      "git_blob_sha256": "cc175821ba0489e4fc7c49e7627976cf6220f1e143f635f8ca3d58906da37b5e",
+      "bytes": 4220,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-docs/CLOUD_CLIPS.md",
+      "git_blob_sha256": "b3b74270a91e51be5f7917d9538507e68108f275c22b21987abb770b5c389a58",
+      "bytes": 11960,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-docs/CLOUD_SETUP.md",
+      "git_blob_sha256": "b004ef873db3a4a46d0e4f698ccf1e31f261d1e88f285af8e3fdc7dec9c150b7",
+      "bytes": 10990,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-docs/RELEASE.md",
+      "git_blob_sha256": "6bb16877954fd4bb13273cd34e509f2023f558515d131cb3e0dc815fd5d724fd",
+      "bytes": 4225,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-docs/SETUP_STATUS.md",
+      "git_blob_sha256": "4907d2c8e206a518d6387effff182d5ce709e9beb0e00099001aefc45cb44136",
+      "bytes": 5529,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/bridge-preview.reference.txt",
+      "git_blob_sha256": "859e927ad0763c2f97bbbc0183ccbb792cbb37ed06e1b2f908ae0f522dd6ae57",
+      "bytes": 984,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/credits/database.mjs.reference.txt",
+      "git_blob_sha256": "e3bec20519dc83a18718d167e9bad6dc2d13daf1a1c6ce55f6b3daff273cd1c0",
+      "bytes": 9469,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/priority/database.mjs.reference.txt",
+      "git_blob_sha256": "69963fa3be916d7adac0ae95e0430ac9ea26ef31e0b5f950b80649eef0abb0de",
+      "bytes": 13722,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/priority/results.py.reference.txt",
+      "git_blob_sha256": "1b2f6467c796644657c0a504f2c3db0437eeefbf12f2b2cb05d222c55a981ea2",
+      "bytes": 4645,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/production/database.mjs.reference.txt",
+      "git_blob_sha256": "238f828feca10f850e33fd4e74eebd4268963dc30ddecad3f8c30e1a3e10cec2",
+      "bytes": 8070,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/production/test_per_job.py.reference.txt",
+      "git_blob_sha256": "d8a351cb689a1daa76007e4226be64702f5f6ad965d0b2ce765594cfe2a5d3d4",
+      "bytes": 4872,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/production/worker_regression.py.reference.txt",
+      "git_blob_sha256": "fbdb487107b8e4b91f186dbb54e011e6e2424fede6658e98b2e7f97ace8c1d47",
+      "bytes": 1629,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/requests/database.mjs.reference.txt",
+      "git_blob_sha256": "d94535c7880de35913dd840015ba6029ba0ae568735fe6e59d7086d2203bcd88",
+      "bytes": 11122,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/retention/database.mjs.reference.txt",
+      "git_blob_sha256": "8a880054697daa081f5c9f2cc0f90f548db30846bed1905ddfa2f579bb45ecde",
+      "bytes": 16738,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/retention/regression.py.reference.txt",
+      "git_blob_sha256": "c9f11ade959d63547ad1cfa6bdd67aa5c602806402e24add8e5f29232ee01953",
+      "bytes": 860,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/retention/test_worker.py.reference.txt",
+      "git_blob_sha256": "d7cb09dcd5ae0d71e31f0292953f12c2305e5ec8451a409cc153b001a24e3778",
+      "bytes": 3410,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/security/database.mjs.reference.txt",
+      "git_blob_sha256": "085db44d54da3f1f558269f53dd4992247845c265d4496750542db55d2984907",
+      "bytes": 5034,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/security/restore.mjs.reference.txt",
+      "git_blob_sha256": "7fc67e276a10e3ac80724fb56ea00f7eb0a000435e866d93a35703355768df1d",
+      "bytes": 4272,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/security/verify-private-restore.mjs.reference.txt",
+      "git_blob_sha256": "67944a55bfac7154f6755c48680ff2e6fa6d8e701090c013e51c02bbb1276b6f",
+      "bytes": 3928,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/semi/database.mjs.reference.txt",
+      "git_blob_sha256": "8f90ac58eb3a3c41e2afee03977f7f5dcb60ef1dd94cd08824ffecb48421fc91",
+      "bytes": 15234,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/history-tests/semi/preview-server.py.reference.txt",
+      "git_blob_sha256": "ae98d4626376ffc67c53d9aa96e1e474a177836db1797cbae670bead7eedc699",
+      "bytes": 1517,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/initial-worker/.gitignore",
+      "git_blob_sha256": "700408e30b254781aa212b25a8048c789e8c6232246cafab4fe91527da1f48b7",
+      "bytes": 160,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/initial-worker/CLOUD_SETUP.md",
+      "git_blob_sha256": "feeb251ac6f2ce792f41d39c104d96935bf2334523a32dbbda0b42a4a79f6a56",
+      "bytes": 2376,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/initial-worker/config.example.json",
+      "git_blob_sha256": "046e9e3b204e8af3e3e5b793821f9fb415f1c9c2d14d281ed56892214de07044",
+      "bytes": 367,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/initial-worker/test_worker.py",
+      "git_blob_sha256": "34a3364ed8cc1b661b31a1d16cad67853ded2d3196131c26337f6fd9a0550ecf",
+      "bytes": 8725,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/experiments/initial-worker/worker.py",
+      "git_blob_sha256": "460058be68a935681b1f94d3dc3e6a99fe9d880a30b075a5022f8ebf9b258945",
+      "bytes": 18683,
+      "reason": "historical_experiment"
+    },
+    {
+      "path": "subtitle-platform/site/cloud-jobs.workers-20261023-1.js",
+      "git_blob_sha256": "e828833b2a1684d8c084d6dd3ca1f83d709ea06627a7d8935c155ecbe5f861e8",
+      "bytes": 23617,
+      "reason": "superseded_unreferenced_site_asset"
+    },
+    {
+      "path": "tests/ops/test_install_video_retention_fresh_natural_v1b.py",
+      "git_blob_sha256": "c1bafce4e2e9cad2bae93c9349c40c47cbc857dad3c464f378eb95c15451cf26",
+      "bytes": 8203,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "tests/ops/test_install_video_retention_fresh_natural_v1c.py",
+      "git_blob_sha256": "bf0037cf47ea0d01844aa8efa51c67aad7faba557a45d7c4ae19e430462d54ff",
+      "bytes": 8341,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "tests/ops/test_inventory_today_x_gap_v1.py",
+      "git_blob_sha256": "aeb4941788ad46be62e3b2f45e0b23b3e7994842cd95ca3a5b0fc9d18b5a21ab",
+      "bytes": 5292,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "tests/test_cached_drink_quote_20261102.py",
+      "git_blob_sha256": "328f8ef13dda37bda1434ebdc89ccddcb9a134f0510118218ffdf4125e2c08c6",
+      "bytes": 4551,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    },
+    {
+      "path": "tests/test_cached_today_backfill_v1.py",
+      "git_blob_sha256": "dc3f4a54db44ec5684cb86b9083756272865225665b46ca11d0557db48b5f04d",
+      "bytes": 4574,
+      "reason": "closed_oneoff_and_dedicated_tests"
+    }
+  ]
+}

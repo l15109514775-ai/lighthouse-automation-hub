@@ -1,4 +1,6 @@
-import importlib.util,json,tempfile,unittest
+import importlib.util,json,tempfile,unittest,zipfile
+from html.parser import HTMLParser
+from urllib.parse import urlsplit
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('configure',ROOT/'tools/configure.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
@@ -25,6 +27,16 @@ class ConfigureTests(unittest.TestCase):
    self.assertIn('fixture-community.api.tcloudbasegateway.com',(out/'runner/fetch_shanghai.py').read_text(encoding='utf8'))
    self.assertIn('Environment=SUBTITLE_POLL_SECONDS=1800',(out/'runner/systemd/subtitle-poller.service').read_text(encoding='utf8'))
    self.assertIn('runner/',(out/'README_FIRST.txt').read_text(encoding='utf8'))
+   class Resources(HTMLParser):
+    def handle_starttag(parser,tag,attrs):
+     values=dict(attrs);key='src' if tag=='script' else 'href' if tag=='link' else None
+     if key and values.get(key):
+      url=urlsplit(values[key])
+      if not url.scheme and not url.netloc:self.assertTrue((out/'site'/url.path).is_file(),url.path)
+   Resources().feed((out/'site/index.html').read_text(encoding='utf8'))
+   with zipfile.ZipFile(out/'website-upload.zip') as package:
+    self.assertNotIn('cloud-jobs.workers-20261023-1.js',package.namelist())
+    self.assertIn('cloud-jobs.workers-20261106-1.js',package.namelist())
    with self.assertRaises(ValueError):m.render(self.cfg(),out)
  def test_website_only_can_leave_provider_inert(self):
   c=self.cfg();c['text_api_url']='https://text-provider.example.invalid/v1';m.validate(c)

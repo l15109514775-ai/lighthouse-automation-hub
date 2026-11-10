@@ -289,7 +289,7 @@ def main():
             'publisher_registered': False, 'publications': 0, 'external_requests': 0}))
         return
     if selected_mode == 'acquisition_only':
-        from .replay_worker_runtime import load_youtube_key
+        from .youtube_credentials import load_youtube_key
         if os.environ.get('YOUTUBE_API_KEY_FILE') != '/run/secrets/youtube-api-key':
             raise HubError('REPLAY_MULTIPART_KEY_FILE_REQUIRED', review=True)
         load_youtube_key('/run/secrets/youtube-api-key')

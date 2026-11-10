@@ -75,3 +75,22 @@ def test_unknown_queue_refused_without_constructing_services(runtime, queue):
     settings, store = runtime
     with pytest.raises(ValueError, match='WORKER_QUEUE_INVALID'):
         handlers(settings, store, queue=queue)
+
+
+def test_secret_loader_does_not_import_legacy_worker(tmp_path):
+    secret = tmp_path / 'youtube-api-key'
+    secret.write_text('SyntheticOwnedYoutubeKey1234567890', encoding='ascii')
+    secret.chmod(0o600)
+    script = '''
+import importlib.abc,os,sys
+class NoWorkerImports(importlib.abc.MetaPathFinder):
+ def find_spec(self,fullname,path=None,target=None):
+  if fullname in ('services.hub.replay_worker_runtime','services.hub.cli','services.hub.db'):
+   raise RuntimeError('SECRET_LOADER_DEPENDS_ON_WORKER')
+sys.meta_path.insert(0,NoWorkerImports())
+from services.hub.youtube_credentials import load_youtube_key
+load_youtube_key(sys.argv[1])
+assert os.environ['YOUTUBE_API_KEY']=='SyntheticOwnedYoutubeKey1234567890'
+'''
+    subprocess.run([sys.executable, '-B', '-c', script, str(secret)],
+                   check=True, timeout=20, cwd=Path(__file__).resolve().parents[1])

@@ -1,3 +1,3 @@
-# Cloud 环境安装
+# 旧 Cloud 安装入口已停用
 
-按 [从零搭建](../docs/从零搭建.md) 的 Cloud 章节配置。先使用本地生成器生成属于自己的 worker 副本。在此目录执行 `bash setup_runtime.sh`，然后做运行时检查和离线测试。环境变量与网络机密只填在平台安全表单，不能写入源码。原始试验记录在 `experiments/history-docs`，不作为新的付费授权。
+当前正式路线已改为自托管 API Worker。请按 [runner 部署说明](../runner/README.md) 和 [从零搭建](../docs/从零搭建.md) 配置，不再创建 Codex Cloud 环境。字幕处理模块仍由执行器调用；历史试验的恢复位置见 [历史实验说明](../experiments/README.md)，不作为新的付费授权。

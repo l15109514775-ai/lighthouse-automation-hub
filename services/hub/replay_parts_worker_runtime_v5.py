@@ -226,7 +226,7 @@ def main():
     if args.check:
         print(json.dumps({'version':VERSION,'mode':mode,'role':args.role,'handlers':sorted(worker.handlers),'external_requests':0}));return
     if mode not in ('register_only','publication_only'):
-        from .replay_worker_runtime import load_youtube_key
+        from .youtube_credentials import load_youtube_key
         if os.environ.get('YOUTUBE_API_KEY_FILE')!='/run/secrets/youtube-api-key':raise HubError('REPLAY_PART_KEY_FILE_REQUIRED',review=True)
         load_youtube_key('/run/secrets/youtube-api-key')
     stop=threading.Event();moderator=None;retention=None

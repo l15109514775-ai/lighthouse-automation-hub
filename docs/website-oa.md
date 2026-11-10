@@ -30,7 +30,7 @@
 | 部分 | 目录 | 说明 |
 | --- | --- | --- |
 | 前端 | `subtitle-platform/site/` | `index.html` + `app.js`（登录、任务板、审核）、`project-workflow.js`（项目/认领）、`credits.enhanced-*.js`（积分）、`qq-binding.*.js`（QQ 绑定码） |
-| 数据库 | `subtitle-platform/database/migrations/` | 001–049，全部业务函数 `st_*` |
+| 数据库 | `subtitle-platform/database/migrations/` | 目录包含至 060 的 SQL；首次安装清单目前仅登记至 049，后续依赖尚需单独核实 |
 | 部署配置 | `subtitle-platform/tools/configure.py` | 生成独立部署目录，替换示例域名/环境 ID |
 | 测试 | `subtitle-platform/tests/` | 数据库（pglite）+ 前端离线测试 |
 | 文档 | `subtitle-platform/docs/从零搭建.md`、`使用手册.md`、`架构与数据.md` | 面向非程序员的逐步搭建 |
@@ -43,10 +43,12 @@
 cd subtitle-platform
 cp config.example.json config.local.json   # 只改本地文件，别提交
 # 编辑 config.local.json：environment_id / website_url / cloud_environment_name / text_api_url / text_model / owner_auth_subject
-python tools/configure.py --output ../my-deployment   # 生成带你自己域名的部署包
+python tools/configure.py --config config.local.json --out ../my-deployment
 ```
 
 `configure.py` 只做文本替换并写本地文件，**不连接任何服务**；输出目录已存在会拒绝覆盖。
+
+生成的首次安装 SQL 不代表已覆盖目录中的全部后续迁移。现有生产库不能直接重跑 `INSTALL_ALL.sql`；新环境也必须先核对 API Worker 所需的迁移依赖，不能把生成成功当作数据库安装验收通过。
 
 ## 本地访问入口
 

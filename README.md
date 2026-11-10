@@ -174,7 +174,7 @@ vendor/subtitle-cloud-worker/  云端字幕 worker（git submodule）
 | QQ 机器人插件 | 在本仓库 `subtitle-platform/bot/`，需要 AstrBot 与 QQ 官方机器人 |
 | `tweet-zh-compositor` | **外部 submodule**（`compositor/`），`git clone --recursive` 获取 |
 | `subtitle-cloud-worker` | **外部 submodule**（`vendor/subtitle-cloud-worker/`）；保留锁等实际依赖。当前字幕任务通过自托管 API 执行器运行，不依赖 Codex Cloud |
-| 平台历史实验（初版工作器、未启用调度器） | `subtitle-platform/experiments/`，仅作研究保留，不参与默认流程 |
+| 平台历史实验（初版工作器、未启用调度器） | 已移出当前源码；恢复位置见 `subtitle-platform/experiments/README.md`，不参与正式部署 |
 | 真实账号、Cookie、生产库、备份、媒体 | **不在仓库**；样例均为合成数据 |
 
 ## 许可证与署名
