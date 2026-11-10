@@ -34,10 +34,11 @@ class QueueView:
     reservation would become unknown, never a free retry, even though this
     acquisition-only release does not itself create publications.
     """
-    def __init__(self, store, *, acquisition_enabled=False):
+    def __init__(self, store, *, acquisition_enabled=False, heartbeat_name=None):
         if type(acquisition_enabled) is not bool:
             raise ValueError('REPLAY_MULTIPART_QUEUE_MODE_INVALID')
         self.store, self.acquisition_enabled = store, acquisition_enabled
+        self.heartbeat_name = heartbeat_name
 
     def __getattr__(self, name):
         return getattr(self.store, name)
@@ -58,6 +59,8 @@ class QueueView:
             raise ValueError('REPLAY_MULTIPART_HEARTBEAT_SCOPE')
         self.store.beat(name)
         self.store.beat('worker:video-main-v4')
+        if self.heartbeat_name:
+            self.store.beat(self.heartbeat_name)
 
     def claim(self, queue, lease_seconds, max_attempts, *, job_types=None):
         self._queue(queue)
@@ -126,7 +129,8 @@ class Coordinator:
             raise HubError('REPLAY_MULTIPART_HANDLER_SET_CHANGED', review=True)
         handlers[REFRESH_JOB] = self.fifo.process_refresh
         from .worker import Worker
-        self.worker = Worker(settings, QueueView(store, acquisition_enabled=mode == 'acquisition_only'), handlers,
+        self.worker = Worker(settings, QueueView(store, acquisition_enabled=mode == 'acquisition_only',
+            heartbeat_name='worker:replay-acquisition'), handlers,
             resource_deferrals=resource_callbacks(settings, store),
             readiness_deferrals=self.readiness.callbacks())
 
@@ -174,11 +178,16 @@ class Coordinator:
                 result['steps']['download'] = self.fifo.enqueue_download_tick(self.worker.handlers, planning)
                 result['dispatch_state'] = 'acquisition_only'
             self.store.beat('worker:video-producer-v4')
+            self.store.beat('worker:replay-acquisition-producer')
             if self.mode == 'register_only':
                 # Like an idle ordinary Worker, this is the real live service,
                 # not a fabricated processing-job lease or download heartbeat.
                 self.worker.store.beat('worker:video')
             return result
+
+    def idle_heartbeat(self):
+        # Waiting behind another heavy worker is healthy; it grants no task lease.
+        self.store.beat('worker:replay-acquisition')
 
 
 def build_worker(settings, store, *, mode='register_only'):
@@ -217,6 +226,9 @@ def run_loop(worker, coordinator, *, once=False, stop=None):
     producer.start()
     try:
         while not stop.is_set():
+            idle_heartbeat = getattr(coordinator, 'idle_heartbeat', None)
+            if idle_heartbeat:
+                idle_heartbeat()
             if not worker.once('video'):
                 stop.wait(1)
     finally:
@@ -255,6 +267,8 @@ def main():
         if os.environ.get('YOUTUBE_API_KEY_FILE') != '/run/secrets/youtube-api-key':
             raise HubError('REPLAY_MULTIPART_KEY_FILE_REQUIRED', review=True)
         load_youtube_key('/run/secrets/youtube-api-key')
+        from .acquisition_health import start_epoch
+        start_epoch()
     run_loop(worker, coordinator, once=args.once)
 
 

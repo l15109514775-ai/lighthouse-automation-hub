@@ -74,3 +74,39 @@ services:
     mem_limit: 192m
     cpus: 0.25
     command: ["python","-m","services.hub.cli","worker","--queue","system"]
+
+  replay-acquisition-worker:
+    <<: *runtime
+    profiles: [youtube-acquisition]
+    # Override only this service when deploying an immutable, qualified image.
+    image: ${LIGHTHOUSE_ACQUISITION_IMAGE:-lighthouse-hub:0.1.0}
+    env_file: []
+    environment:
+      HUB_ROOT: /opt/lighthouse-hub
+      HUB_CONFIG: /opt/lighthouse-hub/config/hub.toml
+      DRY_RUN: "true"
+      YOUTUBE_API_KEY_FILE: /run/secrets/youtube-api-key
+    volumes:
+      - ./data:/opt/lighthouse-hub/data
+      - ./media:/opt/lighthouse-hub/media
+      - ./logs:/opt/lighthouse-hub/logs
+      - ./backups:/opt/lighthouse-hub/backups
+      - ./config:/opt/lighthouse-hub/config:ro
+      - ./data/browser-profiles/youtube:/opt/lighthouse-hub/data/browser-profiles/youtube:ro
+    secrets:
+      - source: youtube_api_key
+        target: youtube-api-key
+    mem_limit: 1400m
+    cpus: 1.5
+    stop_grace_period: 30s
+    command: ["python","-m","services.hub.replay_multipart_worker_runtime_v4","--acquisition-only"]
+    healthcheck:
+      test: ["CMD","python","-m","services.hub.acquisition_health"]
+      start_period: 90s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+secrets:
+  youtube_api_key:
+    file: ${YOUTUBE_API_KEY_SECRET_FILE:-./secrets/youtube-api-key}

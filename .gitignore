@@ -12,6 +12,7 @@ backups/
 secrets/
 *.sqlite*
 config/local.toml
+config/hub.toml
 config/reviewers.toml
 config/rights.toml
 config/youtube-download-policy.toml

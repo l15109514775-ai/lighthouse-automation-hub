@@ -26,3 +26,29 @@ missing upstream gitlinks and local hub.toml; tests currently use a copy of the
 public example. Upstream-lock records Windows newlines for vendor files; exact
 compositor commit is present in the old local checkout but absent on GitHub.
 These require explicit packaging treatment before a reproducible fresh build.
+
+
+## Phase 2 — independent container
+
+Added profile-gated acquisition service and dual-thread/boot-scoped health probe.
+Restored the two original pinned gitlinks and added exact-byte upstream
+materialization (281 files verified; no changed checksum accepted).
+
+Local health/isolation/runtime checks: 34 passed. Linux Python 3.12 real Docker
+run: 77 passed, 1 existing moderation daily-boundary test failed and remains to
+be diagnosed before full acceptance. Initial tests on a 1 GiB tmpfs correctly
+hit the 15 GB resource floor; rerun used an isolated host-disk temporary directory.
+
+Actual Compose acceptance on 2026-11-10 passed: UID/GID, readonly root/profile,
+Secret loading, capabilities/no-new-privileges, CPU/memory/PID limits, rotated
+logs, WAL, both health timestamps, SIGKILL/restart and preservation of a foreign
+processing job. Report: /var/tmp/lighthouse-acquisition-g09yf937/report.json on
+the test host. Synthetic key, empty source inventory, network_mode:none; zero
+API/publication rows. This was NOT a YouTube download acceptance.
+
+A full public-source overlay initially failed the existing X-retirement marker:
+it restores retired files and changes protected source bytes. The successful
+runtime image overlays ONLY this refactor's worker modules on the verified
+existing image; no retirement/authorization protection was disabled. Full
+public-source image is kept solely for offline tests which instantiate temporary
+Settings. Production containers and live database are unchanged.
