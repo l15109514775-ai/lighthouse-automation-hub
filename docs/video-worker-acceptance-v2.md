@@ -671,3 +671,38 @@ activation separately from the historical regression snapshot. No failure was
 changed to passed or skipped, and no new clean full-suite run is claimed. Current
 Store/lock/lease, acquisition/delivery, tweet/backup sharing and unknown-publication
 safety remain release requirements.
+
+### Clean Docker/containerd import acceptance (2026-11-10)
+
+A genuinely empty Docker image store and a separately started, empty containerd
+content store loaded the qualified private acquisition archive. All 20 rootfs
+layers and image identity matched. An actual offline read-only UID10001 container
+recorded 48 Python distributions and 450 Debian packages; only loopback existed.
+Both test daemons stopped and production container IDs remained unchanged. No live
+mounts, provider requests, download, publication or production restart occurred.
+
+The first attempt failed and remains recorded: Docker auto-connected to host
+containerd across mount namespaces. A separate Docker namespace alone did not
+prove isolated content storage. The corrected tool explicitly binds Docker to a
+private containerd root/state/socket in the same isolated namespace. The second
+run passed. Temporary stores were removed after stopped-process/mount checks;
+original archive and reports are retained. See portable-image-verification.md.
+
+The current acquisition service's two read-only source-control modules and pause
+file were separately captured into a deterministic 20480-byte private overlay tar,
+SHA256 6562b2db375231b9a677889279795814936877d8918dc2e3bc6f5b33e7794184.
+Base worker hash, staged after-hash and current in-container bytes matched. The
+versioned release manifest records this effective configuration without credentials.
+Overlay-bundle redeployment and a fresh public Dockerfile build are not yet proven.
+
+### Effective overlay archive restoration accepted (2026-11-10)
+
+The preceding overlay redeployment limitation is now resolved for isolated restore:
+`test_acquisition_overlay_bundle.py` extracted the exact allowlisted archive into
+a fresh directory and ran the qualified 0722 image with those restored files.
+All three hashes and operational pause values matched; all five synthetic
+source-control/Worker tests passed. Six local archive safety tests passed (exact
+allowlist, archive/member digest changes, traversal, symlinks and duplicates).
+Production container IDs stayed unchanged. No live DB, profile, secret or provider
+request was used. The release JSON now includes fixture hashes and restore evidence.
+This does not qualify a fresh public-tree rebuild or production reverse migration.

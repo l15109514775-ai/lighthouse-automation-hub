@@ -1,0 +1,72 @@
+{
+  "version": "acquisition-effective-release-v1",
+  "recorded_at": 1794320548.5307798,
+  "base_image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+  "base_source_commit": "463675e",
+  "source_control_change_commit": "643d426",
+  "base_archive_sha256": "69bf7bd9dd7201b049cf89692e794a7f52275003cfcd94e6848bab2eae5f9f9d",
+  "base_clean_import_passed": true,
+  "overlay_archive_sha256": "6562b2db375231b9a677889279795814936877d8918dc2e3bc6f5b33e7794184",
+  "overlay_archive_bytes": 20480,
+  "files": {
+    "services/hub/worker.py": {
+      "sha256": "5f9ae7942665a9fb5718af3894fdc1934c4c225be65f43c79c06fbd4a6d66190",
+      "bytes": 11208,
+      "mode": "0644"
+    },
+    "services/hub/source_controls.py": {
+      "sha256": "3ec8fca0cf158de20c438a65b9a88ef6b0011b1c7010869ab856990804b581ad",
+      "bytes": 3534,
+      "mode": "0644"
+    },
+    "config/source-controls.json": {
+      "sha256": "608209d67a559c30bdea3f5a41e6593e8b0bbd43e75c48b9ff74159fcbc20474",
+      "bytes": 227,
+      "mode": "0640"
+    }
+  },
+  "qualified_overlay_tests": {
+    "synthetic_linux_runs": 15,
+    "per_worker_variant": 5
+  },
+  "full_public_tree_image": false,
+  "overlay_bundle_redeploy_tested": true,
+  "credentials_in_bundle": false,
+  "data_in_bundle": false,
+  "configuration_compatibility": "Existing rights, policy versions, historical tasks, attempts and publications retained; pause is separate operational configuration.",
+  "runtime_inventory_sha256": "026ce341d4c4f7e79eaef7a35f234b7cb7a62a2b971201ee176747c1829a3a41",
+  "clean_store_test": {
+    "state": "clean_import_and_offline_container_passed",
+    "archive_sha256": "69bf7bd9dd7201b049cf89692e794a7f52275003cfcd94e6848bab2eae5f9f9d",
+    "layers_verified": 20,
+    "provider_requests": 0,
+    "live_mounts": false,
+    "daemon_stopped": true,
+    "containerd_stopped": true,
+    "production_container_ids_unchanged": true
+  },
+  "overlay_restore_evidence": {
+    "state": "restored_overlay_bundle_offline_tests_passed",
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "archive_sha256": "6562b2db375231b9a677889279795814936877d8918dc2e3bc6f5b33e7794184",
+    "files_verified": 3,
+    "fixture_sha256": {
+      "tests/conftest.py": "d5073b16a642a6f6b9468ece57a1c32895107225fae8ae31d055b507b1eacec5",
+      "tests/test_source_controls.py": "b71f498f4849e3d3889bfb88fda134b93315031b8ee94d956d9719fcd4fb9bad",
+      "config/hub.toml": "491c4c211d649cb6947a3fa973e12973ad7bbe384bc8491eeb06d6d2f86bc8b7"
+    },
+    "paused": {
+      "x": [
+        "yuuhi_sendo"
+      ],
+      "youtube": [
+        "UCuDY3ibSP2MFRgf7eo3cojg"
+      ]
+    },
+    "production_container_ids_unchanged": true,
+    "live_data_mounts": false,
+    "external_requests": 0
+  },
+  "restored_runtime_tests_passed": 5,
+  "local_bundle_safety_tests_passed": 6
+}

@@ -455,3 +455,14 @@ Evidence on the new host: `/var/lib/lighthouse-migration/final-promotion.json`,
 `production-reboot-after.json`, `production-release-verification.json`,
 `core-compatibility-fix/report.json` and `rollback-plan-tests/report.json`.
 Local copies are under `work/zhiyin-migration-20261110/evidence-*`.
+
+## Portable runtime follow-up — 2026-11-10
+
+A separate empty Docker/containerd import and hardened offline container probe
+passed for the captured 0722 acquisition base. Production containers were unchanged.
+The first diagnostic run used a host-containerd connection and failed; it is not
+counted as a clean-store success. See portable-image-verification.md for evidence,
+isolation fixes, temporary storage cleanup and remaining limitations. Dependency
+inventory and exact current source-control overlay hashes are versioned under
+`docs/releases/`. No DB migration, old-job mutation, publisher activation or new
+YouTube request accompanied these tests.

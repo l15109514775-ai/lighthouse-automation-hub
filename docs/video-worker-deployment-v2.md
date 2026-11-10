@@ -68,9 +68,22 @@ bytes), SHA-256
 After authenticated transfer, verify that hash before `docker image load --input
 /absolute/private/path/image.tar`. Confirm the loaded image identity above and
 rerun offline preflight before activation. Actual loading and a no-network
-container probe passed on the existing host; a clean-daemon import remains untested.
+container probe passed on the existing host. A later import into empty Docker and
+dedicated containerd stores also passed, followed by an offline, read-only,
+UID 10001 container probe. See [the portable test procedure](portable-image-verification.md).
 The companion private manifest records all 20 rootfs layer hashes and source
 checkpoint `463675e`. It is a captured runtime, not the whole evolving public tree.
+
+The current effective service additionally mounts two source-control modules and
+an operational pause configuration. Their exact hashes and base binding are in
+[`releases/acquisition-source-controls-v1.json`](releases/acquisition-source-controls-v1.json).
+The private 20,480-byte `overlays.tar` is retained separately from the base image;
+do not deploy the base alone and assume that it enforces the owner's pause.
+Its isolated archive restoration, exact-file probe and five focused runtime tests
+passed against the qualified image without live data mounts. Current package versions and
+selected runtime hashes are in
+[`releases/acquisition-runtime-0722.json`](releases/acquisition-runtime-0722.json).
+This inventory is evidence about the captured runtime, not a new APT lockfile.
 
 Actual private manifests are `/opt/lighthouse-hub/compose.migrated.json` and
 `/opt/lighthouse-hub/compose.acquisition.json`. Do not replace them with generic
