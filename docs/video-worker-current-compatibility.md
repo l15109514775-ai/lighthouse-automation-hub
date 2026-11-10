@@ -195,3 +195,28 @@ browser upload tests passed. Running the retired two-source capture module
 through the same launcher returned exit code 1. Six tests passed and the
 two documented one-off cases failed with `SOURCE_REQUEST_NOT_SUPPORTED`.
 [Launcher qualification](releases/public-regression-launcher-20261111.json).
+
+### Numbered replay observation held for an active channel
+
+Production replay `2lILwnrnKTE` reached the second readiness observation.
+The queue identified it as `2lILwnrnKTE:readiness:2`. The source pause guard
+looked up that entire key in `youtube_videos.video_id`, rejected it, and the
+coordinator recorded a hold before media dispatch. The parent's legacy
+`upload_pending` state at stage `readiness_hold_v4` does not indicate an upload.
+
+For V4 readiness observations, the corrected guard verifies the exact numbered
+key, the video plan's primary key, type, queue, policy, original video and channel
+against the official metadata row. The existing handler separately validates
+the wait, observation sequence, lease and full payload. Other YouTube task
+types retain their existing lookup. On a consistent copy of the operational
+database the incumbent guard reproduced the hold. The corrected guard in both
+images accepted this child, rejected a different parent and retained the
+owner's pause on the other channel.
+
+The acquisition-only Compose change is staged on the migrated host. The
+rollback declaration rendered identically to the active configuration. Sixteen
+tests passed in an isolated copy of the incumbent runtime and 31 passed in
+the patched candidate. The original readiness test module remains intact for
+pinned historical attestations. The held job and its attempts, FIFO row and
+review history were preserved. No provider call was made for this qualification.
+[Case and release hashes](releases/readiness-child-channel-20261111.json).

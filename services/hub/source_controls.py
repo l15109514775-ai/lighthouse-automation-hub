@@ -41,6 +41,36 @@ def source_paused(root, platform, identity):
     return identity in paused_sources(root)[platform]
 
 
+def _replay_channel(store, job):
+    if job['job_type'] == 'youtube_replay_readiness_v4':
+        # The observation has a unique queue key. Its plan owns the actual video ID.
+        payload = job.get('payload')
+        if not isinstance(payload, dict):
+            raise HubError('SOURCE_FORWARDING_IDENTITY_REQUIRED', review=True)
+        sequence = payload.get('_whole_readiness_sequence')
+        video = payload.get('video_id')
+        if (not isinstance(video, str) or not re.fullmatch(r'[A-Za-z0-9_-]{11}', video)
+                or type(sequence) is not int or not 2 <= sequence <= 96
+                or job['source_id'] != f'{video}:readiness:{sequence}'
+                or not isinstance(payload.get('_whole_readiness_parent_job_id'), str)
+                or not isinstance(payload.get('channel_id'), str)):
+            raise HubError('SOURCE_FORWARDING_IDENTITY_REQUIRED', review=True)
+        rows = store.query(
+            """SELECT v.channel_id FROM jobs p JOIN youtube_videos v ON v.video_id=p.source_id
+               WHERE p.job_id=? AND p.source_platform='youtube' AND p.queue='video'
+                 AND p.job_type='youtube_replay_plan_v4' AND p.policy_version=?
+                 AND p.source_id=? AND v.channel_id=?
+                 AND json_extract(p.payload,'$.video_id')=v.video_id
+                 AND json_extract(p.payload,'$.channel_id')=v.channel_id""",
+            (payload.get('_whole_readiness_parent_job_id'), job['policy_version'], video, payload.get('channel_id')),
+        )
+    else:
+        rows = store.query('SELECT channel_id FROM youtube_videos WHERE video_id=?', (job['source_id'],))
+    if not rows:
+        raise HubError('SOURCE_FORWARDING_IDENTITY_REQUIRED', review=True)
+    return rows[0]['channel_id']
+
+
 def guard_job(settings, store, job):
     """Pause new processing/publication; never rewrite an existing job or receipt.
 
@@ -65,9 +95,5 @@ def guard_job(settings, store, job):
         if handle.lower() in pauses['x']:
             raise HubError('SOURCE_FORWARDING_PAUSED', review=True)
     if job['source_platform'] == 'youtube' and pauses['youtube'] and kind != 'replay_part_lookup_v5':
-        # Read-only metadata lookup; no model inference or substring matching.
-        rows = store.query('SELECT channel_id FROM youtube_videos WHERE video_id=?', (job['source_id'],))
-        if not rows:
-            raise HubError('SOURCE_FORWARDING_IDENTITY_REQUIRED', review=True)
-        if rows[0]['channel_id'] in pauses['youtube']:
+        if _replay_channel(store, job) in pauses['youtube']:
             raise HubError('SOURCE_FORWARDING_PAUSED', review=True)

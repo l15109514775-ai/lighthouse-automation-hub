@@ -1,0 +1,62 @@
+{
+  "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+  "candidate": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "original_source_sha256": "3ec8fca0cf158de20c438a65b9a88ef6b0011b1c7010869ab856990804b581ad",
+  "new_source_sha256": "663738abb2b0d6b807f7456e49a38f8417a10615b8581d49ffe9c89b21a25169",
+  "decisions": {
+    "active": {
+      "real_numbered_child": "SOURCE_FORWARDING_IDENTITY_REQUIRED",
+      "wrong_parent": "SOURCE_FORWARDING_IDENTITY_REQUIRED",
+      "paused_channel_direct_plan": "SOURCE_FORWARDING_PAUSED"
+    },
+    "patched_active": {
+      "real_numbered_child": "allowed",
+      "wrong_parent": "SOURCE_FORWARDING_IDENTITY_REQUIRED",
+      "paused_channel_direct_plan": "SOURCE_FORWARDING_PAUSED"
+    },
+    "patched_candidate": {
+      "real_numbered_child": "allowed",
+      "wrong_parent": "SOURCE_FORWARDING_IDENTITY_REQUIRED",
+      "paused_channel_direct_plan": "SOURCE_FORWARDING_PAUSED"
+    }
+  },
+  "snapshot_removed": true,
+  "network": "none",
+  "production_jobs_changed": false,
+  "production_service_restarted": false,
+  "source_id": "2lILwnrnKTE",
+  "offline_regression": {
+    "test_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+    "selected_tests": [
+      "tests/test_readiness_source_controls.py",
+      "tests/test_source_controls.py",
+      "tests/test_youtube_readiness_v4.py",
+      "tests/test_worker_type_isolation.py"
+    ],
+    "versioned_overlay_sha256": {
+      "services/hub/source_controls.py": "663738abb2b0d6b807f7456e49a38f8417a10615b8581d49ffe9c89b21a25169",
+      "tests/test_readiness_source_controls.py": "9d5fd8c305eeee6818be9bd26d184b8d847b523ab7899f40f9b91e8d1421ea2a"
+    },
+    "counts": {
+      "tests": 31,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "exit": 0,
+    "junit_sha256": "2fb1b4a6b8ea02525864af06d796c40dc2f84fc398c1f164039c4ea69ba5326a",
+    "network": "none"
+  },
+  "private_compose_rehearsal": {
+    "active_base_tests_passed": 16,
+    "junit_sha256": "b1cacb1d04c65aa5df4d7e8349468cd1adc78550d3862e45058449fb29589f3c",
+    "config_before_sha256": "046c22026f85009f3ea5441c663b8b8bf61bcc4a20c7777e01af59a4acf9b5c3",
+    "config_after_sha256": "dcf36ad016be9d38d943112133aec99731756e793b54178a8fad21a8a43dcaa9",
+    "revert_render_matches_deployment": true,
+    "changed_service": "replay-acquisition-worker",
+    "only_one_mount_source_changes": true,
+    "source_sha256": "663738abb2b0d6b807f7456e49a38f8417a10615b8581d49ffe9c89b21a25169"
+  },
+  "active_compose_changed": false,
+  "windows_tests_passed": 16
+}
