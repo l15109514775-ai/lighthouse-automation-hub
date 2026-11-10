@@ -214,6 +214,14 @@ across the two boots. The separate synthetic Compose run checked SIGKILL,
 exclusive locking, restart and stop-only rollback with the same archive.
 [Release qualification](releases/acquisition-readiness-release-qualification-20261111.json).
 
+The source-built base used by this archive has a separate Docker export of
+821,625,344 bytes. All ten filesystem layer hashes and sixteen OCI blobs
+were verified. Its SHA-256 is
+`a817bf338dc1fa5953ce1db124273bdbe659f0396bbac4a80af7a7f0d9a7fc57`.
+Keep the image export, private code archive and public binding manifest
+together for migration. Clean-store import of this specific base remains a
+separate check. [Candidate image export](releases/candidate-source-image-export-20261111.json).
+
 For an actual future promotion, retain the previous private Compose arguments,
 image and source-control files. Follow the existing acquisition deployment
 and rollback procedure at a quiescent task boundary. Omitting the candidate

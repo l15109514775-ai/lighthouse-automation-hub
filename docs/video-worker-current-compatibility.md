@@ -236,6 +236,30 @@ includes the corrected guard and the dispatcher used by the incumbent. The
 seven-module archive remains available for reproducing the preceding release.
 [Deployment and rollback instructions](portable-image-verification.md).
 
+### Incumbent repair and first real follow-up
+
+The staged readiness guard was activated on the incumbent acquisition service
+on November 11. Its image stayed at `0722adba...`; only this service was
+recreated. The eight peer container IDs matched. Both the live acquisition
+Compose declaration and its migration mirror use the corrected module. For
+this repair the before and after declarations, validation, and original/new
+container IDs are in the private `readiness-guard-stage-r66o5ek8` release
+directory. The previous module remains available. A configuration rollback
+restores the saved declaration to both locations at an idle video boundary,
+restarts the acquisition unit, and verifies health and the previous module
+hash. Database state continues forward through a code rollback.
+
+For the single held source, the operator verified the recorded post-live
+observation, original deadline, unchanged source identity, channel pause,
+zero provider calls from the rejected child, and absence of a prior media
+dispatch or publication. An audited transaction returned the original wait
+to the coordinator. It retained the failed numbered child, both attempt
+counts and the original observation limit. The normal server worker then
+completed observation 3, produced a plan for a 35,330-second replay and
+started the first media download. At this checkpoint bytes were arriving in
+the partial file. Download verification and publication require their own
+later receipts. [Incumbent activation and real download checkpoint](releases/incumbent-readiness-activation-20261111.json).
+
 ### Publication GUI test in the two runtime images
 
 `test_replay_part_handoff_gui_v5.py` opens an owned test page and exercises

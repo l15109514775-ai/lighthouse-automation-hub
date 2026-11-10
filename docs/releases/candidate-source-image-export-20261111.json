@@ -1,0 +1,18 @@
+{
+  "version": "qualified-acquisition-portable-image-v1",
+  "state": "archive_verified",
+  "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "archive_sha256": "a817bf338dc1fa5953ce1db124273bdbe659f0396bbac4a80af7a7f0d9a7fc57",
+  "archive_bytes": 821625344,
+  "architecture": "amd64",
+  "os": "linux",
+  "verified_oci_blobs": 16,
+  "private_artifact": true,
+  "fresh_public_build": true,
+  "services_changed": false,
+  "external_requests": 0,
+  "docker_load_tested": false,
+  "source_runtime_commit": "35e695e48bfbe656cb0ee434e3044b1880307fcf",
+  "completed_at": 1794352038.5308096,
+  "verified_layer_count": 10
+}

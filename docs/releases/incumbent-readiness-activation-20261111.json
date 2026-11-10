@@ -1,0 +1,88 @@
+{
+  "incumbent_activation": {
+    "at": 1794352113.236894,
+    "state": "incumbent_guard_active",
+    "original_id": "328a6731c9c687667519d1418012f7aac13b470e85212819c29f088530ca2175",
+    "new_id": "ee9afb145dd400626fc43f231075f4af6fa0ef94ccf051babe45097c5b2d9c6f",
+    "unchanged_peer_count": 8,
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "guard_sha256": "663738abb2b0d6b807f7456e49a38f8417a10615b8581d49ffe9c89b21a25169",
+    "held_rows_unchanged": true,
+    "db_written_by_deployer": false,
+    "source_candidate_activated": false
+  },
+  "recovery": {
+    "at": 1794352213.9361863,
+    "preflight": {
+      "state": "eligible",
+      "proof": {
+        "prior_error": "SOURCE_FORWARDING_IDENTITY_REQUIRED",
+        "source_id": "2lILwnrnKTE",
+        "child_id": "f477fe6d-f0f2-453c-8286-4f40eb0b46c0",
+        "wait_id": "1006c3fd-a6e2-486a-a4c5-260386273d3d",
+        "deadline": 1794428074.3794866,
+        "prior_record_sha256": "4479a28d9f2a0a02f85bc7a0e909bbfc3da8a36da11e07280b098d3226324758",
+        "old_child_attempts": 1,
+        "parent_attempts": 1,
+        "observations": 2,
+        "new_dispatches": 0
+      }
+    },
+    "result": {
+      "state": "waiting_readiness",
+      "proof": {
+        "prior_error": "SOURCE_FORWARDING_IDENTITY_REQUIRED",
+        "source_id": "2lILwnrnKTE",
+        "child_id": "f477fe6d-f0f2-453c-8286-4f40eb0b46c0",
+        "wait_id": "1006c3fd-a6e2-486a-a4c5-260386273d3d",
+        "deadline": 1794428074.3794866,
+        "prior_record_sha256": "4479a28d9f2a0a02f85bc7a0e909bbfc3da8a36da11e07280b098d3226324758",
+        "old_child_attempts": 1,
+        "parent_attempts": 1,
+        "observations": 2,
+        "new_dispatches": 0
+      },
+      "next_check": 1794352213.787381
+    },
+    "script_sha256": "e3ac2f11c8d234c913ac256cc7beb7300e73298189a2c4e8a712d1256402a713",
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414"
+  },
+  "operational_download_checkpoint": {
+    "at": 1794352325.5798426,
+    "fifo": "download_queued",
+    "reason": null,
+    "duration": 35330.0,
+    "free_disk_bytes": 47339528192,
+    "whole_budget": {
+      "disk_floor_bytes": 16106127360,
+      "download_merge_peak_bytes": 27710729784,
+      "merged_max_bytes": 13871364892,
+      "merged_split_peak_bytes": 13903364892,
+      "processing_required_free_bytes": 16138127360,
+      "required_free_bytes": 43816857144,
+      "required_working_bytes": 27710729784,
+      "segment_output_max_bytes": 0,
+      "source_tracks_bytes": 13807364892,
+      "split_required_free_bytes": 16138127360,
+      "workspace_overhead_bytes": 32000000
+    },
+    "dispatch_history": [
+      [
+        "2026-11-11",
+        2
+      ],
+      [
+        "2026-11-10",
+        1
+      ]
+    ],
+    "download": {
+      "state": "processing",
+      "stage": "youtube_whole_acquiring",
+      "error_code": null,
+      "attempts": 1
+    },
+    "download_job_id": "1b304e82-b872-4930-b2e4-f624792f0606",
+    "local_media_bytes_over_1mb": 49064974
+  }
+}
