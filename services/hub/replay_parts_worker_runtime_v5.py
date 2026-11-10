@@ -43,15 +43,20 @@ def fatal_diagnostic(role,error):
 
 
 class QueueView(AcquisitionQueue):
-    def __init__(self,store,*,publish_enabled=False,acquisition_enabled=False):
+    def __init__(self,store,*,publish_enabled=False,acquisition_enabled=False,publication_only=False):
         super().__init__(store,acquisition_enabled=acquisition_enabled)
         if type(publish_enabled) is not bool:raise ValueError('REPLAY_PART_QUEUE_MODE_INVALID')
         self.publish_enabled=publish_enabled
+        if type(publication_only) is not bool or publication_only and not publish_enabled:
+            raise ValueError('REPLAY_PART_QUEUE_MODE_INVALID')
+        self.publication_only=publication_only
 
     def _scope(self):
         original,args=super()._scope()
         if not self.publish_enabled:return original,args
         marks=','.join('?' for _ in PART_JOB_TYPES)
+        if self.publication_only:
+            return "source_platform='youtube' AND policy_version=? AND job_type IN ("+marks+')',(POLICY,*PART_JOB_TYPES)
         return '('+original+" OR (source_platform='youtube' AND policy_version=? AND job_type IN ("+marks+')))',(*args,POLICY,*PART_JOB_TYPES)
 
     def claim(self,queue,lease_seconds,max_attempts,*,job_types=None):
@@ -86,15 +91,15 @@ class QueueView(AcquisitionQueue):
 
 class Coordinator:
     def __init__(self,settings,store,*,mode='register_only'):
-        if mode not in ('register_only','acquisition_only','publish'):raise ValueError('REPLAY_PART_RUNTIME_MODE_INVALID')
+        if mode not in ('register_only','acquisition_only','publish','publication_only'):raise ValueError('REPLAY_PART_RUNTIME_MODE_INVALID')
         self.settings,self.store,self.mode=settings,store,mode
         self.base=AcquisitionCoordinator(settings,store,mode='register_only' if mode=='register_only' else 'acquisition_only')
         self.fifo=self.base.fifo;self.groups=ReplayPartGroupsV5(settings,store);self._publish_policy_sha=None
-        handlers=dict(self.base.worker.handlers)
-        if mode=='publish':
+        handlers={} if mode=='publication_only' else dict(self.base.worker.handlers)
+        if mode in ('publish','publication_only'):
             self.groups.initialize();self.require_publish_policy()
             for index,name in enumerate(PART_JOB_TYPES):handlers[name]=PartReplayWorkerHandler(settings,store,part_index=index).process
-        self.worker=Worker(settings,QueueView(store,publish_enabled=mode=='publish',acquisition_enabled=mode!='register_only'),handlers,
+        self.worker=Worker(settings,QueueView(store,publish_enabled=mode in ('publish','publication_only'),acquisition_enabled=mode!='register_only',publication_only=mode=='publication_only'),handlers,
             resource_deferrals=self.base.worker.resource_deferrals,readiness_deferrals=self.base.worker.readiness_deferrals)
 
     def require_publish_policy(self):
@@ -109,28 +114,29 @@ class Coordinator:
     def tick(self):
         from .locks import resource_guard
         planning=self.base.require_policy();self.groups.initialize()
-        if self.mode=='publish':self.require_publish_policy()
+        if self.mode in ('publish','publication_only'):self.require_publish_policy()
         with resource_guard(self.settings.root/'data/locks/replay-multipart-producer-v4'):
             steps={'groups':self.groups.sync_completed_groups(),'sync':self.fifo.sync_states(publication_projection=self.groups.fifo_projection),
                 'register':self.fifo.register_all_observed()}
             paused=self.store.query("SELECT paused FROM pipelines WHERE name='video'")[0]['paused']
             if not paused and self.mode!='register_only':
-                if self.mode=='publish':
+                if self.mode in ('publish','publication_only'):
                     from .replay_part_moderation_v5 import schedule_tick
                     steps['lookups']=schedule_tick(self.settings,self.store)
                     steps['publication']=self.groups.publication_tick(self.fifo)
-                steps['readiness']=self.base.readiness.tick()
-                steps['resources']=self.fifo.resource_tick(self.base.validators)
-                steps['plan']=self.fifo.enqueue_plan_tick(self.worker.handlers)
-                steps['download']=self.fifo.enqueue_download_tick(self.worker.handlers,planning)
+                if self.mode!='publication_only':
+                    steps['readiness']=self.base.readiness.tick()
+                    steps['resources']=self.fifo.resource_tick(self.base.validators)
+                    steps['plan']=self.fifo.enqueue_plan_tick(self.worker.handlers)
+                    steps['download']=self.fifo.enqueue_download_tick(self.worker.handlers,planning)
             self.store.beat('worker:video-producer-v4');self.store.beat('worker:video-producer-v5')
             if self.mode=='register_only':self.worker.store.beat('worker:video')
-            return {'version':VERSION,'mode':self.mode,'publisher_registered':self.mode=='publish','steps':steps,'external_requests':0}
+            return {'version':VERSION,'mode':self.mode,'publisher_registered':self.mode in ('publish','publication_only'),'steps':steps,'external_requests':0}
 
     def retention_tick(self):
         # This runs outside the producer thread: a current whole-file SHA may
         # take minutes and must not stop registration or its real heartbeat.
-        if self.mode!='publish':return {'state':'disabled','files_deleted':0,'external_requests':0}
+        if self.mode not in ('publish','publication_only'):return {'state':'disabled','files_deleted':0,'external_requests':0}
         if self.store.query("SELECT paused FROM pipelines WHERE name='video'")[0]['paused']:
             return {'state':'paused','files_deleted':0,'external_requests':0}
         from .replay_parts_retention_v5 import retention_tick
@@ -202,11 +208,12 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--once',action='store_true');parser.add_argument('--check',action='store_true')
     parser.add_argument('--role',choices=('main','moderation'),default='main')
     modes=parser.add_mutually_exclusive_group();modes.add_argument('--register-only',action='store_true');modes.add_argument('--acquisition-only',action='store_true');modes.add_argument('--publish',action='store_true')
+    modes.add_argument('--publication-only',action='store_true')
     args=parser.parse_args()
     if os.name!='posix' or os.getuid()!=10001:raise HubError('REPLAY_PART_APP_UID_REQUIRED',review=True)
     logging.basicConfig(level=logging.WARNING,format='%(levelname)s %(name)s')
     s=Settings.load();s.prepare();store=Store(s.db_path)
-    mode='publish' if args.publish else 'acquisition_only' if args.acquisition_only else 'register_only'
+    mode='publication_only' if args.publication_only else 'publish' if args.publish else 'acquisition_only' if args.acquisition_only else 'register_only'
     if args.role=='moderation':
         # Historical lookup neither requires nor grants current sending
         # permission. It needs no acquisition policy or YouTube API key.
@@ -218,19 +225,19 @@ def main():
     worker,coordinator=build_worker(s,store,mode=mode)
     if args.check:
         print(json.dumps({'version':VERSION,'mode':mode,'role':args.role,'handlers':sorted(worker.handlers),'external_requests':0}));return
-    if mode!='register_only':
+    if mode not in ('register_only','publication_only'):
         from .replay_worker_runtime import load_youtube_key
         if os.environ.get('YOUTUBE_API_KEY_FILE')!='/run/secrets/youtube-api-key':raise HubError('REPLAY_PART_KEY_FILE_REQUIRED',review=True)
         load_youtube_key('/run/secrets/youtube-api-key')
     stop=threading.Event();moderator=None;retention=None
-    if mode=='publish' and not args.once:
+    if mode in ('publish','publication_only') and not args.once:
         moderator=threading.Thread(target=moderation_loop,args=(s,store,stop),kwargs={'fatal':os._exit},name='replay-part-moderation-v5',daemon=True)
         moderator.start()
         retention=threading.Thread(target=retention_loop,args=(coordinator,stop),kwargs={'fatal':os._exit},name='replay-part-retention-v5',daemon=True)
         retention.start()
     try:
         run_loop(worker,coordinator,once=args.once,stop=stop)
-        if args.once and mode=='publish':retention_loop(coordinator,stop,once=True)
+        if args.once and mode in ('publish','publication_only'):retention_loop(coordinator,stop,once=True)
     finally:
         stop.set()
         if moderator is not None:moderator.join(timeout=5)

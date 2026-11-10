@@ -161,7 +161,7 @@ class Coordinator:
             result = {'version': VERSION, 'mode': self.mode, 'publisher_registered': False,
                 'publications': 0, 'external_requests': 0, 'steps': {}}
             operations = (
-                ('sync', self.fifo.sync_states),
+                ('sync', self.sync_states),
                 ('register', self.fifo.register_all_observed),
             )
             for name, operation in operations:
@@ -184,6 +184,16 @@ class Coordinator:
                 # not a fabricated processing-job lease or download heartbeat.
                 self.worker.store.beat('worker:video')
             return result
+
+    def sync_states(self):
+        # Existing V5 groups represent several ordinary publications. Applying
+        # V4's single-publication projection would incorrectly mark them unknown.
+        # Reuse only the read-only projection; do not register any publisher.
+        if self.store.query("SELECT 1 FROM sqlite_master WHERE type='table' AND name='replay_part_groups_v5'"):
+            from .replay_parts_v5 import ReplayPartGroupsV5
+            projection = ReplayPartGroupsV5(self.settings, self.store).fifo_projection
+            return self.fifo.sync_states(publication_projection=projection)
+        return self.fifo.sync_states()
 
     def idle_heartbeat(self):
         # Waiting behind another heavy worker is healthy; it grants no task lease.

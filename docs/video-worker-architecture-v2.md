@@ -83,8 +83,8 @@ authorization, and unknown publication results remain reconciliation-only.
 
 The production `video-worker` entry is V5 `--publish`, which historically registers
 both acquisition and publication. Do not run that combined entry beside the new
-service and call it a separated architecture. Keep it stopped until the explicitly
-separated publication mode has been qualified, or use only one acquisition owner.
+service and call it a separated architecture. Use the new explicit `--publication-only` mode after qualification, or use only
+one acquisition owner. The legacy combined mode remains for rollback.
 Production source overlays and retention qualifications are not represented by
 the public base Compose file. Targeted migration must preserve them.
 

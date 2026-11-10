@@ -200,7 +200,7 @@ class WholeReplayPlanner(WholeReplayDownloader):
         atomic_json(ticket,{'root':str(self.settings.root),'job_id':job['job_id'],'lease_owner':job['lease_owner'],'binding':binding});ticket.chmod(0o600)
         if output.exists():
             if output.is_symlink() or output.stat().st_size>262144:raise HubError('YOUTUBE_WHOLE_PLAN_RECEIPT_INVALID',review=True)
-            value=json.loads(output.read_bytes());valid=not value.get('error_code') and value.get('binding_sha256')==digest(binding)
+            value=engine.read_download_record(output,'YOUTUBE_WHOLE_PLAN_RECEIPT_INVALID');valid=not value.get('error_code') and value.get('binding_sha256')==digest(binding)
             if valid and 0<=datetime.now(timezone.utc).timestamp()-datetime.fromisoformat(value['source_plan']['source_plan_basis']['observed_at'].replace('Z','+00:00')).timestamp()<=300:return value
             atomic_json(area/('expired-or-failed-before-attempt-'+str(job['attempts'])+'.json'),value);output.unlink()
         return self._helper(job,binding,area,ticket,output,check)

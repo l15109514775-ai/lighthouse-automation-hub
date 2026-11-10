@@ -63,6 +63,10 @@ def advance(f,monkeypatch,seconds=901):
     f.clock[0]+=seconds
     import services.hub.db as database
     monkeypatch.setattr(database,'time',SimpleNamespace(time=lambda:f.clock[0]))
+    # QueueView issues leases too; all issuance and fencing must share the same
+    # simulated clock. Previously finish() did not reject already-expired leases.
+    import services.hub.replay_multipart_worker_runtime_v4 as runtime
+    monkeypatch.setattr(runtime,'time',SimpleNamespace(time=lambda:f.clock[0]))
 
 
 def test_proven_post_live_moves_parent_to_persistent24h_wait_without_burning_parent_attempts(readiness):

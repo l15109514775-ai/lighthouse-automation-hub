@@ -5,8 +5,16 @@ import unicodedata
 from .db import encode
 
 
-def sha256_file(path):
+def sha256_file(path, *, check=None):
     with open(path, 'rb') as stream:
+        if check is not None:
+            digest = hashlib.sha256()
+            while True:
+                check()
+                chunk = stream.read(4 * 1024 * 1024)
+                if not chunk:
+                    return digest.hexdigest()
+                digest.update(chunk)
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 

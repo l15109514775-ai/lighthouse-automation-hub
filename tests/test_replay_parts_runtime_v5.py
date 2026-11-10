@@ -58,6 +58,33 @@ def test_fixed_32_handlers_and_wait_callbacks_preserve_old_acquisition_scope(pub
     assert result['external_requests']==0 and not f.db.query('SELECT * FROM publications')
 
 
+def test_publication_only_does_not_admit_claim_or_recover_acquisition(publisher):
+    f=publisher
+    worker,coordinator=build_worker(f.s,f.db,mode='publication_only')
+    assert set(worker.handlers)==set(PART_JOB_TYPES)
+    orphan=f.db.enqueue('youtube','owned-extra-plan',PLAN_JOB,'video',{},'replay-fifo-v4')
+    f.db.claim('video',60,4,job_types=(PLAN_JOB,))
+    before=f.db.get(orphan)
+    with _recovery_lock(_RecoveryPath(f.db.path).parent/'locks/video'):
+        assert worker.store.recover('video',4,all_processing=True)==0
+    assert f.db.get(orphan)==before
+    result=coordinator.tick()
+    assert not {'plan','download','readiness','resources'} & set(result['steps'])
+    assert set(worker.handlers)==set(PART_JOB_TYPES)
+
+
+def test_acquisition_projection_preserves_v5_publication_group(publisher):
+    from services.hub.replay_multipart_worker_runtime_v4 import build_worker as build_acquisition
+    f=publisher;create(f)
+    before=f.db.query('SELECT * FROM publications')
+    worker,coordinator=build_acquisition(f.s,f.db,mode='acquisition_only')
+    coordinator.tick()
+    candidate=f.db.query('SELECT * FROM replay_fifo_v4')[0]
+    assert candidate['state']=='publication_queued' and candidate['publication_job_id']==f.parent
+    assert not set(worker.handlers)&set(PART_JOB_TYPES)
+    assert f.db.query('SELECT * FROM publications')==before
+
+
 def test_registered_group_is_not_reinterpreted_by_legacy_sourcewide_single_pub_rule(publisher):
     f=publisher;create(f);job,binding,state=f.publish.snapshot(f.child)
     # The true protected primitive is tested here independently of the native

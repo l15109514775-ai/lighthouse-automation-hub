@@ -3,7 +3,9 @@ import json
 import sqlite3
 import threading
 import time
-from .errors import HubError, PublishUnknown, ResourceDeferred, YouTubeReadinessDeferred
+import errno
+import logging
+from .errors import HubError, PublishUnknown, ResourceDeferred, YouTubeReadinessDeferred, LeaseLost
 from .locks import exclusive
 from .outcomes import JobOutcome
 
@@ -33,13 +35,18 @@ class Worker:
         if current and current['state']=='processing' and current['lease_owner']==job.get('lease_owner'):
             self.store.finish(job,state,code=code,result=current['result'],stage=current['stage'])
 
-    def _heartbeat(self, job, stop):
-        while not stop.wait(min(30, self.settings.config['lease_seconds'] / 3)):
-            if not self.store.heartbeat(job, self.settings.config['lease_seconds']):
-                return
-            # A long download is live work even while once() has not returned.
-            # Never advertise this worker after a failed lease renewal.
-            self.store.beat('worker:' + job['queue'])
+    def _heartbeat(self, job, stop, lost=None):
+        try:
+            while not stop.wait(min(30, self.settings.config['lease_seconds'] / 3)):
+                if not self.store.heartbeat(job, self.settings.config['lease_seconds']):
+                    raise LeaseLost()
+                self.store.beat('worker:' + job['queue'])
+        except Exception:
+            # Fail closed on failed renewal, including SQLite errors. Do not
+            # print exception values or allow a returned handler to commit.
+            if lost is not None:
+                lost.set()
+            logging.getLogger(__name__).error('WORKER_LEASE_RENEWAL_FAILED')
 
     def _defer_resource_busy(self, job):
         """Waiting for an unacquired OS resource is not an external attempt.
@@ -93,12 +100,15 @@ class Worker:
                 if not job:
                     return False
                 stop = threading.Event()
-                heartbeat = threading.Thread(target=self._heartbeat, args=(job, stop), daemon=True)
+                lost = threading.Event()
+                heartbeat = threading.Thread(target=self._heartbeat, args=(job, stop, lost), daemon=True)
                 heartbeat.start()
                 try:
                     if job['job_type'] not in self.handlers:
                         raise HubError('JOB_TYPE_UNSUPPORTED', review=True)
                     result = self.handlers[job['job_type']](job)
+                    if lost.is_set():
+                        raise LeaseLost()
                     if isinstance(result,JobOutcome):
                         if result.state not in ('completed','awaiting_moderation','upload_pending','failed'):
                             raise HubError('INVALID_HANDLER_OUTCOME',review=True)
@@ -106,9 +116,17 @@ class Worker:
                                           code=result.error_code,stage='done' if result.state=='completed' else 'published_pending')
                     else:
                         self.store.finish(job, 'completed', result=result, stage='done')
+                except LeaseLost:
+                    raise
+                except sqlite3.Error:
+                    raise
                 except PublishUnknown as exc:
+                    if lost.is_set():
+                        raise LeaseLost()
                     self.store.finish(job, 'publish_unknown', code=exc.code)
                 except HubError as exc:
+                    if lost.is_set():
+                        raise LeaseLost()
                     if isinstance(exc,ResourceDeferred) and job['job_type'] in self.resource_deferrals:
                         self._resource_deferred(job,exc)
                     elif isinstance(exc,YouTubeReadinessDeferred) and job['job_type'] in self.readiness_deferrals:
@@ -129,8 +147,14 @@ class Worker:
                             state = 'failed'
                         delay = max(exc.retry_after, min(3600, 15 * 2 ** (job['attempts'] - 1)) + random.random() * 5)
                         self.store.finish(job, state, code=exc.code, delay=delay)
-                except Exception:
+                except Exception as exc:
                     # Exception strings can contain keys, provider bodies or signed URLs.
+                    if lost.is_set():
+                        raise LeaseLost()
+                    if isinstance(exc, OSError) and exc.errno in (errno.ENOSPC, errno.EDQUOT, errno.EROFS, errno.EACCES, errno.EPERM):
+                        code = 'DISK_LOW' if exc.errno in (errno.ENOSPC, errno.EDQUOT) else 'FILESYSTEM_NOT_WRITABLE'
+                        self.store.finish(job, 'awaiting_review', code=code)
+                        return True
                     retry = job['attempts'] < cfg['max_attempts'] and job['job_type'] in RETRYABLE_UNEXPECTED
                     if retry:
                         delay = min(3600, 15 * 2 ** (job['attempts'] - 1)) + random.random() * 5
@@ -141,11 +165,18 @@ class Worker:
                     stop.set()
                     heartbeat.join(timeout=2)
                 return True
-        except OSError:
-            # Another worker owns this queue; never recover or run its in-flight work.
+        except LeaseLost:
+            logging.getLogger(__name__).error('WORKER_LEASE_LOST')
             return False
-        except sqlite3.OperationalError:
-            # A transient database lock is not a job failure; try the queue later.
+        except OSError as exc:
+            # Another worker owns this queue; never recover or run its in-flight work.
+            if exc.errno not in (errno.EACCES, errno.EAGAIN):
+                logging.getLogger(__name__).error('WORKER_LOCK_IO_ERROR')
+            return False
+        except sqlite3.Error as exc:
+            code = getattr(exc, 'sqlite_errorcode', 0)
+            label = 'SQLITE_BUSY' if code & 255 in (sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED) else 'SQLITE_UNAVAILABLE'
+            logging.getLogger(__name__).error(label)
             return False
 
     def run(self, queue):

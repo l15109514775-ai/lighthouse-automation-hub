@@ -1,3 +1,33 @@
+import re
+
+
+class LeaseLost(RuntimeError):
+    def __init__(self):
+        super().__init__('LEASE_LOST')
+
+
+def stable_error_code(code):
+    if code is None:
+        return None
+    return code if isinstance(code, str) and re.fullmatch(r'[A-Z][A-Z0-9_]{0,127}', code) else 'ERROR_CODE_INVALID'
+
+
+def error_category(code):
+    """Operational taxonomy; existing codes/states remain the durable contract."""
+    code = stable_error_code(code) or ''
+    categories = (
+        ('database', ('SQLITE', 'DATABASE')),
+        ('disk_resource', ('DISK_', 'WAITING_RESOURCE', 'HEAVY_RESOURCE_BUSY')),
+        ('authorization', ('AUTH_EXPIRED', 'SESSION_', 'AUTHORIZATION')),
+        ('platform_restriction', ('ACCESS_RESTRICTED', 'RATE_LIMIT', 'CAPTCHA', 'REGION', 'DRM', 'BOT_', 'FORBIDDEN')),
+        ('identity', ('BINDING_', 'IDENTITY_', 'SOURCE_CHANGED', 'INPUT_CHANGED', 'LEASE_', 'INVENTORY_CHANGED')),
+        ('integrity', ('RECEIPT_', 'PROBE_', 'FFPROBE', 'PACKET_', 'HASH_', 'CORRUPT', 'TRUNCAT', 'QUALITY_')),
+        ('configuration', ('CONFIG', 'POLICY_', 'RUNTIME_UNAVAILABLE', 'WORKSPACE_', 'PERMISSION', 'NOT_WRITABLE')),
+        ('network', ('NETWORK_', 'TIMEOUT', 'HELPER_INTERRUPTED')),
+    )
+    return next((category for category, fragments in categories if any(f in code for f in fragments)), 'internal')
+
+
 class HubError(Exception):
     def __init__(self, code, *, retryable=False, review=False, retry_after=0):
         super().__init__(code)
@@ -5,6 +35,10 @@ class HubError(Exception):
         self.retryable = retryable
         self.review = review
         self.retry_after = retry_after
+
+    @property
+    def category(self):
+        return error_category(self.code)
 
 
 class ResourceDeferred(HubError):

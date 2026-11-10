@@ -359,6 +359,38 @@ def probe_track(file,kind,check):
     except (ValueError,KeyError,TypeError):raise HubError('YOUTUBE_HIGHEST_PROBE_INVALID',review=True) from None
 
 
+def read_download_record(path, code):
+    """Bounded local checkpoint read; malformed evidence never becomes a retry."""
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError()
+            result[key] = value
+        return result
+    try:
+        if path.is_symlink():
+            raise ValueError()
+        fd = os.open(path, os.O_RDONLY | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_BINARY', 0))
+        try:
+            before = os.fstat(fd)
+            if not stat.S_ISREG(before.st_mode) or not 0 < before.st_size <= 262144:
+                raise ValueError()
+            data = os.read(fd, 262145)
+            after = os.fstat(fd)
+            if len(data) != before.st_size or any(getattr(before, k) != getattr(after, k)
+                    for k in ('st_size', 'st_mtime_ns', 'st_ctime_ns')):
+                raise ValueError()
+        finally:
+            os.close(fd)
+        value = json.loads(data, object_pairs_hook=unique)
+        if not isinstance(value, dict):
+            raise ValueError()
+        return value
+    except (ValueError, UnicodeError, OSError):
+        raise HubError(code, review=True) from None
+
+
 class HighestReplayDownloader:
     VERSION=VERSION
     CHILD_MODULE='adapters.ytdlp_highest_v2'
@@ -383,11 +415,11 @@ class HighestReplayDownloader:
         receipt_file=folder/'verified.json'
         if receipt_file.exists():
             if receipt_file.is_symlink() or receipt_file.stat().st_size>262144:raise HubError('YOUTUBE_HIGHEST_RECEIPT_INVALID',review=True)
-            receipt=json.loads(receipt_file.read_bytes())
+            receipt=read_download_record(receipt_file,'YOUTUBE_HIGHEST_RECEIPT_INVALID')
             asset=receipt.get('source_asset',{});file=Path(asset.get('file',''))
             if (receipt.get('version')!=self.VERSION or receipt.get('binding_sha256')!=digest(binding) or
                     file!=folder/'original.mp4' or not file.is_file() or file.is_symlink() or
-                    file.stat().st_size!=asset.get('bytes') or sha256_file(file)!=asset.get('sha256')):
+                    file.stat().st_size!=asset.get('bytes') or sha256_file(file,check=check)!=asset.get('sha256')):
                 raise HubError('YOUTUBE_HIGHEST_RESUME_BINDING_CHANGED',review=True)
             check();return receipt
         ticket=folder/'ticket.json';output=folder/'download-result.json'
@@ -395,7 +427,7 @@ class HighestReplayDownloader:
         result=None
         if output.exists():
             if output.is_symlink() or output.stat().st_size>262144:raise HubError('YOUTUBE_HIGHEST_RESULT_INVALID',review=True)
-            previous=json.loads(output.read_bytes())
+            previous=read_download_record(output,'YOUTUBE_HIGHEST_RESULT_INVALID')
             if not previous.get('error_code') and previous.get('binding_sha256')==digest(binding):result=previous
             else:
                 atomic_json(folder/('failure-before-attempt-'+str(job['attempts'])+'.json'),previous);output.unlink()
@@ -417,7 +449,7 @@ class HighestReplayDownloader:
             check()
             if output.is_symlink() or not output.is_file() or output.stat().st_size>262144:
                 raise HubError('YOUTUBE_HIGHEST_HELPER_INTERRUPTED',retryable=True)
-            result=json.loads(output.read_bytes())
+            result=read_download_record(output,'YOUTUBE_HIGHEST_RESULT_INVALID')
             if process.returncode or result.get('error_code'):
                 raise HubError(result.get('error_code','YOUTUBE_HIGHEST_DOWNLOAD_FAILED'),retryable=result.get('retryable') is True,
                     review=result.get('review') is True)
@@ -474,7 +506,7 @@ class HighestReplayDownloader:
             for file,track in zip(sources,tracks):
                 if file.stat().st_size!=track['bytes'] or sha256_file(file)!=track['sha256']:
                     raise HubError('YOUTUBE_HIGHEST_TRACK_CHANGED',review=True)
-            digest_file=sha256_file(merged);verify_check()
+            digest_file=sha256_file(merged,check=verify_check);verify_check()
             if final.exists():
                 if final.stat().st_size!=details['bytes'] or sha256_file(final)!=digest_file:
                     raise HubError('YOUTUBE_HIGHEST_EXISTING_OUTPUT_CONFLICT',review=True)

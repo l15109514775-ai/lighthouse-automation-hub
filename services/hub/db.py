@@ -5,6 +5,7 @@ import sqlite3
 import time
 import uuid
 from .job_scope import job_type_filter
+from .errors import LeaseLost, stable_error_code
 
 
 def encode(value):
@@ -90,29 +91,31 @@ class Store:
         return self.get(row['job_id'])
 
     def heartbeat(self, job, lease_seconds):
+        now = time.time()
         with self.transaction() as db:
             return db.execute('''UPDATE jobs SET lease_until=?,updated_at=? WHERE job_id=?
-                 AND state='processing' AND lease_owner=?''',
-                (time.time() + lease_seconds, time.time(), job['job_id'], job['lease_owner'])).rowcount == 1
+                 AND state='processing' AND lease_owner=? AND lease_until>? AND attempts=?''',
+                (now + lease_seconds, now, job['job_id'], job['lease_owner'], now, job['attempts'])).rowcount == 1
 
     def finish(self, job, state, *, code=None, result=None, stage=None, delay=0, external_id=None):
+        code = stable_error_code(code)
         with self.transaction() as db:
             changed = db.execute('''UPDATE jobs SET state=?,error_code=?,result=?,stage=?,next_run=?,
                 external_publish_id=COALESCE(?,external_publish_id),updated_at=?,lease_owner=NULL,lease_until=NULL
-                WHERE job_id=? AND state='processing' AND lease_owner=?''',
+                WHERE job_id=? AND state='processing' AND lease_owner=? AND lease_until>? AND attempts=?''',
                 (state, code, encode(result if result is not None else job['result']), stage or job['stage'],
-                 time.time() + delay, external_id, time.time(), job['job_id'], job['lease_owner'])).rowcount
+                 time.time() + delay, external_id, time.time(), job['job_id'], job['lease_owner'], time.time(), job['attempts'])).rowcount
             if changed != 1:
-                raise RuntimeError('LEASE_LOST')
+                raise LeaseLost()
             if state in ('failed', 'awaiting_review', 'publish_unknown', 'auth_expired'):
                 event = {'failed': 'task.failed', 'auth_expired': 'auth.expired'}.get(state, 'review.required')
                 self._event(db, event, {'job_id': job['job_id'], 'code': code, 'queue': job['queue']})
 
     def checkpoint(self, job, stage, result):
         with self.transaction() as db:
-            if db.execute('UPDATE jobs SET stage=?,result=?,updated_at=? WHERE job_id=? AND state=? AND lease_owner=?',
-                          (stage, encode(result), time.time(), job['job_id'], 'processing', job['lease_owner'])).rowcount != 1:
-                raise RuntimeError('LEASE_LOST')
+            if db.execute('UPDATE jobs SET stage=?,result=?,updated_at=? WHERE job_id=? AND state=? AND lease_owner=? AND lease_until>? AND attempts=?',
+                          (stage, encode(result), time.time(), job['job_id'], 'processing', job['lease_owner'], time.time(), job['attempts'])).rowcount != 1:
+                raise LeaseLost()
         job['stage'], job['result'] = stage, result
 
     def recover(self, queue, max_attempts, *, all_processing=False, job_types=None):

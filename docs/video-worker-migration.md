@@ -52,3 +52,33 @@ runtime image overlays ONLY this refactor's worker modules on the verified
 existing image; no retirement/authorization protection was disabled. Full
 public-source image is kept solely for offline tests which instantiate temporary
 Settings. Production containers and live database are unchanged.
+
+
+## Phase 3 — lifecycle and file delivery
+
+Added expired-lease/attempt fencing to heartbeat, checkpoint and finish; failed
+renewal no longer advertises worker health or permits completion. Stable error
+classification distinguishes database, disk, authorization, platform restriction,
+identity, integrity, configuration, network and internal errors; arbitrary error
+strings are rejected before persistence. No historical state/code is bulk changed.
+
+Malformed, oversized, duplicate-key or symlink verification records now stop for
+review. Whole-file hashing can check lease/policy/disk between chunks. Original
+packet/quality checks and receipt formats remain. Existing partials are retained.
+
+Added explicit V5 --publication-only mode. The legacy --publish combined mode is
+unchanged. Independent V4 uses V5's existing read-only FIFO projection when group
+tables exist, preventing false single-publication reconciliation holds. It does
+not register publishing handlers or aggregate/submit groups.
+
+Validation: targeted local suite 125 passed, 2 Linux-only tests skipped. This
+includes actual synthetic FFmpeg media, crash after download-result and after
+verified.json, recovery without a second download-helper call, SQLite write-lock
+contention, corrupt receipt, failed renewal and scoped publication behavior.
+Linux SIGKILL/WAL and full-suite acceptance remain Phase 4. A simulated-clock
+fixture now advances QueueView and Store together, so expired-lease enforcement
+is tested against one consistent clock.
+
+The vendored upstream lock requires CRLF for files whose Git blobs may use LF;
+materialization retains those original verified bytes. Its working tree can show
+newline-only changes; no upstream source commit or lock checksum was changed.
