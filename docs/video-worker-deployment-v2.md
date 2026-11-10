@@ -1,3 +1,7 @@
+## Latest deployment checkpoint — 2026-11-10
+
+New-host production cutover and actual whole-host reboot passed. Eight containers, including isolated Download Worker 2.0, are running; health/readiness return 200. All 1,324 historical video job rows were preserved. Shanghai ingestion and dot status now reach the new host. Full goal acceptance is still open: new-host complete backup/restore, final regression/reproducibility audit and reverse-migration documentation. See [detailed evidence and limits](video-worker-acceptance-v2.md#2026-11-10-production-cutover-and-whole-host-reboot).
+
 # Download Worker 2.0: controlled deployment and rollback
 
 ## Release gate (2026-11-10)

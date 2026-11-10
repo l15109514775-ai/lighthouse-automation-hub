@@ -1,3 +1,5 @@
+> Current status, 2026-11-10 13:00 UTC: the new host is the sole active production owner; actual reboot, independent acquisition health and dot connectivity passed. Earlier preparation notes below are historical. See [current acceptance](video-worker-acceptance-v2.md#2026-11-10-production-cutover-and-whole-host-reboot) for evidence and remaining backup/reproducibility work. Never start the fenced old host with its stale database.
+
 # New-server download acceptance scope
 
 Owner decision, 2026-11-10: the forthcoming server migration targets **new

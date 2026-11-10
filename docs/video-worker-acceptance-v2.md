@@ -466,3 +466,92 @@ sample. It does not prove production cutover, a new whole-host reboot with live
 production, or every long/segmented input. Synthetic segmentation/fault evidence
 remains distinct. Production still belongs to the original host, pending final
 synchronization, caller routing, configuration deployment and single-owner checks.
+
+## 2026-11-10 production cutover and whole-host reboot
+
+The new host is now the sole production owner. The old host remains accessible
+for recovery, but its application containers are stopped, Docker restart
+policies set to `no`, Lighthouse timers/services disabled, and subtitle cron
+entries fenced with their exact originals preserved. A fresh post-cutover SSH
+check confirmed that fence. Do not restart the old stack against its stale DB.
+
+The final stopped-source SQLite snapshot contained **21,372 jobs and 59 tables**,
+SHA-256 `c22b6703819249b8db925f7d329b9a1d672857320abc2ce678135782195eedfb`.
+Final rsync transferred 182,975,527 bytes in 727 files with no deletion. The
+snapshot hash and every original table's count/sorted-row hash matched after
+copy and additive migration 018. The four reviewed policies, dedicated API
+Secret, corrected ingest boundary and owner-authenticated Bilibili profile were
+installed after the delta. No human-review fields were fabricated.
+
+An actual reboot changed boot ID from
+`9a5124ec-8ccf-403f-b4bb-816e1d7b85c6` to
+`29ae7770-338a-4f01-b381-b66bb408020b`. Eight containers started automatically:
+API, scheduler, tweet worker, system worker, subtitle ingest, observer MCP,
+observer tunnel and the independent replay acquisition worker. The old ordinary
+video worker and subtitle runner remain stopped. Acquisition uses immutable
+image `sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414`,
+UID/GID 10001, read-only root filesystem, 1.5 CPU, 1400 MiB memory and no public
+port. Its instance-bound producer and main heartbeat probe returned zero and
+Docker health is healthy. Both `/health` and `/ready` returned HTTP 200.
+
+Post-boot read-only comparison found **all 1,324 historical video job rows
+unchanged, across all job columns**. Publication row count stayed 92; no synthetic
+publication was submitted. At 12:58 UTC the new host had completed four normal
+`x_discovery` and fifteen maintenance jobs without new errors. This does not
+claim a new production tweet publication or a naturally arriving new replay has
+already completed. The separate authorized real download and SIGKILL recovery
+evidence above remains the real acquisition acceptance.
+
+The Shanghai subtitle caller was paused only when no fetch subprocess existed,
+then atomically changed to the new host after an authenticated HTTP boundary
+check. Its original fetch file and service state were preserved. TAT invocation
+`inv-0b12fagf23` confirmed `migrated_and_resumed`, active/enabled polling and the
+expected HTTP 400 for deliberately missing job headers. No synthetic subtitle
+job was submitted. The existing dot plugin returned a current `ready` snapshot
+through the migrated tunnel, including the healthy acquisition container, with
+zero provider requests. The temporary cross-host export key has been revoked;
+ordinary operations SSH was rechecked successfully.
+
+### Migration faults found and resolved
+
+- Docker `top -eo comm` omitted the PID column required by Docker; adding
+  `pid,comm` fixed the idle-receiver check before stopping any target service.
+- A broad database filename glob also matched two historical backup copies.
+  The promotion guard stopped, the inert partial move was restored, and the
+  script was restricted to `hub.sqlite3`, `-wal`, and `-shm`. Those historical
+  backup copies were not modified. Failed-attempt evidence is preserved.
+- Final rsync restored `tweet-runtime-v4.toml` to root:root 0640, which the source
+  process had already cached but the new API could not read. Only its group was
+  changed to 10001, retaining contents and mode; future promotion does this too.
+- The observer's original `OpenStdin=true` had been omitted in Compose and its
+  process exited on EOF. `stdin_open: true` restores the required behavior. The
+  runtime generator now preserves stdin, tty and supplemental groups. Docker's
+  legacy `StdinOnce` has no direct Compose field; this difference is recorded,
+  not asserted identical. A real dot query verified the migrated transport.
+
+### Explicit limits and remaining acceptance
+
+- Daily backup is active/enabled, next scheduled for **2026-11-11 03:30 Asia/Shanghai**.
+  The last full verified backup displayed by dot still predates migration.
+  New-host HEAD/GET and a tiny PUT/GET canary passed earlier; they are not a
+  full archive restoration. New-host full backup/restore evidence is outstanding.
+- The previously failed incremental-watch service and legacy replay-reconcile
+  timer were not revived. Historical errors remain in the database/status.
+- Four preactivation rollback plan tests passed on Windows and in a real
+  network-disabled, read-only Linux container. This is not an executed production
+  rollback. Since the target now has new writes, reverse migration must preserve
+  the target's current DB, media and publication records. The preactivation
+  `restore_fenced_source.py` path is no longer applicable.
+- Runtime artifacts use a pinned captured base plus hash-checked changes and
+  separately exported locked source. This is not a claim that the entire
+  historical production stack has been freshly rebuilt from the public repo.
+- No new clean full-suite run is claimed. Earlier targeted test results,
+  intentionally retired compatibility failures and their scope remain recorded.
+  Final goal-wide regression/reproducibility audit and reverse-migration
+  documentation remain open; migration success alone does not close the goal.
+
+Evidence on the new host: `/var/lib/lighthouse-migration/final-promotion.json`,
+`final-database-fingerprints.json`, `production-reboot-before.json`,
+`production-reboot-after.json`, `production-release-verification.json`,
+`core-compatibility-fix/report.json` and `rollback-plan-tests/report.json`.
+Local copies are under `work/zhiyin-migration-20261110/evidence-*`.
