@@ -11,9 +11,14 @@ SIGKILL/resume, current-image Docker restart and stop-only rollback acceptance.
 Both naturally discovered Chise downloads have now completed. Source
 `_nadmR0WzqI` also completed upload, submission and public verification as
 [`BV12iWG6zEP7`](https://www.bilibili.com/video/BV12iWG6zEP7); its child, parent
-and FIFO records completed automatically. Source `lWzXr6h0SyM` is in a bounded
-large-file upload recovery, not completed publication. The actual Bilibili editor
-showed 725.4/10695.1 MB (7%) at epoch 1794337770. This is transfer evidence only.
+and FIFO records completed automatically. Source `lWzXr6h0SyM` completed its
+11,214,658,526-byte native upload and whole-file coverage check in the bounded
+recovery attempt. It is now held at `replay_part_uploaded`: metadata and cover
+readback passed, but after the save click the page redirected to the draft manager
+and the toast-only prepare confirmation did not produce its receipt. There is no
+public-submit intent or publication row. Exact draft identity and safe continuation
+remain outstanding; no upload retry is authorized by this failure. See the
+[uploaded/draft-save checkpoint](releases/large-draft-save-checkpoint-20261111.json).
 See the [public result](releases/chise-public-verification-20261111.json) and
 [recovery preflight](releases/publication-cover-rebind-20261111.json).
 
@@ -21,7 +26,7 @@ Nine containers run, including the independent acquisition and publication
 workers. The owner-requested Yuuhi pause remains active. The earlier core discovery
 configuration gap was corrected and its normal official monitor produced these
 two tasks. The parent of the large upload still retains the earlier review/error
-projection while its child is processing; that parent display is not permission
+projection while its child is held at uploaded; that parent display is not permission
 to create a replacement task or clear the historical error.
 
 Maintenance now persists independent official-discovery health and alerts on a

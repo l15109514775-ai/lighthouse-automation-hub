@@ -1,0 +1,66 @@
+{
+  "schema": "lighthouse-uploaded-draft-save-checkpoint-v1",
+  "at": 1794340674.3779469,
+  "job_id": "82a818a5-6ac2-44e6-adbd-88a3a279e0f8",
+  "native_attempt_id": "341aec7a-8f2e-484e-8e4a-d8b49f824ff7",
+  "source_id": "lWzXr6h0SyM",
+  "job_state": "awaiting_review",
+  "stage": "replay_part_uploaded",
+  "attempts": 4,
+  "upload_complete_verified": true,
+  "uploaded_bytes": 11214658526,
+  "uploaded_artifact_sha256": "ecc68874452d9b6e7c2fe0028fb2f6f312d6679b2d0d1d7f30f80c9c772bd420",
+  "server_file_hash_verified": false,
+  "metadata_verified_before_save": true,
+  "cover_applied_before_save": true,
+  "error": {
+    "action": "prepare",
+    "error_code": "REPLAY_BROWSER_NATIVE_OPERATION_FAILED",
+    "publication_result_unknown": false,
+    "video_selection_attempted_in_session": true
+  },
+  "post_save_page": "native draft manager",
+  "native_preparation_receipt_exists": false,
+  "native_draft_id_confirmed": false,
+  "public_submit_intent_exists": false,
+  "publications": [],
+  "intent_sha256": {
+    "video-selection.json": "24da739f6840d269671d31349f7cae6820884ec8eca15e80d01f6be94b78f211",
+    "cover-completion.json": "d58bef9528402b11662162cdf764cdbc066134890cf93637e1bc8d92c7cbbf3e",
+    "private-draft-save.json": "91aa08cd772a4de24600ddb5b91e9377f11310d47d80741ed0c7a16b85177b13"
+  },
+  "evidence": {
+    "upload-coverage.json": {
+      "bytes": 1779,
+      "sha256": "65acd28c9742f3ed56582f779d5794fd21bd04dae663f3e55e5e07c3303754f5"
+    },
+    "upload-observation.json": {
+      "bytes": 1738,
+      "sha256": "e52d6dad1d13a697695f238c5138f1779dc917a2314196e61c247238392962af"
+    },
+    "metadata-v5-readback.json": {
+      "bytes": 1220,
+      "sha256": "283675ba18e8c71c0c4a3add8675bbc16b1897b64a68ad56319b24d2da0bfad9"
+    },
+    "native-preparation-observation.json": {
+      "bytes": 2581,
+      "sha256": "2866c7b3abb5cd7150f30d44ac630e842bf84245298c4982f16b7ae97b910cb0"
+    },
+    "error-prepare-inventory.json": {
+      "bytes": 7943,
+      "sha256": "318e3440717075472e70afb1b9067b136937ae6f15f20f873f9e85f02da9a85f"
+    },
+    "last-error.json": {
+      "bytes": 171,
+      "sha256": "03e699c359ee7760d9a1b16a3139ef7db95805c82ba9616ad231986c7e907be3"
+    },
+    "pre-submit.png": {
+      "bytes": 320894,
+      "sha256": "f904d1e2d5e0db8524c2625c7b7c7bd087581171f4f8c6cc56927a91997e52d7"
+    }
+  },
+  "diagnosis": "After the private draft-save click, the page navigated to the native draft manager. The existing prepare code waits only for a transient saved toast and did not commit its preparation receipt. Exact saved-draft identity still requires read-only reconciliation.",
+  "requeued": false,
+  "upload_repeated": false,
+  "goal_complete": false
+}

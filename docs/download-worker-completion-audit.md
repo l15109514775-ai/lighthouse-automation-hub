@@ -134,6 +134,22 @@ Detailed sources: [acceptance history](video-worker-acceptance-v2.md),
    [bridge compatibility](releases/publication-owner-bridge-20261111.json).
    Preserve completed media until the existing publication and
    retention gates succeed; do not treat a healthy publisher as upload acceptance.
+   **Subsequent large-file upload completed, preparation held:** the native editor
+   showed upload complete, and the persisted coverage re-read verified all
+   11,214,658,526 bytes with SHA-256
+   `ecc68874452d9b6e7c2fe0028fb2f6f312d6679b2d0d1d7f30f80c9c772bd420`.
+   Metadata readback and cover application succeeded; the pre-submit screenshot
+   is preserved and reviewed. At the private save boundary the browser navigated
+   to the native draft manager, displaying a matching title candidate, while the
+   existing code waited for the old transient toast. No `native-preparation.json`
+   was committed. The current phase is uploaded/awaiting_review, with the same
+   native attempt and count four, no publication row or public-submit intent.
+   Do not delete the three consumed private intents or retry upload. Exact draft
+   identity needs fresh read-only reconciliation before bounded continuation.
+   The actual part session also has a 300-second prepare budget; account for the
+   observed repeated full-file checks when qualifying the correction, rather than
+   assuming every long-file preparation fits. No timeout or receipt guard has been
+   relaxed. See [the preserved real failure](releases/large-draft-save-checkpoint-20261111.json).
 2. **New-host full external backup and restore.** The daily budget refusal had
    zero dispatched requests and has an exact guarded recovery proof. The actual
    safe-deferral entry passed. After the real Asia/Shanghai day rollover, the

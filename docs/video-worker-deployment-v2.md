@@ -17,7 +17,10 @@ they do not relabel the 34 deferred legacy failures as passing.
 The new host passed an isolated authorized real download, media verification and
 SIGKILL/resume with the same task. Both naturally discovered Chise downloads
 completed; one also reached verified public publication as `BV12iWG6zEP7`.
-The 11.2 GB source's bounded upload recovery is still in progress. These are
+The 11.2 GB source's bounded upload recovery has completed file transfer and
+integrity coverage, but stopped after a draft-save redirect without committing
+the preparation receipt. Its existing upload must be reconciled and reused;
+submission and public verification remain open. These are
 authorized real-content operations, not synthetic test publications.
 
 Full new-host external backup/restore remains outstanding. The later within-budget
