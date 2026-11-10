@@ -11,7 +11,13 @@ root=Path('/opt/lighthouse-hub')
 assert os.geteuid()==0
 raw=subprocess.check_output(['/usr/bin/docker','ps','-a','--filter','label=com.docker.compose.project=lighthouse-hub',
                               '--format','{{.ID}}'],text=True,timeout=10)
-ids=raw.split()
+# The isolated publisher intentionally belongs to a separate Compose project.
+# Keep its project AND service scoped; do not expose every host container.
+publisher_raw=subprocess.check_output(['/usr/bin/docker','ps','-a',
+    '--filter','label=com.docker.compose.project=lighthouse-publication',
+    '--filter','label=com.docker.compose.service=replay-publication-worker',
+    '--format','{{.ID}}'],text=True,timeout=10)
+ids=list(dict.fromkeys(raw.split()+publisher_raw.split()))
 assert all(re.fullmatch('[0-9a-f]{12,64}',value) for value in ids)
 containers=[]
 for ident in ids:

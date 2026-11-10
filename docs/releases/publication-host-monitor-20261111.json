@@ -1,0 +1,83 @@
+{
+  "at": 1794338528.7959034,
+  "old_sha256": "249f9c23cf66ca99cbf9c905060405d573b8d4bbed62c7cee928cd110e1a620d",
+  "new_sha256": "185ebe8bb36c3397596e23da3549792b805123f88a08d0144f5a02b6dbb1ef52",
+  "linux_tests": "3 passed in 0.04s",
+  "network": "none",
+  "production_data_mounted_in_tests": false,
+  "container_ids_unchanged": true,
+  "containers": [
+    {
+      "name": "lighthouse-hub-system-worker-1",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "not_configured"
+    },
+    {
+      "name": "lighthouse-hub-replay-acquisition-worker-1",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "lighthouse-hub-tweet-worker-1",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "not_configured"
+    },
+    {
+      "name": "lighthouse-observer-mcp-v1",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "not_configured"
+    },
+    {
+      "name": "lighthouse-hub-scheduler-1",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "not_configured"
+    },
+    {
+      "name": "lighthouse-observer-tunnel-v1",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "not_configured"
+    },
+    {
+      "name": "lighthouse-hub-api-1",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "healthy"
+    },
+    {
+      "name": "subtitle-ingest",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "not_configured"
+    },
+    {
+      "name": "lighthouse-publication-replay-publication-worker-1",
+      "state": "running",
+      "exit_code": 0,
+      "restart_count": 0,
+      "health": "healthy"
+    }
+  ],
+  "provider_requests": 0,
+  "rollback_file": "/usr/local/lib/lighthouse-host-monitor-v1/host-monitor.previous.py",
+  "installed_file": "/usr/local/lib/lighthouse-host-monitor-v1/host-monitor.py",
+  "runtime_image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+  "systemd_override": "/etc/systemd/system/lighthouse-hub-monitor.service.d/90-root-owned-code.conf",
+  "systemd_override_sha256": "dc61913fcf99453ed6a305ff96526026b63ab1d24b543b16abca2e2b99ff4924",
+  "original_application_source_unchanged": true,
+  "privileged_code_root_owned": true,
+  "mcp_readback": {"snapshot_generated_at":1794338560.660545,"age_seconds":10.839,"availability":"current","health":{"database":"ok","status":"ready","stale_services":[]},"publisher":{"name":"lighthouse-publication-replay-publication-worker-1","state":"running","health":"healthy","exit_code":0,"restart_count":0},"container_count":9}
+}

@@ -406,3 +406,34 @@ hash was checked in the replacement running container, the final recovery code
 passed 19 Linux tests, and complete production machine verification succeeded
 before the held task was released. The worker has claimed it normally; there is
 no large-file upload completion claim in this checkpoint.
+
+### Independent publisher in host and dot status — 2026-11-11
+
+A real dot query exposed a monitoring omission: the host readout selected only
+Compose project `lighthouse-hub`, omitting the new `lighthouse-publication`
+publisher. `scripts/host-monitor.py` now additionally selects that exact project
+**and** service `replay-publication-worker`, deduplicates IDs and retains the
+same limited state/health fields. It does not export Docker Env, mounts or control
+access. Failed collection preserves the prior snapshot timestamp.
+
+Three focused tests passed locally and in the actual 0722 Linux image with no
+network or live data. Production systemd execution then reported all nine running
+containers without replacing or restarting any. Evidence and byte hashes:
+`releases/publication-host-monitor-20261111.json`.
+
+The inherited root-run script was in an operator/group-writable application path.
+The first installer guard stopped before making changes. The qualified collector
+is instead installed as root-owned 0444 at
+`/usr/local/lib/lighthouse-host-monitor-v1/host-monitor.py`, under root-owned,
+non-writable-by-others parents. Its fixed ExecStart override is
+`/etc/systemd/system/lighthouse-hub-monitor.service.d/90-root-owned-code.conf`.
+The application copy is left unchanged. Copy these external runtime files during
+future deployment; the original application tree alone is insufficient.
+
+For a monitor-only code rollback, verify the report's `old_sha256` against the
+root-owned `host-monitor.previous.py` in the same library directory, and change
+only that override's fixed Python entry to the retained file. Reload systemd and
+run the monitor once; require a fresh valid snapshot. This would again omit the
+publisher, so report that limitation. Do not restore execution from the writable
+application path, reset task state or restart video workers. This rollback is
+documented with retained bytes; it has not been executed in production.

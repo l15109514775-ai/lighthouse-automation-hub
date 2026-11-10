@@ -39,6 +39,10 @@ service while leaving healthy tweet/status services running.
   with their task directories. Those records prevent a copied task from being
   mistaken for an unused upload attempt. See
   [the qualified recovery](private-upload-recovery.md).
+- Preserve the root-owned host-monitor library and its fixed systemd override
+  from `releases/publication-host-monitor-20261111.json`. The application-tree
+  copy is not the effective privileged entry. Verify ownership, parent-directory
+  permissions and hashes before enabling the monitor on the destination.
 - Check source-IP restrictions for YouTube API and CloudBase, profile usability,
   peer ingress firewall rules and the status tunnel. A fresh hostname or loaded
   image does not establish these permissions. Request any additional account
