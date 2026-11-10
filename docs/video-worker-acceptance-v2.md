@@ -1,0 +1,182 @@
+# Download Worker 2.0 — acceptance record, 2026-11-10
+
+## Decision
+
+**Candidate implemented; production activation is blocked. Refactor acceptance is
+not complete.** Do not describe the synthetic Docker tests as a real YouTube
+download or an operational production download service.
+
+No live service was replaced/restarted and no live task was reset, deleted or
+republished. The existing API remained healthy, tweet/scheduler/system containers
+continued running, and the previously stopped video worker remained stopped.
+No test published content. The final authorized probe made one official YouTube
+metadata call and one download-side request; no paid service was enabled.
+
+## Delivered
+
+- Phase 0 architecture/call-site/schema/history audit: `video-worker-audit.md` and
+  `video-worker-audit-index.md`; baseline `1272f86`.
+- SQL job-type isolation across Store and every in-tree QueueView; Worker supplies
+  its exact handler set for claim/recovery. Actual OS-lock ownership is required
+  for forced recovery. Existing states and historical adapters remain.
+- Expired-lease/attempt fencing for heartbeat/checkpoint/finish; stable error
+  classification; bounded, no-follow receipt loading and cancellable SHA-256.
+- Profile-gated acquisition service using the existing image, DB, FIFO and adapters;
+  per-boot main/producer health, Secret, readonly profile and resource limits.
+- Explicit V5 publication-only mode and V4 reuse of V5 group projection, so the
+  split architecture does not misclassify historical multipart publication.
+- Exact upstream gitlinks/materialization; no replacement lock checksums.
+- Linux resource/crash tests, real Compose acceptance driver and scoped rollback
+  script; architecture, migration and deployment instructions.
+
+## Tested versus not tested
+
+| Evidence | Result | Scope / limitation |
+|---|---|---|
+| Phase 1 local tests | 76 passed | Windows, real temporary SQLite/locks |
+| Phase 2 local health/isolation | 34 passed | Not a Docker claim |
+| Phase 3 local lifecycle/receipt suite | 125 passed, 2 skipped | Linux-only SIGKILL cases skipped locally |
+| Linux focused suite | 89 passed, 1 fixture failure | Python 3.12; 124.11 s; readonly restoration failure investigated |
+| Corrected Linux resource tests | 2 passed | Actual 1 MiB full tmpfs and actual unprivileged DB permissions; 0.53 s |
+| Earlier daily-budget boundary failure | Single-case recheck passed | 1.63 s; original clock-sensitive result retained in logs |
+| Rollback guard unit tests | 6 passed | Refuses changed service/command/image/mount; default plan only |
+| Final health/rollback local recheck | 8 passed | Includes explicit health-probe connection close; 0.19 s |
+| Boot-scoped health/runtime checks | 31 passed, plus 3 focused checks passed | Unique boot identity; other processes cannot mask a stalled producer |
+| Full canonical-source regression | 3,971 passed; 431 failed; 184 errors; 1 skipped | 4,587 cases, 2,214.57 s; not a release pass |
+| Effective-production candidate Docker | Passed | Synthetic, network disabled; two containers sharing DB and video lock |
+| SIGKILL and container restart | Passed | Isolated Docker plus Linux child/SQLite-process tests |
+| Online DB backup/restore | Passed in Linux focused suite | Synthetic DB; interrupted WAL transaction rolls back; restored row matches |
+| Real YouTube acquisition attempt | **Blocked by platform refusal** | One metadata refresh succeeded; one planning/download-side request returned YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED; no verified video |
+| New production service activation | **Not performed** | Release gates not met |
+| Production V5 publication-only operation | **Not accepted** | Implemented/tested synthetically; old stopped publisher not restarted |
+| Fresh public Dockerfile build | **Not accepted** | Missing public compositor commit; mutable OS package inputs |
+| Production-wide rollback | **Not accepted** | Only additive new-container stop rollback has been exercised |
+
+The 90 Linux focused cases have passing evidence across the initial run and the
+two-case correction; this is not reported as a single clean 90-case run. The
+readonly fault fixture originally restored only the main DB, leaving SQLite's
+derived WAL/SHM permissions readonly. Restoring all owned fixture files is correct
+fault removal; no production code was allowed to bypass filesystem permissions.
+
+## Full regression / baseline comparison
+
+The canonical-source complete regression run finished with the totals above.
+614 existing failed/error cases were compared against unchanged baseline `1272f86`
+in the same runtime: 424 failed, 157 had setup errors, and 33 passed (662.321 s).
+Thus 581 also failed on baseline; this alone does not prove identical root causes.
+The added readonly-fixture failure separately passed after correct fault restoration.
+Immutable historical verification hashes are not rewritten to make this release pass.
+
+One confirmed compatibility-test change was the old deployment assertion that
+Compose contained exactly one YouTube profile mount. It now proves the existing
+mount count is preserved and the new acquisition service is entirely untouched
+by that legacy deployment script. Its module plus the one-off tweet-age module
+rerun yielded 41 passed and 1 unchanged historical source-attestation failure.
+The five tweet-age setup errors from the full run passed in isolation; full-suite
+order dependence remains a qualification concern, not evidence of a production fix.
+
+Many browser failures came from the generic test container lacking the existing
+browser seccomp profile. That profile matches the public source exactly. A real
+representative Chromium test passed with that profile, cap_drop ALL,
+no-new-privileges, readonly root and Chromium sandboxing still enabled. 290 affected
+Node/compositor cases were rerun with the proper existing browser profile and
+256 MiB shared memory: 210 passed, 60 failed and 20 had setup errors (1,291.017 s).
+One separate compositor runtime case passed in 14.07 s. No security mechanism was
+disabled. This correction is to
+the browser test environment, not a change to the acquisition service's privileges.
+
+Across the original 4,587 cases, the union of the full run and corrective targeted
+runs is 4,189 passing, 250 failing, 147 setup errors and one skipped. **This is not
+a single clean full-suite run.** All 397 remaining cases also failed or errored on
+baseline; none of the baseline-passing cases remains unresolved after the targeted
+runs. This does not establish identical causes or remove suite-order concerns.
+`video-worker-regression-v2.json` records case IDs and evidence hashes. The final
+boot-health change was tested separately and in real Docker, not in a new full run.
+
+An earlier full run was invalidated by inherited tests in the production base
+image; another used Windows checkout bytes incompatible with old exact hashes.
+Both are retained as failed/aborted diagnostics, not counted as passing runs. The
+canonical run uses `git archive` bytes in `/audit/source`, with original locked
+upstream bytes and synthetic config, separate from inherited image source/tests.
+
+## Docker evidence
+
+The final effective-production candidate passed isolated Compose acceptance at:
+`/var/tmp/lighthouse-acquisition-sudn2ryu/report.json` on the Docker test host.
+
+Container image identity reported by Docker:
+`sha256:166bdd776615601eb159094b735bf047a4414f3b7a72b2e3d7d38d0300bdf6a4`.
+It applies the scoped changes over actual production source overrides, retaining
+the pre-existing X retirement protection. A full public-source overlay was rejected
+by that protection and was not used as a production runtime.
+
+Checks passed: no exposed port, no inherited env-file secrets, UID/GID 10001,
+readonly root/profile/key, dropped capabilities, no-new-privileges, memory/CPU/PID
+limits, rotated logging, WAL, two-container lock contention, one successful claim
+per owned job, SIGKILL/restart with a different health-instance nonce, unrelated
+processing row unchanged, rollback plan
+does nothing and apply stops only the new container while preserving DB/media.
+
+Synthetic configuration/credentials authorize no production action. The test
+container mounts only its private directory, never the live DB or real profiles.
+
+## One authorized real acquisition attempt
+
+After the initial preflight, the user authorized the existing server for a real
+test, explicitly requesting no repeated attempts if access remained restricted.
+The final candidate used an isolated database/media directory and coherent
+test-only configuration copies, retaining the existing rights/session evidence
+and recording this test authorization. Production policies and bindings were
+unchanged. The real API Secret and existing browser profile were mounted readonly.
+No scheduler or publication handler was enabled; maximum attempts was one.
+
+For the previously authorized source `c18fHra3k2I`, the metadata refresh completed
+once. The planning job then failed once with `YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED`.
+The result marked the failure non-retryable. Recorded provider counts were one
+`youtube` call and one `youtube_download_http` call. The container was stopped,
+restart policy was `no`, restart count was zero, and there were no MP4 files or
+publication rows. Report: `/var/tmp/lighthouse-real-once-pxn7zpx1/report.json`.
+This proves refusal handling, **not successful media acquisition or verification**.
+The error does not distinguish an IP restriction from other platform restrictions.
+
+A preceding monitor-startup fixture error was corrected only after stopping its
+container and confirming zero jobs and zero API calls. It was not a second
+platform access attempt. Further download tests on this server are stopped; a
+future permitted environment still needs genuine download/recovery acceptance.
+
+## Production blockers and required next steps
+
+1. Reconcile the existing policy bundle. The switch is off; FIFO policy is
+   root:root 0640 and unreadable by UID 10001; acquisition policy covers one channel
+   while FIFO/runtime cover two; FIFO references a different planning fingerprint.
+   Preserve current files/history until a coherent, versioned, authorized migration
+   is prepared. Do not silently recalculate bindings on existing jobs.
+2. Resolve remaining baseline failures and suite-order qualification. Old
+   operational proofs require separate qualification, not checksum substitution.
+3. Make the genuine compositor commit available and qualify a reproducible image
+   supply path. No new dependencies were added, but existing APT inputs are not
+   fully version-pinned.
+4. Requalify production source/launch/retention evidence for the changed modules.
+   Public anonymized configuration and live overrides are not interchangeable.
+5. After the access restriction is legitimately resolved, run authorized real-content
+   download acceptance without repeated probes on this server, then targeted acquisition
+   deployment and V5 publication separation. Preserve platform refusal behavior;
+   no account/IP/proxy/fingerprint switching or CAPTCHA bypass.
+
+No historical code was deleted: production/maintenance/history independence was
+not established for any old adapter. This is intentional compatibility retention,
+not a claim that the cleanup and production acceptance phases are finished.
+
+## Evidence and commits
+
+Private local evidence is under the task workspace's
+`work/video-worker-v2-audit/` (source inventory, test logs, sanitized preflight
+result and SQLite/Docker reports). It is not shipped as a secret-bearing public
+runtime bundle. Production config copies and browser/key mounts were never added
+to Git.
+
+Implementation commits: `5a9e396` (audit), `41c26b9` (scope/locks), `4d47fd8`
+(container), `b11fb1e` (lease/receipt/recovery), `23681d0` (resource/rollback tests
+and deployment gate), `e7c3101` (health connection cleanup), `10434ff` (legacy
+Compose assertion), `b09d1c0` (boot-specific health identity). These are local
+commits; this task has not pushed them.

@@ -44,6 +44,9 @@ no exposed ports, no Bilibili credentials, read-only browser profile and a
 read-only Secret at `/run/secrets/youtube-api-key`. It inherits logging rotation,
 `unless-stopped`, UID/GID 10001, dropped capabilities and no-new-privileges.
 Limits: 1400 MiB, 1.5 CPU, 160 PIDs; tmpfs 192 MiB, stop grace 30 seconds.
+`DRY_RUN=true` is not a network-disable switch for authorized acquisition. Once
+acquisition policies are enabled, this service can download media. Offline tests
+must explicitly use `network_mode: none` and isolated data, as the test driver does.
 The existing video/heavy locks serialize heavy work, rather than relying on memory
 limits to arbitrate concurrency. Low space defers work; it does not delete media.
 
@@ -149,6 +152,8 @@ or a changed deployment. Its plan and apply paths were tested against a real
 isolated Compose container; the historical foreign processing job remained byte-
 equivalent. This proves the additive stop rollback, not an untested wholesale
 image/database rollback of the production stack.
+Record the expected image identity from that container's Docker `.Image` field;
+do not substitute a mutable tag or a different build-stage digest.
 
 If later replacing an existing V5 image, separately qualify restoring that exact
 previous image plus its mount manifest. Revert only changed service configuration,

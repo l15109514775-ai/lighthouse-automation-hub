@@ -101,6 +101,12 @@ corrected to wait a bounded interval for ordinary idle lock contention, rather
 than assume the first scheduling attempt always wins.
 
 Candidate report: `/var/tmp/lighthouse-acquisition-b8kg57be/report.json`.
+After explicit health-probe connection cleanup, the final candidate passed the
+same acceptance at `/var/tmp/lighthouse-acquisition-lczk41l5/report.json`.
+Final boot-identity binding passed at
+`/var/tmp/lighthouse-acquisition-sudn2ryu/report.json`: the health nonce changes
+after SIGKILL/restart, and another process's fresh heartbeats cannot satisfy this
+instance's health probe. Legacy heartbeat names remain for observers.
 Earlier runtime-image report: `/var/tmp/lighthouse-acquisition-c6__lq1i/report.json`.
 Both cover profile/ports, UID, readonly mounts, Secret readability, capabilities,
 limits, WAL, SIGKILL/restart and the rollback script. Networking was disabled;
@@ -108,7 +114,7 @@ synthetic configuration is not production authorization. The real production
 containers and database were not used as fault-injection targets.
 
 Full canonical-source regression run and baseline comparison are recorded in the
-acceptance report when finished. A sample historical archive-proof failure already
+acceptance report. A sample historical archive-proof failure already
 reproduces on baseline `1272f86`; its frozen code hashes are not rewritten here.
 
 ## Production preflight and migration gate
@@ -120,6 +126,14 @@ acquisition permits one channel while FIFO/configuration expect two, and FIFO's
 planning fingerprint does not match the planning file. Temporary copies were used
 to isolate these errors; production policies, authorization references and bindings
 were not edited. This is **not** a successful real YouTube download acceptance.
+
+Subsequent explicit user authorization allowed one real attempt with coherent
+test-only policy copies and an isolated DB/media directory. Official metadata
+refresh succeeded; the single download-side planning request failed with
+`YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED`. The test container was stopped with no retry,
+no verified media and no publication. Production policy conflicts above remain;
+test-only reconciliation does not authorize changing historical production bindings.
+See the acceptance record for the exact scope and evidence.
 
 See [video-worker-deployment-v2.md](video-worker-deployment-v2.md) for the ordered
 policy/version reconciliation, source-overlay qualification and targeted startup.

@@ -137,6 +137,19 @@ docker compose run --rm api python -m services.hub.cli status
 docker compose run --rm api python -m pytest tests/test_tweet.py tests/test_manual_openai.py -q
 ```
 
+## Download Worker 2.0 重构候选
+
+新增的 `replay-acquisition-worker` 复用现有 SQLite、FIFO V4 和下载适配器，
+通过 `youtube-acquisition` profile 单独启用，下载与投稿分离。任务类型白名单、
+视频锁、租约失效保护和独立启动心跳已实现，并完成隔离容器测试。
+**目前尚未通过正式上线验收，不能直接替换现网服务。**
+
+- [架构审计与实际调用关系](docs/video-worker-audit.md)
+- [新架构及职责边界](docs/video-worker-architecture-v2.md)
+- [迁移与历史兼容记录](docs/video-worker-migration.md)
+- [部署门槛和回滚步骤](docs/video-worker-deployment-v2.md)
+- [验收结果、未通过项和生产阻塞](docs/video-worker-acceptance-v2.md)
+
 ## 仓库结构
 
 ```
