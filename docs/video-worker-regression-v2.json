@@ -17,200 +17,14 @@
     "passed": 33
   },
   "current_evidence_union_not_single_run": {
-    "passed": 4476,
-    "error": 66,
-    "failed": 44,
+    "passed": 4547,
+    "error": 20,
+    "failed": 19,
     "skipped": 1
   },
   "unresolved_baseline_passed_cases": [],
-  "unresolved_count": 110,
+  "unresolved_count": 39,
   "unresolved_tests": [
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_reproducible_narrow_build_preserves_runtime_scope_state_and_old_templates",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[failure]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[skip]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[wrong_count]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[wrong_source]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[network]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[production_mount]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[junit]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[proof_path]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-completed-True]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-accept_failed-False]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-accept_started-False]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[new-completed-True]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[new-accept_failed-True]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[unknown-completed-False]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[none]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[missing_receipt]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[history_changed]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[receipt_state]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[plan_changed]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[latest_reappeared]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[legacy_changed]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accept_started]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accept_failed]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accepted_pending_prune]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[prune_failed]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[release_check]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[unit_verify]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[reload]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_rollback_preserves_completed_history_and_restores_pointer_on_failure[False]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_archive_retention_v2c::test_rollback_preserves_completed_history_and_restores_pointer_on_failure[True]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
     {
       "test": "tests.ops.test_capture_two_reference_sources_v2::test_real_recorded_capture_has_same_owner_receipts_original_time_and_no_models_or_publish",
       "state": "failed",
@@ -252,144 +66,6 @@
       "state": "failed",
       "baseline_state": "failed",
       "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.ops.test_qualify_replay_editor_v10::test_parent_manifest_910_and_runtime141_are_preserved",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.ops.test_qualify_source_inventory_v11::test_parent_manifest_914_and_runtime141_are_preserved",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_exact_recovery_keeps_attempt_two_payload_and_next_real_claim_is_three",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_active_lease_is_refused_without_stealing_or_reset",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_existing_publication_even_unknown_blocks_both_resumes",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[0]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[1]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[3]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_wrong_reviewed_snapshot_hash_rolls_back_without_any_queue_mutation",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_original_metadata_payload_ticket_change_is_refused_even_without_timestamp_change",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_exact_recovery_keeps_attempt_one_payload_and_next_real_claim_is_two",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_active_lease_is_refused_without_stealing_or_reset",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_existing_publication_even_unknown_blocks_both_resumes",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[0]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[2]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[3]",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_wrong_reviewed_snapshot_hash_rolls_back_without_any_queue_mutation",
-      "state": "error",
-      "baseline_state": "error",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_resume_keeps_original_payload_result_partial_and_attempt_then_claims_two",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[lease]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[publication]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[binding]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[partial]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "historical_source_attestation"
-    },
-    {
-      "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[wrong_plan]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "historical_source_attestation"
     },
     {
       "test": "tests.ops.test_youtube_acceptance_pilot_deploy_v1::test_ubuntu_attestation_and_two_exact_source_hashes",
@@ -447,72 +123,6 @@
     },
     {
       "test": "tests.test_natural_native_operators_v3c::test_same_pilot_issuer_body_preserves_real_evidence_and_no_network_no_queue_fences",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.test_public_description_display_v2::test_recorded_198_to241_visible_difference_has_exact_versioned_explanation",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.test_public_description_display_v2::test_only_four_explicit_candidates_match_independently[False-True]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.test_public_description_display_v2::test_only_four_explicit_candidates_match_independently[True-True]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[recorded]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[changed_body]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[changed_space]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_queue_highest_pilot_v2::test_actual_source_date_and_four_full_description_lines",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.test_replay_natural_video_v3::test_natural_highest_uses_per_video_720p30_ids_and_full_original_metadata",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.test_replay_part_handoff_gui_v5::test_real_gui_runtime_keeps_same_owned_page_and_removes_only_nonce_credentials",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_replay_part_native_v5::test_standalone_part_uses_real_delivery_and_one_native_file[public_no_progress]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "requires_individual_review"
-    },
-    {
-      "test": "tests.test_replay_part_native_v5::test_actual_python_qa_reservation_and_node_raw_evidence_complete_same_bound_part",
       "state": "failed",
       "baseline_state": "failed",
       "triage_category": "requires_individual_review"
@@ -641,42 +251,6 @@
       "test": "tests.test_reply_machine_v2::test_extended_reply_record_binds_two_exact_model_sources_with_raw_day_provenance",
       "state": "error",
       "baseline_state": "error",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_complete]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_protection]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_ambiguous]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_unknown_once]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_short_video_native_controls::test_private_draft_native_confirmation_and_unknown_are_one_click_only[private_saved]",
-      "state": "failed",
-      "baseline_state": "failed",
-      "triage_category": "browser_or_compositor_fixture_contract"
-    },
-    {
-      "test": "tests.test_short_video_native_controls::test_private_draft_native_confirmation_and_unknown_are_one_click_only[private_unknown_once]",
-      "state": "failed",
-      "baseline_state": "failed",
       "triage_category": "browser_or_compositor_fixture_contract"
     },
     {
@@ -1400,9 +974,9 @@
     "reason": "Explicit fixture modes, non-duplicated TOML overrides, distinct anonymized channel, literal generation override; runtime guards unchanged. Writable sandboxed browser HOME/XDG test environment; preserve explicit IMAGE_TOO_LARGE_FOR_UPLOAD error."
   },
   "triage_category_counts": {
-    "browser_or_compositor_fixture_contract": 38,
-    "historical_source_attestation": 54,
-    "requires_individual_review": 18
+    "browser_or_compositor_fixture_contract": 28,
+    "historical_source_attestation": 2,
+    "requires_individual_review": 9
   },
   "triage_note": "Categories are diagnostic triage, not waivers or proof of a harmless defect. Historical hashes are unchanged.",
   "offline_continuation_runtime_commit": "98f62b0",
@@ -2445,5 +2019,484 @@
     "runtime_services_changed": false,
     "frozen_hashes_rewritten": false,
     "note": "Sandboxed offline Linux fixture tests; the one temporary Unix-socket path failure passed with shorter basetemp. This is an evidence union, not a new full-suite run or real platform operation."
+  },
+  "historical_recovery_and_video_qualification": {
+    "evidence": [
+      {
+        "file": "continued-video-metadata.xml",
+        "sha256": "70572735f8e9f20e28038f2df8a6ca2f55ee2001cbc280d2be1822303fa5b101",
+        "counts": {
+          "passed": 73,
+          "failure": 1
+        }
+      },
+      {
+        "file": "continued-native-environment.xml",
+        "sha256": "3fce26e0cb7a6cb7be8dc145d99d4003d32abbe282bbb18d18676f7ad7407a99",
+        "counts": {
+          "passed": 19,
+          "failure": 2
+        }
+      },
+      {
+        "file": "continued-recovery-linux.xml",
+        "sha256": "d860b98d971833e5cf6e75a27934965bf318b2089571d2c66fdf1164faf170d6",
+        "counts": {
+          "passed": 24
+        }
+      },
+      {
+        "file": "continued-handoff-and-pins.xml",
+        "sha256": "b78a047dbbf79aa69fb15c12394d0694c6fff0809b1397699969da8a1e03bfdc",
+        "counts": {
+          "passed": 26
+        }
+      }
+    ],
+    "resolved_original_suite_cases": 40,
+    "resolved_tests": [
+      {
+        "test": "tests.ops.test_qualify_replay_editor_v10::test_parent_manifest_910_and_runtime141_are_preserved",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.ops.test_qualify_source_inventory_v11::test_parent_manifest_914_and_runtime141_are_preserved",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_exact_recovery_keeps_attempt_two_payload_and_next_real_claim_is_three",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_active_lease_is_refused_without_stealing_or_reset",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_existing_publication_even_unknown_blocks_both_resumes",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[0]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[1]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_nonmatching_attempt_history_is_never_reset[3]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_wrong_reviewed_snapshot_hash_rolls_back_without_any_queue_mutation",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_duration_identity_plans_v1::test_original_metadata_payload_ticket_change_is_refused_even_without_timestamp_change",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_exact_recovery_keeps_attempt_one_payload_and_next_real_claim_is_two",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_active_lease_is_refused_without_stealing_or_reset",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_existing_publication_even_unknown_blocks_both_resumes",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[0]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[2]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_nonmatching_attempt_history_is_never_reset[3]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_readiness_serialization_plans_v1::test_wrong_reviewed_snapshot_hash_rolls_back_without_any_queue_mutation",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_resume_keeps_original_payload_result_partial_and_attempt_then_claims_two",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[lease]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[publication]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[binding]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[partial]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_resume_two_whole_workspace_downloads_v1::test_changed_scope_or_snapshot_refuses_without_queue_mutation[wrong_plan]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.test_public_description_display_v2::test_recorded_198_to241_visible_difference_has_exact_versioned_explanation",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.test_public_description_display_v2::test_only_four_explicit_candidates_match_independently[False-True]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.test_public_description_display_v2::test_only_four_explicit_candidates_match_independently[True-True]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[recorded]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[changed_body]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_public_description_display_v2::test_real_owned_chromium_uses_v2_and_saves_raw_failures[changed_space]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_queue_highest_pilot_v2::test_actual_source_date_and_four_full_description_lines",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.test_replay_natural_video_v3::test_natural_highest_uses_per_video_720p30_ids_and_full_original_metadata",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.test_replay_part_handoff_gui_v5::test_real_gui_runtime_keeps_same_owned_page_and_removes_only_nonce_credentials",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_replay_part_native_v5::test_standalone_part_uses_real_delivery_and_one_native_file[public_no_progress]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.test_replay_part_native_v5::test_actual_python_qa_reservation_and_node_raw_evidence_complete_same_bound_part",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "requires_individual_review"
+      },
+      {
+        "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_complete]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_protection]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_ambiguous]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_short_video_native_controls::test_native_cover_completion_is_bound_and_never_clicks_twice[cover_unknown_once]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_short_video_native_controls::test_private_draft_native_confirmation_and_unknown_are_one_click_only[private_saved]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      },
+      {
+        "test": "tests.test_short_video_native_controls::test_private_draft_native_confirmation_and_unknown_are_one_click_only[private_unknown_once]",
+        "state": "failed",
+        "baseline_state": "failed",
+        "triage_category": "browser_or_compositor_fixture_contract"
+      }
+    ],
+    "new_current_source_rejection_tests": 3,
+    "runtime_services_changed": false,
+    "frozen_hashes_rewritten": false,
+    "note": "Exact old source fixtures are not current deployment qualification. Actual isolated loopback GUI tested; no public platform calls. Negative no-progress playback waited for the actual bounded observer with an explicit test timeout, no production timeout changes."
+  },
+  "historical_retention_qualification": {
+    "file": "continued-retention-linux.xml",
+    "sha256": "05458538272a9c28cea513b6cde7fa48e7ef9b8cc51e7fcd1c36f4ec96528146",
+    "linux_passed": 35,
+    "resolved_original_suite_cases": 31,
+    "resolved_tests": [
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_reproducible_narrow_build_preserves_runtime_scope_state_and_old_templates",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[failure]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[skip]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[wrong_count]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[wrong_source]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[network]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[production_mount]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[junit]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_proof_failures_cannot_be_packaged_or_installed[proof_path]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-completed-True]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-accept_failed-False]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[legacy-accept_started-False]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[new-completed-True]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[new-accept_failed-True]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_daily_pin_transition_never_relabels_unfinished_legacy_record[unknown-completed-False]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[none]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[missing_receipt]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[history_changed]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[receipt_state]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[plan_changed]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[latest_reappeared]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_missing_latest_requires_real_fixed_recovery_closure[legacy_changed]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accept_started]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accept_failed]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[accepted_pending_prune]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_installer_refuses_any_unfinished_daily_before_apply_or_rollback[prune_failed]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[release_check]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[unit_verify]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_failed_switch_restores_exact_old_unit_and_release[reload]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_rollback_preserves_completed_history_and_restores_pointer_on_failure[False]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      },
+      {
+        "test": "tests.ops.test_archive_retention_v2c::test_rollback_preserves_completed_history_and_restores_pointer_on_failure[True]",
+        "state": "error",
+        "baseline_state": "error",
+        "triage_category": "historical_source_attestation"
+      }
+    ],
+    "new_current_source_rejection_tests": 1,
+    "private_input_archive_sha256": "070517adad0216df3eb9e2da5bf599bca41d0fe25b9a266f9c502044da898e13",
+    "production_backup_or_cleanup_run": false,
+    "frozen_hashes_rewritten": false
   }
 }

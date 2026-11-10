@@ -107,9 +107,9 @@ def test_natural_highest_uses_per_video_720p30_ids_and_full_original_metadata(na
     assert [x['format_id'] for x in result['selected_formats']]==['owned720','ownedAudio']
     meta=natural_metadata(f['s'],f['db'].get(f['source']))
     assert f['raw']['snippet']['title'] in meta['description'] and len(meta['title'])<=80
-    assert meta['title']=='【示例主播A】2026-11-01「Owned natural highest title」直播回放'
-    assert meta['description']=='示例主播A 2026年11月1日直播回放，日语原声。\n原题：Owned natural highest title\n原视频：https://www.youtube.com/watch?v=ownedNew001\n原频道：https://www.youtube.com/@example-channel-a'
-    assert meta['tags']==['示例主播A','ぶいすぽっ','虚拟UP主','直播回放']
+    assert meta['title']=='【Example Streamer A】2026-11-01「Owned natural highest title」直播回放'
+    assert meta['description']=='Example Streamer A 2026年11月1日直播回放，日语原声。\n原题：Owned natural highest title\n原视频：https://www.youtube.com/watch?v=ownedNew001\n原频道：https://www.youtube.com/@example-channel-a'
+    assert meta['tags']==['Example Streamer A','ぶいすぽっ','虚拟UP主','直播回放']
     assert f['raw']['snippet']['publishedAt'].startswith('2026-07')  # Not an operating-date substitute.
     assert '转载许可编号' not in meta['description']
     assert result['silent_quality_fallback_allowed'] is result['human_review'] is False

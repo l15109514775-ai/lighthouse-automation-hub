@@ -12,3 +12,6 @@ scripts/ops/codex-progress-request-20261103.json -text whitespace=cr-at-eol
 
 # Original frozen retention parser; its historical public-account scope is part of the pin.
 scripts/ops/qualify_replay_parts_retention_v5.py -text whitespace=cr-at-eol
+
+# Immutable reviewed source inputs, used only as historical test data.
+tests/fixtures/historical-recovery/*.source -text

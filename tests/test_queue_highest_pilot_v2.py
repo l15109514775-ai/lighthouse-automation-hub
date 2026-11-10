@@ -11,8 +11,8 @@ q=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(q)
 
 def test_actual_source_date_and_four_full_description_lines(highest):
     f=highest;value=q.plan(f['service'],f['source']);source=f['db'].get(f['source'])
-    assert value['metadata']['title']=='【示例主播A】2026-11-01「Owned highest replay」直播回放'
-    assert value['metadata']['description']=='示例主播A 2026年11月1日直播回放，日语原声。\n原题：Owned highest replay\n原视频：https://www.youtube.com/watch?v=9T5tn1WGlJg\n原频道：https://www.youtube.com/@example-channel-a'
+    assert value['metadata']['title']=='【Example Streamer A】2026-11-01「Owned highest replay」直播回放'
+    assert value['metadata']['description']=='Example Streamer A 2026年11月1日直播回放，日语原声。\n原题：Owned highest replay\n原视频：https://www.youtube.com/watch?v=9T5tn1WGlJg\n原频道：https://www.youtube.com/@example-channel-a'
     assert not value['queue_mutated'] and not value['human_review'] and not value['existing_publish_jobs']
     assert f['db'].get(f['source'])==source
 

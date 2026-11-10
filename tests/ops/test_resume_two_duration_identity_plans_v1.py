@@ -21,7 +21,8 @@ def fixture(tmp_path,monkeypatch):
     class OwnedRootAdmission:
         def as_posix(self):return '/opt/lighthouse-hub'  # Explicit path-admission seam only.
         def __truediv__(self,name):return tmp_path/name
-    source=Path(__file__).parents[2]/'services/hub/youtube_natural_plan_v3.py'
+    # Exercise the genuine reviewed historical input, not current production approval.
+    source=Path(__file__).parents[1]/'fixtures/historical-recovery/youtube_natural_plan_v3.py.source'
     area=tmp_path/'services/hub';area.mkdir(parents=True);(area/'youtube_natural_plan_v3.py').write_bytes(source.read_bytes())
     assert hashlib.sha256(source.read_bytes()).hexdigest()==op.SOURCE_SHA
     expected={}
@@ -115,3 +116,15 @@ def test_original_metadata_payload_ticket_change_is_refused_even_without_timesta
     before=db.query('SELECT * FROM jobs ORDER BY job_id')
     with pytest.raises(AssertionError):run(monkeypatch,'0'*64)
     assert db.query('SELECT * FROM jobs ORDER BY job_id')==before and not db.query('SELECT * FROM audit')
+
+
+def test_historical_recovery_rejects_changed_current_runtime_without_mutating_jobs(fixture):
+    settings,db=fixture
+    before=db.query('SELECT * FROM jobs ORDER BY job_id')
+    current=Path(__file__).parents[2]/'services/hub/youtube_natural_plan_v3.py'
+    target=settings.root/'services/hub/youtube_natural_plan_v3.py'
+    target.write_bytes(current.read_bytes())
+    assert hashlib.sha256(target.read_bytes()).hexdigest()!=op.SOURCE_SHA
+    with pytest.raises(AssertionError):
+        with db.transaction() as conn:op.snapshot(settings,db,conn,settings.runtime_pins)
+    assert db.query('SELECT * FROM jobs ORDER BY job_id')==before

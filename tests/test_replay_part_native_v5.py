@@ -10,8 +10,10 @@ from services.hub.youtube_download import digest
 from test_replay_parts_v5 import publisher
 
 
+# The negative playback case waits through the real bounded 30-second observer,
+# plus browser preparation; its child still has an 80-second hard timeout.
 @pytest.mark.parametrize('scenario',['upload_one','prepare_public','foreign_sidebar','delivery_changed','selected_file_changed',
-    'submit_file_changed','upload_receipt_rewritten','expired_ticket','public_no_progress','public_challenge','pending_manager','submit_manager_loading'])
+    'submit_file_changed','upload_receipt_rewritten','expired_ticket',pytest.param('public_no_progress', marks=pytest.mark.timeout(100)),'public_challenge','pending_manager','submit_manager_loading'])
 def test_standalone_part_uses_real_delivery_and_one_native_file(delivery,scenario):
     f=delivery;result=f.service.process(f.job);state=result['youtube_download_v4'];d=state['delivery_v5'];output=d['outputs'][0]
     assert d['processing_model']=='single_whole_passthrough_v5' and len(d['outputs'])==1

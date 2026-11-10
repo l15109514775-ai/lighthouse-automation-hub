@@ -4,6 +4,8 @@ from types import SimpleNamespace
 import ast,hashlib,importlib.util,json,os
 import xml.etree.ElementTree as ET
 import pytest
+import tarfile
+from historical_artifacts import historical_artifact
 
 REPO=Path(__file__).parents[2]
 def module(name):
@@ -33,8 +35,21 @@ def kit(tmp_path):
     # Freeze a small owned copy; another agent may be editing the live runtime.
     repo=tmp_path/'repo';runtime='services/hub/cloudbase_backup_runtime.py'
     names={runtime,*b.UNCHANGED,*b.HOST,'scripts/ops/lighthouse-cloudbase-backup.service',*('scripts/ops/'+n for n in b.OLD_HELPERS)}
-    for name in names:
-        target=repo/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes((REPO/name).read_bytes())
+    # The old builder requires its original reviewed inputs, not today's fixed
+    # operators. No original digest or current production source is rewritten.
+    with tarfile.open(historical_artifact('historical-retention-v2c-source-inputs.tar')) as archived:
+        expected=names-{runtime}
+        assert {m.name for m in archived.getmembers()}==expected
+        assert len(archived.getmembers())==len(expected)
+        for name in names:
+            target=repo/name;target.parent.mkdir(parents=True,exist_ok=True)
+            if name==runtime:raw=(REPO/name).read_bytes()
+            else:
+                member=archived.getmember(name)
+                assert member.isfile() and member.size<=150000
+                with archived.extractfile(member) as stream:raw=stream.read(150001)
+                assert len(raw)==member.size
+            target.write_bytes(raw)
     runtime_sha=b.sha((repo/runtime).read_bytes());layer={runtime:runtime_sha,**b.UNCHANGED}
     core,cj=proof(layer);auto,aj=proof(layer,autorun=True)
     args=(repo,runtime_sha,b.wire(core),cj,b.wire(auto),aj)
@@ -224,3 +239,12 @@ def test_rollback_preserves_completed_history_and_restores_pointer_on_failure(ki
     assert (daily/'history'/(ident+'.json')).read_bytes()==raw and timer.read_bytes()==timer_raw
     assert synced and all(paths==(daily,history) for paths in synced)
     assert all(args[:2] not in (['systemctl','start'],['systemctl','restart']) for args in calls)
+
+
+def test_historical_builder_refuses_changed_current_operator_instead_of_requalifying_it(kit):
+    name='scripts/ops/prune_cloudbase_verified_clones_v1.py'
+    raw=(REPO/name).read_bytes()
+    assert b.sha(raw)!=b.UNCHANGED[name]
+    (kit['repo']/name).write_bytes(raw)
+    with pytest.raises(ValueError,match='REVIEWED_RUNTIME_OR_HOST_CHANGED'):
+        b.build(*kit['args'])

@@ -90,8 +90,8 @@ disabled. This correction is to
 the browser test environment, not a change to the acquisition service's privileges.
 
 Across the original 4,587 cases, the union of the full run and corrective targeted
-runs is now 4,476 passing, 44 failing, 66 setup errors and one skipped. **This is not
-a single clean full-suite run.** All 110 remaining cases also failed or errored on
+runs is now 4,547 passing, 19 failing, 20 setup errors and one skipped. **This is not
+a single clean full-suite run.** All 39 remaining cases also failed or errored on
 baseline; none of the baseline-passing cases remains unresolved after the targeted
 runs. This does not establish identical causes or remove suite-order concerns.
 `video-worker-regression-v2.json` records case IDs and evidence hashes. The final
@@ -256,3 +256,46 @@ Read-only production observation again found the API healthy, scheduler/tweet/
 system running, and the pre-existing video container stopped. SQLite quick_check
 was `ok`, journal mode WAL. These observations do not establish video end-to-end
 acceptance. No production file, database row, publication or cleanup was changed.
+
+## Historical recovery, video evidence and GUI continuation
+
+Another 71 originally unresolved cases passed after the above 160-case round:
+
+- Linux metadata/description/legacy deployment selection: 73 passed, one original
+  frozen-source attestation still failed. Restored exact public visible-description
+  fixture bytes (SHA-256 `e00885130b7d63d75c9d0f11c0d2b312bd4ac5631dcc3d6758d94bee0e8d9378`)
+  instead of changing its original metadata digest or character-position assertions.
+  Example-title assertions now match the existing example channel names.
+- Linux native-browser environment selection: 19 passed, two failed. The retired
+  reply fixture still contains an invalid anonymized handle. The no-progress
+  playback case was killed by the generic 40-second test timeout before its real
+  bounded observer returned; a later explicit 100-second pytest budget (child
+  limit still 80 seconds) passed. No runtime timeout, check or playback claim changed.
+- Historical recovery: 24/24 passed on Windows and Linux, including three new
+  cases proving current source is rejected without changing jobs or partial files.
+  Exact old source bytes are test data, not rollback replacements for runtime code.
+- GUI, playback and frozen-parser qualification: 26/26 passed in Linux. The GUI
+  test used actual Xvfb/x11vnc/websockify/Chromium in a network-disabled container,
+  an owned root-readonly three-key config and empty media tmpfs. No live profile,
+  cookie or DB was mounted; no host port was published. The test verified loopback
+  listeners and removal of temporary authentication files. Owned DOM removal of a
+  synthetic challenge is test data, not bypass of a real platform challenge.
+- Historical retention builder: 35/35 passed in Linux (38/38 including locator
+  checks locally), including a new current-operator rejection case. Its original
+  reviewed inputs were recovered from Git history and a retained old service unit;
+  all operator digests remain unchanged. No live backup, install or cleanup ran.
+
+Remaining 39 original-suite cases are 28 retired/public-anonymization X fixture
+cases, six old disabled native multipart mutation scenarios, and five historical
+source-attestation cases. They are not silently skipped or waived. The multipart
+mutation route is intentionally disabled because its old UI assumption creates
+batch posts; it must not be re-enabled to make those old positive tests pass.
+A separately reviewed test-contract update is needed to assert that quarantine,
+while preserving historical fixtures and read-only reconciliation coverage.
+The public anonymized X identities need their own consistent fixture/source policy;
+this download refactor does not broaden inactive runtime account scopes.
+
+All totals remain an evidence union over 4,587 original cases, not a clean final
+full-suite run. Three artifact-locator checks and four new current-source rejection
+checks are additional to that original population. Public source publication,
+production activation and another real YouTube download have not occurred.

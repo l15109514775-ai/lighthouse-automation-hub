@@ -203,3 +203,21 @@ Two genuine historical overlay archives are private external test inputs, select
 by an explicit directory and verified against their original hashes. They are not
 new deployment packages and are not installed in production. Missing inputs fail
 clearly instead of downloading or regenerating evidence. No old adapter was deleted.
+
+## Historical recovery contract tests
+
+`tests/fixtures/historical-recovery/README.md` records the exact old planner and
+adapter commits/hashes. These `.source` files are read as data, never imported or
+installed as workers. Existing operator source pins remain unchanged. Additional
+negative tests prove today's planner/adapter are rejected, preserving rows,
+attempts and partial media. Passing the old fixture is not authorization to run a
+one-off historical recovery script on today's production state.
+
+The retention builder similarly uses a private source-input archive assembled
+from nine byte-matched Git objects plus the exact retained previous service unit.
+Archive SHA-256 is
+`070517adad0216df3eb9e2da5bf599bca41d0fe25b9a266f9c502044da898e13`.
+This is newly packaged historical test input, not a regenerated acceptance proof.
+The fixed old builder checks every reviewed source digest. Current backup fixes
+were not reverted and a negative test confirms their old qualification is rejected.
+No archive, source sample or old unit was deployed to the live application.

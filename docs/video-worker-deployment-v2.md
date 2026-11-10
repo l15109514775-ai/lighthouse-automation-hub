@@ -209,7 +209,7 @@ These settings are for isolated tests, not privileges to add to the download
 service or a reason to disable Chromium sandboxing.
 
 Historical archive tests accept `LIGHTHOUSE_TEST_ARTIFACT_DIR`, an absolute
-non-symlink directory holding the two exact archives registered in
+non-symlink directory holding the exact archives registered in
 `tests/ops/historical_artifacts.py`. The default is the original workspace outputs
 directory; an independent checkout must explicitly supply the archived inputs.
 The locator checks registered names, bounds and fixed SHA-256. It performs no
@@ -221,3 +221,16 @@ visual-retirement guard. It has static compatibility evidence only; it was not
 built, used to replace a service, or presented as the new download image.
 The two restored CloudBase templates are disabled examples with placeholder
 resources and no credentials; they do not authorize backup access.
+
+The later retention tests also require the registered private
+`historical-retention-v2c-source-inputs.tar`. It contains only ten original reviewed
+source/unit inputs, with provenance retained outside Git. It is not a deployable
+release or a replacement for successful current-runtime qualification.
+
+The isolated GUI smoke additionally requires an owned root-readonly
+`/opt/lighthouse-hub/config/bilibili-video-handoff-v5.json` containing exactly
+`version`, `enabled` and `ttl_seconds` (60 in the test), plus an empty writable
+media tmpfs for UID/GID 10001. It starts actual GUI tools and checks loopback-only
+ports inside the container; never map those ports onto the host or mount live
+profiles for this test. The no-progress player test explicitly allows the real
+observer deadline to elapse; all other generic test deadlines stay unchanged.

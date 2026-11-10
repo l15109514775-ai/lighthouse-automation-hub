@@ -14,7 +14,9 @@ def owned(tmp_path,monkeypatch):
     class OwnedRootAdmission:
         def as_posix(self):return '/opt/lighthouse-hub'
         def __truediv__(self,value):return tmp_path/value
-    adapter=Path(__file__).parents[2]/'adapters/ytdlp_whole_v4.py'
+    # Frozen input is read only as evidence bytes; never imported as the live adapter.
+    adapter=Path(__file__).parents[1]/'fixtures/historical-recovery/ytdlp_whole_v4.py.source'
+    assert hashlib.sha256(adapter.read_bytes()).hexdigest()==op.SOURCE_SHA
     target=tmp_path/'adapters/ytdlp_whole_v4.py';target.parent.mkdir();target.write_bytes(adapter.read_bytes())
     config=tmp_path/'config';config.mkdir()
     for n in ('hub.toml','video-runtime-v5.toml'):(config/n).write_bytes(b'owned=true\n')
@@ -81,3 +83,16 @@ def test_changed_scope_or_snapshot_refuses_without_queue_mutation(owned,monkeypa
     with pytest.raises(AssertionError):apply(monkeypatch,reviewed)
     assert db.query('SELECT * FROM jobs ORDER BY job_id')==before and db.query('SELECT * FROM replay_fifo_v4 ORDER BY candidate_id')==fifo
     assert not db.query('SELECT * FROM audit')
+
+
+def test_historical_recovery_rejects_current_adapter_without_reset_or_cleanup(owned):
+    settings,db,root=owned
+    before=db.query('SELECT * FROM jobs ORDER BY job_id')
+    partials={str(p):p.read_bytes() for p in root.glob('media/**/stream-299.mp4.part')}
+    current=Path(__file__).parents[2]/'adapters/ytdlp_whole_v4.py'
+    target=root/'adapters/ytdlp_whole_v4.py';target.write_bytes(current.read_bytes())
+    assert hashlib.sha256(target.read_bytes()).hexdigest()!=op.SOURCE_SHA
+    with pytest.raises(AssertionError):
+        with db.transaction() as conn:op.snapshot(settings,db,conn)
+    assert db.query('SELECT * FROM jobs ORDER BY job_id')==before
+    assert {str(p):p.read_bytes() for p in root.glob('media/**/stream-299.mp4.part')}==partials
