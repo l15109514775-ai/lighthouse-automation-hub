@@ -36,6 +36,11 @@ is a full source archive, **not** a qualified reduced runtime package.
 
 ## New server release gates
 
+The subsequent [download access protection](youtube-download-access-policy.md)
+adds migration 018 and durable request pacing / manual stops. Build a new image
+with these changes; the older candidate's acceptance does not cover them. Keep
+the current download service disabled until the new-host gates below pass.
+
 1. Record the new server's OS, disk capacity, application UID, image digest and
    runtime versions. Transfer secrets separately; do not use public example
    channel IDs, target UID or authorization references as production settings.

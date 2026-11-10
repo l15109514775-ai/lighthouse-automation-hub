@@ -549,6 +549,10 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
     job['lease_owner']=data['lease_owner'];maintenance=maintenance_factory(settings,store);plan=binding['source_plan']
     stats={'requests':0,'response_bytes':0,'request_limit':plan['max_http_requests'],'provider':PROVIDER,'budget_history_reset':False}
     budget=Budget(store,limits_function(binding));last_progress=0;info=None;observation=None
+    # V4 acquisition owns this new policy; old compatibility entry points retain
+    # their existing behavior and must not run beside the new acquisition owner.
+    from services.hub.youtube_access import AcquisitionAccess
+    access=AcquisitionAccess(settings,store) if binding.get('request_mode')=='fifo-v4' else None
     active_track=None;active_track_url=None;range_failure=None;access_failure=None
     def check():
         service.check_binding(job,binding);maintenance.check_disk(disk_needed(folder,binding))
@@ -569,6 +573,7 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
             value=super()._extract_player_response(*a,**k)
             try:clear_stream_player_guard(value)
             except HubError as exc:
+                if access is not None:access.trip(exc.code,job['job_id'])
                 if exc.code=='YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED':access_failure=access_response_diagnostic('client',video_id,value,client=a[0] if a else k.get('client'),request_index=stats['requests'])
                 raise
             return value
@@ -578,6 +583,7 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
                 initial=self._search_json(self._YT_INITIAL_PLAYER_RESPONSE_RE,webpage,'initial player protection check',video_id,fatal=False)
                 try:clear_stream_player_guard(initial)
                 except HubError as exc:
+                    if access is not None:access.trip(exc.code,job['job_id'])
                     if exc.code=='YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED':access_failure=access_response_diagnostic('initial',video_id,initial,client=webpage_client,request_index=stats['requests'])
                     raise
             return super()._extract_player_responses(clients,video_id,webpage,webpage_client,webpage_ytcfg,is_premium_subscriber)
@@ -585,6 +591,7 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
         def _is_agegated(response):
             nonlocal access_failure
             if BaseYoutubeIE._is_agegated(response):
+                if access is not None:access.trip('YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED',job['job_id'])
                 access_failure=access_response_diagnostic('age',video_id,response,request_index=stats['requests'])
                 raise HubError('YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED')
             return False
@@ -616,6 +623,7 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
                 check();host=legacy.destination(url);headers=legacy.scoped_headers(self.params.get('http_headers'),request.headers,url,
                     authenticated=True,jar=self.cookiejar,original_host=origin)
                 if stats['requests']>=plan['max_http_requests']:raise HubError('YOUTUBE_HIGHEST_REQUEST_LIMIT')
+                if access is not None:access.before_request(media=host.endswith('.googlevideo.com'),check=check)
                 call=budget.reserve(PROVIDER,job['job_id']);stats['requests']+=1;connection=None;response=None;wrapped=None;diagnostic=None
                 try:
                     connection,response=open_request(url,[host],method=request.method,headers=headers,body=request.data)
@@ -635,8 +643,11 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
                         url=urljoin(url,response.getheader('Location',''));legacy.destination(url);connection.close();connection=None;budget.finish(call,'done');continue
                     if status in (401,403):
                         access_failure=access_response_diagnostic('http',video_id,request_index=stats['requests'],http_status=status)
+                        if access is not None:access.response(status,response.getheader('Retry-After'),job['job_id'])
                         raise HubError('YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED')
-                    if status==429:raise HubError('YOUTUBE_DOWNLOAD_RATE_LIMITED')
+                    if status==429:
+                        if access is not None:access.response(status,response.getheader('Retry-After'),job['job_id'])
+                        raise HubError('YOUTUBE_DOWNLOAD_RATE_LIMITED')
                     if status>=500:raise HubError('YOUTUBE_DOWNLOAD_NETWORK_ERROR',retryable=True)
                     if metadata_only and kind=='media':raise HubError('YOUTUBE_NATURAL_PLANNING_MEDIA_FORBIDDEN',review=True)
                     if host=='www.youtube.com':
@@ -721,6 +732,11 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
     except Exception as exc:
         text=str(exc).lower();restricted=any(x in text for x in ('403','sign in','captcha','not a bot','age-restrict','country','drm','po token'))
         error={'error_code':'YOUTUBE_DOWNLOAD_ACCESS_RESTRICTED' if restricted else 'YOUTUBE_HIGHEST_EXTRACTION_FAILED','retryable':False,'review':True}
+    if access is not None:
+        access.trip(error['error_code'],job['job_id'])
+        access_state=access.status()
+        if access_state['manual_resume_required']:
+            error={'error_code':access_state['error_code'],'retryable':False,'review':True}
     atomic_json(output,{**error,'http':stats,'partial_files_retained':True,'source_plan':plan,
         **({'range_diagnostic':range_failure} if range_failure is not None else {}),
         **({'access_diagnostic':access_failure} if access_failure is not None else {}),

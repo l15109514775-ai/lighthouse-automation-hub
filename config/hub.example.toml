@@ -95,3 +95,13 @@ monthly_calls = 0
 max_call_usd = 0
 paid_authorized = false
 
+
+# Conservative V4 download admission, persisted in the existing task database.
+# These are operational defaults, not YouTube guaranteed safe thresholds.
+[youtube_acquisition_access]
+metadata_interval_seconds = 1.0
+media_interval_seconds = 0.25
+between_downloads_seconds = 60
+rate_limit_cooldown_seconds = 3600
+network_retry_seconds = 60
+network_max_attempts = 3

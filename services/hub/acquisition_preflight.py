@@ -60,7 +60,13 @@ def _history(database, fifo_hash):
         db.execute('BEGIN')
         tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         result = {'journal_mode': db.execute('PRAGMA journal_mode').fetchone()[0],
-                  'jobs': [], 'fifo_bindings': [], 'fifo_table_present': 'replay_fifo_v4' in tables}
+                  'jobs': [], 'fifo_bindings': [], 'fifo_table_present': 'replay_fifo_v4' in tables,
+                  'access_gate_present': 'youtube_acquisition_access' in tables}
+        if result['access_gate_present']:
+            row = db.execute('SELECT paused,error_code,not_before,revision FROM youtube_acquisition_access WHERE singleton=1').fetchone()
+            result['access_gate_present'] = row is not None
+            if row:
+                result['access_gate'] = {'paused':bool(row[0]), 'error_code':row[1], 'not_before':row[2], 'revision':row[3]}
         clean = lambda s: s if isinstance(s, str) and re.fullmatch(r'[a-zA-Z0-9_:-]{1,128}', s) else 'unrecognized'
         for kind, state, count, attempts in db.execute(
                 "SELECT job_type,state,count(*),sum(attempts) FROM jobs WHERE queue='video' GROUP BY job_type,state"):
@@ -82,6 +88,11 @@ def inspect(settings):
               'network_used': False, 'production_activation_allowed': False,
               'policy_files': {}, 'blockers': [], 'history': None}
     blockers = report['blockers']
+    from .youtube_access import policy as access_policy
+    try:
+        report['access_policy'] = access_policy(settings)
+    except HubError as exc:
+        blockers.append(exc.code)
     values = {}
     for name in (FIFO_FILE, POLICY_FILE, PLAN_POLICY_FILE):
         try:
@@ -122,6 +133,10 @@ def inspect(settings):
     fifo_hash = report['policy_files'].get(FIFO_FILE, {}).get('sha256')
     try:
         report['history'] = _history(settings.db_path, fifo_hash)
+        if not report['history']['access_gate_present']:
+            blockers.append('YOUTUBE_ACCESS_MIGRATION_REQUIRED')
+        elif report['history'].get('access_gate', {}).get('paused'):
+            blockers.append('YOUTUBE_ACCESS_MANUAL_RESUME_REQUIRED')
         active = [item for item in report['history']['fifo_bindings']
                   if item['state'] not in ('completed', 'excluded', 'existing')]
         if fifo_hash is None and active:

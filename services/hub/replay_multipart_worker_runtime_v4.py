@@ -34,12 +34,13 @@ class QueueView:
     reservation would become unknown, never a free retry, even though this
     acquisition-only release does not itself create publications.
     """
-    def __init__(self, store, *, acquisition_enabled=False, heartbeat_name=None):
+    def __init__(self, store, *, acquisition_enabled=False, heartbeat_name=None, access_gate=None):
         if type(acquisition_enabled) is not bool:
             raise ValueError('REPLAY_MULTIPART_QUEUE_MODE_INVALID')
         self.store, self.acquisition_enabled = store, acquisition_enabled
         self.heartbeat_name = heartbeat_name
         self.heartbeat_instance = None
+        self.access_gate = access_gate
 
     def __getattr__(self, name):
         return getattr(self.store, name)
@@ -75,6 +76,8 @@ class QueueView:
         now, owner = time.time(), str(uuid.uuid4())
         with self.store.transaction() as db:
             if db.execute("SELECT paused FROM pipelines WHERE name='video'").fetchone()['paused']:
+                return None
+            if self.access_gate is not None and not self.access_gate.allows_claim(db, now):
                 return None
             row = db.execute(f"""SELECT job_id FROM jobs WHERE queue='video' AND {scope}
                 AND state IN ('pending','retry_scheduled') AND next_run<=? AND attempts<?
@@ -121,6 +124,8 @@ class Coordinator:
             raise ValueError('REPLAY_MULTIPART_MODE_INVALID')
         self.mode = mode
         self.settings, self.store = settings, store
+        from .youtube_access import AcquisitionAccess
+        self.access = AcquisitionAccess(settings, store)
         self.producer_heartbeat = None
         self.fifo = ReplayFIFOV4(settings, store)
         self.prepare = YouTubeWholeReplayPrepare(settings, store)
@@ -132,9 +137,11 @@ class Coordinator:
         if set(handlers) != {PLAN_JOB, DOWNLOAD_JOB, READINESS_JOB} or not all(map(callable, handlers.values())):
             raise HubError('REPLAY_MULTIPART_HANDLER_SET_CHANGED', review=True)
         handlers[REFRESH_JOB] = self.fifo.process_refresh
+        handlers = {name: (lambda job, handler=handler: self.access.run(job, handler))
+                    for name, handler in handlers.items()}
         from .worker import Worker
         self.worker = Worker(settings, QueueView(store, acquisition_enabled=mode == 'acquisition_only',
-            heartbeat_name='worker:replay-acquisition'), handlers,
+            heartbeat_name='worker:replay-acquisition', access_gate=self.access), handlers,
             resource_deferrals=resource_callbacks(settings, store),
             readiness_deferrals=self.readiness.callbacks())
 
@@ -175,6 +182,9 @@ class Coordinator:
                 result['dispatch_state'] = 'register_only'
             elif paused:
                 result['dispatch_state'] = 'paused'
+            elif not self.access.status()['claim_allowed']:
+                result['dispatch_state'] = 'access_paused'
+                result['access'] = self.access.status()
             else:
                 result['steps']['readiness'] = self.readiness.tick()
                 result['steps']['resources'] = self.fifo.resource_tick(self.validators)
