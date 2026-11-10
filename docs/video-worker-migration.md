@@ -341,3 +341,29 @@ in the ingress source allowlist, could not connect. No subtitle job, model call
 or publication was submitted. The Shanghai poller remained active and its actual
 endpoint still points to the original host. Caller update, final synchronization
 and single-owner production activation remain outstanding.
+# Host cutover: restore before first target activation
+
+`scripts/restore_fenced_source.py` is a narrowly scoped source restoration tool.
+It accepts the root-owned `source-frozen.json` captured before stopping source
+writers and a fresh `lighthouse-target-quiescent-v1` proof from a coordinator
+which has just inspected the target over pinned SSH. The proof must establish
+that all target containers are stopped, no production owner record exists, and
+the target has never been activated. Evidence older than 120 seconds is rejected.
+
+The command defaults to dry-run; `--apply` restores original Docker restart
+policies, only originally running containers, recorded unit enablement/activity,
+and hash-checked saved cron entries. A scoped systemd drop-in replaces generic
+`compose up` with that exact original active container list, preventing legacy
+video/subtitle containers from being resurrected during restore or reboot.
+Container identity drift and changed cron destinations stop restoration.
+
+This tool does **not** restore databases or edit task states. Once target
+production has started, stop both sides, preserve the target's authoritative
+database/media/publication records and prepare a reverse migration; this
+preactivation restoration command is no longer applicable.
+
+Validation on 2026-11-10: four pure plan tests passed (including six target-proof
+rejection variants). These are not a claim that a production host rollback has
+been executed. Source freeze must preserve cron metadata before altering each
+entry and disable cron producers before draining consumers.
+
