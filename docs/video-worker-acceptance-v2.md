@@ -38,9 +38,15 @@ of 1080p60 H.264 and stereo AAC from the 13,837,283,384-byte output. A
 network-isolated probe in the candidate image exceeded its initial 128 MiB
 limit and passed at 512 MiB. The acquisition receipt belongs to the incumbent.
 The publisher's first upload was transferring at the observation time. Public
-confirmation is still pending. The owner deferred the candidate's live download
-and activation until a later log review.
+confirmation is still pending. The owner deferred a separate live download test
+and then requested direct deployment for the next naturally discovered recording.
 [Media and transfer observations](releases/current-replay-handoff-20261111.json).
+
+At 10:23 Beijing time the new acquisition container passed its own producer
+and worker heartbeat checks. All nine source mounts matched their declared
+bytes. The other eight services kept their container IDs. The same upload
+child continued on attempt one. The new startup marker explicitly records
+pending real-download acceptance. [Cutover receipt](releases/natural-queue-cutover-20261111.json).
 
 The publisher's retention thread failed with a `KeyError` on an earlier
 completed group. A read-only call against the installed code isolated the missing

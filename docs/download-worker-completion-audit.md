@@ -12,10 +12,11 @@ affect current tasks. Historical records and publication semantics still must be
 preserved. The new host is the sole production owner; the old host remains fenced.
 Yuuhi's tweet/replay forwarding is paused; only Chise is active.
 
-The new host remains on the repaired incumbent acquisition image. The source-built
-candidate was restored from the operator's verified image export on the former
-Tencent host. Its two-file systemd deployment configuration and fallback were
-staged on the new host. Neither step changed production ownership. [Independent
+The source-built acquisition image is running on the new host for the next natural
+recording at the owner's request. Both boot heartbeats passed, and the incumbent's
+accepted sample remains in the archived previous marker. First real download on
+this build is pending. The same publication worker retained the existing upload
+attempt. [Cutover receipt](releases/natural-queue-cutover-20261111.json), [independent
 image restore](releases/candidate-independent-import-20261111.json) and
 [systemd staging](releases/candidate-systemd-stage-20261111.json).
 
@@ -286,8 +287,8 @@ The source-built candidate also passed an acquisition-specific private binding
 comparison, 84 offline regressions and an isolated actual return to the previous
 image on the same synthetic database. The unmodified source image rejected the
 production identity policy as expected. The prepared seven-file override is
-versioned and has been rendered against the private deployment. Production
-keeps its qualified image. [Rebuilt candidate evidence](releases/rebuilt-acquisition-compatibility-20261111.json).
+versioned and has been rendered against the private deployment. That qualification
+preceded the natural-queue cutover. [Rebuilt candidate evidence](releases/rebuilt-acquisition-compatibility-20261111.json).
 
 A second rollback drill booted both builds on a private copy of the actual
 production database, observing two producer cycles on each. All 60 compared

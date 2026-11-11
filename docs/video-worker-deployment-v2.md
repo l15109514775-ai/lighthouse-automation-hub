@@ -160,15 +160,25 @@ requires the current owner and acquisition-enabled markers under
 `/etc/lighthouse-hub`. Use these units for the installed release. A generic
 `docker compose up` may revive retired services and bypass the owner gate.
 
-### Pending switch from the incumbent to the source-built image
+### Acquisition cutover for the next natural recording
 
-The installed acquisition marker records the exact image, source and job ID
-of a real accepted download. The existing receipt belongs to the incumbent
-`0722adba`. Retain it with the previous configuration. For the candidate
-`a87681b0`, record the actual accepted job and verified media from that image
-before arming permanent startup. The offline regression and clean import are
-separate evidence. A recording already in flight keeps its original worker
-through transfer and media verification.
+The owner requested startup of `a87681b0` before its first natural download.
+The installed version-two acquisition marker records pending real-download
+acceptance and has empty sample/job fields. The previous marker with its
+actual accepted job belongs to `0722adba` and is retained with that declaration.
+The first verified download on the new image can provide its own evidence.
+The last long recording completed acquisition on the incumbent before cutover.
+
+The host-specific switch and rollback script is root-owned at
+`/var/lib/lighthouse-migration/candidate-systemd-override-hq_qyb42/switch-acquisition-natural.py`.
+Run it with `python3` and the `rollback` argument on the production host to
+restore the previous acquisition declaration, mirror and startup marker from
+this cutover. The script verifies the expected release, requires an idle
+acquisition queue, fences the FIFO producer, and checks either exclusive video
+lock ownership or its independently running publisher holder. It checks both
+boot heartbeats and peer container identities after replacement. The previous
+image was exercised in an isolated rollback drill. The live cutover succeeded;
+a production rollback of this release has not been invoked.
 
 The systemd unit consumes two Compose declarations. Use the prepared
 `installed-candidate.compose.json` when switching, and its byte-identical

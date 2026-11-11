@@ -1,0 +1,69 @@
+{
+  "action": "switch",
+  "at": 1794363811.4756038,
+  "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "previous_container": "ee9afb145dd400626fc43f231075f4af6fa0ef94ccf051babe45097c5b2d9c6f",
+  "new_container": "1eeb8adb6676abf1d7e01481345923940023a24bf8ff3b42da3e69a5c2353703",
+  "running_healthy": true,
+  "separate_boot_heartbeats": true,
+  "file_sha256": {
+    "services/hub/worker.py": "5f9ae7942665a9fb5718af3894fdc1934c4c225be65f43c79c06fbd4a6d66190",
+    "services/hub/source_controls.py": "663738abb2b0d6b807f7456e49a38f8417a10615b8581d49ffe9c89b21a25169",
+    "adapters/http.py": "28e68b1ed5017e1c51dee2d77a6edaf8d1ca7833d2b60b82a628c7fa5e5a8250",
+    "adapters/safe_https.py": "8d393985e41f2409e9a1fa738e3ed2d2842d7dc4bd02ebe9c79a25bb9b01149f",
+    "services/hub/budget.py": "1de68d1a9937e229be76fc5fe2de21ae1814a9cfc0158096f86bc67bd87f827e",
+    "services/hub/replay_fifo_v4.py": "279600d746528fe5de12dcef6d642c4028f2ef104ceebe4867186b7ccc354b50",
+    "services/hub/replay_multipart_private_v4.py": "db5de80b750fd808715c84e2d13941ffafb68454141f7f65ca5abed233ed5f2e",
+    "services/hub/replay_multipart_v4.py": "3b196519cdda068d7e1b780deb6540318a9b5a624861b96551c643290e723399",
+    "services/hub/youtube_download.py": "bf23f72e176e80a44219f6ed02f70db4bec77583b95e987497d29007a2d3a7ae"
+  },
+  "unchanged_services": [
+    "api",
+    "lighthouse-observer-mcp-v1",
+    "lighthouse-observer-tunnel-v1",
+    "replay-publication-worker",
+    "scheduler",
+    "subtitle-ingest",
+    "system-worker",
+    "tweet-worker"
+  ],
+  "publisher_id": "487386ef23266efc6a42f478a4b1b706042101b013416e8259461a7614620996",
+  "publication_before": [
+    "processing",
+    "replay_part_uploading",
+    1,
+    null
+  ],
+  "publication_after": [
+    "processing",
+    "replay_part_uploading",
+    1,
+    null
+  ],
+  "cutover_enqueued_jobs": 0,
+  "candidate_accepted_download": false,
+  "direct_queue_writes": 0,
+  "effective_code_comparison": {
+    "unchanged": [
+      "services/hub/worker.py",
+      "services/hub/db.py",
+      "services/hub/source_controls.py",
+      "services/hub/replay_fifo_v4.py",
+      "services/hub/youtube_readiness_v4.py",
+      "services/hub/youtube_download_v4.py",
+      "services/hub/replay_delivery_v5.py",
+      "services/hub/youtube_access.py",
+      "adapters/ytdlp_whole_v4.py"
+    ],
+    "different": [
+      "services/hub/replay_multipart_worker_runtime_v4.py",
+      "services/hub/acquisition_health.py"
+    ],
+    "old_yt_dlp": "2026.10.26",
+    "new_yt_dlp": "2026.10.26",
+    "changed_service_fields": [
+      "image",
+      "volumes"
+    ]
+  }
+}
