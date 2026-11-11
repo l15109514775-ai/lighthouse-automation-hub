@@ -1,6 +1,6 @@
 # Download Worker 2.0 — current completion audit
 
-Checkpoint: 2026-11-11, after the independent image restore and terminal public-image test run.
+Checkpoint: 2026-11-11, after the two-reader release restore and guarded-child recovery test.
 **Overall goal remains active.** This index separates current evidence from the
 historical failed/blocked entries retained in the long acceptance log. It does
 not turn a successful probe, file restore or running container into an end-to-end
@@ -27,6 +27,29 @@ this build is pending. The same publication worker retained the existing upload
 attempt. [Cutover receipt](releases/natural-queue-cutover-20261111.json), [independent
 image restore](releases/candidate-independent-import-20261111.json) and
 [systemd staging](releases/candidate-systemd-stage-20261111.json).
+
+The installed acquisition role now uses two HTTPS range readers with a shared
+18,750,000 B/s media ceiling. The new portable bundle restores all eleven code
+binds; its fully rendered Compose definition matched the installed one. A
+separate SIGKILL exercise verified partial-file compatibility with both older
+transports. [Restore comparison](releases/range-compose-restore-20261111.json)
+and [rollback observations](releases/range-rollback-20261111.json).
+
+The guarded FIFO child also passed a same-release recovery test in the deployed
+Linux image with its effective code binds. SIGKILL interrupted the third admitted
+range after one contiguous prefix had been written. The actual Store recovered
+the same job under the video lock, issued a fresh lease, and incremented its
+attempt. The resumed child retained the original SQLite request entries, began
+at the prefix offset and verified both track hashes. The test used synthetic
+media, extractor and HTTP replies, a simulated free-space reading, and an
+isolated database. [Guarded-child test record](releases/range-fifo-crash-20261111.json).
+
+At this checkpoint the production database contained zero new V4 download jobs
+since range activation, and the acquisition access gate was open. A recording
+downloaded before activation (`2lILwnrnKTE`) had three read-only publication
+checks, the latest observing pending moderation. Its publication row still had
+no verified external ID. These observations provide neither a real transfer rate
+for the two-reader release nor a verified public link for that recording.
 
 The completed public-image Linux run collected 4,733 cases. It reported 4,699
 passed, 12 failed, 20 setup errors and two conditional skips, plus six passing

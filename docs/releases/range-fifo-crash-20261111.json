@@ -1,0 +1,12 @@
+{
+  "test": "test_fifo_range_resume.py",
+  "sha256": "684f47558c9c1c6639e3ff29d50e3a40b11028ae95f214df12935f665943a052",
+  "image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "declaration_sha256": "c27568b86011b3879afbb59c64a8e534c02d531e754fcbfdc4410eb1a5e997ec",
+  "result": "1 passed in 5.26s",
+  "network": "none",
+  "real_youtube": false,
+  "production_mounts": [
+    "read-only Python/JS source files"
+  ]
+}
