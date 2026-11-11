@@ -51,6 +51,11 @@ checks, the latest observing pending moderation. Its publication row still had
 no verified external ID. These observations provide neither a real transfer rate
 for the two-reader release nor a verified public link for that recording.
 
+Later on November 11 the production ledger recorded public verification for
+`2lILwnrnKTE` as [BV1oHWj6vE2z](https://www.bilibili.com/video/BV1oHWj6vE2z).
+The publication child completed on attempt one, and its parent and FIFO row
+also reached completion. The download preceded the two-reader cutover.
+
 The completed public-image Linux run collected 4,733 cases. It reported 4,699
 passed, 12 failed, 20 setup errors and two conditional skips, plus six passing
 subtests. Thirty failures/errors matched the historical, owner-deferred cases
