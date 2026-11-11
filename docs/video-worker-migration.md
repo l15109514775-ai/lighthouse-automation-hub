@@ -1,5 +1,23 @@
 # Video worker migration log
 
+## Retiring superseded download releases after acceptance
+
+The owner authorized cleanup after Download Worker 2.0 passes acceptance.
+For the first naturally discovered Chise replay, match the acquisition attempt
+to the running image and deployment timeline, then verify the download receipt,
+media checks and handoff to the publisher. The previous release downloaded
+`2lILwnrnKTE` before cutover. Its publication outcome provides no download
+acceptance for the new image.
+
+Before removing a superseded artifact, check current container image IDs, boot
+declarations, code mounts, active jobs and remaining code or recovery references.
+At the November 11 post-cutover inspection, `replay-publication-worker` was still
+running image `0722adba`. Preserve this shared image while the publisher uses it.
+The new downloader also consumes FIFO V4 and the V4 adapter. Eligible cleanup
+covers artifacts exclusive to retired releases. Keep publication mappings,
+attempts, rollback receipts and task history available for the owner's on-demand
+log reviews over the coming month.
+
 ## Phase 0 — audit
 
 Baseline 1272f86; audit committed as 5a9e396. Read-only production inventory,

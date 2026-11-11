@@ -182,15 +182,23 @@ boot heartbeats and peer container identities after replacement. The previous
 image was exercised in an isolated rollback drill. The live cutover succeeded;
 a production rollback of this release has not been invoked.
 
-Four targeted offline cases exercised the operator script with real file locks,
+Six targeted offline cases exercised the operator script with real file locks,
 SQLite WAL and declaration replacements. Host service control was simulated.
 The cases covered a stopped container, an unhealthy container with a provider
 hold and a scheduled retry, refusal on a processing job, and refusal on a foreign
-lock. The updated host script SHA-256 is
-`4fb0eb995a43db326d419b274955b2a11c1024882dfdc9ad01d2e2804475fee4`.
+lock. Two additional cases cover a failed candidate startup followed by either a
+healthy restoration or a failed restoration. Inspect root-owned
+`natural-cutover/automatic-restore-<attempt>-*.json` in the release directory.
+Match the started and terminal receipts by attempt ID. The terminal receipt
+records the requested and restored images, original failure step and error
+type, and the observed restore outcome. A started receipt alone leaves the
+outcome open. If a receipt cannot be written, the script attempts a redacted
+stderr diagnostic and continues recovery. A process killed before recording a
+failure can still require system logs for diagnosis. The host script SHA-256 is
+`f6c649ebd2d29e1e4c75fb642340dd8eb756958b5abd48d655eec4ea887dbcdf`.
 The private operator copy of both declarations, both markers, script and
 cutover receipts was read back and checked member-by-member. Its archive SHA-256
-is `7a03805fc3466494fe3c4e52e80f29a8448da69110d373d7ad456a66aebc8a9e`.
+is `7fc71422dde6318c238ed05f50eede6235aa3d31d41961695f2409b22ceb4cd8`.
 
 The systemd unit consumes two Compose declarations. Use the prepared
 `installed-candidate.compose.json` when switching, and its byte-identical
