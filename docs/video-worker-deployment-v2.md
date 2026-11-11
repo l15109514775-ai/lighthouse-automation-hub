@@ -162,6 +162,8 @@ requires the current owner and acquisition-enabled markers under
 
 ### Acquisition cutover for the next natural recording
 
+The 2026-11-11 range transport trial layers two read-only Python modules onto the acquisition declaration. Its root-owned operator script is `/var/lib/lighthouse-migration/replay-range-trial-23758681c3c88e8e/release.py`. Use `python3 release.py rollback` from that directory to restore the previous single-reader 2.0 transport, or `python3 release.py rollback-incumbent` to restore the pre-2.0 acquisition release. This helper uses the existing producer/video lock fence and restores the matching startup marker and both Compose declarations. Use this helper after the range trial, as the original cutover script below identifies its original container by ID. Production rollback of the new transport has not been exercised.
+
 The owner requested startup of `a87681b0` before its first natural download.
 The installed version-two acquisition marker records pending real-download
 acceptance and has empty sample/job fields. The previous marker with its

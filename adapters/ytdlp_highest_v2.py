@@ -8,6 +8,7 @@ from datetime import datetime
 from fractions import Fraction
 from pathlib import Path
 from types import SimpleNamespace
+from threading import Lock
 import hashlib,http.client,json,math,os,re,signal,stat,subprocess,sys,time,uuid
 from urllib.parse import urljoin
 from urllib.request import Request as CookieRequest
@@ -553,13 +554,16 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
     # their existing behavior and must not run beside the new acquisition owner.
     from services.hub.youtube_access import AcquisitionAccess
     access=AcquisitionAccess(settings,store) if binding.get('request_mode')=='fifo-v4' else None
+    from adapters import replay_ranges
+    workers=1;rate=2_000_000
+    counter_lock=Lock()
     active_track=None;active_track_url=None;range_failure=None;access_failure=None
     def check():
         service.check_binding(job,binding);maintenance.check_disk(disk_needed(folder,binding))
-    def progress(message):
+    def progress(message,*,force=False):
         nonlocal last_progress
         check()
-        if time.monotonic()-last_progress>=2:
+        if force or time.monotonic()-last_progress>=2:
             last_progress=time.monotonic();atomic_json(folder/'progress.json',{'version':version_label,'checked_at':time.time(),
                 'format_id':message.get('info_dict',{}).get('format_id'),'status':message.get('status'),
                 'downloaded_bytes':message.get('downloaded_bytes'),'total_bytes':message.get('total_bytes'),'http':stats,'source_plan':plan})
@@ -602,9 +606,12 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
         def read(self,amt=None):
             check();metadata=amt is None or amt<0
             raw=self.fp.read(min(8_388_609,self.bound-self.count+1)) if metadata else self.fp.read(min(amt,8_388_608))
-            self.count+=len(raw);stats['response_bytes']+=len(raw)
+            self.count+=len(raw)
+            with counter_lock:
+                stats['response_bytes']+=len(raw)
+                total=stats['response_bytes']
             if metadata and len(raw)>8_388_608:raise HubError('YOUTUBE_DOWNLOAD_METADATA_RESPONSE_LIMIT')
-            if self.count>self.bound or stats['response_bytes']>plan['source_bytes']*2+32_000_000:raise HubError('YOUTUBE_HIGHEST_SIZE_LIMIT')
+            if self.count>self.bound or total>plan['source_bytes']*2+32_000_000:raise HubError('YOUTUBE_HIGHEST_SIZE_LIMIT')
             return raw
         def close(self):
             try:super().close()
@@ -626,6 +633,12 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
                 if access is not None:access.before_request(media=host.endswith('.googlevideo.com'),check=check)
                 call=budget.reserve(PROVIDER,job['job_id']);stats['requests']+=1;connection=None;response=None;wrapped=None;diagnostic=None
                 try:
+                    if workers>1 and active_track is not None:
+                        # Admission and progress are single-writer. Persist the new ledger
+                        # count before the first body read, including redirected requests.
+                        partial=folder/('stream-'+active_track['format_id']+'.'+active_track['ext']+'.part')
+                        progress({'status':'downloading','info_dict':active_track,'downloaded_bytes':partial.stat().st_size,
+                            'total_bytes':active_track['filesize']},force=True)
                     connection,response=open_request(url,[host],method=request.method,headers=headers,body=request.data)
                     status=response.status
                     mime=(response.getheader('Content-Type','').split(';',1)[0] or 'unknown').lower()
@@ -654,7 +667,7 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
                         self.cookiejar.extract_cookies(response,CookieRequest(url))
                         for cookie in list(self.cookiejar):
                             if cookie.domain not in legacy.COOKIE_DOMAINS:self.cookiejar.clear(cookie.domain,cookie.path,cookie.name)
-                    if diagnostic and (diagnostic['requested_start'] is not None and diagnostic['requested_start']>0 or
+                    if diagnostic and (workers>1 and active_track is not None or diagnostic['requested_start'] is not None and diagnostic['requested_start']>0 or
                             active_track is not None and not diagnostic['requested_range_valid']):
                         if diagnostic['rejection_reason'] is not None:
                             raise HubError('YOUTUBE_HIGHEST_RESUME_RANGE_NOT_HONORED',review=True)
@@ -676,6 +689,9 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
                     if connection:connection.close()
             raise HubError('YOUTUBE_DOWNLOAD_REDIRECT_REJECTED')
     try:
+        if access is not None and not metadata_only:
+            workers=replay_ranges.worker_count(settings.config)
+            rate=replay_ranges.replay_rate(settings.config)
         if __version__!=legacy.YTDLP_VERSION or version('yt-dlp-ejs')!=legacy.EJS_VERSION:
             raise HubError('YOUTUBE_DOWNLOAD_DEPENDENCY_VERSION_CHANGED')
         plan_validator(plan)
@@ -686,7 +702,7 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
             'extractor_retries':0,'retries':0,'fragment_retries':0,'socket_timeout':20,'concurrent_fragment_downloads':1,
             'skip_unavailable_fragments':False,'js_runtimes':{'node':{'path':'/usr/local/bin/node'}},'remote_components':[],
             'postprocessors':[],'fixup':'never','continuedl':True,'nopart':False,'overwrites':False,'max_filesize':plan['source_bytes'],
-            'ratelimit':2_000_000,'buffersize':65536,'noprogress':True,'progress_hooks':[progress],'mark_watched':False,
+            'ratelimit':rate,'buffersize':65536,'noprogress':True,'progress_hooks':[progress],'mark_watched':False,
             'impersonate':None,'writeinfojson':False,'writesubtitles':False,'writethumbnail':False,'getcomments':False,
             'allowed_extractors':['youtube'],'extractor_args':{'youtube':{'player_client':list(BaseYoutubeIE._DEFAULT_AUTHED_CLIENTS)}}}
         with Guarded(options) as ydl:
@@ -716,11 +732,27 @@ def child_download(ticket,*,service_type=YouTubeHighestDownload,folder_fn=checke
                                 'selected_formats':revision['old_plan']['selected_formats']}):
                         raise HubError('YOUTUBE_HIGHEST_RESUME_FORMAT_CHANGED',review=True)
             atomic_json(selection,expected);selection.chmod(0o600);tracks=[]
+            bandwidth=replay_ranges.ReplayBandwidth(rate)
             for fmt,identity in zip(selected,plan['selected_formats']):
                 check();file=folder/('stream-'+identity['format_id']+'.'+identity['ext'])
                 if file.is_symlink() or Path(str(file)+'.part').is_symlink():raise HubError('YOUTUBE_HIGHEST_WORKSPACE_INVALID',review=True)
                 active_track=identity;active_track_url=fmt['url']
-                try:ok,_=ydl.dl(str(file),fmt)
+                try:
+                    if workers==1:
+                        ok,_=ydl.dl(str(file),fmt)
+                    else:
+                        if fmt.get('protocol')!='https' or fmt.get('fragments') or fmt.get('manifest_url'):
+                            raise HubError('YOUTUBE_HIGHEST_FORMAT_SIZE_OR_TRANSPORT_CHANGED',review=True)
+                        def open_range(start,end):
+                            headers={**(fmt.get('http_headers') or {}),'Range':f'bytes={start}-{end}'}
+                            return ydl.urlopen(Request(fmt['url'],headers=headers))
+                        def track_progress(count):
+                            progress({'status':'downloading','info_dict':fmt,'downloaded_bytes':count,'total_bytes':identity['filesize']})
+                        stats['range_workers']=workers
+                        stats['rate_bytes_per_second']=rate
+                        replay_ranges.download_track(file,identity['filesize'],workers=workers,open_range=open_range,
+                            check=check,progress=track_progress,bandwidth=bandwidth)
+                        ok=True
                 finally:active_track=None;active_track_url=None
                 if not ok or not file.is_file() or file.stat().st_size!=identity['filesize']:
                     raise HubError('YOUTUBE_HIGHEST_TRACK_INCOMPLETE',review=True)

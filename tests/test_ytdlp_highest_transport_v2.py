@@ -54,6 +54,43 @@ def owned_loop(f,monkeypatch,count,*,url=None,headers=None,status=200,content_ra
     monkeypatch.setattr(hq,'open_request',open_owned);monkeypatch.setattr(f.ytdlp.YoutubeDL,'extract_info',extract)
 
 
+@pytest.mark.parametrize('reply_status',[206,200,429])
+def test_fifo_range_body_uses_guarded_transport_and_request_ledger(transport,monkeypatch,reply_status):
+    import io
+    from hashlib import sha256
+    f=transport
+    ticket=json.loads(f.ticket.read_bytes())
+    bound=ticket['binding']
+    bound['request_mode']='fifo-v4'
+    for fmt in bound['source_plan']['selected_formats']:
+        fmt['filesize']=4
+    hq.atomic_json(f.ticket,ticket)
+    monkeypatch.setattr(f.ytdlp.YoutubeDL,'extract_info',lambda *a,**kw:info(bound))
+    class Response(io.BytesIO):
+        status=reply_status
+        def getheaders(self):
+            return [('Content-Range','bytes 0-3/4'),('Content-Length','4'),('Content-Type','application/octet-stream')]
+        def getheader(self,key,default=None):
+            return dict(self.getheaders()).get(key,default)
+    def open_owned(url,hosts,**kwargs):
+        assert kwargs['headers']['Range']=='bytes=0-3'
+        assert 'cookie' not in {key.lower() for key in kwargs['headers']}
+        return SimpleNamespace(close=lambda:None),Response(b'abcd')
+    monkeypatch.setattr(hq,'open_request',open_owned)
+    code=hq.child_download(f.ticket,service_type=lambda *a:SimpleNamespace(check_binding=lambda *a:None),
+        selector=lambda raw,b:raw['formats'],plan_validator=lambda p:None)
+    result=f.result()
+    assert (result['http']['range_workers'],result['http']['rate_bytes_per_second'])==(2,18_750_000)
+    assert result['http']['requests']==f.db.query('SELECT count(*) n FROM api_calls')[0]['n']
+    if reply_status==206:
+        assert code==0 and result['http']['response_bytes']==8
+        assert [t['sha256'] for t in result['tracks']]==[sha256(b'abcd').hexdigest()]*2
+    else:
+        assert code==1 and result['http']['requests']==1 and result['http']['response_bytes']==0
+        assert result['error_code']==('YOUTUBE_DOWNLOAD_RATE_LIMITED' if reply_status==429 else 'YOUTUBE_HIGHEST_RESUME_RANGE_NOT_HONORED')
+        assert not list(f.folder.glob('stream-*.mp4'))
+
+
 @pytest.mark.timeout(180)
 def test_real_child_exceeds_old_512_and_1000_without_resetting_existing_history(transport,monkeypatch):
     f=transport;call=Budget(f.db,legacy.LIMITS).reserve(legacy.PROVIDER,units=60);Budget(f.db,legacy.LIMITS).finish(call,'done')

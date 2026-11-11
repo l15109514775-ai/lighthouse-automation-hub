@@ -1,4 +1,6 @@
 youtube_download_enabled = false
+youtube_download_range_workers = 2
+youtube_download_rate_bytes_per_second = 18750000  # shared media payload rate, 150 decimal Mbps
 x_source_transport = "official_api"
 machine_source_generation = 1
 machine_tweet_enabled = false
