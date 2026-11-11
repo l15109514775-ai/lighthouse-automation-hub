@@ -1,0 +1,21 @@
+{
+  "source_id": "2lILwnrnKTE",
+  "observed_at": 1794355524.9980817,
+  "download_job_id": "1b304e82-b872-4930-b2e4-f624792f0606",
+  "download_started_at": 1794352287.51619,
+  "updated_official_observation_at": 1794355262.0773382,
+  "monitor": {
+    "job_id": "ab284410-5349-4441-9ec3-e373f31895e8",
+    "job_type": "youtube_live_monitor",
+    "state": "completed",
+    "created_at": 1794355259.5145748,
+    "updated_at": 1794355263.3509674,
+    "source_api": "youtube-data-v3-official",
+    "downloads_performed": 0
+  },
+  "fifo_rows": 1,
+  "download_jobs": 1,
+  "attempts": 1,
+  "state": "processing",
+  "external_requests_by_observer": 0
+}

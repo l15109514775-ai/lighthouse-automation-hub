@@ -26,6 +26,12 @@ kept their identities. The restored fallback package contains the active guard,
 dispatcher and owner pause, and passed five offline tests. [Activation record](releases/incumbent-readiness-activation-20261111.json)
 and [fallback restore evidence](releases/incumbent-fallback-20261111.json).
 
+The official live monitor checked the same recording again 2,975 seconds after
+the download job was created. Its observation timestamp falls within a completed
+monitor run. The production database still held one FIFO row and the same single
+processing download job at attempt one. The monitor reported zero downloads.
+[In-flight rediscovery receipt](releases/inflight-discovery-20261111.json).
+
 Maintenance now persists independent official-discovery health and alerts on a
 disabled/stale/erroring upstream, excluding intentionally paused sources. Nine
 focused tests passed in the production System Worker image, and a normal
