@@ -21,6 +21,16 @@ covers artifacts exclusive to retired releases. Keep publication mappings,
 attempts, rollback receipts and task history available for the owner's on-demand
 log reviews over the coming month.
 
+The observation period applies to old program versions. Replay media follows
+its normal retention policy throughout: release redundant download tracks after
+verified merge, keep the delivery file through submission and public playback
+confirmation, then release eligible local files with a deletion receipt.
+On November 11 the original files for `_nadmR0WzqI` and `lWzXr6h0SyM` were
+absent, matching their 3,413,212,368-byte and 11,214,658,526-byte receipts.
+The current `2lILwnrnKTE` upload retained its merged file. Its separate tracks
+were already absent. One unused 5,644,495-byte test fragment was removed after
+checking the byte-identical canonical fixture, references and open file handles.
+
 ## Phase 0 — audit
 
 Baseline 1272f86; audit committed as 5a9e396. Read-only production inventory,
