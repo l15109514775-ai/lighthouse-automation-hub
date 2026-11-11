@@ -2,7 +2,10 @@
 
 ## Retiring superseded download releases after acceptance
 
-The owner authorized cleanup after Download Worker 2.0 passes acceptance.
+The owner requested an observation period followed by joint confirmation before
+deleting superseded versions. Keep the fallback until both the operator and
+the owner explicitly confirm 2.0 has been reliable. The first successful
+download and the passage of a calendar month do not trigger deletion.
 For the first naturally discovered Chise replay, match the acquisition attempt
 to the running image and deployment timeline, then verify the download receipt,
 media checks and handoff to the publisher. The previous release downloaded

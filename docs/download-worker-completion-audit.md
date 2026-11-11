@@ -12,6 +12,14 @@ affect current tasks. Historical records and publication semantics still must be
 preserved. The new host is the sole production owner; the old host remains fenced.
 Yuuhi's tweet/replay forwarding is paused; only Chise is active.
 
+On November 11 the owner raised the CloudBase backup network budget from
+512,000,000 to 1,000,000,000 bytes per Beijing day. The monthly limit remains
+8,000,000,000 bytes. The installed scheduled entry passed its integrity and
+budget checks. With 189,853,149 bytes reserved today and 386,648,864 bytes
+needed for the next plan, the decision changed from deferred to available.
+The checks made zero remote requests. The next timer is November 12 at 03:30
+Beijing time. A successful remote backup and restore still require a new receipt.
+
 The source-built acquisition image is running on the new host for the next natural
 recording at the owner's request. Both boot heartbeats passed, and the incumbent's
 accepted sample remains in the archived previous marker. First real download on
