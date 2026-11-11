@@ -173,12 +173,24 @@ The host-specific switch and rollback script is root-owned at
 `/var/lib/lighthouse-migration/candidate-systemd-override-hq_qyb42/switch-acquisition-natural.py`.
 Run it with `python3` and the `rollback` argument on the production host to
 restore the previous acquisition declaration, mirror and startup marker from
-this cutover. The script verifies the expected release, requires an idle
-acquisition queue, fences the FIFO producer, and checks either exclusive video
-lock ownership or its independently running publisher holder. It checks both
+this cutover. The script verifies the expected release and fences the FIFO
+producer. Rollback can replace an unhealthy container or the identified stopped
+container with an active provider hold. Waiting jobs can remain queued when
+the operator holds the video lock. An active acquisition job prevents switching.
+If the publisher holds the lock, the acquisition queue must be idle. It checks both
 boot heartbeats and peer container identities after replacement. The previous
 image was exercised in an isolated rollback drill. The live cutover succeeded;
 a production rollback of this release has not been invoked.
+
+Four targeted offline cases exercised the operator script with real file locks,
+SQLite WAL and declaration replacements. Host service control was simulated.
+The cases covered a stopped container, an unhealthy container with a provider
+hold and a scheduled retry, refusal on a processing job, and refusal on a foreign
+lock. The updated host script SHA-256 is
+`4fb0eb995a43db326d419b274955b2a11c1024882dfdc9ad01d2e2804475fee4`.
+The private operator copy of both declarations, both markers, script and
+cutover receipts was read back and checked member-by-member. Its archive SHA-256
+is `7a03805fc3466494fe3c4e52e80f29a8448da69110d373d7ad456a66aebc8a9e`.
 
 The systemd unit consumes two Compose declarations. Use the prepared
 `installed-candidate.compose.json` when switching, and its byte-identical
