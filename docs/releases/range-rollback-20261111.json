@@ -1,0 +1,38 @@
+{
+  "version": "two-reader-rollback-partial-v1",
+  "production_declarations": [
+    "c27568b86011b3879afbb59c64a8e534c02d531e754fcbfdc4410eb1a5e997ec",
+    "9337909dc7c782c3096ef39f5399863dd15babb76f8002f7f57229f06e713de7",
+    "dcf36ad016be9d38d943112133aec99731756e793b54178a8fad21a8a43dcaa9"
+  ],
+  "operator_script_sha256": "2fc9787ba54212f521233a7c22e34e0bbe64458cfe76a57b70ff764beab5e383",
+  "production_config": "2 18750000",
+  "network": "none",
+  "production_database_or_media_mounted": false,
+  "production_rollback_invoked": false,
+  "reader_source_sha256": {
+    "adapters/replay_ranges.py": "efe1e9831589835f096428fc51ea2582958672baf2e12130160a182d1bed7a3a",
+    "adapters/ytdlp_highest_v2.py": "4e3a28964b3cdbe55af88147c04d1dfaf541b4128bf0dae98ec5223d1fced1c9"
+  },
+  "cases": [
+    {
+      "target_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+      "writer_exit": 137,
+      "first_offset": 262144,
+      "served": 1835008,
+      "bytes": 2097152,
+      "sha256": "91d3beb88a9b2f778a6c44a1c53b63d3c79931845a9aef84b3fb414610bd1938",
+      "requests": 1
+    },
+    {
+      "target_image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+      "writer_exit": 137,
+      "first_offset": 262144,
+      "served": 1835008,
+      "bytes": 2097152,
+      "sha256": "91d3beb88a9b2f778a6c44a1c53b63d3c79931845a9aef84b3fb414610bd1938",
+      "requests": 1
+    }
+  ],
+  "temporary_files_removed": true
+}

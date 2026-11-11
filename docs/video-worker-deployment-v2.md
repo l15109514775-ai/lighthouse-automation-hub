@@ -164,6 +164,20 @@ requires the current owner and acquisition-enabled markers under
 
 The 2026-11-11 range transport trial layers two read-only Python modules onto the acquisition declaration. Its root-owned operator script is `/var/lib/lighthouse-migration/replay-range-trial-23758681c3c88e8e/release.py`. Use `python3 release.py rollback` from that directory to restore the previous single-reader 2.0 transport, or `python3 release.py rollback-incumbent` to restore the pre-2.0 acquisition release. This helper uses the existing producer/video lock fence and restores the matching startup marker and both Compose declarations. Use this helper after the range trial, as the original cutover script below identifies its original container by ID. Production rollback of the new transport has not been exercised.
 
+For migration, the private operator bundle `acquisition-source-bindings-v3.tar` contains the eleven read-only modules read back from the running acquisition container. Keep it with the pinned base image, the previous installed declaration and the existing host configuration backup. The bundle excludes operating credentials and databases. On the destination Docker host, first load the pinned image. Stage into a new directory using absolute paths:
+
+```sh
+python3 scripts/prepare_acquisition_source_bindings.py \
+  --manifest /recovery/range-source-bindings-20261111.json \
+  --archive /recovery/acquisition-source-bindings-v3.tar \
+  --installed-override /recovery/installed-previous.compose.json \
+  --directory /recovery/staged-acquisition
+```
+
+Use the pre-2.0 single-role override from the original cutover for the `--installed-override` input. Render the staged `installed-candidate.compose.json` with the base Compose file before activating the new owner. On the current host all ten rendered service definitions matched the installed definitions after resolving the eleven source paths by hash. The staged fallback matched the original input byte for byte. This exercise did not start a second production worker. [Bundle manifest](releases/range-source-bindings-20261111.json) · [Compose restore result](releases/range-compose-restore-20261111.json)
+
+An isolated Docker drill killed the new range reader after it committed 262,144 bytes of a synthetic 2 MiB track. Both rollback targets used their native yt-dlp HTTP downloader to request exactly the remaining 1,835,008 bytes from a loopback fixture. The final hashes matched the original. The drill verifies partial-file compatibility across the three releases. Production leases, guarded YouTube transport and Bilibili publication were outside this drill. [Rollback result](releases/range-rollback-20261111.json)
+
 The owner requested startup of `a87681b0` before its first natural download.
 The installed version-two acquisition marker records pending real-download
 acceptance and has empty sample/job fields. The previous marker with its

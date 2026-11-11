@@ -1,0 +1,10 @@
+{
+  "verified_code_binds": 11,
+  "rendered_services": 10,
+  "base_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "archive_sha256": "1ff45b23bf6d2307249df414049e7f433fc0c40f6efcfa7fd4036d5f5fe0fa4d",
+  "render_matches_installed": true,
+  "previous_declaration_byte_identical": true,
+  "current_declaration_sha256": "c27568b86011b3879afbb59c64a8e534c02d531e754fcbfdc4410eb1a5e997ec",
+  "production_worker_unchanged": true
+}

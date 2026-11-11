@@ -25,6 +25,9 @@ SOURCE_BINDING_VERSIONS = {
     'acquisition-source-bindings-v1': SOURCE_BINDINGS,
     'acquisition-source-bindings-v2': SOURCE_BINDINGS | {'services/hub/worker.py', 'services/hub/source_controls.py'},
 }
+SOURCE_BINDING_VERSIONS['acquisition-source-bindings-v3'] = SOURCE_BINDING_VERSIONS['acquisition-source-bindings-v2'] | {
+    'adapters/replay_ranges.py', 'adapters/ytdlp_highest_v2.py',
+}
 
 
 def safe_path(path):
