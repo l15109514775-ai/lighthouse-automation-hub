@@ -1,0 +1,13 @@
+{
+  "version": "range-cutover-controls-v1",
+  "archive_sha256": "f1026919b9b6ace3e1e3e3ab3b956d9754a4f48687fc9f0e523d08cca17709bd",
+  "bytes": 81920,
+  "members": 7,
+  "previous_controls_sha256": "7fc71422dde6318c238ed05f50eede6235aa3d31d41961695f2409b22ceb4cd8",
+  "effective_code_archive_sha256": "1ff45b23bf6d2307249df414049e7f433fc0c40f6efcfa7fd4036d5f5fe0fa4d",
+  "installed_declaration_reconstructed_byte_identical": true,
+  "both_installed_declarations_identical": true,
+  "installed_startup_marker_reconstructed_byte_identical": true,
+  "every_archived_member_read_back": true,
+  "production_writes": 0
+}
