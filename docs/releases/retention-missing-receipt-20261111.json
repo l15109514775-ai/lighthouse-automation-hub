@@ -1,0 +1,37 @@
+{
+  "component": "replay-publication-worker",
+  "observed_problem": {
+    "container_restarts": 23,
+    "fatal_background_role": "retention",
+    "production_read_only_reproduction": {
+      "source_id": "Bu2k_39HGSI",
+      "parent_state": "completed",
+      "exception": "KeyError",
+      "field": "replay_parts_first_completion_v5",
+      "file": "services/hub/replay_parts_retention_v5.py",
+      "line": 202
+    }
+  },
+  "test_environment": {
+    "image": "sha256:0722adba6834512161b932663951d76bb5994873ebd4456662cfa24c51aa7414",
+    "network": "none",
+    "production_data_mounted": false,
+    "application_secrets_mounted": false,
+    "suite": "tests/test_replay_parts_retention_v5.py",
+    "passed": 33,
+    "failed": 0,
+    "exit_code": 0,
+    "junit_sha256": "c2c3e9cd21a97f92ba28213187beab5eac1f6d721d106b5af15bd8c5c64000c4",
+    "corrected_source_sha256": "d07127a30666262e53e0c9bd7c19a4ceb174a14e30e04415fd8ac5ecbc070d45",
+    "held_code": "REPLAY_PART_EVIDENCE_REFERENCE_INVALID",
+    "production_container_ids_unchanged": true
+  },
+  "deployment_observation": {
+    "state": "staged",
+    "release_sha256": "19947f1fd48d70854f815446c7d42f2d55a5012cecd67e05f2093b805d5926fa",
+    "activation_deferred": "current_replay_uploading",
+    "source_id": "2lILwnrnKTE",
+    "upload_attempts": 1,
+    "external_publish_id": null
+  }
+}

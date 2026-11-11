@@ -1,0 +1,61 @@
+{
+  "at": 1794362589.9465132,
+  "source_id": "2lILwnrnKTE",
+  "job_id": "1b304e82-b872-4930-b2e4-f624792f0606",
+  "download_attempts": 1,
+  "candidate_media_probe_image": "sha256:a87681b0bcdb7554330da717bc73e1ade2f4c885ae9937ed7156dc0b5d1462fd",
+  "candidate_downloaded_this_file": false,
+  "producer_asset_sha256": "daa39fc02d65057f6a91f611b5abd73b0b40f3cd118f7e208101d740601c2ff0",
+  "manifest_sha256": "ebcd2de24f69629ecbdeb5e70a28c7333eb4c0eb6e7ba2a790b0ac0bb01c0782",
+  "verified_receipt_sha256": "3904334356bfde9ff4dce28e01009f5fa0135d831b21e8b273fd78fdebf380df",
+  "delivery_outputs": 1,
+  "source_to_merged_packet_coverage_verified": true,
+  "actual_ffprobe": {
+    "programs": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "60/1"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "44100",
+        "channels": 2,
+        "r_frame_rate": "0/0"
+      }
+    ],
+    "format": {
+      "duration": "35329.346757",
+      "size": "13837283384"
+    }
+  },
+  "fifo": {
+    "state": "download_completed",
+    "download_job_id": "1b304e82-b872-4930-b2e4-f624792f0606",
+    "publication_job_id": null
+  },
+  "inspection_provider_requests": 0,
+  "publication_transfer": {
+    "observed_at": 1794363224.4360383,
+    "first_sample_at": 1794363216.3752146,
+    "container_tx_delta": 38892426,
+    "child": {
+      "job_id": "932005a3-3478-4e19-af75-1c07506b1e88",
+      "state": "processing",
+      "stage": "replay_part_uploading",
+      "error_code": null,
+      "attempts": 1
+    },
+    "bilibili_receipt_observed": false
+  },
+  "offline_probe_memory": {
+    "first_limit_mib": 128,
+    "first_result": "ffprobe_cgroup_oom",
+    "second_limit_mib": 512,
+    "second_result": "passed"
+  }
+}

@@ -199,7 +199,7 @@ class ReplayPartsRetentionV5:
         if (source['state']!='completed' or source.get('lease_owner') or source.get('lease_until') or
                 context['manifest']['sha256']!=parent['payload']['parts_manifest_sha256'] or parent['source_id']!=source['source_id'] or
                 len(context['delivery']['outputs'])!=len(rows)):fail()
-        first=parent['result']['replay_parts_first_completion_v5']
+        first=parent['result'].get('replay_parts_first_completion_v5')
         completion=reference_body(self.root,first,expected=self.root/'media'/group_id/'replay-parts-v5/first-completion.json')
         if (completion['version']!='replay-parts-first-completion-v5' or completion['parent_job_id']!=group_id or
                 completion['group_binding_sha256']!=digest(parent['payload']) or completion['summary']['state']!='completed'):fail()

@@ -287,14 +287,34 @@ def test_replaced_path_after_interrupted_unlink_is_preserved_and_never_counted_a
     assert first.read_bytes()==b'owned replacement that must never be removed' and Path(p['candidates'][1]['file']).is_file()
 
 
-def test_automatic_tick_processes_completed_group_without_per_video_manual_plan_and_then_idles(completed,monkeypatch):
+def test_automatic_tick_holds_missing_completion_receipt_then_cleans_proven_group_and_idles(completed,monkeypatch):
+    from types import SimpleNamespace
+    from services.hub import replay_parts_retention_v5 as retention
     f=completed;(f.s.root/'config'/'replay-parts-retention-v5-release.json').write_text('Owned root gate seam','utf-8')
     monkeypatch.setattr(ReplayPartsRetentionV5,'_release',lambda self:(self._authorization(f.owner['authorization_id']),'owned-root-release-only'))
-    calls=[]
-    def fresh(*args):calls.append(args);return f.refresh(*args)
+    original=f.db.get(f.parent)['result']
+    missing=dict(original)
+    del missing['replay_parts_first_completion_v5']
+    file=Path(f.db.get(f.child)['payload']['file'])
+    before=file.read_bytes()
+    publications=f.db.query('SELECT * FROM publications')
+    with f.db.transaction() as db:
+        db.execute('UPDATE jobs SET result=? WHERE job_id=?',(encode(missing),f.parent))
+    held=retention_tick(f.s,f.db)
+    assert (held['state'],held['code'],held['files_deleted'])==('held','REPLAY_PART_EVIDENCE_REFERENCE_INVALID',0)
+    assert file.read_bytes()==before and f.db.get(f.parent)['result']==missing
+    assert f.db.query('SELECT * FROM publications')==publications
+    assert retention_tick(f.s,f.db)['state']=='idle'
+    with sqlite3.connect(f.retention.index) as db:
+        due,status,code=db.execute('SELECT next_due,status,last_code FROM maintenance WHERE group_id=?',(f.parent,)).fetchone()
+        assert status=='held' and code==held['code']
+        assert db.execute('SELECT COUNT(*) FROM operations').fetchone()[0]==0
+    with f.db.transaction() as db:
+        db.execute('UPDATE jobs SET result=? WHERE job_id=?',(encode(original),f.parent))
+    monkeypatch.setattr(retention,'time',SimpleNamespace(time=lambda:due+1))
     value=retention_tick(f.s,f.db)
     assert value['state']=='completed' and value['files_deleted']==1
-    assert calls==[]  # Historical acceptance is reused with zero new platform lookup.
+    assert value['receipt']['external_requests']==0
     assert retention_tick(f.s,f.db)['state']=='idle'
 
 

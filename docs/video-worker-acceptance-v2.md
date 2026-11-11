@@ -32,6 +32,27 @@ monitor run. The production database still held one FIFO row and the same single
 processing download job at attempt one. The monitor reported zero downloads.
 [In-flight rediscovery receipt](releases/inflight-discovery-20261111.json).
 
+The incumbent finished `2lILwnrnKTE` on that first download attempt and handed
+one verified output to the normal publisher. FFprobe read 35,329.346757 seconds
+of 1080p60 H.264 and stereo AAC from the 13,837,283,384-byte output. A
+network-isolated probe in the candidate image exceeded its initial 128 MiB
+limit and passed at 512 MiB. The acquisition receipt belongs to the incumbent.
+The publisher's first upload was transferring at the observation time. Public
+confirmation is still pending. The owner deferred the candidate's live download
+and activation until a later log review.
+[Media and transfer observations](releases/current-replay-handoff-20261111.json).
+
+The publisher's retention thread failed with a `KeyError` on an earlier
+completed group. A read-only call against the installed code isolated the missing
+`replay_parts_first_completion_v5` reference at the retention context check.
+The fix sends the missing reference to the existing evidence validator. A
+cleanup-only hold preserves the media and publication history. The isolated
+publisher image passed 33 retention tests, including the automatic tick with
+missing evidence, its cooldown, and cleanup when the original evidence is
+restored in the fixture. The corrected bind, release and rollback files were
+staged. The activation check found the live upload and deferred replacement.
+[Retention qualification](releases/retention-missing-receipt-20261111.json).
+
 Maintenance now persists independent official-discovery health and alerts on a
 disabled/stale/erroring upstream, excluding intentionally paused sources. Nine
 focused tests passed in the production System Worker image, and a normal
